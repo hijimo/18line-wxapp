@@ -1,28 +1,37 @@
 <!--index.wxml-->
-<navigation-bar title="Weixin" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<header-bar avatarUrl="{{userInfo.avatarUrl}}" bind:belltap="onBellTap" />
+
 <scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    <view class="userinfo">
-      <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
-        </button>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
-        </view>
-      </block>
-      <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <view wx:else> 请使用2.10.4及以上版本基础库 </view>
-      </block>
-      <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-      </block>
+  <view class="page-main">
+    <!-- Section 1: Hero Banner Swiper -->
+    <hero-banner banners="{{banners}}" bind:bannertap="onBannerTap" />
+
+    <!-- Section 2: My Journey -->
+    <journey-card journeys="{{journeys}}" bind:viewall="onViewAll" />
+
+    <!-- Section 3: Local Highlights (Inspiration Cards Swiper) -->
+    <inspiration-card title="{{inspirationTitle}}" cards="{{inspirationCards}}" bind:cardtap="onInspirationTap" />
+
+    <!-- Section 4: Easter Eggs -->
+    <view class="section-eggs">
+      <view class="section-heading">
+        <text class="section-heading-text">寻找隐匿之物 (Easter Eggs)</text>
+      </view>
+      <view class="eggs-list">
+        <gem-item wx:for="{{eggs}}" wx:key="id" item="{{item}}" bind:itemtap="onEggTap" />
+      </view>
     </view>
-    <view class="usermotto">
-      <text class="user-motto">{{motto}}</text>
+
+    <!-- Section 5: Food & Marketplace -->
+    <view class="section-food">
+      <view class="section-heading">
+        <text class="section-heading-text">地道风物 (Delicacies)</text>
+      </view>
+      <view class="food-grid">
+        <food-card wx:for="{{foods}}" wx:key="id" item="{{item}}" bind:cardtap="onFoodTap" />
+      </view>
     </view>
   </view>
 </scroll-view>
+
+<tab-bar currentTab="{{currentTab}}" bind:tabchange="onTabChange" />

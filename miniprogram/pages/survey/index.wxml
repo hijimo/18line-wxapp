@@ -1,0 +1,169 @@
+<!-- survey/index.wxml -->
+<view class="survey-page">
+  <!-- Shared header -->
+  <survey-header step="{{currentStep}}" totalSteps="3" bind:back="onBack" />
+
+  <!-- Step 1: Intensity -->
+  <scroll-view wx:if="{{currentStep === 1}}" class="step-content" scroll-y>
+    <view class="main-content">
+      <!-- Avatar section -->
+      <view class="avatar-section">
+        <view class="avatar-ring">
+          <image class="avatar-img" src="/assets/images/user-profile.png" mode="aspectFill" />
+          <view class="avatar-edit-btn">
+            <image class="edit-icon" src="http://localhost:3845/assets/387cfafc9b062c2278d7913cc87b483445415f63.svg" mode="aspectFit" />
+          </view>
+        </view>
+        <text class="section-tag">个人设置</text>
+      </view>
+
+      <!-- Header section -->
+      <view class="hero-section">
+        <text class="hero-title">选择您的探索强度</text>
+        <text class="hero-desc">这能帮我们为您匹配最合适的路线。</text>
+      </view>
+
+      <!-- Intensity cards -->
+      <view class="cards-list">
+        <view
+          wx:for="{{intensityOptions}}"
+          wx:key="id"
+          class="intensity-card {{selectedIntensity === item.id ? 'selected' : ''}}"
+          bindtap="onSelectIntensity"
+          data-id="{{item.id}}"
+        >
+          <view class="card-icon-wrap {{selectedIntensity === item.id ? 'selected' : ''}}">
+            <image class="card-icon" src="{{item.icon}}" mode="aspectFit" />
+          </view>
+          <view class="card-text">
+            <text class="card-title {{selectedIntensity === item.id ? 'selected' : ''}}">{{item.title}}</text>
+            <text class="card-desc {{selectedIntensity === item.id ? 'selected' : ''}}">{{item.desc}}</text>
+          </view>
+          <view class="radio {{selectedIntensity === item.id ? 'selected' : ''}}" >
+            <view wx:if="{{selectedIntensity === item.id}}" class="radio-dot"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- Step 2: Food & Accommodation -->
+  <scroll-view wx:if="{{currentStep === 2}}" class="step-content" scroll-y>
+    <view class="main-content">
+      <!-- Hero -->
+      <view class="hero-section">
+        <view class="tag-pill orange">偏好映射</view>
+        <text class="hero-title-lg">旅途的味道</text>
+        <text class="hero-desc">地道风味还是家乡舒适？</text>
+      </view>
+
+      <!-- Food preferences -->
+      <view class="pref-section">
+        <view class="pref-header">
+          <image class="pref-icon" src="http://localhost:3845/assets/db38cdcd8d0253b5863656bd1b03c273788a7ad1.svg" mode="aspectFit" />
+          <text class="pref-title">饮食偏好</text>
+        </view>
+        <view class="chip-grid">
+          <view
+            wx:for="{{foodOptions}}"
+            wx:key="id"
+            class="chip {{selectedFood === item.id ? 'selected' : ''}}"
+            bindtap="onSelectFood"
+            data-id="{{item.id}}"
+          >
+            <image class="chip-icon" src="{{item.icon}}" mode="aspectFit" />
+            <text class="chip-label">{{item.label}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Accommodation preferences -->
+      <view class="pref-section">
+        <view class="pref-header">
+          <image class="pref-icon" src="http://localhost:3845/assets/8ce5d6cd8c1cf17cca8f60bf4fedc042a32dea49.svg" mode="aspectFit" />
+          <text class="pref-title">住宿偏好</text>
+        </view>
+        <view class="accom-grid">
+          <view
+            wx:for="{{accomOptions}}"
+            wx:key="id"
+            class="accom-card {{selectedAccom === item.id ? 'selected' : ''}}"
+            bindtap="onSelectAccom"
+            data-id="{{item.id}}"
+          >
+            <image class="accom-img" src="{{item.image}}" mode="aspectFill" />
+            <view class="accom-footer">
+              <text class="accom-label">{{item.label}}</text>
+              <view class="accom-radio {{selectedAccom === item.id ? 'selected' : ''}}">
+                <view wx:if="{{selectedAccom === item.id}}" class="accom-radio-dot"></view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- Step 3: Soul -->
+  <scroll-view wx:if="{{currentStep === 3}}" class="step-content" scroll-y>
+    <view class="main-content">
+      <!-- Hero -->
+      <view class="hero-section">
+        <view class="tag-pill orange">旅行之魂</view>
+        <text class="hero-title-lg">什么最能打动您？</text>
+        <text class="hero-desc">选择您的探索灵魂，指引前行的路。</text>
+      </view>
+
+      <!-- Soul grid -->
+      <view class="soul-grid">
+        <view
+          wx:for="{{soulOptions}}"
+          wx:key="id"
+          class="soul-card {{selectedSoul.indexOf(item.id) >= 0 ? 'selected' : ''}}"
+          bindtap="onSelectSoul"
+          data-id="{{item.id}}"
+        >
+          <view class="soul-icon-wrap">
+            <image class="soul-icon" src="{{item.icon}}" mode="aspectFit" />
+          </view>
+          <text class="soul-label">{{item.label}}</text>
+          <image
+            class="soul-check"
+            src="{{selectedSoul.indexOf(item.id) >= 0 ? 'http://localhost:3845/assets/7ce96e3f8bb417bee1ca3d60e3468fb74bae8143.svg' : 'http://localhost:3845/assets/7ce96e3f8bb417bee1ca3d60e3468fb74bae8143.svg'}}"
+            mode="aspectFit"
+          />
+        </view>
+      </view>
+
+      <!-- Blind mode toggle -->
+      <view class="blind-mode-section">
+        <view class="blind-mode-header">
+          <image class="blind-icon" src="http://localhost:3845/assets/90d56eb4c547ef919bf8a5b3b5db3e9fe103f00f.svg" mode="aspectFit" />
+          <text class="blind-title">盲游模式</text>
+        </view>
+        <text class="blind-desc">您希望在抵达前保留多少惊喜？</text>
+        <view class="blind-toggle">
+          <view
+            class="toggle-btn {{blindMode === 'full' ? 'active' : ''}}"
+            bindtap="onSelectBlindMode"
+            data-mode="full"
+          >
+            <image class="toggle-icon" src="http://localhost:3845/assets/f02e67540b312ce17c930affe171420eb83482c6.svg" mode="aspectFit" />
+            <text class="toggle-label">全盲惊喜</text>
+          </view>
+          <view
+            class="toggle-btn {{blindMode === 'clear' ? 'active' : ''}}"
+            bindtap="onSelectBlindMode"
+            data-mode="clear"
+          >
+            <image class="toggle-icon" src="http://localhost:3845/assets/742ce77808c63ee25d2a292e5f2fd4c7a9b3f989.svg" mode="aspectFit" />
+            <text class="toggle-label">清晰路径</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- Shared bottom bar -->
+  <survey-bottom step="{{currentStep}}" bind:next="onNext" bind:back="onBack" />
+</view>

@@ -1,0 +1,23 @@
+<!--gem-item.wxml-->
+<view class="gem-item" bindtap="onItemTap" data-id="{{item.id}}">
+  <view class="gem-thumb-wrap">
+    <image class="gem-thumb" src="{{item.image}}" mode="aspectFill" />
+  </view>
+  <view class="gem-info">
+    <view class="gem-title-row">
+      <text class="gem-title">{{item.title}}</text>
+      <text class="gem-price {{item.price === '免费' ? 'price-free' : 'price-cost'}}">{{item.price}}</text>
+    </view>
+    <text class="gem-desc">{{item.description}}</text>
+    <view class="gem-meta">
+      <view class="gem-meta-item">
+        <image class="icon-clock" src="/assets/images/icon-clock.svg" />
+        <text class="gem-meta-text">{{item.duration}}</text>
+      </view>
+      <view class="gem-meta-item">
+        <image class="icon-distance" src="/assets/images/icon-distance.svg" />
+        <text class="gem-meta-text">{{item.distance}}</text>
+      </view>
+    </view>
+  </view>
+</view>

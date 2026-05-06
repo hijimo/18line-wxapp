@@ -1,0 +1,13 @@
+<!--tab-bar.wxml-->
+<view class="tab-bar">
+  <view class="tab-item {{item.active ? 'tab-active' : ''}}" wx:for="{{tabs}}" wx:key="id" bindtap="onTabTap" data-id="{{item.id}}">
+    <view wx:if="{{item.active}}" class="tab-icon-active-wrap">
+      <image class="tab-icon" src="{{item.activeIcon}}" />
+      <text class="tab-text-active">{{item.label}}</text>
+    </view>
+    <view wx:else class="tab-icon-wrap">
+      <image class="tab-icon" src="{{item.icon}}" />
+      <text class="tab-text">{{item.label}}</text>
+    </view>
+  </view>
+</view>

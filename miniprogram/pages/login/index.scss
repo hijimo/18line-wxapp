@@ -1,0 +1,207 @@
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: #f9faf4;
+  overflow: hidden;
+}
+
+/* Background */
+.bg-canvas {
+  position: absolute;
+  top: -22rpx;
+  left: -20rpx;
+  right: 0;
+  bottom: -42rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-image {
+  width: 780rpx;
+  height: 1766rpx;
+  position: absolute;
+}
+
+.bg-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(22, 52, 34, 0.4) 0%, rgba(22, 52, 34, 0) 50%, rgba(22, 52, 34, 0.8) 100%);
+}
+
+/* Texture overlay */
+.texture-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 2rpx;
+  background-image: url('http://localhost:3845/assets/f84ad6d75c01f5865641dba32416e817dee06ff5.png');
+  background-size: 48rpx 44rpx;
+  background-position: top left;
+  mix-blend-mode: overlay;
+  opacity: 0.03;
+}
+
+/* Main content */
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  padding: 160rpx 64rpx;
+  box-sizing: border-box;
+}
+
+/* Brand section */
+.brand-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 64rpx;
+}
+
+.logo-container {
+  width: 192rpx;
+  height: 192rpx;
+  border-radius: 64rpx;
+  overflow: hidden;
+  box-shadow: 0 50rpx 100rpx -24rpx rgba(0, 0, 0, 0.25);
+  margin-bottom: 48rpx;
+  background: rgba(255, 255, 255, 0);
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+}
+
+.brand-name {
+  font-size: 96rpx;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -4.8rpx;
+  line-height: 96rpx;
+  text-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.3);
+  font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+}
+
+.brand-tagline {
+  margin-top: 24rpx;
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 5.6rpx;
+  text-transform: uppercase;
+  font-family: 'WenQuanYi Zen Hei', sans-serif;
+}
+
+/* Actions section */
+.actions-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Login button */
+.login-btn {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 24rpx;
+  background: #2d4b37;
+  border-radius: 24rpx;
+  padding: 40rpx 0;
+  overflow: hidden;
+  box-shadow: 0 50rpx 100rpx -24rpx rgba(0, 0, 0, 0.25);
+}
+
+.login-btn--loading {
+  opacity: 0.7;
+}
+
+.wechat-icon {
+  width: 32rpx;
+  height: 40rpx;
+  flex-shrink: 0;
+}
+
+.login-btn-text {
+  font-size: 36rpx;
+  color: #ffffff;
+  letter-spacing: 0.9rpx;
+  font-family: 'WenQuanYi Zen Hei', sans-serif;
+}
+
+/* Other methods */
+.other-methods {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 64rpx;
+  padding-bottom: 0;
+}
+
+.other-methods-text {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.7rpx;
+  font-family: 'WenQuanYi Zen Hei', sans-serif;
+}
+
+/* Compliance */
+.compliance-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 24rpx;
+  margin-top: 96rpx;
+  max-width: 560rpx;
+  padding-left: 46rpx;
+}
+
+.checkbox-container {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 8rpx;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox--checked {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.check-icon {
+  width: 24rpx;
+  height: 18rpx;
+}
+
+.compliance-text {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 36rpx;
+  font-family: 'WenQuanYi Zen Hei', sans-serif;
+}
+
+.link-text {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.2);
+}

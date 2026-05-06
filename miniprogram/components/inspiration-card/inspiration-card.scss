@@ -1,0 +1,117 @@
+.inspiration-section {
+  display: flex;
+  flex-direction: column;
+  gap: 48rpx;
+  align-items: flex-start;
+}
+
+.inspiration-heading-text {
+  font-size: 48rpx;
+  color: #163422;
+  line-height: 64rpx;
+}
+
+.inspiration-swiper {
+  width: 100%;
+  height: 848rpx;
+}
+
+.swiper-item-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  padding-left: 48rpx;
+}
+
+.inspiration-card {
+  width: 560rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.card-image-wrap {
+  width: 560rpx;
+  height: 640rpx;
+  border-radius: 80rpx;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+}
+
+.card-rating {
+  position: absolute;
+  top: 32rpx;
+  right: 32rpx;
+  backdrop-filter: blur(12rpx);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1rpx solid rgba(255, 255, 255, 0.2);
+  border-radius: 9999rpx;
+  padding: 10rpx 26rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.icon-star {
+  width: 22rpx;
+  height: 22rpx;
+}
+
+.card-rating-text {
+  font-size: 22rpx;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.card-tag {
+  position: absolute;
+  bottom: 32rpx;
+  left: 32rpx;
+  padding: 8rpx 24rpx;
+  border-radius: 9999rpx;
+}
+
+.tag-green {
+  background: #163422;
+}
+
+.tag-brown {
+  background: #944a00;
+}
+
+.tag-dark {
+  background: #452800;
+}
+
+.card-tag-text {
+  font-size: 20rpx;
+  color: #ffffff;
+  letter-spacing: -1rpx;
+  text-transform: uppercase;
+}
+
+.card-info {
+  padding: 0 16rpx;
+}
+
+.card-title {
+  font-size: 36rpx;
+  color: #163422;
+  font-weight: 700;
+  line-height: 56rpx;
+  display: block;
+  padding-top: 24rpx;
+}
+
+.card-desc {
+  font-size: 28rpx;
+  color: #424843;
+  line-height: 40rpx;
+  display: block;
+}

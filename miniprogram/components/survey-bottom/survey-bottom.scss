@@ -1,0 +1,90 @@
+/* survey-bottom: 对齐 Figma 46-115 */
+.survey-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 64rpx 64rpx;
+  backdrop-filter: blur(6px);
+  background: rgba(249, 250, 244, 0.9);
+  border-radius: 80rpx 80rpx 0 0;
+  box-shadow: 0 -16rpx 64rpx 0 rgba(26, 28, 25, 0.08);
+}
+
+.back-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16rpx 32rpx;
+  border-radius: 24rpx;
+}
+
+.back-icon-wrap {
+  padding-bottom: 4rpx;
+}
+
+.back-icon {
+  width: 12rpx;
+  height: 20rpx;
+}
+
+.back-text {
+  font-size: 20rpx;
+  color: #44483d;
+  letter-spacing: 2rpx;
+  text-transform: uppercase;
+  line-height: 30rpx;
+}
+
+.progress-bar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.progress-placeholder {
+  width: 1rpx;
+}
+
+.dot {
+  height: 8rpx;
+  border-radius: 9999rpx;
+}
+
+.dot.active {
+  width: 80rpx;
+  background: #163422;
+}
+
+.dot.inactive {
+  width: 48rpx;
+  background: rgba(194, 200, 192, 0.3);
+}
+
+.next-btn {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 28rpx 80rpx;
+  border-radius: 32rpx;
+  background: linear-gradient(161.554deg, #163422 0%, #2d4b37 100%);
+  box-shadow: 0 40rpx 50rpx -10rpx rgba(22, 52, 34, 0.25), 0 16rpx 20rpx -12rpx rgba(22, 52, 34, 0.25);
+}
+
+.next-text {
+  font-size: 24rpx;
+  color: #ffffff;
+  letter-spacing: 2.4rpx;
+  text-transform: uppercase;
+  line-height: 32rpx;
+}
+
+.next-icon {
+  width: 8.6rpx;
+  height: 14rpx;
+}

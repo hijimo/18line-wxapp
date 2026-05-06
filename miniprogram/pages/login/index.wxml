@@ -1,0 +1,52 @@
+<view class="container">
+  <!-- Background -->
+  <view class="bg-canvas">
+    <image class="bg-image" src="http://localhost:3845/assets/469688fded2b9631210393150f9def714cca8f31.png" mode="aspectFill" />
+    <view class="bg-gradient" />
+  </view>
+
+  <!-- Texture overlay -->
+  <view class="texture-overlay" />
+
+  <!-- Main content -->
+  <view class="content-wrapper">
+    <!-- Brand identity -->
+    <view class="brand-section">
+      <view class="logo-container">
+        <image class="logo" src="http://localhost:3845/assets/47c1355877a8ad205ea6593c74042e92547363d0.png" mode="aspectFill" />
+      </view>
+      <view class="brand-name">18线</view>
+      <view class="brand-tagline">探索未至之境</view>
+    </view>
+
+    <!-- Actions -->
+    <view class="actions-section">
+      <!-- Main login button -->
+      <view class="login-btn {{loading ? 'login-btn--loading' : ''}}" bindtap="handleLogin">
+        <image class="wechat-icon" src="http://localhost:3845/assets/f22ed001589ada25e160164be1c62ddc0e407a42.svg" mode="aspectFit" />
+        <text class="login-btn-text">{{loading ? '登录中...' : '一键授权登录'}}</text>
+      </view>
+
+      <!-- Other methods -->
+      <view class="other-methods">
+        <text class="other-methods-text">其他登录方式</text>
+      </view>
+
+      <!-- Compliance -->
+      <view class="compliance-row">
+        <view class="checkbox-container" bindtap="toggleAgreed">
+          <view class="checkbox {{agreed ? 'checkbox--checked' : ''}}">
+            <image wx:if="{{agreed}}" class="check-icon" src="http://localhost:3845/assets/0098b08799d057691f6e0e20e4e545ecef4fd6b5.svg" mode="aspectFit" />
+          </view>
+        </view>
+        <view class="compliance-text">
+          <text>我已阅读并同意 </text>
+          <text class="link-text">用户协议</text>
+          <text> 和 </text>
+          <text class="link-text">隐私政策</text>
+          <text>，授权 18线使用您的账号公开信息。</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

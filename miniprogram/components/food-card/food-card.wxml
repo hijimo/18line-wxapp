@@ -1,0 +1,11 @@
+<!--food-card.wxml-->
+<view class="food-card" bindtap="onCardTap" data-id="{{item.id}}">
+  <view class="food-image-wrap">
+    <image class="food-image" src="{{item.image}}" mode="aspectFill" />
+    <view class="food-gradient" />
+  </view>
+  <view class="food-info">
+    <text class="food-name">{{item.name}}</text>
+    <text class="food-tag {{item.tagType === 'must-try' ? 'tag-must-try' : 'tag-seasonal'}}">{{item.tag}}</text>
+  </view>
+</view>

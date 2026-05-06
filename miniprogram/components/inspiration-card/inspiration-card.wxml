@@ -1,0 +1,28 @@
+<!--inspiration-card.wxml-->
+<view class="inspiration-section">
+  <view class="inspiration-heading">
+    <text class="inspiration-heading-text">{{title}}</text>
+  </view>
+  <swiper class="inspiration-swiper" next-margin="96rpx" previous-margin="0" snap-to-edge="true">
+    <swiper-item wx:for="{{cards}}" wx:key="id">
+      <view class="swiper-item-inner">
+        <view class="inspiration-card" bindtap="onCardTap" data-id="{{item.id}}">
+          <view class="card-image-wrap">
+            <image class="card-image" src="{{item.image}}" mode="aspectFill" />
+            <view class="card-rating">
+              <image class="icon-star" src="/assets/images/icon-star.svg" />
+              <text class="card-rating-text">{{item.rating}}</text>
+            </view>
+            <view class="card-tag {{item.tagColor === 'green' ? 'tag-green' : item.tagColor === 'brown' ? 'tag-brown' : 'tag-dark'}}">
+              <text class="card-tag-text">{{item.tag}}</text>
+            </view>
+          </view>
+          <view class="card-info">
+            <text class="card-title">{{item.title}}</text>
+            <text class="card-desc">{{item.description}}</text>
+          </view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+</view>

@@ -1,0 +1,25 @@
+<!-- survey-bottom.wxml: 对齐 Figma 46-115 -->
+<view class="survey-bottom">
+  <!-- 返回按钮 -->
+  <view class="back-btn" bindtap="onBack">
+    <view class="back-icon-wrap">
+      <image class="back-icon" src="http://localhost:3845/assets/d9a2178be9b2dbfc5cf278890c303b9ca6142ac6.svg" mode="aspectFit" />
+    </view>
+    <text class="back-text">返回</text>
+  </view>
+
+  <!-- 进度条 (仅 step 2 显示) -->
+  <view wx:if="{{step === 2}}" class="progress-bar">
+    <view class="dot inactive"></view>
+    <view class="dot active"></view>
+    <view class="dot inactive"></view>
+  </view>
+  <!-- step 1/3 时占位 -->
+  <view wx:else class="progress-placeholder"></view>
+
+  <!-- 下一步 / 完成 按钮 -->
+  <view class="next-btn" bindtap="onNext">
+    <text class="next-text">{{step === 3 ? '完成' : '下一步'}}</text>
+    <image wx:if="{{step !== 3}}" class="next-icon" src="http://localhost:3845/assets/d28cd99eefabce46ec4ddc147afcc552852cec1e.svg" mode="aspectFit" />
+  </view>
+</view>

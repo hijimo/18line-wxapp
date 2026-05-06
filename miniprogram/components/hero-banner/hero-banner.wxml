@@ -1,0 +1,30 @@
+<!--hero-banner.wxml-->
+<swiper class="hero-swiper" autoplay circular indicator-dots indicator-color="rgba(255,255,255,0.3)" indicator-active-color="#ffffff">
+  <swiper-item wx:for="{{banners}}" wx:key="id">
+    <view class="banner-card">
+      <image class="banner-image" src="{{item.image}}" mode="aspectFill" />
+      <view class="banner-gradient" />
+      <view class="banner-content">
+        <view class="banner-tag">
+          <text class="banner-tag-text">{{item.tag}}</text>
+        </view>
+        <view class="banner-title-wrap">
+          <text class="banner-title">{{item.title}}</text>
+        </view>
+        <view class="banner-desc-wrap">
+          <text class="banner-desc">{{item.description}}</text>
+        </view>
+        <view class="banner-footer">
+          <view class="banner-btn" bindtap="onBannerTap" data-id="{{item.id}}">
+            <text class="banner-btn-text">{{item.buttonText}}</text>
+            <image class="icon-arrow" src="/assets/images/icon-arrow-right.svg" />
+          </view>
+          <view class="banner-price-wrap">
+            <text class="banner-price-label">{{item.priceLabel}}</text>
+            <text class="banner-price">{{item.price}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </swiper-item>
+</swiper>

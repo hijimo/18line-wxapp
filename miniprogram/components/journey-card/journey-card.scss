@@ -1,0 +1,286 @@
+.journey-section {
+  display: flex;
+  flex-direction: column;
+  gap: 48rpx;
+}
+
+.journey-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.journey-header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.journey-heading {
+  font-size: 48rpx;
+  color: #163422;
+  line-height: 64rpx;
+}
+
+.journey-subheading {
+  font-size: 28rpx;
+  color: #424843;
+  line-height: 40rpx;
+}
+
+.journey-header-btn {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.journey-header-btn-text {
+  font-size: 28rpx;
+  color: #944a00;
+}
+
+.icon-chevron {
+  width: 14rpx;
+  height: 24rpx;
+}
+
+.journey-swiper {
+  width: 100%;
+  height: 1020rpx;
+}
+
+.journey-card {
+  background: #ffffff;
+  border: 1rpx solid rgba(194, 200, 192, 0.15);
+  border-radius: 48rpx;
+  padding: 50rpx;
+  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
+  margin-right: 48rpx;
+}
+
+.journey-card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 64rpx;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.progress-left {
+  display: flex;
+  flex-direction: column;
+  gap: 7rpx;
+}
+
+.progress-title {
+  font-size: 40rpx;
+  color: #163422;
+  line-height: 56rpx;
+}
+
+.progress-date {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.icon-calendar {
+  width: 18rpx;
+  height: 20rpx;
+}
+
+.progress-date-text {
+  font-size: 24rpx;
+  color: #424843;
+}
+
+.progress-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2rpx;
+}
+
+.progress-budget {
+  font-size: 48rpx;
+  color: #944a00;
+  font-weight: 600;
+  line-height: 64rpx;
+}
+
+.progress-budget-label {
+  font-size: 20rpx;
+  color: #727972;
+  letter-spacing: 2rpx;
+  text-transform: uppercase;
+}
+
+.day-tracker {
+  padding-top: 16rpx;
+  position: relative;
+}
+
+.tracker-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4rpx;
+  background: rgba(194, 200, 192, 0.3);
+  transform: translateY(-50%);
+}
+
+.tracker-dots {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 110rpx;
+  position: relative;
+}
+
+.day-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.day-completed .day-dot {
+  background: #163422;
+  box-shadow: 0 0 0 8rpx #ffffff, 0 8rpx 12rpx -2rpx rgba(0, 0, 0, 0.1), 0 4rpx 8rpx -4rpx rgba(0, 0, 0, 0.1);
+}
+
+.day-completed .day-label {
+  color: #163422;
+}
+
+.day-active .day-dot {
+  background: #944a00;
+  box-shadow: 0 0 0 8rpx #ffffff, 0 8rpx 12rpx -2rpx rgba(0, 0, 0, 0.1), 0 4rpx 8rpx -4rpx rgba(0, 0, 0, 0.1);
+}
+
+.day-active .day-label {
+  color: #944a00;
+}
+
+.day-upcoming {
+  opacity: 0.4;
+}
+
+.day-upcoming .day-dot {
+  background: #edeee8;
+  box-shadow: 0 0 0 8rpx #ffffff;
+}
+
+.day-upcoming .day-label {
+  color: #1a1c19;
+}
+
+.day-dot {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-check {
+  width: 18rpx;
+  height: 14rpx;
+}
+
+.day-number {
+  font-size: 22rpx;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.day-upcoming .day-number {
+  color: #1a1c19;
+}
+
+.day-label {
+  font-size: 20rpx;
+  font-weight: 600;
+  padding-top: 16rpx;
+}
+
+.current-goal {
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+  background: #f3f4ee;
+  padding: 32rpx;
+  border-radius: 32rpx;
+}
+
+.icon-target {
+  width: 72rpx;
+  height: 72rpx;
+}
+
+.goal-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.goal-label {
+  font-size: 24rpx;
+  color: #424843;
+}
+
+.goal-title {
+  font-size: 28rpx;
+  color: #163422;
+  line-height: 40rpx;
+}
+
+.location-images {
+  display: flex;
+  gap: 24rpx;
+  height: 384rpx;
+}
+
+.location-main {
+  width: 350rpx;
+  height: 100%;
+  border-radius: 32rpx;
+  overflow: hidden;
+  position: relative;
+}
+
+.location-main-img {
+  width: 100%;
+  height: 100%;
+}
+
+.location-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.location-side {
+  width: 210rpx;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.location-side-item {
+  flex: 1;
+  border-radius: 32rpx;
+  overflow: hidden;
+}
+
+.location-side-img {
+  width: 100%;
+  height: 100%;
+}

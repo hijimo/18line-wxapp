@@ -1,0 +1,6274 @@
+openapi: 3.0.1
+info:
+  title: 十八线_接口文档
+  description: 十八线——小众旅游
+  contact:
+    name: travel18
+  version: 版本号:0.0.1
+servers:
+- url: http://8.136.229.208:8080
+  description: Generated server url
+security:
+- Authorization: []
+tags:
+- name: OSS上传凭证
+  description: 管理端获取阿里云OSS STS临时上传凭证，前端拿到凭证后直传OSS
+- name: 微信-OSS上传凭证
+  description: 微信小程序端获取阿里云OSS STS临时上传凭证，游客登录后可获取
+- name: 微信-资源附件
+  description: 微信小程序端资源附件管理，游客上传文件后保存元数据记录
+paths:
+  /wx/preference:
+    get:
+      tags:
+      - 微信小程序-游客喜好
+      summary: 查询游客喜好
+      operationId: getByTouristId
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    put:
+      tags:
+      - 微信小程序-游客喜好
+      summary: 更新游客喜好
+      operationId: edit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelTouristPreference'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    post:
+      tags:
+      - 微信小程序-游客喜好
+      summary: 新增游客喜好
+      operationId: add
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelTouristPreference'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/auth/updateProfile:
+    put:
+      tags:
+      - 微信小程序认证
+      summary: 更新游客资料
+      operationId: updateProfile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelTourist'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/tourist:
+    put:
+      tags:
+      - 游客管理
+      summary: 修改游客
+      operationId: edit_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelTourist'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/preference:
+    put:
+      tags:
+      - 游客喜好管理
+      summary: 修改游客喜好
+      operationId: edit_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelTouristPreference'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /test/user/update:
+    put:
+      tags:
+      - test-controller
+      operationId: update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserEntity'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RString'
+  /system/user:
+    put:
+      tags:
+      - 用户管理
+      summary: 修改用户
+      operationId: edit_3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysUser'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    post:
+      tags:
+      - 用户管理
+      summary: 新增用户
+      operationId: add_4
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysUser'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/user/resetPwd:
+    put:
+      tags:
+      - 用户管理
+      summary: 重置密码
+      operationId: resetPwd
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysUser'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/user/profile:
+    get:
+      tags:
+      - 个人中心
+      summary: 个人信息
+      operationId: profile
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    put:
+      tags:
+      - 个人中心
+      summary: 修改用户
+      operationId: updateProfile_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysUser'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/user/profile/updatePwd:
+    put:
+      tags:
+      - 个人中心
+      summary: 重置密码
+      operationId: updatePwd
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/user/changeStatus:
+    put:
+      tags:
+      - 用户管理
+      summary: 状态修改
+      operationId: changeStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysUser'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/user/authRole:
+    put:
+      tags:
+      - 用户管理
+      summary: 用户授权角色
+      operationId: insertAuthRole
+      parameters:
+      - name: userId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: roleIds
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/role:
+    put:
+      tags:
+      - 角色管理
+      summary: 修改保存角色
+      operationId: edit_4
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysRole'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    post:
+      tags:
+      - 角色管理
+      summary: 新增角色
+      operationId: add_5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysRole'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/role/dataScope:
+    put:
+      tags:
+      - 角色管理
+      summary: 修改保存数据权限
+      operationId: dataScope
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysRole'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/role/changeStatus:
+    put:
+      tags:
+      - 角色管理
+      summary: 状态修改
+      operationId: changeStatus_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysRole'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/role/authUser/selectAll:
+    put:
+      tags:
+      - 角色管理
+      summary: 批量选择用户授权
+      operationId: selectAuthUserAll
+      parameters:
+      - name: roleId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: userIds
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/role/authUser/cancel:
+    put:
+      tags:
+      - 角色管理
+      summary: 取消授权用户
+      operationId: cancelAuthUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysUserRole'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/role/authUser/cancelAll:
+    put:
+      tags:
+      - 角色管理
+      summary: 批量取消授权用户
+      operationId: cancelAuthUserAll
+      parameters:
+      - name: roleId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: userIds
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/post:
+    put:
+      tags:
+      - sys-post-controller
+      operationId: edit_5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysPost'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    post:
+      tags:
+      - sys-post-controller
+      operationId: add_6
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysPost'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/notice:
+    put:
+      tags:
+      - 通知公告
+      summary: 修改通知公告
+      operationId: edit_6
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysNotice'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    post:
+      tags:
+      - 通知公告
+      summary: 新增通知公告
+      operationId: add_7
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysNotice'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/menu:
+    put:
+      tags:
+      - 菜单管理
+      summary: 修改菜单
+      operationId: edit_7
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysMenu'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    post:
+      tags:
+      - 菜单管理
+      summary: 新增菜单
+      operationId: add_8
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysMenu'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/menu/updateSort:
+    put:
+      tags:
+      - 菜单管理
+      summary: 保存菜单排序
+      operationId: updateSort
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dict/type:
+    put:
+      tags:
+      - 字典类型
+      summary: 修改字典类型
+      operationId: edit_8
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysDictType'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    post:
+      tags:
+      - 字典类型
+      summary: 新增字典类型
+      operationId: add_9
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysDictType'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dict/data:
+    put:
+      tags:
+      - 字典数据
+      summary: 修改保存字典类型
+      operationId: edit_9
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysDictData'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    post:
+      tags:
+      - 字典数据
+      summary: 新增字典类型
+      operationId: add_10
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysDictData'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dept:
+    put:
+      tags:
+      - sys-dept-controller
+      operationId: edit_10
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysDept'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    post:
+      tags:
+      - sys-dept-controller
+      operationId: add_11
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysDept'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dept/updateSort:
+    put:
+      tags:
+      - sys-dept-controller
+      operationId: updateSort_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/config:
+    put:
+      tags:
+      - 参数配置
+      summary: 修改参数配置
+      operationId: edit_11
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysConfig'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    post:
+      tags:
+      - 参数配置
+      summary: 新增参数配置
+      operationId: add_12
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SysConfig'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/resource/add:
+    post:
+      tags:
+      - 微信-资源附件
+      summary: 微信端新增资源
+      description: 游客前端直传OSS成功后，调用此接口保存资源元数据（objectKey、文件名、大小、类型等）。需游客登录态。
+      operationId: addSave
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelResource'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/{itineraryId}/photography/add:
+    post:
+      tags:
+      - C端行程管理
+      summary: 添加行程跟拍
+      operationId: addPhotography
+      parameters:
+      - name: itineraryId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/{itineraryId}/day/{dayNumber}/dining:
+    post:
+      tags:
+      - C端行程管理
+      summary: 更新日程餐饮
+      operationId: updateDayDining
+      parameters:
+      - name: itineraryId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: dayNumber
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelItineraryDining'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/{itineraryId}/day/{dayNumber}/attractions:
+    post:
+      tags:
+      - C端行程管理
+      summary: 更新日程景点
+      operationId: updateDayAttractions
+      parameters:
+      - name: itineraryId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: dayNumber
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/{itineraryId}/day/{dayNumber}/accommodation:
+    post:
+      tags:
+      - C端行程管理
+      summary: 更新日程住宿
+      operationId: updateDayAccommodation
+      parameters:
+      - name: itineraryId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: dayNumber
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/{itineraryId}/car/add:
+    post:
+      tags:
+      - C端行程管理
+      summary: 添加行程包车
+      operationId: addCar
+      parameters:
+      - name: itineraryId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/remove:
+    post:
+      tags:
+      - C端行程管理
+      summary: 删除行程
+      operationId: remove
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelItinerary'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/edit:
+    post:
+      tags:
+      - C端行程管理
+      summary: 修改行程
+      operationId: edit_12
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelItinerary'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/copy:
+    post:
+      tags:
+      - C端行程管理
+      summary: 复制行程
+      operationId: copy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelItinerary'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/confirm:
+    post:
+      tags:
+      - C端行程管理
+      summary: 确认行程
+      operationId: confirm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelItinerary'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/confirmStatus:
+    post:
+      tags:
+      - C端行程管理
+      summary: 更新确认状态
+      operationId: confirmStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelItinerary'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/auto:
+    post:
+      tags:
+      - C端行程管理
+      summary: 一键生成行程
+      operationId: autoGenerate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelItinerary'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/add:
+    post:
+      tags:
+      - C端行程管理
+      summary: 手动创建行程
+      operationId: add_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelItinerary'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/auth/testToken:
+    post:
+      tags:
+      - 微信小程序认证
+      summary: 测试用-直接获取token（上线前删除）
+      operationId: testToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: integer
+                format: int64
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/auth/login:
+    post:
+      tags:
+      - 微信小程序认证
+      summary: 微信登录
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/auth/bindPhone:
+    post:
+      tags:
+      - 微信小程序认证
+      summary: 绑定手机号
+      operationId: bindPhone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /unlockscreen:
+    post:
+      tags:
+      - sys-index-controller
+      operationId: unlockScreen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/template:
+    post:
+      tags:
+      - 行程模板管理
+      summary: 新增行程模板
+      operationId: add_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelTemplate'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/template/remove:
+    post:
+      tags:
+      - 行程模板管理
+      summary: 删除行程模板
+      operationId: remove_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/template/generate:
+    post:
+      tags:
+      - 行程模板管理
+      summary: 全自动生成模板
+      operationId: generate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateTemplateRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/template/edit:
+    post:
+      tags:
+      - 行程模板管理
+      summary: 修改行程模板
+      operationId: edit_13
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelTemplate'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/resource/remove:
+    post:
+      tags:
+      - 资源附件管理
+      summary: 删除资源
+      operationId: remove_2
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/resource/list:
+    post:
+      tags:
+      - 资源附件管理
+      summary: 查询资源列表
+      operationId: list
+      parameters:
+      - name: resource
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelResource'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/resource/edit:
+    post:
+      tags:
+      - 资源附件管理
+      summary: 修改资源
+      operationId: editSave
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelResource'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/resource/add:
+    post:
+      tags:
+      - 资源附件管理
+      summary: 新增资源
+      operationId: addSave_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelResource'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/photography/remove:
+    post:
+      tags:
+      - 跟拍管理
+      summary: 删除跟拍
+      operationId: remove_3
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/photography/list:
+    post:
+      tags:
+      - 跟拍管理
+      summary: 查询跟拍列表
+      operationId: list_1
+      parameters:
+      - name: photography
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelPhotography'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/photography/export:
+    post:
+      tags:
+      - 跟拍管理
+      summary: 导出跟拍列表
+      operationId: export
+      parameters:
+      - name: photography
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelPhotography'
+      responses:
+        "200":
+          description: OK
+  /travel18/photography/edit:
+    post:
+      tags:
+      - 跟拍管理
+      summary: 修改保存跟拍
+      operationId: editSave_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelPhotography'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/photography/add:
+    post:
+      tags:
+      - 跟拍管理
+      summary: 新增保存跟拍
+      operationId: addSave_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelPhotography'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/line/remove:
+    post:
+      tags:
+      - 线路管理
+      summary: 删除线路
+      operationId: remove_4
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/line/list:
+    post:
+      tags:
+      - 线路管理
+      summary: 查询线路列表
+      operationId: list_2
+      parameters:
+      - name: line
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelLine'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/line/export:
+    post:
+      tags:
+      - 线路管理
+      summary: 导出线路列表
+      operationId: export_1
+      parameters:
+      - name: line
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelLine'
+      responses:
+        "200":
+          description: OK
+  /travel18/line/edit:
+    post:
+      tags:
+      - 线路管理
+      summary: 修改保存线路
+      operationId: editSave_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelLine'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/line/add:
+    post:
+      tags:
+      - 线路管理
+      summary: 新增保存线路
+      operationId: addSave_3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelLine'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/dish/remove:
+    post:
+      tags:
+      - 菜品管理
+      summary: 删除菜品
+      operationId: remove_5
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/dish/list:
+    post:
+      tags:
+      - 菜品管理
+      summary: 查询菜品列表
+      operationId: list_3
+      parameters:
+      - name: dish
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelDish'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/dish/export:
+    post:
+      tags:
+      - 菜品管理
+      summary: 导出菜品列表
+      operationId: export_2
+      parameters:
+      - name: dish
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelDish'
+      responses:
+        "200":
+          description: OK
+  /travel18/dish/edit:
+    post:
+      tags:
+      - 菜品管理
+      summary: 修改保存菜品
+      operationId: editSave_3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelDish'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/dish/add:
+    post:
+      tags:
+      - 菜品管理
+      summary: 新增保存菜品
+      operationId: addSave_4
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelDish'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/dining/remove:
+    post:
+      tags:
+      - 餐饮管理
+      summary: 删除餐饮
+      operationId: remove_6
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/dining/list:
+    post:
+      tags:
+      - 餐饮管理
+      summary: 查询餐饮列表
+      operationId: list_4
+      parameters:
+      - name: dining
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelDining'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/dining/export:
+    post:
+      tags:
+      - 餐饮管理
+      summary: 导出餐饮列表
+      operationId: export_3
+      parameters:
+      - name: dining
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelDining'
+      responses:
+        "200":
+          description: OK
+  /travel18/dining/edit:
+    post:
+      tags:
+      - 餐饮管理
+      summary: 修改保存餐饮
+      operationId: editSave_4
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelDining'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/dining/add:
+    post:
+      tags:
+      - 餐饮管理
+      summary: 新增保存餐饮
+      operationId: addSave_5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelDining'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/checkin/remove:
+    post:
+      tags:
+      - 打卡点管理
+      summary: 删除打卡点
+      operationId: remove_7
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/checkin/list:
+    post:
+      tags:
+      - 打卡点管理
+      summary: 查询打卡点列表
+      operationId: list_5
+      parameters:
+      - name: checkin
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelCheckin'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/checkin/export:
+    post:
+      tags:
+      - 打卡点管理
+      summary: 导出打卡点列表
+      operationId: export_4
+      parameters:
+      - name: checkin
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelCheckin'
+      responses:
+        "200":
+          description: OK
+  /travel18/checkin/edit:
+    post:
+      tags:
+      - 打卡点管理
+      summary: 修改保存打卡点
+      operationId: editSave_5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelCheckin'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/checkin/add:
+    post:
+      tags:
+      - 打卡点管理
+      summary: 新增保存打卡点
+      operationId: addSave_6
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelCheckin'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/car/remove:
+    post:
+      tags:
+      - 包车管理
+      summary: 删除包车
+      operationId: remove_8
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/car/list:
+    post:
+      tags:
+      - 包车管理
+      summary: 查询包车列表
+      operationId: list_6
+      parameters:
+      - name: car
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelCar'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/car/export:
+    post:
+      tags:
+      - 包车管理
+      summary: 导出包车列表
+      operationId: export_5
+      parameters:
+      - name: car
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelCar'
+      responses:
+        "200":
+          description: OK
+  /travel18/car/edit:
+    post:
+      tags:
+      - 包车管理
+      summary: 修改保存包车
+      operationId: editSave_6
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelCar'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/car/add:
+    post:
+      tags:
+      - 包车管理
+      summary: 新增保存包车
+      operationId: addSave_7
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelCar'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/attraction/remove:
+    post:
+      tags:
+      - 景点管理
+      summary: 删除景点
+      operationId: remove_9
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/attraction/list:
+    post:
+      tags:
+      - 景点管理
+      summary: 查询景点列表
+      operationId: list_7
+      parameters:
+      - name: attraction
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelAttraction'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/attraction/export:
+    post:
+      tags:
+      - 景点管理
+      summary: 导出景点列表
+      operationId: export_6
+      parameters:
+      - name: attraction
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelAttraction'
+      responses:
+        "200":
+          description: OK
+  /travel18/attraction/edit:
+    post:
+      tags:
+      - 景点管理
+      summary: 修改保存景点
+      operationId: editSave_7
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelAttraction'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/attraction/add:
+    post:
+      tags:
+      - 景点管理
+      summary: 新增保存景点
+      operationId: addSave_8
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelAttraction'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/algorithm/config:
+    post:
+      tags:
+      - 算法配置管理
+      summary: 新增算法配置
+      operationId: add_3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelAlgorithmConfig'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/algorithm/config/remove:
+    post:
+      tags:
+      - 算法配置管理
+      summary: 删除算法配置
+      operationId: remove_10
+      parameters:
+      - name: ids
+        in: query
+        description: 配置ID，多个用逗号分隔
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/algorithm/config/edit:
+    post:
+      tags:
+      - 算法配置管理
+      summary: 修改算法配置
+      operationId: edit_14
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelAlgorithmConfig'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/accommodation/remove:
+    post:
+      tags:
+      - 住宿管理
+      summary: 删除住宿
+      operationId: remove_11
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/accommodation/list:
+    post:
+      tags:
+      - 住宿管理
+      summary: 查询住宿列表
+      operationId: list_8
+      parameters:
+      - name: accommodation
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelAccommodation'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/accommodation/export:
+    post:
+      tags:
+      - 住宿管理
+      summary: 导出住宿列表
+      operationId: export_7
+      parameters:
+      - name: accommodation
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelAccommodation'
+      responses:
+        "200":
+          description: OK
+  /travel18/accommodation/edit:
+    post:
+      tags:
+      - 住宿管理
+      summary: 修改保存住宿
+      operationId: editSave_8
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelAccommodation'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/accommodation/add:
+    post:
+      tags:
+      - 住宿管理
+      summary: 新增保存住宿
+      operationId: addSave_9
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelAccommodation'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /test/user/save:
+    post:
+      tags:
+      - test-controller
+      operationId: save
+      parameters:
+      - name: user
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/UserEntity'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RString'
+  /system/user/profile/avatar:
+    post:
+      tags:
+      - 个人中心
+      summary: 头像上传
+      operationId: avatar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - avatarfile
+              type: object
+              properties:
+                avatarfile:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/user/importTemplate:
+    post:
+      tags:
+      - 用户管理
+      summary: 下载导入模板
+      operationId: importTemplate
+      responses:
+        "200":
+          description: OK
+  /system/user/importData:
+    post:
+      tags:
+      - 用户管理
+      summary: 导入用户数据
+      operationId: importData
+      parameters:
+      - name: file
+        in: query
+        required: true
+        schema:
+          type: string
+          format: binary
+      - name: updateSupport
+        in: query
+        required: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/user/export:
+    post:
+      tags:
+      - 用户管理
+      summary: 导出用户列表
+      operationId: export_8
+      parameters:
+      - name: user
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysUser'
+      responses:
+        "200":
+          description: OK
+  /system/role/export:
+    post:
+      tags:
+      - 角色管理
+      summary: 导出角色列表
+      operationId: export_9
+      parameters:
+      - name: role
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysRole'
+      responses:
+        "200":
+          description: OK
+  /system/region/refresh-cache:
+    post:
+      tags:
+      - 省市区编码管理
+      summary: 刷新省市区缓存
+      operationId: refreshCache
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/post/export:
+    post:
+      tags:
+      - sys-post-controller
+      operationId: export_10
+      parameters:
+      - name: post
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysPost'
+      responses:
+        "200":
+          description: OK
+  /system/notice/markRead:
+    post:
+      tags:
+      - 通知公告
+      summary: 标记公告已读
+      operationId: markRead
+      parameters:
+      - name: noticeId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/notice/markReadAll:
+    post:
+      tags:
+      - 通知公告
+      summary: 批量标记已读
+      operationId: markReadAll
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dict/type/export:
+    post:
+      tags:
+      - 字典类型
+      summary: 导出字典类型
+      operationId: export_11
+      parameters:
+      - name: dictType
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysDictType'
+      responses:
+        "200":
+          description: OK
+  /system/dict/data/export:
+    post:
+      tags:
+      - 字典数据
+      summary: 导出字典数据
+      operationId: export_12
+      parameters:
+      - name: dictData
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysDictData'
+      responses:
+        "200":
+          description: OK
+  /system/config/export:
+    post:
+      tags:
+      - 参数配置
+      summary: 导出参数配置
+      operationId: export_13
+      parameters:
+      - name: config
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysConfig'
+      responses:
+        "200":
+          description: OK
+  /register:
+    post:
+      tags:
+      - sys-register-controller
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterBody'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/operlog/export:
+    post:
+      tags:
+      - sys-operlog-controller
+      operationId: export_14
+      parameters:
+      - name: operLog
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysOperLog'
+      responses:
+        "200":
+          description: OK
+  /monitor/logininfor/export:
+    post:
+      tags:
+      - sys-logininfor-controller
+      operationId: export_15
+      parameters:
+      - name: logininfor
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysLogininfor'
+      responses:
+        "200":
+          description: OK
+  /login:
+    post:
+      tags:
+      - 登录
+      summary: 登录方法
+      operationId: login_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginBody'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /common/uploads:
+    post:
+      tags:
+      - 通用
+      summary: 通用上传请求（多个）
+      operationId: uploadFiles
+      parameters:
+      - name: files
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /common/upload:
+    post:
+      tags:
+      - 通用
+      summary: 通用上传请求（单个）
+      operationId: uploadFile
+      parameters:
+      - name: file
+        in: query
+        required: true
+        schema:
+          type: string
+          format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/template/{templateId}:
+    get:
+      tags:
+      - C端行程模板
+      summary: 查询模板详情（含日程明细）
+      operationId: getInfo
+      parameters:
+      - name: templateId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/template/list:
+    get:
+      tags:
+      - C端行程模板
+      summary: 查询行程模板列表
+      operationId: list_9
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/resource/biz:
+    get:
+      tags:
+      - 微信-资源附件
+      summary: 微信端查询业务资源
+      description: 按业务类型和业务实体ID查询关联的资源附件列表，OSS文件的fileUrl会自动转换为完整访问URL
+      operationId: listByBiz
+      parameters:
+      - name: bizType
+        in: query
+        description: 业务类型：attraction/checkin/accommodation/dining/car/photography
+        required: true
+        schema:
+          type: string
+        example: attraction
+      - name: bizId
+        in: query
+        description: 业务实体ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/preference/latest:
+    get:
+      tags:
+      - 微信小程序-游客喜好
+      summary: 获取游客最近一次喜好配置
+      operationId: getLatest
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/oss/credential:
+    get:
+      tags:
+      - 微信-OSS上传凭证
+      summary: 获取OSS上传凭证（微信端）
+      description: 游客登录后获取STS临时上传凭证，前端拿到凭证后可直接向OSS发起PUT上传。凭证有效期30分钟，仅允许往指定业务目录PUT文件。
+      operationId: getCredential
+      parameters:
+      - name: bizType
+        in: query
+        description: 业务类型：attraction/checkin/accommodation/dining/car/photography
+        required: true
+        schema:
+          type: string
+        example: attraction
+      - name: resourcePurpose
+        in: query
+        description: 文件用途：cover/banner/detail/guide/manual/menu/other
+        required: false
+        schema:
+          type: string
+        example: cover
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/{itineraryId}:
+    get:
+      tags:
+      - C端行程管理
+      summary: 查询行程详情
+      operationId: getInfo_1
+      parameters:
+      - name: itineraryId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/itinerary/list:
+    get:
+      tags:
+      - C端行程管理
+      summary: 查询行程列表
+      operationId: list_10
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/auth/getUserInfo:
+    get:
+      tags:
+      - 微信小程序认证
+      summary: 获取游客信息
+      operationId: getUserInfo
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/tourist/{touristId}:
+    get:
+      tags:
+      - 游客管理
+      summary: 获取游客详情
+      operationId: getInfo_2
+      parameters:
+      - name: touristId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/tourist/list:
+    get:
+      tags:
+      - 游客管理
+      summary: 查询游客列表
+      operationId: list_11
+      parameters:
+      - name: tourist
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelTourist'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/template/{templateId}:
+    get:
+      tags:
+      - 行程模板管理
+      summary: 查询模板详情（含日程明细）
+      operationId: getInfo_3
+      parameters:
+      - name: templateId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/template/list:
+    get:
+      tags:
+      - 行程模板管理
+      summary: 分页查询行程模板列表
+      operationId: list_12
+      parameters:
+      - name: template
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelTemplate'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/resource/{resourceId}:
+    get:
+      tags:
+      - 资源附件管理
+      summary: 获取资源详情
+      operationId: getInfo_4
+      parameters:
+      - name: resourceId
+        in: path
+        description: 资源ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/resource/biz:
+    get:
+      tags:
+      - 资源附件管理
+      summary: 按业务查询资源列表
+      operationId: listByBiz_1
+      parameters:
+      - name: bizType
+        in: query
+        description: 业务类型
+        required: true
+        schema:
+          type: string
+      - name: bizId
+        in: query
+        description: 业务实体ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/preference/{preferenceId}:
+    get:
+      tags:
+      - 游客喜好管理
+      summary: 获取游客喜好详情
+      operationId: getInfo_5
+      parameters:
+      - name: preferenceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/preference/list:
+    get:
+      tags:
+      - 游客喜好管理
+      summary: 查询游客喜好列表
+      operationId: list_13
+      parameters:
+      - name: preference
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelTouristPreference'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/photography/{photographyId}:
+    get:
+      tags:
+      - 跟拍管理
+      summary: 获取跟拍详情
+      operationId: getInfo_6
+      parameters:
+      - name: photographyId
+        in: path
+        description: 跟拍ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/oss/credential:
+    get:
+      tags:
+      - OSS上传凭证
+      summary: 获取OSS上传凭证（管理端）
+      description: 通过STS AssumeRole生成临时上传凭证，前端拿到凭证后可直接向OSS发起PUT上传，不经过后端转发。凭证有效期30分钟，仅允许往指定业务目录PUT文件。
+      operationId: getCredential_1
+      parameters:
+      - name: bizType
+        in: query
+        description: 业务类型：attraction/checkin/accommodation/dining/car/photography
+        required: true
+        schema:
+          type: string
+        example: attraction
+      - name: resourcePurpose
+        in: query
+        description: 文件用途：cover/banner/detail/guide/manual/menu/other
+        required: false
+        schema:
+          type: string
+        example: cover
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/dish/{dishId}:
+    get:
+      tags:
+      - 菜品管理
+      summary: 获取菜品详情
+      operationId: getInfo_7
+      parameters:
+      - name: dishId
+        in: path
+        description: 菜品ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/dining/{diningId}:
+    get:
+      tags:
+      - 餐饮管理
+      summary: 获取餐饮详情
+      operationId: getInfo_8
+      parameters:
+      - name: diningId
+        in: path
+        description: 餐饮ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/dining/{diningId}/dishes:
+    get:
+      tags:
+      - 餐饮管理
+      summary: 查询餐饮下的菜品
+      operationId: getDishesByDining
+      parameters:
+      - name: diningId
+        in: path
+        description: 餐饮ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/checkin/{checkinId}:
+    get:
+      tags:
+      - 打卡点管理
+      summary: 查询打卡点详情
+      operationId: getInfo_9
+      parameters:
+      - name: checkinId
+        in: path
+        description: 打卡点ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/car/{carId}:
+    get:
+      tags:
+      - 包车管理
+      summary: 获取包车详情
+      operationId: getInfo_10
+      parameters:
+      - name: carId
+        in: path
+        description: 包车ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/attraction/{attractionId}:
+    get:
+      tags:
+      - 景点管理
+      summary: 查询景点详情
+      operationId: getInfo_11
+      parameters:
+      - name: attractionId
+        in: path
+        description: 景点ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/attraction/checkin/{attractionId}:
+    get:
+      tags:
+      - 景点管理
+      summary: 查询景点下的打卡点列表
+      operationId: checkinList
+      parameters:
+      - name: attractionId
+        in: path
+        description: 景点ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/algorithm/config/{configId}:
+    get:
+      tags:
+      - 算法配置管理
+      summary: 查询配置详情
+      operationId: getInfo_12
+      parameters:
+      - name: configId
+        in: path
+        description: 配置ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/algorithm/config/list:
+    get:
+      tags:
+      - 算法配置管理
+      summary: 分页查询算法配置列表
+      operationId: list_14
+      parameters:
+      - name: config
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelAlgorithmConfig'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/algorithm/config/history/{configId}:
+    get:
+      tags:
+      - 算法配置管理
+      summary: 查询配置历史
+      operationId: history
+      parameters:
+      - name: configId
+        in: path
+        description: 配置ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/algorithm/config/history/list:
+    get:
+      tags:
+      - 算法配置管理
+      summary: 分页查询配置历史
+      operationId: historyList
+      parameters:
+      - name: history
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravelAlgorithmConfigHistory'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /travel18/algorithm/config/effective:
+    get:
+      tags:
+      - 算法配置管理
+      summary: 查询生效配置
+      operationId: getEffectiveConfig
+      parameters:
+      - name: provinceCode
+        in: query
+        description: 省份代码
+        required: false
+        schema:
+          type: string
+      - name: cityCode
+        in: query
+        description: 城市代码
+        required: false
+        schema:
+          type: string
+      - name: districtCode
+        in: query
+        description: 区县代码
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/accommodation/{accommodationId}:
+    get:
+      tags:
+      - 住宿管理
+      summary: 获取住宿详情
+      operationId: getInfo_13
+      parameters:
+      - name: accommodationId
+        in: path
+        description: 住宿ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /test/user/{userId}:
+    get:
+      tags:
+      - test-controller
+      operationId: getUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RUserEntity'
+    delete:
+      tags:
+      - test-controller
+      operationId: delete
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RString'
+  /test/user/list:
+    get:
+      tags:
+      - test-controller
+      operationId: userList
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RListUserEntity'
+  /system/user/list:
+    get:
+      tags:
+      - 用户管理
+      summary: 获取用户列表
+      operationId: list_15
+      parameters:
+      - name: user
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysUser'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /system/user/deptTree:
+    get:
+      tags:
+      - 用户管理
+      summary: 获取部门树列表
+      operationId: deptTree
+      parameters:
+      - name: dept
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysDept'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/user/authRole/{userId}:
+    get:
+      tags:
+      - 用户管理
+      summary: 根据用户编号获取授权角色
+      operationId: authRole
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/user/:
+    get:
+      tags:
+      - 用户管理
+      summary: 根据用户编号获取详细信息
+      operationId: getInfo_14
+      parameters: []
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/user/{userId}:
+    get:
+      tags:
+      - 用户管理
+      summary: 根据用户编号获取详细信息
+      operationId: getInfo_15
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/role/{roleId}:
+    get:
+      tags:
+      - 角色管理
+      summary: 根据角色编号获取详细信息
+      operationId: getInfo_16
+      parameters:
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/role/optionselect:
+    get:
+      tags:
+      - 角色管理
+      summary: 获取角色选择框列表
+      operationId: optionselect
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/role/list:
+    get:
+      tags:
+      - 角色管理
+      summary: 获取角色列表
+      operationId: list_16
+      parameters:
+      - name: role
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysRole'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /system/role/deptTree/{roleId}:
+    get:
+      tags:
+      - 角色管理
+      summary: 获取对应角色部门树列表
+      operationId: deptTree_1
+      parameters:
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/role/authUser/unallocatedList:
+    get:
+      tags:
+      - 角色管理
+      summary: 查询未分配用户角色列表
+      operationId: unallocatedList
+      parameters:
+      - name: user
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysUser'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /system/role/authUser/allocatedList:
+    get:
+      tags:
+      - 角色管理
+      summary: 查询已分配用户角色列表
+      operationId: allocatedList
+      parameters:
+      - name: user
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysUser'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /system/region/tree:
+    get:
+      tags:
+      - 省市区编码管理
+      summary: 获取树形区域数据
+      operationId: regionTree
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/region/province:
+    get:
+      tags:
+      - 省市区编码管理
+      summary: 获取所有省级数据
+      operationId: provinceList
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/region/district/{cityCode}:
+    get:
+      tags:
+      - 省市区编码管理
+      summary: 根据城市编码获取区级数据
+      operationId: districtList
+      parameters:
+      - name: cityCode
+        in: path
+        description: 市级编码
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/region/city/{provinceCode}:
+    get:
+      tags:
+      - 省市区编码管理
+      summary: 根据省份编码获取市级数据
+      operationId: cityList
+      parameters:
+      - name: provinceCode
+        in: path
+        description: 省级编码
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/post/{postId}:
+    get:
+      tags:
+      - sys-post-controller
+      operationId: getInfo_17
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/post/optionselect:
+    get:
+      tags:
+      - sys-post-controller
+      operationId: optionselect_1
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/post/list:
+    get:
+      tags:
+      - sys-post-controller
+      operationId: list_17
+      parameters:
+      - name: post
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysPost'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /system/notice/{noticeId}:
+    get:
+      tags:
+      - 通知公告
+      summary: 根据通知公告编号获取详细信息
+      operationId: getInfo_18
+      parameters:
+      - name: noticeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/notice/list:
+    get:
+      tags:
+      - 通知公告
+      summary: 获取通知公告列表
+      operationId: list_18
+      parameters:
+      - name: notice
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysNotice'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /system/notice/listTop:
+    get:
+      tags:
+      - 通知公告
+      summary: 首页顶部公告列表
+      operationId: listTop
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/menu/{menuId}:
+    get:
+      tags:
+      - 菜单管理
+      summary: 根据菜单编号获取详细信息
+      operationId: getInfo_19
+      parameters:
+      - name: menuId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    delete:
+      tags:
+      - 菜单管理
+      summary: 删除菜单
+      operationId: remove_18
+      parameters:
+      - name: menuId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/menu/treeselect:
+    get:
+      tags:
+      - 菜单管理
+      summary: 获取菜单下拉树列表
+      operationId: treeselect
+      parameters:
+      - name: menu
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysMenu'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/menu/roleMenuTreeselect/{roleId}:
+    get:
+      tags:
+      - 菜单管理
+      summary: 加载对应角色菜单列表树
+      operationId: roleMenuTreeselect
+      parameters:
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/menu/list:
+    get:
+      tags:
+      - 菜单管理
+      summary: 获取菜单列表
+      operationId: list_19
+      parameters:
+      - name: menu
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysMenu'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dict/type/{dictId}:
+    get:
+      tags:
+      - 字典类型
+      summary: 查询字典类型详细
+      operationId: getInfo_20
+      parameters:
+      - name: dictId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dict/type/optionselect:
+    get:
+      tags:
+      - 字典类型
+      summary: 获取字典选择框列表
+      operationId: optionselect_2
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dict/type/list:
+    get:
+      tags:
+      - 字典类型
+      summary: 获取字典类型列表
+      operationId: list_20
+      parameters:
+      - name: dictType
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysDictType'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /system/dict/data/{dictCode}:
+    get:
+      tags:
+      - 字典数据
+      summary: 查询字典数据详细
+      operationId: getInfo_21
+      parameters:
+      - name: dictCode
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dict/data/type/{dictType}:
+    get:
+      tags:
+      - 字典数据
+      summary: 根据字典类型查询字典数据信息
+      operationId: dictType
+      parameters:
+      - name: dictType
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dict/data/list:
+    get:
+      tags:
+      - 字典数据
+      summary: 获取字典数据列表
+      operationId: list_21
+      parameters:
+      - name: dictData
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysDictData'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /system/dept/{deptId}:
+    get:
+      tags:
+      - sys-dept-controller
+      operationId: getInfo_22
+      parameters:
+      - name: deptId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+    delete:
+      tags:
+      - sys-dept-controller
+      operationId: remove_21
+      parameters:
+      - name: deptId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dept/list:
+    get:
+      tags:
+      - sys-dept-controller
+      operationId: list_22
+      parameters:
+      - name: dept
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysDept'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dept/list/exclude/{deptId}:
+    get:
+      tags:
+      - sys-dept-controller
+      operationId: excludeChild
+      parameters:
+      - name: deptId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/config/{configId}:
+    get:
+      tags:
+      - 参数配置
+      summary: 根据参数编号获取详细信息
+      operationId: getInfo_23
+      parameters:
+      - name: configId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/config/list:
+    get:
+      tags:
+      - 参数配置
+      summary: 获取参数配置列表
+      operationId: list_23
+      parameters:
+      - name: config
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysConfig'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /system/config/configKey/{configKey}:
+    get:
+      tags:
+      - 参数配置
+      summary: 根据参数键名查询参数值
+      operationId: getConfigKey
+      parameters:
+      - name: configKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/server:
+    get:
+      tags:
+      - server-controller
+      operationId: getInfo_24
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/operlog/list:
+    get:
+      tags:
+      - sys-operlog-controller
+      operationId: list_24
+      parameters:
+      - name: operLog
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysOperLog'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /monitor/online/list:
+    get:
+      tags:
+      - sys-user-online-controller
+      operationId: list_25
+      parameters:
+      - name: ipaddr
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: userName
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /monitor/logininfor/unlock/{userName}:
+    get:
+      tags:
+      - sys-logininfor-controller
+      operationId: unlock
+      parameters:
+      - name: userName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/logininfor/list:
+    get:
+      tags:
+      - sys-logininfor-controller
+      operationId: list_26
+      parameters:
+      - name: logininfor
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SysLogininfor'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TableDataInfo'
+  /monitor/cache:
+    get:
+      tags:
+      - cache-controller
+      operationId: getInfo_25
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/cache/getValue/{cacheName}/{cacheKey}:
+    get:
+      tags:
+      - cache-controller
+      operationId: getCacheValue
+      parameters:
+      - name: cacheName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: cacheKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/cache/getNames:
+    get:
+      tags:
+      - cache-controller
+      operationId: cache
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/cache/getKeys/{cacheName}:
+    get:
+      tags:
+      - cache-controller
+      operationId: getCacheKeys
+      parameters:
+      - name: cacheName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /getRouters:
+    get:
+      tags:
+      - 登录
+      summary: 获取路由信息
+      operationId: getRouters
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /getInfo:
+    get:
+      tags:
+      - 登录
+      summary: 获取用户信息
+      operationId: getInfo_26
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /common/download:
+    get:
+      tags:
+      - 通用
+      summary: 通用下载请求
+      operationId: fileDownload
+      parameters:
+      - name: fileName
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: delete
+        in: query
+        required: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: OK
+  /common/download/resource:
+    get:
+      tags:
+      - 通用
+      summary: 本地资源通用下载
+      operationId: resourceDownload
+      parameters:
+      - name: resource
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+  /captchaImage:
+    get:
+      tags:
+      - 验证码
+      summary: 生成验证码
+      operationId: getCode
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/tourist/{touristIds}:
+    delete:
+      tags:
+      - 游客管理
+      summary: 删除游客
+      operationId: remove_12
+      parameters:
+      - name: touristIds
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /travel18/preference/{preferenceIds}:
+    delete:
+      tags:
+      - 游客喜好管理
+      summary: 删除游客喜好
+      operationId: remove_13
+      parameters:
+      - name: preferenceIds
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/user/{userIds}:
+    delete:
+      tags:
+      - 用户管理
+      summary: 删除用户
+      operationId: remove_14
+      parameters:
+      - name: userIds
+        in: path
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/role/{roleIds}:
+    delete:
+      tags:
+      - 角色管理
+      summary: 删除角色
+      operationId: remove_15
+      parameters:
+      - name: roleIds
+        in: path
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/post/{postIds}:
+    delete:
+      tags:
+      - sys-post-controller
+      operationId: remove_16
+      parameters:
+      - name: postIds
+        in: path
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/notice/{noticeIds}:
+    delete:
+      tags:
+      - 通知公告
+      summary: 删除通知公告
+      operationId: remove_17
+      parameters:
+      - name: noticeIds
+        in: path
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dict/type/{dictIds}:
+    delete:
+      tags:
+      - 字典类型
+      summary: 删除字典类型
+      operationId: remove_19
+      parameters:
+      - name: dictIds
+        in: path
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dict/type/refreshCache:
+    delete:
+      tags:
+      - 字典类型
+      summary: 刷新字典缓存
+      operationId: refreshCache_1
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/dict/data/{dictCodes}:
+    delete:
+      tags:
+      - 字典数据
+      summary: 删除字典类型
+      operationId: remove_20
+      parameters:
+      - name: dictCodes
+        in: path
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/config/{configIds}:
+    delete:
+      tags:
+      - 参数配置
+      summary: 删除参数配置
+      operationId: remove_22
+      parameters:
+      - name: configIds
+        in: path
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /system/config/refreshCache:
+    delete:
+      tags:
+      - 参数配置
+      summary: 刷新参数缓存
+      operationId: refreshCache_2
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/operlog/{operIds}:
+    delete:
+      tags:
+      - sys-operlog-controller
+      operationId: remove_23
+      parameters:
+      - name: operIds
+        in: path
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/operlog/clean:
+    delete:
+      tags:
+      - sys-operlog-controller
+      operationId: clean
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/online/{tokenId}:
+    delete:
+      tags:
+      - sys-user-online-controller
+      operationId: forceLogout
+      parameters:
+      - name: tokenId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/logininfor/{infoIds}:
+    delete:
+      tags:
+      - sys-logininfor-controller
+      operationId: remove_24
+      parameters:
+      - name: infoIds
+        in: path
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/logininfor/clean:
+    delete:
+      tags:
+      - sys-logininfor-controller
+      operationId: clean_1
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/cache/clearCacheName/{cacheName}:
+    delete:
+      tags:
+      - cache-controller
+      operationId: clearCacheName
+      parameters:
+      - name: cacheName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/cache/clearCacheKey/{cacheKey}:
+    delete:
+      tags:
+      - cache-controller
+      operationId: clearCacheKey
+      parameters:
+      - name: cacheKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /monitor/cache/clearCacheAll:
+    delete:
+      tags:
+      - cache-controller
+      operationId: clearCacheAll
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /:
+    get:
+      tags:
+      - sys-index-controller
+      operationId: index
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+    put:
+      tags:
+      - sys-index-controller
+      operationId: index_3
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+    post:
+      tags:
+      - sys-index-controller
+      operationId: index_2
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+    delete:
+      tags:
+      - sys-index-controller
+      operationId: index_5
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+    options:
+      tags:
+      - sys-index-controller
+      operationId: index_6
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+    head:
+      tags:
+      - sys-index-controller
+      operationId: index_1
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+    patch:
+      tags:
+      - sys-index-controller
+      operationId: index_4
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+components:
+  schemas:
+    TravelTouristPreference:
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        preferenceId:
+          type: integer
+          format: int64
+        touristId:
+          type: integer
+          format: int64
+        tripId:
+          type: integer
+          format: int64
+        gender:
+          type: string
+        birthYear:
+          type: integer
+          format: int32
+        stamina:
+          type: string
+        travelLikes:
+          type: string
+        foodLikes:
+          type: string
+        stayPref:
+          type: string
+        healthTags:
+          type: string
+        status:
+          type: string
+        delFlag:
+          type: string
+        staminaLabel:
+          type: string
+        travelLikesList:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        foodLikesList:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        stayPrefList:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        healthTagsList:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+    AjaxResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+        warn:
+          type: boolean
+        error:
+          type: boolean
+        empty:
+          type: boolean
+      additionalProperties:
+        type: object
+    TravelTourist:
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        touristId:
+          type: integer
+          format: int64
+        openid:
+          type: string
+        unionid:
+          type: string
+        sessionKey:
+          type: string
+        nickname:
+          type: string
+        avatarUrl:
+          type: string
+        gender:
+          type: string
+        phone:
+          type: string
+        realName:
+          type: string
+        idCard:
+          type: string
+        status:
+          type: string
+        delFlag:
+          type: string
+        loginIp:
+          type: string
+        loginDate:
+          type: string
+          format: date-time
+    UserEntity:
+      type: object
+      properties:
+        userId:
+          type: integer
+          description: 用户ID
+          format: int32
+        username:
+          type: string
+          description: 用户名称
+        password:
+          type: string
+          description: 用户密码
+        mobile:
+          type: string
+          description: 用户手机
+      description: 用户实体
+    RString:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        msg:
+          type: string
+        data:
+          type: string
+    SysDept:
+      required:
+      - deptName
+      - orderNum
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        deptId:
+          type: integer
+          format: int64
+        parentId:
+          type: integer
+          format: int64
+        ancestors:
+          type: string
+        deptName:
+          maxLength: 30
+          minLength: 0
+          type: string
+        orderNum:
+          type: integer
+          format: int32
+        leader:
+          type: string
+        phone:
+          maxLength: 11
+          minLength: 0
+          type: string
+        email:
+          maxLength: 50
+          minLength: 0
+          type: string
+        status:
+          type: string
+        delFlag:
+          type: string
+        parentName:
+          type: string
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/SysDept'
+    SysRole:
+      required:
+      - roleKey
+      - roleName
+      - roleSort
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        roleId:
+          type: integer
+          format: int64
+        roleName:
+          maxLength: 30
+          minLength: 0
+          type: string
+        roleKey:
+          maxLength: 100
+          minLength: 0
+          type: string
+        roleSort:
+          type: integer
+          format: int32
+        dataScope:
+          type: string
+        menuCheckStrictly:
+          type: boolean
+        deptCheckStrictly:
+          type: boolean
+        status:
+          type: string
+        delFlag:
+          type: string
+        flag:
+          type: boolean
+        menuIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        deptIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        permissions:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        admin:
+          type: boolean
+    SysUser:
+      required:
+      - userName
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        userId:
+          type: integer
+          format: int64
+        deptId:
+          type: integer
+          format: int64
+        userName:
+          maxLength: 30
+          minLength: 0
+          type: string
+        nickName:
+          maxLength: 30
+          minLength: 0
+          type: string
+        email:
+          maxLength: 50
+          minLength: 0
+          type: string
+        phonenumber:
+          maxLength: 11
+          minLength: 0
+          type: string
+        sex:
+          type: string
+        avatar:
+          type: string
+        password:
+          type: string
+        status:
+          type: string
+        delFlag:
+          type: string
+        loginIp:
+          type: string
+        loginDate:
+          type: string
+          format: date-time
+        pwdUpdateDate:
+          type: string
+          format: date-time
+        dept:
+          $ref: '#/components/schemas/SysDept'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/SysRole'
+        roleIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        postIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        roleId:
+          type: integer
+          format: int64
+        admin:
+          type: boolean
+    SysUserRole:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        roleId:
+          type: integer
+          format: int64
+    SysPost:
+      required:
+      - postCode
+      - postName
+      - postSort
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        postId:
+          type: integer
+          format: int64
+        postCode:
+          maxLength: 64
+          minLength: 0
+          type: string
+        postName:
+          maxLength: 50
+          minLength: 0
+          type: string
+        postSort:
+          type: integer
+          format: int32
+        status:
+          type: string
+        flag:
+          type: boolean
+    SysNotice:
+      required:
+      - noticeTitle
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        noticeId:
+          type: integer
+          format: int64
+        noticeTitle:
+          maxLength: 50
+          minLength: 0
+          type: string
+        noticeType:
+          type: string
+        noticeContent:
+          type: string
+        status:
+          type: string
+        isRead:
+          type: boolean
+    SysMenu:
+      required:
+      - menuName
+      - menuType
+      - orderNum
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        menuId:
+          type: integer
+          format: int64
+        menuName:
+          maxLength: 50
+          minLength: 0
+          type: string
+        parentName:
+          type: string
+        parentId:
+          type: integer
+          format: int64
+        orderNum:
+          type: integer
+          format: int32
+        path:
+          maxLength: 200
+          minLength: 0
+          type: string
+        component:
+          maxLength: 200
+          minLength: 0
+          type: string
+        query:
+          type: string
+        routeName:
+          type: string
+        isFrame:
+          type: string
+        isCache:
+          type: string
+        menuType:
+          type: string
+        visible:
+          type: string
+        status:
+          type: string
+        perms:
+          maxLength: 100
+          minLength: 0
+          type: string
+        icon:
+          type: string
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/SysMenu'
+    SysDictType:
+      required:
+      - dictName
+      - dictType
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        dictId:
+          type: integer
+          format: int64
+        dictName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        dictType:
+          maxLength: 100
+          minLength: 0
+          pattern: "^[a-z][a-z0-9_]*$"
+          type: string
+        status:
+          type: string
+    SysDictData:
+      required:
+      - dictLabel
+      - dictType
+      - dictValue
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        dictCode:
+          type: integer
+          format: int64
+        dictSort:
+          type: integer
+          format: int64
+        dictLabel:
+          maxLength: 100
+          minLength: 0
+          type: string
+        dictValue:
+          maxLength: 100
+          minLength: 0
+          type: string
+        dictType:
+          maxLength: 100
+          minLength: 0
+          type: string
+        cssClass:
+          maxLength: 100
+          minLength: 0
+          type: string
+        listClass:
+          type: string
+        isDefault:
+          type: string
+        status:
+          type: string
+        default:
+          type: boolean
+    SysConfig:
+      required:
+      - configKey
+      - configName
+      - configValue
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        configId:
+          type: integer
+          format: int64
+        configName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        configKey:
+          maxLength: 100
+          minLength: 0
+          type: string
+        configValue:
+          maxLength: 500
+          minLength: 0
+          type: string
+        configType:
+          type: string
+    TravelResource:
+      required:
+      - bizId
+      - bizType
+      - fileUrl
+      - resourceType
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        resourceId:
+          type: integer
+          format: int64
+        bizType:
+          maxLength: 30
+          minLength: 0
+          type: string
+        bizId:
+          type: integer
+          format: int64
+        resourceType:
+          type: string
+        resourcePurpose:
+          type: string
+        fileName:
+          type: string
+        fileUrl:
+          maxLength: 500
+          minLength: 0
+          type: string
+        fileSize:
+          type: integer
+          format: int64
+        mimeType:
+          type: string
+        fileExt:
+          type: string
+        sortOrder:
+          type: integer
+          format: int32
+        status:
+          type: string
+        delFlag:
+          type: string
+    TravelItineraryDining:
+      type: object
+      properties:
+        breakfastId:
+          type: integer
+          format: int64
+        lunchId:
+          type: integer
+          format: int64
+        dinnerId:
+          type: integer
+          format: int64
+    TravelItinerary:
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        itineraryId:
+          type: integer
+          format: int64
+        touristId:
+          type: integer
+          format: int64
+        templateId:
+          type: integer
+          format: int64
+        templateDayIds:
+          type: string
+        itineraryName:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        days:
+          type: integer
+          format: int32
+        status:
+          type: string
+        createFrom:
+          type: string
+        version:
+          type: integer
+          format: int32
+        totalCost:
+          type: number
+        delFlag:
+          type: string
+        daysList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelItineraryDay'
+        statusLabel:
+          type: string
+        createFromLabel:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+    TravelItineraryDay:
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        itineraryDayId:
+          type: integer
+          format: int64
+        itineraryId:
+          type: integer
+          format: int64
+        templateDayId:
+          type: integer
+          format: int64
+        dayNumber:
+          type: integer
+          format: int32
+        dayTheme:
+          type: string
+        attractionIds:
+          type: string
+        attractionCriteria:
+          type: string
+        touristAttractionIds:
+          type: string
+        accommodationId:
+          type: integer
+          format: int64
+        touristAccommodationId:
+          type: integer
+          format: int64
+        breakfastId:
+          type: integer
+          format: int64
+        touristBreakfastId:
+          type: integer
+          format: int64
+        lunchId:
+          type: integer
+          format: int64
+        touristLunchId:
+          type: integer
+          format: int64
+        dinnerId:
+          type: integer
+          format: int64
+        touristDinnerId:
+          type: integer
+          format: int64
+        photographyId:
+          type: integer
+          format: int64
+        touristPhotographyId:
+          type: integer
+          format: int64
+        carId:
+          type: integer
+          format: int64
+        touristCarId:
+          type: integer
+          format: int64
+        delFlag:
+          type: string
+    TravelTemplate:
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        templateId:
+          type: integer
+          format: int64
+        templateName:
+          type: string
+        templateDesc:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        baseDays:
+          type: integer
+          format: int32
+        minDays:
+          type: integer
+          format: int32
+        maxDays:
+          type: integer
+          format: int32
+        staminaLevel:
+          type: string
+        travelTags:
+          type: string
+        includePhotography:
+          type: string
+        includeCar:
+          type: string
+        version:
+          type: integer
+          format: int32
+        status:
+          type: string
+        delFlag:
+          type: string
+        days:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelTemplateDay'
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+    TravelTemplateDay:
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        templateDayId:
+          type: integer
+          format: int64
+        templateId:
+          type: integer
+          format: int64
+        dayNumber:
+          type: integer
+          format: int32
+        dayTheme:
+          type: string
+        attractionIds:
+          type: string
+        attractionCriteria:
+          type: string
+        leisureMin:
+          type: integer
+          format: int32
+        leisureMax:
+          type: integer
+          format: int32
+        accommodationId:
+          type: integer
+          format: int64
+        breakfastDiningId:
+          type: integer
+          format: int64
+        lunchDiningId:
+          type: integer
+          format: int64
+        dinnerDiningId:
+          type: integer
+          format: int64
+        photographyId:
+          type: integer
+          format: int64
+        carId:
+          type: integer
+          format: int64
+        status:
+          type: string
+        delFlag:
+          type: string
+    GenerateTemplateRequest:
+      type: object
+      properties:
+        province:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        days:
+          type: integer
+          format: int32
+        staminaLevel:
+          type: string
+        travelLikes:
+          type: string
+        foodLikes:
+          type: string
+    TableDataInfo:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+        rows:
+          type: array
+          items:
+            type: object
+        code:
+          type: integer
+          format: int32
+        msg:
+          type: string
+    TravelPhotography:
+      required:
+      - nickname
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        photographyId:
+          type: integer
+          format: int64
+        nickname:
+          type: string
+        gender:
+          type: string
+        introduction:
+          type: string
+        contactInfo:
+          type: string
+        price:
+          type: number
+        recommendRating:
+          type: integer
+          format: int32
+        equipment:
+          type: string
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+    TravelLine:
+      required:
+      - lineName
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        lineId:
+          type: integer
+          format: int64
+        lineName:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+    TravelDish:
+      required:
+      - dishName
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        dishId:
+          type: integer
+          format: int64
+        diningId:
+          type: integer
+          format: int64
+        dishName:
+          type: string
+        dishDesc:
+          type: string
+        specialStar:
+          type: integer
+          format: int32
+        darkLevel:
+          type: string
+        price:
+          type: number
+        seasonal:
+          type: string
+        reservation:
+          type: string
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+    TravelDining:
+      required:
+      - diningName
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        diningId:
+          type: integer
+          format: int64
+        diningName:
+          type: string
+        diningDesc:
+          type: string
+        diningTips:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        address:
+          type: string
+        longitude:
+          type: number
+        latitude:
+          type: number
+        petFriendly:
+          type: string
+        diningNature:
+          type: string
+        avgCost:
+          type: number
+        recommendRating:
+          type: integer
+          format: int32
+        parkingAvailable:
+          type: string
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+    TravelCheckin:
+      required:
+      - attractionId
+      - checkinName
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        checkinId:
+          type: integer
+          format: int64
+        attractionId:
+          type: integer
+          format: int64
+        checkinName:
+          type: string
+        checkinShortName:
+          type: string
+        checkinDescription:
+          type: string
+        checkinBlurb:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        longitude:
+          type: number
+        latitude:
+          type: number
+        checkinNotes:
+          type: string
+        blindStatus:
+          type: string
+        classicRating:
+          type: string
+        leisureRating:
+          type: string
+        visitDuration:
+          type: string
+        openTime:
+          type: string
+        familyFriendly:
+          type: string
+        ticketPriceA:
+          type: number
+        ticketPriceC:
+          type: number
+        reservationRequired:
+          type: string
+        perCost:
+          type: string
+        indoorOutdoor:
+          type: string
+        closedDay:
+          type: string
+        specialPeriod:
+          type: string
+        badFactors:
+          type: string
+        sortOrder:
+          type: integer
+          format: int32
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+    TravelCar:
+      required:
+      - nickname
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        carId:
+          type: integer
+          format: int64
+        nickname:
+          type: string
+        gender:
+          type: string
+        introduction:
+          type: string
+        contactInfo:
+          type: string
+        price:
+          type: number
+        carModel:
+          type: string
+        seatCount:
+          type: integer
+          format: int32
+        drivingYears:
+          type: integer
+          format: int32
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+    TravelAttraction:
+      required:
+      - attractionName
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        attractionId:
+          type: integer
+          format: int64
+        lineIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelLine'
+        attractionName:
+          type: string
+        attractionShortName:
+          type: string
+        attractionDescription:
+          type: string
+        attractionBlurb:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        longitude:
+          type: number
+        latitude:
+          type: number
+        attractionNotes:
+          type: string
+        blindStatus:
+          type: string
+        classicRating:
+          type: string
+        leisureRating:
+          type: string
+        visitDuration:
+          type: string
+        openTime:
+          type: string
+        familyFriendly:
+          type: string
+        ticketPriceA:
+          type: number
+        ticketPriceC:
+          type: number
+        reservationRequired:
+          type: string
+        perCost:
+          type: string
+        indoorOutdoor:
+          type: string
+        closedDay:
+          type: string
+        specialPeriod:
+          type: string
+        badFactors:
+          type: string
+        attractionType:
+          type: string
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+    TravelAlgorithmConfig:
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        configId:
+          type: integer
+          format: int64
+        regionCode:
+          type: string
+        regionName:
+          type: string
+        regionLevel:
+          type: string
+        version:
+          type: integer
+          format: int32
+        status:
+          type: string
+        delFlag:
+          type: string
+        staminaLimit0:
+          type: integer
+          format: int32
+        staminaLimit1:
+          type: integer
+          format: int32
+        staminaLimit2:
+          type: integer
+          format: int32
+        staminaLimit3:
+          type: integer
+          format: int32
+        recoveryStartDay:
+          type: integer
+          format: int32
+        recoveryThreshold:
+          type: integer
+          format: int32
+        recoveryLimit2635:
+          type: integer
+          format: int32
+        recoveryLimit3650:
+          type: integer
+          format: int32
+        recoveryLimit51Plus:
+          type: integer
+          format: int32
+        singleAttractionThreshold:
+          type: integer
+          format: int32
+        staminaFormulaCoefficient:
+          type: number
+        periodLimitMorning:
+          type: integer
+          format: int32
+        periodLimitAfternoon:
+          type: integer
+          format: int32
+        periodLimitEvening:
+          type: integer
+          format: int32
+    TravelAccommodation:
+      required:
+      - accommodationName
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        accommodationId:
+          type: integer
+          format: int64
+        accommodationName:
+          type: string
+        accommodationDesc:
+          type: string
+        contactPhone:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        address:
+          type: string
+        longitude:
+          type: number
+        latitude:
+          type: number
+        accommodationType:
+          type: string
+        breakfastIncluded:
+          type: string
+        petFriendly:
+          type: string
+        priceMin:
+          type: number
+        priceMax:
+          type: number
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+    RegisterBody:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+          description: 用户名
+          example: admin
+        password:
+          type: string
+          description: 密码
+        code:
+          type: string
+          description: 验证码
+        uuid:
+          type: string
+          description: 验证码唯一标识
+    SysOperLog:
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        operId:
+          type: integer
+          format: int64
+        title:
+          type: string
+        businessType:
+          type: integer
+          format: int32
+        businessTypes:
+          type: array
+          items:
+            type: integer
+            format: int32
+        method:
+          type: string
+        requestMethod:
+          type: string
+        operatorType:
+          type: integer
+          format: int32
+        operName:
+          type: string
+        deptName:
+          type: string
+        operUrl:
+          type: string
+        operIp:
+          type: string
+        operLocation:
+          type: string
+        operParam:
+          type: string
+        jsonResult:
+          type: string
+        status:
+          type: integer
+          format: int32
+        errorMsg:
+          type: string
+        operTime:
+          type: string
+          format: date-time
+        costTime:
+          type: integer
+          format: int64
+    SysLogininfor:
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        infoId:
+          type: integer
+          format: int64
+        userName:
+          type: string
+        status:
+          type: string
+        ipaddr:
+          type: string
+        loginLocation:
+          type: string
+        browser:
+          type: string
+        os:
+          type: string
+        msg:
+          type: string
+        loginTime:
+          type: string
+          format: date-time
+    LoginBody:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+          description: 用户名
+          example: admin
+        password:
+          type: string
+          description: 密码
+        code:
+          type: string
+          description: 验证码
+        uuid:
+          type: string
+          description: 验证码唯一标识
+      description: 用户登录对象
+    TravelAlgorithmConfigHistory:
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        historyId:
+          type: integer
+          format: int64
+        configId:
+          type: integer
+          format: int64
+        regionCode:
+          type: string
+        regionName:
+          type: string
+        version:
+          type: integer
+          format: int32
+        operation:
+          type: string
+        oldConfigSnapshot:
+          type: string
+        newConfigSnapshot:
+          type: string
+        operateTime:
+          type: string
+          format: date-time
+        operateBy:
+          type: string
+    RUserEntity:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        msg:
+          type: string
+        data:
+          $ref: '#/components/schemas/UserEntity'
+    RListUserEntity:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        msg:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserEntity'
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

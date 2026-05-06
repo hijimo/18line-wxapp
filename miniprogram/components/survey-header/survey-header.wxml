@@ -1,0 +1,14 @@
+<!-- survey-header.wxml -->
+<view class="survey-header" style="padding-top: {{statusBarHeight}}px;">
+  <view class="header-content">
+    <view class="header-left">
+      <view class="back-btn" bindtap="onBack">
+        <image class="back-icon" src="http://localhost:3845/assets/bb0f5b874b9f73ac93f51ed7ff7e077d6e062aef.svg" mode="aspectFit" />
+      </view>
+      <text class="step-text">第 {{step}} 步 (共 {{totalSteps}} 步)</text>
+    </view>
+    <view class="header-right">
+      <text class="logo-text">寻觅 Xun Mi</text>
+    </view>
+  </view>
+</view>

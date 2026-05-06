@@ -1,0 +1,37 @@
+首先帮我实现 登录页面保存到/pages/login/index 使用 figma dev mcp , 设计稿地址为：https://www.figma.com/design/c3a3ehIcdX4mUCFiBClVSs/18line?node-id=46-2&m=dev
+
+然后， 实现一键登录的功能，先调用 utils/authorize 中的wxLogin，拿到code之后再调用 services/auth 中的 login 方法获取token并保存 到 wx.setStorageSync , import {TOKEN_KEY} from '@/utils/request'
+
+
+最后，帮我实现 用户调查页面,
+用户调查一分分三个step 
+请特别注意：
+三个step的header 头统一使用  https://www.figma.com/design/c3a3ehIcdX4mUCFiBClVSs/18line?node-id=46-303&m=dev  ，你需要把它封装成一个组件。
+三个step 的bottom 统一使用 https://www.figma.com/design/c3a3ehIcdX4mUCFiBClVSs/18line?node-id=46-115&m=dev ，你需要把它封装成一个组件，只有第二页才显示进度条。如果是第三页 “下一步”按钮显示成 “完成”
+
+ 设计稿地址为：
+https://www.figma.com/design/c3a3ehIcdX4mUCFiBClVSs/18line?node-id=46-37&m=dev
+https://www.figma.com/design/c3a3ehIcdX4mUCFiBClVSs/18line?node-id=46-128&m=dev
+https://www.figma.com/design/c3a3ehIcdX4mUCFiBClVSs/18line?node-id=46-236&m=dev
+
+你应该先计划任务，然后再分两个                                          
+  engineering-wechat-mini-program-developer agent teams进行工作。
+你不要预先读取figma内容，只要任务需要执行的时候才开始读取
+
+
+
+
+帮我实现 用户调查页面,这个功能已经实现了一部分， pages/survey, 你需要先对比一下已完成的部分再继续
+用户调查一分分三个step 
+请特别注意：
+三个step的header 头统一使用  https://www.figma.com/design/c3a3ehIcdX4mUCFiBClVSs/18line?node-id=46-303&m=dev  ，你需要把它封装成一个组件。
+三个step 的bottom 统一使用 https://www.figma.com/design/c3a3ehIcdX4mUCFiBClVSs/18line?node-id=46-115&m=dev ，你需要把它封装成一个组件，只有第二页才显示进度条。如果是第三页 “下一步”按钮显示成 “完成”
+
+ 设计稿地址为：
+https://www.figma.com/design/c3a3ehIcdX4mUCFiBClVSs/18line?node-id=46-37&m=dev
+https://www.figma.com/design/c3a3ehIcdX4mUCFiBClVSs/18line?node-id=46-128&m=dev
+https://www.figma.com/design/c3a3ehIcdX4mUCFiBClVSs/18line?node-id=46-236&m=dev
+
+你应该先计划任务，然后再分两个                                          
+  engineering-wechat-mini-program-developer agent teams进行工作。
+你不要预先读取figma内容，只要任务需要执行的时候才开始读取

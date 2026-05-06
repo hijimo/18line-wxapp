@@ -1,62 +1,57 @@
-/**index.scss**/
 page {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(180deg, #f9faf4 0%, #f9faf4 100%);
 }
+
 .scrollarea {
   flex: 1;
   overflow-y: hidden;
+  padding-top: 120rpx;
+  padding-bottom: 200rpx;
 }
 
-.userinfo {
+.page-main {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  color: #aaa;
-  width: 80%;
+  gap: 80rpx;
+  padding: 48rpx;
 }
 
-.userinfo-avatar {
-  overflow: hidden;
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.usermotto {
-  margin-top: 200px;
-}
-
-.avatar-wrapper {
-  padding: 0;
-  width: 56px !important;
-  border-radius: 8px;
-  margin-top: 40px;
-  margin-bottom: 40px;
-}
-
-.avatar {
-  display: block;
-  width: 56px;
-  height: 56px;
-}
-
-.nickname-wrapper {
+.section-eggs {
   display: flex;
-  width: 100%;
-  padding: 16px;
-  box-sizing: border-box;
-  border-top: .5px solid rgba(0, 0, 0, 0.1);
-  border-bottom: .5px solid rgba(0, 0, 0, 0.1);
-  color: black;
+  flex-direction: column;
+  gap: 48rpx;
+  padding-top: 16rpx;
 }
 
-.nickname-label {
-  width: 105px;
+.section-heading {
+  align-self: flex-start;
 }
 
-.nickname-input {
-  flex: 1;
+.section-heading-text {
+  font-size: 48rpx;
+  color: #163422;
+  font-weight: 700;
+  line-height: 64rpx;
+}
+
+.eggs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+.section-food {
+  display: flex;
+  flex-direction: column;
+  gap: 48rpx;
+  padding-top: 16rpx;
+}
+
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32rpx;
 }
