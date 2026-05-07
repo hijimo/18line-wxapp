@@ -1,8 +1,9 @@
+import { getOssCredential } from '../services/oss';
+
 const KEY_UPLOAD_SIGN = '__upload_sign_object';
 
-const genKey = (dir: string, filename: string) => {
-  const dt = new Date();
-  return `${dir}/${dt.getFullYear()}${dt.getMonth() + 1}/${filename}`;
+const genKey = (uploadDir: string, filename: string) => {
+  return `${uploadDir}${filename}`;
 };
 
 const genFileUrl = (host: string, key: string) => `${host}/${key}`;
@@ -27,9 +28,11 @@ export interface IUploadOption {
   filePath: string;
 }
 
-// TODO: 替换为你的实际服务接口
 const getUploadUrl = (): string => '';
-const getOssSign = async (): Promise<any> => ({});
+const getOssSign = async (): Promise<any> => {
+  const res = await getOssCredential();
+  return { success: true, data: res.data };
+};
 
 class Uploader {
   xhr: WechatMiniprogram.UploadTask | null = null;
@@ -46,16 +49,15 @@ class Uploader {
     }
 
     const sign = this.sign || wx.getStorageSync(KEY_UPLOAD_SIGN);
-    if (sign) {
-      const t = Math.floor(Date.now() / 1000) + 30 * 60;
-      if (sign.creator + sign.duration >= t) {
+    if (sign && sign.expiration) {
+      const expireTime = new Date(sign.expiration).getTime();
+      if (expireTime - Date.now() > 60 * 1000) {
         return sign;
       }
     }
 
     const { success, data, retMsg }: any = await getOssSign();
     if (success) {
-      data.creator = Math.floor(Date.now() / 1000);
       wx.setStorageSync(KEY_UPLOAD_SIGN, data);
       return data;
     }
@@ -102,9 +104,9 @@ class Uploader {
   }
 
   getFormData(filePath: string, formData?: any) {
-    const { accessKeyId: OSSAccessKeyId, dir, policy, signature, host } = this.sign;
+    const { accessKeyId: OSSAccessKeyId, uploadDir, policy, signature, host } = this.sign;
     const filename = filePath.split('/').pop() || '';
-    const key = genKey(dir, filename);
+    const key = genKey(uploadDir, filename);
     return {
       ...formData,
       OSSAccessKeyId,
@@ -121,5 +123,4 @@ class Uploader {
   }
 }
 
-module.exports = { Uploader };
 export default Uploader;

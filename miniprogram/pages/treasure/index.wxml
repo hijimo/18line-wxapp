@@ -1,0 +1,124 @@
+<view class="page-container">
+  <!-- Header -->
+  <view class="header-bar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="header-content">
+      <text class="page-title">寻宝</text>
+      <view class="header-right" bindtap="onBellTap">
+        <image class="icon-bell" src="/assets/images/icon-bell.svg" />
+      </view>
+    </view>
+  </view>
+
+  <!-- Tabs -->
+  <view class="tabs" style="top: {{statusBarHeight + 56}}px;">
+    <view class="tab {{currentTab === 'nearby' ? 'tab--active' : ''}}" bindtap="switchTab" data-tab="nearby">
+      <text class="tab-text">附近宝藏</text>
+    </view>
+    <view class="tab {{currentTab === 'my' ? 'tab--active' : ''}}" bindtap="switchTab" data-tab="my">
+      <text class="tab-text">我的收藏</text>
+      <view wx:if="{{myTreasures.length > 0}}" class="tab-badge">
+        <text class="tab-badge-text">{{myTreasures.length}}</text>
+      </view>
+    </view>
+    <view class="tab {{currentTab === 'found' ? 'tab--active' : ''}}" bindtap="switchTab" data-tab="found">
+      <text class="tab-text">已发现</text>
+    </view>
+  </view>
+
+  <!-- Content -->
+  <scroll-view class="scrollarea" scroll-y type="list">
+    <view class="treasure-content">
+      <!-- Nearby Treasures -->
+      <block wx:if="{{currentTab === 'nearby'}}">
+        <!-- Location hint -->
+        <view class="location-hint">
+          <image class="location-icon" src="/assets/images/icon-distance.svg" mode="aspectFit" />
+          <text class="location-text">当前位置：{{currentLocation}}</text>
+        </view>
+
+        <!-- Treasure Cards -->
+        <view class="treasure-list">
+          <view class="treasure-card" wx:for="{{nearbyTreasures}}" wx:key="id" bindtap="onTreasureTap" data-id="{{item.id}}">
+            <view class="treasure-card-left">
+              <view class="treasure-icon-wrap treasure-icon--{{item.rarity}}">
+                <image class="treasure-icon" src="/assets/images/icon-star.svg" mode="aspectFit" />
+              </view>
+            </view>
+            <view class="treasure-card-center">
+              <text class="treasure-name">{{item.name}}</text>
+              <text class="treasure-hint">{{item.hint}}</text>
+              <view class="treasure-meta">
+                <view class="meta-tag meta-tag--{{item.rarity}}">
+                  <text class="meta-tag-text">{{item.rarityLabel}}</text>
+                </view>
+                <view class="meta-distance">
+                  <image class="meta-icon" src="/assets/images/icon-distance.svg" mode="aspectFit" />
+                  <text class="meta-text">{{item.distance}}</text>
+                </view>
+              </view>
+            </view>
+            <view class="treasure-card-right">
+              <image class="arrow-icon" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <!-- My Treasures -->
+      <block wx:if="{{currentTab === 'my'}}">
+        <block wx:if="{{myTreasures.length > 0}}">
+          <view class="treasure-list">
+            <view class="treasure-card" wx:for="{{myTreasures}}" wx:key="id" bindtap="onTreasureTap" data-id="{{item.id}}">
+              <view class="treasure-card-left">
+                <view class="treasure-icon-wrap treasure-icon--{{item.rarity}}">
+                  <image class="treasure-icon" src="/assets/images/icon-star.svg" mode="aspectFit" />
+                </view>
+              </view>
+              <view class="treasure-card-center">
+                <text class="treasure-name">{{item.name}}</text>
+                <text class="treasure-hint">{{item.hint}}</text>
+                <view class="treasure-meta">
+                  <view class="meta-tag meta-tag--{{item.rarity}}">
+                    <text class="meta-tag-text">{{item.rarityLabel}}</text>
+                  </view>
+                </view>
+              </view>
+              <view class="treasure-card-right">
+                <image class="arrow-icon" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+              </view>
+            </view>
+          </view>
+        </block>
+        <view wx:else class="empty-state">
+          <image class="empty-icon" src="/assets/images/icon-star.svg" mode="aspectFit" />
+          <text class="empty-title">暂无收藏的宝藏</text>
+          <text class="empty-desc">发现感兴趣的宝藏后可以收藏</text>
+        </view>
+      </block>
+
+      <!-- Found Treasures -->
+      <block wx:if="{{currentTab === 'found'}}">
+        <block wx:if="{{foundTreasures.length > 0}}">
+          <view class="treasure-list">
+            <view class="treasure-card treasure-card--found" wx:for="{{foundTreasures}}" wx:key="id">
+              <view class="treasure-card-left">
+                <view class="treasure-icon-wrap treasure-icon--found">
+                  <image class="treasure-icon" src="/assets/images/icon-check.svg" mode="aspectFit" />
+                </view>
+              </view>
+              <view class="treasure-card-center">
+                <text class="treasure-name">{{item.name}}</text>
+                <text class="treasure-hint">{{item.foundDate}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+        <view wx:else class="empty-state">
+          <image class="empty-icon" src="/assets/images/icon-check.svg" mode="aspectFit" />
+          <text class="empty-title">暂无已发现的宝藏</text>
+          <text class="empty-desc">去附近探索，发现隐藏的宝藏吧</text>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+</view>

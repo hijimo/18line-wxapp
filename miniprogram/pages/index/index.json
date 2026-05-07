@@ -5,7 +5,6 @@
     "journey-card": "/components/journey-card/journey-card",
     "inspiration-card": "/components/inspiration-card/inspiration-card",
     "gem-item": "/components/gem-item/gem-item",
-    "food-card": "/components/food-card/food-card",
-    "tab-bar": "/components/tab-bar/tab-bar"
+    "food-card": "/components/food-card/food-card"
   }
 }

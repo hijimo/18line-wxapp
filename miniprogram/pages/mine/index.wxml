@@ -1,0 +1,133 @@
+<!--pages/mine/index.wxml-->
+<view class="page-container">
+  <!-- Header Bar -->
+  <view class="header-bar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="header-content">
+      <view class="header-left">
+        <text class="logo-text">寻秘</text>
+      </view>
+      <view class="header-right" bindtap="onBellTap">
+        <image class="icon-bell" src="/assets/images/icon-bell.svg" />
+      </view>
+    </view>
+  </view>
+
+  <scroll-view class="scrollarea" scroll-y type="list">
+    <view class="page-main">
+      <!-- User Profile Section -->
+      <view class="profile-section">
+        <view class="avatar-wrapper" bindtap="goEditProfile">
+          <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+          <view class="avatar-edit-icon">
+            <image class="edit-icon" src="/assets/images/icon-edit.svg" mode="aspectFit" />
+          </view>
+        </view>
+        <view class="profile-info">
+          <text class="nickname">{{userInfo.nickname}}</text>
+          <view class="role-badge">
+            <text class="role-text">{{userInfo.role}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 我的旅途 Section -->
+      <view class="section-card">
+        <view class="section-header">
+          <text class="section-title">我的旅途</text>
+          <view class="view-all" bindtap="goJourneys">
+            <text class="view-all-text">查看全部</text>
+            <image class="icon-arrow" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+          </view>
+        </view>
+        <view class="grid-3col">
+          <view class="grid-item" bindtap="goJourneys" data-filter="pending">
+            <view class="grid-icon-wrap">
+              <image class="grid-icon" src="/assets/images/icon-trip-pending.svg" mode="aspectFit" />
+              <view wx:if="{{journeyCount.pending > 0}}" class="badge">
+                <text class="badge-text">{{journeyCount.pending}}</text>
+              </view>
+            </view>
+            <text class="grid-label">待完成</text>
+          </view>
+          <view class="grid-item" bindtap="goJourneys" data-filter="cancelled">
+            <view class="grid-icon-wrap">
+              <image class="grid-icon" src="/assets/images/icon-trip-cancelled.svg" mode="aspectFit" />
+            </view>
+            <text class="grid-label">已取消</text>
+          </view>
+          <view class="grid-item" bindtap="goJourneys" data-filter="completed">
+            <view class="grid-icon-wrap">
+              <image class="grid-icon" src="/assets/images/icon-trip-completed.svg" mode="aspectFit" />
+            </view>
+            <text class="grid-label">已完成</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 我的寻宝 Section -->
+      <!--<view class="section-card">
+        <view class="section-header">
+          <text class="section-title">我的寻宝</text>
+          <view class="view-all">
+            <text class="view-all-text">查看全部</text>
+            <image class="icon-arrow" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+          </view>
+        </view>
+        <view class="grid-3col">
+          <view class="grid-item">
+            <view class="grid-icon-wrap">
+              <image class="grid-icon" src="/assets/images/icon-clock.svg" mode="aspectFit" />
+              <view wx:if="{{treasureCount.pending > 0}}" class="badge">
+                <text class="badge-text">{{treasureCount.pending}}</text>
+              </view>
+            </view>
+            <text class="grid-label">待完成</text>
+          </view>
+          <view class="grid-item">
+            <view class="grid-icon-wrap">
+              <image class="grid-icon" src="/assets/images/icon-calendar.svg" mode="aspectFit" />
+            </view>
+            <text class="grid-label">已取消</text>
+          </view>
+          <view class="grid-item">
+            <view class="grid-icon-wrap">
+              <image class="grid-icon" src="/assets/images/icon-check.svg" mode="aspectFit" />
+            </view>
+            <text class="grid-label">已完成</text>
+          </view>
+        </view>
+      </view>-->
+
+      <!-- Functional List -->
+      <view class="func-card">
+        <view class="func-item" bindtap="goTravelTraits">
+          <view class="func-item-left">
+            <image class="func-icon" src="/assets/images/icon-target.svg" mode="aspectFit" />
+            <view class="func-text-wrap">
+              <text class="func-title">我的旅游特性</text>
+              <text class="func-subtitle">查看您的旅行偏好分析</text>
+            </view>
+          </view>
+          <image class="func-arrow" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+        </view>
+        <view class="func-divider" />
+        <view class="func-item" bindtap="goFAQ">
+          <view class="func-item-left">
+            <image class="func-icon" src="/assets/images/icon-star.svg" mode="aspectFit" />
+            <view class="func-text-wrap">
+              <text class="func-title">常见问题</text>
+              <text class="func-subtitle">帮助与反馈</text>
+            </view>
+          </view>
+          <image class="func-arrow" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+        </view>
+      </view>
+
+      <!-- Logout Button -->
+      <view class="logout-btn" bindtap="handleLogout">
+        <text class="logout-text">退出登录</text>
+      </view>
+    </view>
+  </scroll-view>
+
+</view>

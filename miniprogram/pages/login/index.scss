@@ -1,27 +1,29 @@
-.container {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  background: #f9faf4;
+page {
+  height: 100%;
   overflow: hidden;
 }
 
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: #f9faf4;
+  overflow: hidden;
+}
+.bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
 /* Background */
 .bg-canvas {
   position: absolute;
-  top: -22rpx;
-  left: -20rpx;
+  top: 0;
+  left: 0;
   right: 0;
-  bottom: -42rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.bg-image {
-  width: 780rpx;
-  height: 1766rpx;
-  position: absolute;
+  bottom: 0;
 }
 
 .bg-gradient {
@@ -30,7 +32,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(180deg, rgba(22, 52, 34, 0.4) 0%, rgba(22, 52, 34, 0) 50%, rgba(22, 52, 34, 0.8) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(22, 52, 34, 0.85) 0%,
+    rgba(22, 52, 34, 0.6) 40%,
+    rgba(22, 52, 34, 0.75) 100%
+  );
 }
 
 /* Texture overlay */
@@ -39,12 +46,23 @@
   top: 0;
   left: 0;
   right: 0;
-  bottom: 2rpx;
-  background-image: url('http://localhost:3845/assets/f84ad6d75c01f5865641dba32416e817dee06ff5.png');
-  background-size: 48rpx 44rpx;
-  background-position: top left;
+  bottom: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 42rpx,
+      rgba(255, 255, 255, 0.03) 42rpx,
+      rgba(255, 255, 255, 0.03) 44rpx
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 46rpx,
+      rgba(255, 255, 255, 0.03) 46rpx,
+      rgba(255, 255, 255, 0.03) 48rpx
+    );
   mix-blend-mode: overlay;
-  opacity: 0.03;
 }
 
 /* Main content */
@@ -54,8 +72,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 100vh;
-  padding: 160rpx 64rpx;
+  height: 100vh;
+  padding: 120rpx 64rpx env(safe-area-inset-bottom);
   box-sizing: border-box;
 }
 
@@ -145,7 +163,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 64rpx;
+  padding-top: 40rpx;
   padding-bottom: 0;
 }
 
@@ -162,7 +180,7 @@
   flex-direction: row;
   align-items: flex-start;
   gap: 24rpx;
-  margin-top: 96rpx;
+  margin-top: 48rpx;
   max-width: 560rpx;
   padding-left: 46rpx;
 }

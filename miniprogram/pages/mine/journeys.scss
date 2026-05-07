@@ -1,0 +1,230 @@
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f9faf4;
+}
+
+.page-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 120rpx;
+}
+
+/* Filter Bar */
+.filter-bar {
+  padding: 16rpx 0;
+  background: #f9faf4;
+}
+
+.filter-scroll {
+  white-space: nowrap;
+  padding: 0 48rpx;
+}
+
+.filter-chips {
+  display: inline-flex;
+  gap: 16rpx;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 14rpx 32rpx;
+  border-radius: 9999rpx;
+  background: #edeee8;
+}
+
+.filter-chip--active {
+  background: #163422;
+}
+
+.filter-chip-text {
+  font-size: 26rpx;
+  color: #424843;
+  font-weight: 500;
+}
+
+.filter-chip-text--active {
+  color: #ffffff;
+}
+
+/* Scroll Area */
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+/* Journey List */
+.journey-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  padding: 24rpx 48rpx;
+}
+
+/* Journey Card */
+.journey-card {
+  display: flex;
+  flex-direction: row;
+  background: #ffffff;
+  border-radius: 32rpx;
+  padding: 24rpx;
+  gap: 24rpx;
+  box-shadow: 0 4rpx 24rpx rgba(26, 28, 25, 0.04);
+}
+
+.journey-image {
+  width: 200rpx;
+  height: 150rpx;
+  border-radius: 16rpx;
+  flex-shrink: 0;
+  background: #edeee8;
+}
+
+.journey-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.journey-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12rpx;
+}
+
+.journey-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1a1c19;
+  line-height: 38rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.status-badge {
+  padding: 4rpx 16rpx;
+  border-radius: 9999rpx;
+  flex-shrink: 0;
+}
+
+.status-badge--active {
+  background: #163422;
+}
+
+.status-badge--pending {
+  background: #edeee8;
+}
+
+.status-badge--completed {
+  background: #edeee8;
+}
+
+.status-badge--planning {
+  background: #edeee8;
+}
+
+.status-text {
+  font-size: 20rpx;
+  font-weight: 500;
+}
+
+.status-text--active {
+  color: #ffffff;
+}
+
+.status-text--pending {
+  color: #424843;
+}
+
+.status-text--completed {
+  color: #424843;
+}
+
+.status-text--planning {
+  color: #424843;
+}
+
+.journey-meta {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding-top: 8rpx;
+}
+
+.meta-icon {
+  width: 24rpx;
+  height: 24rpx;
+  opacity: 0.5;
+}
+
+.meta-text {
+  font-size: 22rpx;
+  color: rgba(22, 52, 34, 0.5);
+}
+
+.meta-dot {
+  font-size: 22rpx;
+  color: rgba(22, 52, 34, 0.3);
+}
+
+.journey-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12rpx;
+}
+
+.journey-tags {
+  display: flex;
+  gap: 8rpx;
+  flex: 1;
+  overflow: hidden;
+}
+
+.journey-tag {
+  font-size: 20rpx;
+  color: #944a00;
+  background: #ffdcc5;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  white-space: nowrap;
+}
+
+.journey-rating {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  flex-shrink: 0;
+}
+
+.rating-icon {
+  width: 20rpx;
+  height: 20rpx;
+}
+
+.rating-text {
+  font-size: 22rpx;
+  color: #163422;
+  font-weight: 600;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: rgba(22, 52, 34, 0.4);
+}

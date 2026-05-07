@@ -1,4 +1,4 @@
-const API_ORIGIN = ''; // TODO: 配置你的API地址
+const API_ORIGIN = 'http://8.136.229.208:8080/api'; // TODO: 配置你的API地址
 
 export const TOKEN_KEY = 'token';
 
@@ -134,11 +134,4 @@ export const requestChunked = (path: string, option?: RequestOption) => {
   } as any);
 };
 
-module.exports = {
-  request,
-  requestChunked,
-  getToken,
-  TOKEN_KEY,
-  DEFAULT_PAGE_SIZE,
-};
 export default request;

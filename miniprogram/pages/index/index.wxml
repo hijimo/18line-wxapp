@@ -33,5 +33,3 @@
     </view>
   </view>
 </scroll-view>
-
-<tab-bar currentTab="{{currentTab}}" bind:tabchange="onTabChange" />

@@ -1,19 +1,16 @@
 <view class="container">
-  <!-- Background -->
-  <view class="bg-canvas">
-    <image class="bg-image" src="http://localhost:3845/assets/469688fded2b9631210393150f9def714cca8f31.png" mode="aspectFill" />
-    <view class="bg-gradient" />
-  </view>
+  <!-- Background image -->
+  <image class="bg-image" src="/assets/images/login-bg.png" mode="aspectFill" />
 
-  <!-- Texture overlay -->
-  <view class="texture-overlay" />
+  <!-- Gradient overlay -->
+  <view class="bg-overlay" />
 
   <!-- Main content -->
   <view class="content-wrapper">
     <!-- Brand identity -->
     <view class="brand-section">
       <view class="logo-container">
-        <image class="logo" src="http://localhost:3845/assets/47c1355877a8ad205ea6593c74042e92547363d0.png" mode="aspectFill" />
+        <image class="logo" src="/assets/images/logo.png" mode="aspectFit" />
       </view>
       <view class="brand-name">18线</view>
       <view class="brand-tagline">探索未至之境</view>
@@ -23,20 +20,15 @@
     <view class="actions-section">
       <!-- Main login button -->
       <view class="login-btn {{loading ? 'login-btn--loading' : ''}}" bindtap="handleLogin">
-        <image class="wechat-icon" src="http://localhost:3845/assets/f22ed001589ada25e160164be1c62ddc0e407a42.svg" mode="aspectFit" />
+        <image class="wechat-icon" src="/assets/images/icon-wechat.svg" mode="aspectFit" />
         <text class="login-btn-text">{{loading ? '登录中...' : '一键授权登录'}}</text>
-      </view>
-
-      <!-- Other methods -->
-      <view class="other-methods">
-        <text class="other-methods-text">其他登录方式</text>
       </view>
 
       <!-- Compliance -->
       <view class="compliance-row">
         <view class="checkbox-container" bindtap="toggleAgreed">
           <view class="checkbox {{agreed ? 'checkbox--checked' : ''}}">
-            <image wx:if="{{agreed}}" class="check-icon" src="http://localhost:3845/assets/0098b08799d057691f6e0e20e4e545ecef4fd6b5.svg" mode="aspectFit" />
+            <image wx:if="{{agreed}}" class="check-icon" src="/assets/images/icon-check-white.svg" mode="aspectFit" />
           </view>
         </view>
         <view class="compliance-text">

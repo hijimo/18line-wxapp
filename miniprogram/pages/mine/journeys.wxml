@@ -1,0 +1,55 @@
+<!--pages/mine/journeys.wxml-->
+<view class="page-container">
+  <!-- Filter Chips -->
+  <view class="filter-bar">
+    <scroll-view class="filter-scroll" scroll-x>
+      <view class="filter-chips">
+        <view
+          wx:for="{{filters}}"
+          wx:key="id"
+          class="filter-chip {{item.active ? 'filter-chip--active' : ''}}"
+          bindtap="onFilterTap"
+          data-id="{{item.id}}"
+        >
+          <text class="filter-chip-text {{item.active ? 'filter-chip-text--active' : ''}}">{{item.label}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- Journey List -->
+  <scroll-view class="scrollarea" scroll-y type="list">
+    <view class="journey-list">
+      <view wx:for="{{journeys}}" wx:key="id" class="journey-card" bindtap="onJourneyTap" data-id="{{item.id}}">
+        <image class="journey-image" src="{{item.image}}" mode="aspectFill" />
+        <view class="journey-info">
+          <view class="journey-top">
+            <text class="journey-title">{{item.title}}</text>
+            <view class="status-badge status-badge--{{item.statusType}}">
+              <text class="status-text status-text--{{item.statusType}}">{{item.status}}</text>
+            </view>
+          </view>
+          <view class="journey-meta">
+            <image class="meta-icon" src="/assets/images/icon-calendar.svg" mode="aspectFit" />
+            <text class="meta-text">{{item.date}}</text>
+            <text class="meta-dot">·</text>
+            <text class="meta-text">{{item.location}}</text>
+          </view>
+          <view class="journey-bottom">
+            <view class="journey-tags">
+              <text wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this" class="journey-tag">{{tag}}</text>
+            </view>
+            <view wx:if="{{item.rating}}" class="journey-rating">
+              <image class="rating-icon" src="/assets/images/icon-star.svg" mode="aspectFit" />
+              <text class="rating-text">{{item.rating}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{journeys.length === 0}}" class="empty-state">
+        <text class="empty-text">暂无旅途记录</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

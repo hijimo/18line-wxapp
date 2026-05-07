@@ -1,6 +1,5 @@
 Component({
   data: {
-    currentTab: 'explore',
     userInfo: {
       avatarUrl: '/assets/images/user-profile.png',
       nickName: '',
@@ -139,6 +138,9 @@ Component({
       },
     ],
   },
+  pageLifetimes: {
+    show() {},
+  },
   methods: {
     onBannerTap(e: any) {
       const { id } = e.detail
@@ -161,10 +163,6 @@ Component({
     },
     onBellTap() {
       console.log('Bell tap')
-    },
-    onTabChange(e: any) {
-      const { id } = e.detail
-      this.setData({ currentTab: id })
     },
   },
 })

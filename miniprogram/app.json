@@ -1,13 +1,44 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/trip/index",
+    "pages/treasure/index",
+    "pages/mine/index",
     "pages/login/index",
     "pages/survey/index",
+    "pages/mine/edit",
+    "pages/mine/journeys",
     "pages/logs/logs"
   ],
   "window": {
     "navigationBarTextStyle": "black",
     "navigationStyle": "custom"
+  },
+  "tabBar": {
+    "color": "#44483D",
+    "selectedColor": "#163422",
+    "backgroundColor": "#F9FAF4",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "探索",
+        "iconPath": "assets/images/tab-explore.png",
+        "selectedIconPath": "assets/images/tab-explore-active.png"
+      },
+      {
+        "pagePath": "pages/treasure/index",
+        "text": "集市",
+        "iconPath": "assets/images/tab-market.png",
+        "selectedIconPath": "assets/images/tab-market-active.png"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的",
+        "iconPath": "assets/images/tab-mine.png",
+        "selectedIconPath": "assets/images/tab-mine-active.png"
+      }
+    ]
   },
   "style": "v2",
   "rendererOptions": {
@@ -19,6 +50,9 @@
       "sdkVersionBegin": "3.0.0",
       "sdkVersionEnd": "15.255.255"
     }
+  },
+  "resolveAlias": {
+    "@/*": "/*"
   },
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",

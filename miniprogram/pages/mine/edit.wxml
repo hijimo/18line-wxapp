@@ -1,0 +1,97 @@
+<!--pages/mine/edit.wxml-->
+<view class="page-container">
+  <!-- Navigation Bar -->
+  <navigation-bar title="编辑资料" background="rgba(249,250,244,0.7)" color="#163422" bind:back="onBack" />
+
+  <scroll-view class="scrollarea" scroll-y type="list">
+    <view class="page-main">
+      <!-- Avatar Upload -->
+      <view class="avatar-section">
+        <view class="avatar-upload" bindtap="chooseAvatar">
+          <image class="avatar" src="{{avatarUrl}}" mode="aspectFill" />
+          <view class="camera-btn">
+            <image class="camera-icon" src="/assets/images/icon-camera.svg" mode="aspectFit" />
+          </view>
+        </view>
+        <text class="avatar-hint">更新头像</text>
+      </view>
+
+      <!-- Form Fields -->
+      <view class="form-section">
+        <!-- 昵称 -->
+        <view class="form-group">
+          <text class="form-label">昵称</text>
+          <input
+            class="form-input"
+            value="{{nickname}}"
+            placeholder="请输入昵称"
+            placeholder-class="input-placeholder"
+            bindinput="onNicknameInput"
+          />
+        </view>
+
+        <!-- 我的角色 -->
+        <view class="form-group">
+          <text class="form-label">我的角色</text>
+          <input
+            class="form-input"
+            value="{{role}}"
+            placeholder="请输入角色"
+            placeholder-class="input-placeholder"
+            bindinput="onRoleInput"
+          />
+        </view>
+
+        <!-- 出生年份 -->
+        <view class="form-group">
+          <text class="form-label">出生年份</text>
+          <picker mode="date" fields="year" value="{{birthYear}}" bindchange="onBirthYearChange">
+            <view class="form-picker">
+              <text class="{{birthYear ? 'picker-value' : 'picker-placeholder'}}">{{birthYear || '请选择出生年份'}}</text>
+              <image class="picker-arrow" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+            </view>
+          </picker>
+        </view>
+
+        <!-- 个人简介 -->
+        <view class="form-group">
+          <text class="form-label">个人简介</text>
+          <textarea
+            class="form-textarea"
+            value="{{bio}}"
+            placeholder="介绍一下自己吧"
+            placeholder-class="input-placeholder"
+            maxlength="200"
+            bindinput="onBioInput"
+          />
+        </view>
+      </view>
+
+      <!-- Travel Preferences -->
+      <view class="preferences-section">
+        <text class="form-label">旅行偏好</text>
+        <view class="chips-wrap">
+          <view
+            wx:for="{{preferences}}"
+            wx:key="id"
+            class="chip {{item.selected ? 'chip--active' : ''}}"
+            bindtap="togglePreference"
+            data-id="{{item.id}}"
+          >
+            <text class="chip-text">{{item.label}}</text>
+          </view>
+          <view class="chip chip--add" bindtap="addPreference">
+            <text class="chip-text-add">+</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- Save Button -->
+  <view class="bottom-bar">
+    <view class="save-btn" bindtap="handleSave">
+      <text class="save-btn-text">保存资料</text>
+    </view>
+  </view>
+</view>

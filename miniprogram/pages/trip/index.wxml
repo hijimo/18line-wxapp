@@ -1,0 +1,121 @@
+<view class="page-container">
+  <!-- Tabs -->
+  <view class="tabs">
+    <view class="tab {{currentTab === 'upcoming' ? 'tab--active' : ''}}" bindtap="switchTab" data-tab="upcoming">
+      <text class="tab-text">进行中</text>
+      <view wx:if="{{upcomingTrips.length > 0}}" class="tab-badge">
+        <text class="tab-badge-text">{{upcomingTrips.length}}</text>
+      </view>
+    </view>
+    <view class="tab {{currentTab === 'pending' ? 'tab--active' : ''}}" bindtap="switchTab" data-tab="pending">
+      <text class="tab-text">待开始</text>
+    </view>
+    <view class="tab {{currentTab === 'completed' ? 'tab--active' : ''}}" bindtap="switchTab" data-tab="completed">
+      <text class="tab-text">已完成</text>
+    </view>
+  </view>
+
+  <!-- Trip List -->
+  <scroll-view class="scrollarea" scroll-y type="list">
+    <view class="trip-list">
+      <!-- Upcoming Trips -->
+      <block wx:if="{{currentTab === 'upcoming'}}">
+        <block wx:if="{{upcomingTrips.length > 0}}">
+          <view class="trip-card" wx:for="{{upcomingTrips}}" wx:key="id" bindtap="onTripTap" data-id="{{item.id}}">
+            <view class="trip-card-header">
+              <view class="trip-status trip-status--active">
+                <view class="status-dot status-dot--active" />
+                <text class="status-text">进行中</text>
+              </view>
+              <text class="trip-date">{{item.date}}</text>
+            </view>
+            <view class="trip-card-body">
+              <image class="trip-cover" src="{{item.image}}" mode="aspectFill" />
+              <view class="trip-info">
+                <text class="trip-title">{{item.title}}</text>
+                <text class="trip-desc">{{item.description}}</text>
+                <view class="trip-meta">
+                  <view class="meta-item">
+                    <image class="meta-icon" src="/assets/images/icon-calendar.svg" mode="aspectFit" />
+                    <text class="meta-text">{{item.days}}天</text>
+                  </view>
+                  <view class="meta-item">
+                    <image class="meta-icon" src="/assets/images/icon-distance.svg" mode="aspectFit" />
+                    <text class="meta-text">{{item.distance}}</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <!-- Day Progress -->
+            <view class="day-progress">
+              <view class="day-item {{day.status}}" wx:for="{{item.days_detail}}" wx:for-item="day" wx:key="day">
+                <view class="day-dot" />
+                <text class="day-label">DAY {{day.day}}</text>
+              </view>
+              <view class="progress-line" />
+            </view>
+          </view>
+        </block>
+        <view wx:else class="empty-state">
+          <image class="empty-icon" src="/assets/images/icon-calendar.svg" mode="aspectFit" />
+          <text class="empty-title">暂无进行中的行程</text>
+          <text class="empty-desc">去探索页面开启一段新旅程吧</text>
+        </view>
+      </block>
+
+      <!-- Pending Trips -->
+      <block wx:if="{{currentTab === 'pending'}}">
+        <block wx:if="{{pendingTrips.length > 0}}">
+          <view class="trip-card" wx:for="{{pendingTrips}}" wx:key="id" bindtap="onTripTap" data-id="{{item.id}}">
+            <view class="trip-card-header">
+              <view class="trip-status trip-status--pending">
+                <view class="status-dot status-dot--pending" />
+                <text class="status-text">待开始</text>
+              </view>
+              <text class="trip-date">{{item.date}}</text>
+            </view>
+            <view class="trip-card-body">
+              <image class="trip-cover" src="{{item.image}}" mode="aspectFill" />
+              <view class="trip-info">
+                <text class="trip-title">{{item.title}}</text>
+                <text class="trip-desc">{{item.description}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+        <view wx:else class="empty-state">
+          <image class="empty-icon" src="/assets/images/icon-calendar.svg" mode="aspectFit" />
+          <text class="empty-title">暂无待开始的行程</text>
+          <text class="empty-desc">去探索页面开启一段新旅程吧</text>
+        </view>
+      </block>
+
+      <!-- Completed Trips -->
+      <block wx:if="{{currentTab === 'completed'}}">
+        <block wx:if="{{completedTrips.length > 0}}">
+          <view class="trip-card trip-card--completed" wx:for="{{completedTrips}}" wx:key="id" bindtap="onTripTap" data-id="{{item.id}}">
+            <view class="trip-card-header">
+              <view class="trip-status trip-status--completed">
+                <image class="status-icon" src="/assets/images/icon-trip-completed.svg" mode="aspectFit" />
+                <text class="status-text">已完成</text>
+              </view>
+              <text class="trip-date">{{item.date}}</text>
+            </view>
+            <view class="trip-card-body">
+              <image class="trip-cover" src="{{item.image}}" mode="aspectFill" />
+              <view class="trip-info">
+                <text class="trip-title">{{item.title}}</text>
+                <text class="trip-desc">{{item.description}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+        <view wx:else class="empty-state">
+          <image class="empty-icon" src="/assets/images/icon-trip-completed.svg" mode="aspectFit" />
+          <text class="empty-title">暂无已完成的行程</text>
+          <text class="empty-desc">完成行程后会在这里展示</text>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+</view>
