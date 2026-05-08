@@ -1,16 +1,9 @@
 <view class="page-container">
   <!-- Header -->
-  <view class="header-bar" style="padding-top: {{statusBarHeight}}px;">
-    <view class="header-content">
-      <text class="page-title">寻宝</text>
-      <view class="header-right" bindtap="onBellTap">
-        <image class="icon-bell" src="/assets/images/icon-bell.svg" />
-      </view>
-    </view>
-  </view>
+  <navigation-bar title="寻宝" back="{{false}}" color="black" background="#F9FAF4"></navigation-bar>
 
   <!-- Tabs -->
-  <view class="tabs" style="top: {{statusBarHeight + 56}}px;">
+  <view class="tabs">
     <view class="tab {{currentTab === 'nearby' ? 'tab--active' : ''}}" bindtap="switchTab" data-tab="nearby">
       <text class="tab-text">附近宝藏</text>
     </view>

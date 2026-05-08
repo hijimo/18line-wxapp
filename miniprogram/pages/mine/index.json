@@ -1,6 +1,3 @@
 {
-  "usingComponents": {
-    "header-bar": "/components/header-bar/header-bar"
-  },
-  "navigationStyle": "custom"
+  "usingComponents": {}
 }

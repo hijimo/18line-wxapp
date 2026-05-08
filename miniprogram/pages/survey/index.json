@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "survey-header": "/components/survey-header/survey-header",
     "survey-bottom": "/components/survey-bottom/survey-bottom"
   }
 }

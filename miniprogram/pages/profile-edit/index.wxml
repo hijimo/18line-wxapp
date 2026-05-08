@@ -1,7 +1,7 @@
-<!--pages/mine/edit.wxml-->
+<!--pages/profile-edit/index.wxml-->
 <view class="page-container">
   <!-- Navigation Bar -->
-  <navigation-bar title="编辑资料" background="rgba(249,250,244,0.7)" color="#163422" bind:back="onBack" />
+  <navigation-bar title="编辑资料" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
 
   <scroll-view class="scrollarea" scroll-y type="list">
     <view class="page-main">

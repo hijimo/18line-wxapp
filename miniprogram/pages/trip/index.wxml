@@ -1,4 +1,6 @@
 <view class="page-container">
+  <navigation-bar title="我的行程" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
+
   <!-- Tabs -->
   <view class="tabs">
     <view class="tab {{currentTab === 'upcoming' ? 'tab--active' : ''}}" bindtap="switchTab" data-tab="upcoming">

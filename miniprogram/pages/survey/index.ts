@@ -1,5 +1,10 @@
+import { getLatestPreference, addPreference, updatePreference } from '../../services/preference';
+import type { PreferenceParams } from '../../types/preference';
+
 Page({
   data: {
+    mode: '',
+    preferenceId: 0,
     currentStep: 1,
     // Step 1: intensity selection
     selectedIntensity: 'steady',
@@ -35,6 +40,32 @@ Page({
     blindMode: 'full',
   },
 
+  onLoad(options: any) {
+    if (options?.mode === 'edit') {
+      this.setData({ mode: 'edit' });
+      this.loadExistingPreference();
+    }
+  },
+
+  async loadExistingPreference() {
+    try {
+      const res = await getLatestPreference();
+      const pref = res.data;
+      if (pref) {
+        this.setData({
+          preferenceId: pref.preferenceId || 0,
+          selectedIntensity: pref.stamina || 'steady',
+          selectedFood: pref.foodLikes || 'light',
+          selectedAccom: pref.stayPref || 'heritage',
+          selectedSoul: pref.travelLikes ? pref.travelLikes.split(',') : [],
+          blindMode: pref.healthTags || 'full',
+        });
+      }
+    } catch (err) {
+      console.error('Failed to load preference:', err);
+    }
+  },
+
   onSelectIntensity(e: any) {
     this.setData({ selectedIntensity: e.currentTarget.dataset.id })
   },
@@ -68,11 +99,32 @@ Page({
     if (currentStep < 3) {
       this.setData({ currentStep: currentStep + 1 })
     } else {
-      // Survey complete
-      wx.showToast({ title: '探索设置完成！', icon: 'success' })
-      setTimeout(() => {
-        wx.navigateBack({ delta: 1 })
-      }, 1500)
+      this.submitPreference()
+    }
+  },
+
+  async submitPreference() {
+    const { mode, preferenceId, selectedIntensity, selectedFood, selectedAccom, selectedSoul, blindMode } = this.data;
+    const params: any = {
+      stamina: selectedIntensity,
+      foodLikes: selectedFood,
+      stayPref: selectedAccom,
+      travelLikes: selectedSoul.join(','),
+      healthTags: blindMode,
+    };
+
+    try {
+      if (mode === 'edit' && preferenceId) {
+        params.preferenceId = preferenceId;
+        await updatePreference(params);
+      } else {
+        await addPreference(params);
+      }
+      wx.showToast({ title: '保存成功', icon: 'success' });
+      setTimeout(() => wx.navigateBack({ delta: 1 }), 1500);
+    } catch (err) {
+      console.error('Failed to save preference:', err);
+      wx.showToast({ title: '保存失败，请重试', icon: 'none' });
     }
   },
 

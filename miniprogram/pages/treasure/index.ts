@@ -1,6 +1,5 @@
 Page({
   data: {
-    statusBarHeight: 0,
     currentTab: 'nearby',
     currentLocation: '杭州市西湖区',
     nearbyTreasures: [
@@ -65,8 +64,7 @@ Page({
   },
 
   onLoad() {
-    const sysInfo = wx.getSystemInfoSync();
-    this.setData({ statusBarHeight: sysInfo.statusBarHeight || 0 });
+    // no-op
   },
 
   switchTab(e: any) {

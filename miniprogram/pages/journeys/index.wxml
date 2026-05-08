@@ -1,5 +1,7 @@
-<!--pages/mine/journeys.wxml-->
+<!--pages/journeys/index.wxml-->
 <view class="page-container">
+  <navigation-bar title="我的旅途" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
+
   <!-- Filter Chips -->
   <view class="filter-bar">
     <scroll-view class="filter-scroll" scroll-x>

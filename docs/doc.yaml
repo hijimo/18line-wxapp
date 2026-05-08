@@ -6,7 +6,7 @@ info:
     name: travel18
   version: 版本号:0.0.1
 servers:
-- url: http://8.136.229.208:8080
+- url: http://8.136.229.208:8080/api
   description: Generated server url
 security:
 - Authorization: []
@@ -1039,6 +1039,27 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TravelItinerary'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/dict/batch:
+    post:
+      tags:
+      - 微信小程序-字典数据
+      summary: 批量查询多个字典类型
+      operationId: getBatch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
         required: true
       responses:
         "200":
@@ -2524,6 +2545,45 @@ paths:
       - C端行程管理
       summary: 查询行程列表
       operationId: list_10
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/dict/{dictType}:
+    get:
+      tags:
+      - 微信小程序-字典数据
+      summary: 根据字典类型查询字典数据
+      operationId: getByType
+      parameters:
+      - name: dictType
+        in: path
+        description: 字典类型
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/dict/types:
+    get:
+      tags:
+      - 微信小程序-字典数据
+      summary: 获取字典类型列表
+      operationId: getTypes
       responses:
         "200":
           description: OK
@@ -2544,12 +2604,33 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/AjaxResult'
+  /wx/accommodation/{accommodationId}:
+    get:
+      tags:
+      - C端住宿
+      summary: 查询住宿详情（含经纬度）
+      operationId: getInfo_2
+      parameters:
+      - name: accommodationId
+        in: path
+        description: 住宿ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
   /travel18/tourist/{touristId}:
     get:
       tags:
       - 游客管理
       summary: 获取游客详情
-      operationId: getInfo_2
+      operationId: getInfo_3
       parameters:
       - name: touristId
         in: path
@@ -2588,7 +2669,7 @@ paths:
       tags:
       - 行程模板管理
       summary: 查询模板详情（含日程明细）
-      operationId: getInfo_3
+      operationId: getInfo_4
       parameters:
       - name: templateId
         in: path
@@ -2627,7 +2708,7 @@ paths:
       tags:
       - 资源附件管理
       summary: 获取资源详情
-      operationId: getInfo_4
+      operationId: getInfo_5
       parameters:
       - name: resourceId
         in: path
@@ -2675,7 +2756,7 @@ paths:
       tags:
       - 游客喜好管理
       summary: 获取游客喜好详情
-      operationId: getInfo_5
+      operationId: getInfo_6
       parameters:
       - name: preferenceId
         in: path
@@ -2714,7 +2795,7 @@ paths:
       tags:
       - 跟拍管理
       summary: 获取跟拍详情
-      operationId: getInfo_6
+      operationId: getInfo_7
       parameters:
       - name: photographyId
         in: path
@@ -2764,7 +2845,7 @@ paths:
       tags:
       - 菜品管理
       summary: 获取菜品详情
-      operationId: getInfo_7
+      operationId: getInfo_8
       parameters:
       - name: dishId
         in: path
@@ -2785,7 +2866,7 @@ paths:
       tags:
       - 餐饮管理
       summary: 获取餐饮详情
-      operationId: getInfo_8
+      operationId: getInfo_9
       parameters:
       - name: diningId
         in: path
@@ -2827,7 +2908,7 @@ paths:
       tags:
       - 打卡点管理
       summary: 查询打卡点详情
-      operationId: getInfo_9
+      operationId: getInfo_10
       parameters:
       - name: checkinId
         in: path
@@ -2848,7 +2929,7 @@ paths:
       tags:
       - 包车管理
       summary: 获取包车详情
-      operationId: getInfo_10
+      operationId: getInfo_11
       parameters:
       - name: carId
         in: path
@@ -2869,7 +2950,7 @@ paths:
       tags:
       - 景点管理
       summary: 查询景点详情
-      operationId: getInfo_11
+      operationId: getInfo_12
       parameters:
       - name: attractionId
         in: path
@@ -2911,7 +2992,7 @@ paths:
       tags:
       - 算法配置管理
       summary: 查询配置详情
-      operationId: getInfo_12
+      operationId: getInfo_13
       parameters:
       - name: configId
         in: path
@@ -3023,7 +3104,7 @@ paths:
       tags:
       - 住宿管理
       summary: 获取住宿详情
-      operationId: getInfo_13
+      operationId: getInfo_14
       parameters:
       - name: accommodationId
         in: path
@@ -3151,7 +3232,7 @@ paths:
       tags:
       - 用户管理
       summary: 根据用户编号获取详细信息
-      operationId: getInfo_14
+      operationId: getInfo_15
       parameters: []
       responses:
         "200":
@@ -3165,7 +3246,7 @@ paths:
       tags:
       - 用户管理
       summary: 根据用户编号获取详细信息
-      operationId: getInfo_15
+      operationId: getInfo_16
       parameters:
       - name: userId
         in: path
@@ -3185,7 +3266,7 @@ paths:
       tags:
       - 角色管理
       summary: 根据角色编号获取详细信息
-      operationId: getInfo_16
+      operationId: getInfo_17
       parameters:
       - name: roleId
         in: path
@@ -3360,7 +3441,7 @@ paths:
     get:
       tags:
       - sys-post-controller
-      operationId: getInfo_17
+      operationId: getInfo_18
       parameters:
       - name: postId
         in: path
@@ -3410,7 +3491,7 @@ paths:
       tags:
       - 通知公告
       summary: 根据通知公告编号获取详细信息
-      operationId: getInfo_18
+      operationId: getInfo_19
       parameters:
       - name: noticeId
         in: path
@@ -3462,7 +3543,7 @@ paths:
       tags:
       - 菜单管理
       summary: 根据菜单编号获取详细信息
-      operationId: getInfo_19
+      operationId: getInfo_20
       parameters:
       - name: menuId
         in: path
@@ -3559,7 +3640,7 @@ paths:
       tags:
       - 字典类型
       summary: 查询字典类型详细
-      operationId: getInfo_20
+      operationId: getInfo_21
       parameters:
       - name: dictId
         in: path
@@ -3611,7 +3692,7 @@ paths:
       tags:
       - 字典数据
       summary: 查询字典数据详细
-      operationId: getInfo_21
+      operationId: getInfo_22
       parameters:
       - name: dictCode
         in: path
@@ -3668,7 +3749,7 @@ paths:
     get:
       tags:
       - sys-dept-controller
-      operationId: getInfo_22
+      operationId: getInfo_23
       parameters:
       - name: deptId
         in: path
@@ -3743,7 +3824,7 @@ paths:
       tags:
       - 参数配置
       summary: 根据参数编号获取详细信息
-      operationId: getInfo_23
+      operationId: getInfo_24
       parameters:
       - name: configId
         in: path
@@ -3800,7 +3881,7 @@ paths:
     get:
       tags:
       - server-controller
-      operationId: getInfo_24
+      operationId: getInfo_25
       responses:
         "200":
           description: OK
@@ -3889,7 +3970,7 @@ paths:
     get:
       tags:
       - cache-controller
-      operationId: getInfo_25
+      operationId: getInfo_26
       responses:
         "200":
           description: OK
@@ -3968,7 +4049,7 @@ paths:
       tags:
       - 登录
       summary: 获取用户信息
-      operationId: getInfo_26
+      operationId: getInfo_27
       responses:
         "200":
           description: OK
@@ -5175,6 +5256,68 @@ components:
         dinnerId:
           type: integer
           format: int64
+    TravelAccommodation:
+      required:
+      - accommodationName
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        accommodationId:
+          type: integer
+          format: int64
+        accommodationName:
+          type: string
+        accommodationDesc:
+          type: string
+        contactPhone:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        address:
+          type: string
+        longitude:
+          type: number
+        latitude:
+          type: number
+        accommodationType:
+          type: string
+        breakfastIncluded:
+          type: string
+        petFriendly:
+          type: string
+        priceMin:
+          type: number
+        priceMax:
+          type: number
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
     TravelItinerary:
       type: object
       properties:
@@ -5319,6 +5462,10 @@ components:
         touristCarId:
           type: integer
           format: int64
+        accommodation:
+          $ref: '#/components/schemas/TravelAccommodation'
+        touristAccommodation:
+          $ref: '#/components/schemas/TravelAccommodation'
         delFlag:
           type: string
     TravelTemplate:
@@ -5998,68 +6145,6 @@ components:
         periodLimitEvening:
           type: integer
           format: int32
-    TravelAccommodation:
-      required:
-      - accommodationName
-      type: object
-      properties:
-        createBy:
-          type: string
-        createTime:
-          type: string
-          format: date-time
-        updateBy:
-          type: string
-        updateTime:
-          type: string
-          format: date-time
-        remark:
-          type: string
-        params:
-          type: object
-          additionalProperties:
-            type: object
-        accommodationId:
-          type: integer
-          format: int64
-        accommodationName:
-          type: string
-        accommodationDesc:
-          type: string
-        contactPhone:
-          type: string
-        province:
-          type: string
-        city:
-          type: string
-        district:
-          type: string
-        address:
-          type: string
-        longitude:
-          type: number
-        latitude:
-          type: number
-        accommodationType:
-          type: string
-        breakfastIncluded:
-          type: string
-        petFriendly:
-          type: string
-        priceMin:
-          type: number
-        priceMax:
-          type: number
-        status:
-          type: string
-        delFlag:
-          type: string
-        attachments:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
     RegisterBody:
       required:
       - password

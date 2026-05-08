@@ -1,16 +1,7 @@
 <!--pages/mine/index.wxml-->
 <view class="page-container">
   <!-- Header Bar -->
-  <view class="header-bar" style="padding-top: {{statusBarHeight}}px;">
-    <view class="header-content">
-      <view class="header-left">
-        <text class="logo-text">寻秘</text>
-      </view>
-      <view class="header-right" bindtap="onBellTap">
-        <image class="icon-bell" src="/assets/images/icon-bell.svg" />
-      </view>
-    </view>
-  </view>
+  <navigation-bar title="我的" back="{{false}}" color="black" background="#F9FAF4"></navigation-bar>
 
   <scroll-view class="scrollarea" scroll-y type="list">
     <view class="page-main">

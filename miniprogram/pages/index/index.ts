@@ -1,9 +1,13 @@
+import { getTemplateList } from '../../services/template';
+import { getItineraryList } from '../../services/itinerary';
+
 Component({
   data: {
     userInfo: {
       avatarUrl: '/assets/images/user-profile.png',
       nickName: '',
     },
+    hasJourneys: true,
     banners: [
       {
         id: 'songyang-3d',
@@ -139,15 +143,68 @@ Component({
     ],
   },
   pageLifetimes: {
-    show() {},
+    show() {
+      this.loadBanners();
+      this.loadJourneys();
+    },
   },
   methods: {
+    async loadBanners() {
+      try {
+        const res = await getTemplateList();
+        const templates = (res.data || []).slice(0, 5);
+        if (templates.length > 0) {
+          const banners = templates.map((t: any) => ({
+            id: String(t.templateId || ''),
+            image: t.coverImage || '/assets/images/hero-banner-songyang.png',
+            tag: t.tag || 'NEW EXPEDITION',
+            title: t.templateName || '',
+            description: t.description || '',
+            buttonText: '立即启程',
+            priceLabel: 'STARTING FROM',
+            price: t.price ? `¥${t.price}` : '',
+          }));
+          this.setData({ banners });
+        }
+      } catch (err) {
+        console.error('Failed to load banners:', err);
+      }
+    },
+
+    async loadJourneys() {
+      try {
+        const res = await getItineraryList();
+        const list = (res.data || []).slice(0, 5);
+        if (list.length > 0) {
+          const journeys = list.map((item: any) => ({
+            id: String(item.itineraryId || ''),
+            title: item.itineraryName || '未命名旅途',
+            date: item.startDate || '',
+            budget: item.totalCost ? `¥${item.totalCost}` : '',
+            days: Array.from({ length: item.days || 0 }, (_, i) => ({
+              day: i + 1,
+              label: `DAY ${i + 1}`,
+              number: String(i + 1).padStart(2, '0'),
+              status: i === 0 ? 'active' : 'upcoming',
+            })),
+            currentGoal: '',
+            locations: [],
+          }));
+          this.setData({ journeys, hasJourneys: true });
+        } else {
+          this.setData({ journeys: [], hasJourneys: false });
+        }
+      } catch (err) {
+        console.error('Failed to load journeys:', err);
+      }
+    },
+
     onBannerTap(e: any) {
       const { id } = e.detail
       console.log('Banner tap:', id)
     },
     onViewAll() {
-      console.log('View all journeys')
+      wx.navigateTo({ url: '/pages/journeys/index' });
     },
     onInspirationTap(e: any) {
       const { id } = e.detail

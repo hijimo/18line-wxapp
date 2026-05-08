@@ -1,7 +1,7 @@
 <!-- survey/index.wxml -->
 <view class="survey-page">
-  <!-- Shared header -->
-  <survey-header step="{{currentStep}}" totalSteps="3" bind:back="onBack" />
+  <!-- Navigation Bar -->
+  <navigation-bar title="个人偏好设置" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
 
   <!-- Step 1: Intensity -->
   <scroll-view wx:if="{{currentStep === 1}}" class="step-content" scroll-y>

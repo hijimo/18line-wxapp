@@ -6,8 +6,8 @@
     "pages/mine/index",
     "pages/login/index",
     "pages/survey/index",
-    "pages/mine/edit",
-    "pages/mine/journeys",
+    "pages/profile-edit/index",
+    "pages/journeys/index",
     "pages/logs/logs"
   ],
   "window": {

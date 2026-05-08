@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<header-bar avatarUrl="{{userInfo.avatarUrl}}" bind:belltap="onBellTap" />
+<navigation-bar title="探索" back="{{false}}" color="black" background="#F9FAF4"></navigation-bar>
 
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="page-main">
@@ -7,7 +7,33 @@
     <hero-banner banners="{{banners}}" bind:bannertap="onBannerTap" />
 
     <!-- Section 2: My Journey -->
-    <journey-card journeys="{{journeys}}" bind:viewall="onViewAll" />
+    <view class="journey-section">
+      <view class="journey-section-header">
+        <view>
+          <view class="journey-section-title">我的寻觅之旅</view>
+          <view class="journey-section-subtitle">正在进行的奇遇记</view>
+        </view>
+        <view class="journey-view-all" bindtap="onViewAll">
+          <text class="journey-view-all-text">全部轨迹 ></text>
+        </view>
+      </view>
+
+      <block wx:if="{{hasJourneys}}">
+        <journey-card journeys="{{journeys}}" bind:viewall="onViewAll" />
+      </block>
+
+      <block wx:else>
+        <view class="journey-empty-card">
+          <view class="journey-empty-icon-wrap">
+            <image class="journey-empty-icon" src="/assets/images/icon-empty-journey.svg" mode="aspectFit" />
+          </view>
+          <text class="journey-empty-text">开启您的第一段寻秘之旅</text>
+          <view class="journey-empty-btn" bindtap="onViewAll">
+            <text class="journey-empty-btn-text">去添加</text>
+          </view>
+        </view>
+      </block>
+    </view>
 
     <!-- Section 3: Local Highlights (Inspiration Cards Swiper) -->
     <inspiration-card title="{{inspirationTitle}}" cards="{{inspirationCards}}" bind:cardtap="onInspirationTap" />

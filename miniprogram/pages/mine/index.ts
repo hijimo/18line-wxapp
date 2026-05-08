@@ -3,7 +3,6 @@ import { TOKEN_KEY } from '../../utils/request';
 
 Page({
   data: {
-    statusBarHeight: 0,
     userInfo: {
       avatarUrl: '/assets/images/user-profile.png',
       nickname: '林舒逸',
@@ -22,8 +21,7 @@ Page({
   },
 
   onLoad() {
-    const sysInfo = wx.getSystemInfoSync();
-    this.setData({ statusBarHeight: sysInfo.statusBarHeight || 0 });
+    // no-op
   },
 
   onShow() {
@@ -46,16 +44,16 @@ Page({
   },
 
   goEditProfile() {
-    wx.navigateTo({ url: '/pages/mine/edit' });
+    wx.navigateTo({ url: '/pages/profile-edit/index' });
   },
 
   goJourneys(e: any) {
     const filter = e.currentTarget?.dataset?.filter || '';
-    wx.navigateTo({ url: `/pages/mine/journeys?filter=${filter}` });
+    wx.navigateTo({ url: `/pages/journeys/index?filter=${filter}` });
   },
 
   goTravelTraits() {
-    wx.showToast({ title: '功能开发中', icon: 'none' });
+    wx.navigateTo({ url: '/pages/survey/index?mode=edit' });
   },
 
   goFAQ() {

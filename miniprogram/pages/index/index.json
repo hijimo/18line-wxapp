@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "header-bar": "/components/header-bar/header-bar",
     "hero-banner": "/components/hero-banner/hero-banner",
     "journey-card": "/components/journey-card/journey-card",
     "inspiration-card": "/components/inspiration-card/inspiration-card",
