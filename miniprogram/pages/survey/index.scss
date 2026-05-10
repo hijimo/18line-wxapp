@@ -346,6 +346,10 @@
   background: #ffffff;
 }
 
+.soul-card.selected {
+  box-shadow: 0 0 0 4rpx #163422;
+}
+
 .soul-icon-wrap {
   width: 80rpx;
   height: 80rpx;
@@ -375,6 +379,21 @@
   right: 24rpx;
   width: 33rpx;
   height: 33rpx;
+  border-radius: 50%;
+  background: #163422;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+
+.soul-check.visible {
+  opacity: 1;
+}
+
+.soul-check-icon {
+  width: 18rpx;
+  height: 14rpx;
 }
 
 /* ---- Blind mode ---- */

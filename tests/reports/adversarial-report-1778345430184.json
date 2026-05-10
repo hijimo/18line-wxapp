@@ -1,0 +1,538 @@
+{
+  "timestamp": "2026-05-09T16:50:30.183Z",
+  "summary": {
+    "builderTotal": 87,
+    "builderPassed": 87,
+    "builderFailed": 0,
+    "reviewerTotal": 0,
+    "reviewerPassed": 0,
+    "reviewerFailed": 0,
+    "conflicts": 0
+  },
+  "conflicts": [],
+  "builderResults": [
+    {
+      "title": "[Unit] 文件完整性验证 create-itinerary 页面四个文件完整",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 itinerary-detail 页面四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 base-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 add-schedule-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 attraction-card 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 hotel-card 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 dining-card 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 car-card 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 photography-card 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 attraction-intro-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 hotel-intro-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 dining-intro-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 car-intro-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 photography-intro-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 photography.ts 服务文件存在",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] app.json 页面注册 create-itinerary 已注册",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] app.json 页面注册 itinerary-detail 已注册",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail/index.json 组件注册 usingComponents 包含所有必要组件",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail/index.json 组件注册 组件路径指向存在的文件",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 base-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 add-schedule-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 attraction-card.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 hotel-card.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 dining-card.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 car-card.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 photography-card.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 attraction-intro-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 hotel-intro-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 dining-intro-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 car-intro-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 photography-intro-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 导入了 autoGenerateItinerary",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 导入了 addItinerary",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 导入了 getRegionTree 或 getProvinces",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 导入了 getDictByType",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 使用 wx.redirectTo 而非 navigateTo",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 包含 calculateDays 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 包含 loading 状态管理",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 AI生成时调用 setKeepScreenOn",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 使用 travel_tourist_like 字典类型",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 导入了 getItinerary",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 onLoad 中校验 id 参数",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 loadItinerary 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 onDayTap 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 onAddSpot 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 onCardDetail 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 onScheduleRefresh 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 onDrawerClose 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 onIntroClose 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含抽屉互斥逻辑",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 getAttractionList",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 getAccommodationList",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 getDiningList",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 getCarList",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 getPhotographyList",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 updateDayAttractions",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 updateDayDining",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 updateDayAccommodation",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 addCar",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 addPhotography",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 包含 showActionSheet 餐饮选择",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 包含防抖逻辑（setTimeout）",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 包含 triggerEvent refresh",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 包含 5 个 tab",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 卡片组件接口验证 attraction-card 触发 carddetail 事件",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 卡片组件接口验证 hotel-card 触发 carddetail 事件",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 卡片组件接口验证 dining-card 触发 carddetail 事件",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 卡片组件接口验证 car-card 触发 carddetail 事件",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 卡片组件接口验证 photography-card 触发 carddetail 事件",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 卡片组件接口验证 dining-card 包含 meal 属性",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] base-drawer 组件验证 使用 root-portal",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] base-drawer 组件验证 包含 catchtouchmove 防穿透",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] base-drawer 组件验证 包含 noop 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] base-drawer 组件验证 触发 close 事件",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] base-drawer 组件验证 包含 show 和 height 属性",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.attractionList",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.breakfast",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.lunch",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.dinner",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.accommodation",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.photography",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.car",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 dining-card 传入 meal 属性",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] photography.ts 服务验证 导出 getPhotographyList",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] photography.ts 服务验证 导出 getPhotographyDetail",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] photography.ts 服务验证 使用正确的 API 路径",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] photography.ts 服务验证 导入 TravelPhotography 类型",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    }
+  ],
+  "reviewerResults": []
+}

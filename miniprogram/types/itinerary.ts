@@ -1,13 +1,68 @@
+import type { TravelDining } from './dining';
+import type { TravelAccommodation } from './accommodation';
+import type { TravelAttraction } from './attraction';
+import type { TravelCar } from './car';
+
+export interface TravelPhotography {
+  photographyId?: number;
+  nickname?: string;
+  gender?: string;
+  introduction?: string;
+  contactInfo?: string;
+  price?: number;
+  recommendRating?: number;
+  equipment?: string;
+  status?: string;
+  delFlag?: string;
+  attachments?: Record<string, any>[];
+  createBy?: string;
+  createTime?: string;
+  updateBy?: string;
+  updateTime?: string;
+  remark?: string;
+}
+
 export interface TravelItineraryDay {
-  dayId?: number;
+  itineraryDayId?: number;
   itineraryId?: number;
+  templateDayId?: number;
   dayNumber?: number;
-  breakfastId?: number;
-  lunchId?: number;
-  dinnerId?: number;
-  accommodationId?: number;
+  dayTheme?: string;
   attractionIds?: string;
-  [key: string]: any;
+  attractionCriteria?: string;
+  touristAttractionIds?: string;
+  accommodationId?: number;
+  touristAccommodationId?: number;
+  breakfastId?: number;
+  touristBreakfastId?: number;
+  lunchId?: number;
+  touristLunchId?: number;
+  dinnerId?: number;
+  touristDinnerId?: number;
+  photographyId?: number;
+  touristPhotographyId?: number;
+  carId?: number;
+  touristCarId?: number;
+  accommodation?: TravelAccommodation;
+  touristAccommodation?: TravelAccommodation;
+  attractionList?: TravelAttraction[];
+  touristAttractionList?: TravelAttraction[];
+  breakfast?: TravelDining;
+  touristBreakfast?: TravelDining;
+  lunch?: TravelDining;
+  touristLunch?: TravelDining;
+  dinner?: TravelDining;
+  touristDinner?: TravelDining;
+  photography?: TravelPhotography;
+  touristPhotography?: TravelPhotography;
+  car?: TravelCar;
+  touristCar?: TravelCar;
+  delFlag?: string;
+  createBy?: string;
+  createTime?: string;
+  updateBy?: string;
+  updateTime?: string;
+  remark?: string;
 }
 
 export interface Itinerary {
@@ -30,15 +85,18 @@ export interface Itinerary {
   remark?: string;
   delFlag?: string;
   daysList?: TravelItineraryDay[];
+  attachments?: Record<string, any>[];
   createBy?: string;
   createTime?: string;
   updateBy?: string;
   updateTime?: string;
 }
 
-export type ItineraryParams = Omit<Itinerary, 'itineraryId'> & {
-  itineraryId?: number;
-};
+export type ItineraryParams = Partial<Itinerary>;
+
+export interface ItineraryListParams {
+  status?: string;
+}
 
 export interface UpdateDayDiningParams {
   itineraryId: number;

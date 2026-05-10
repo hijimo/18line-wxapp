@@ -1,0 +1,110 @@
+.tab-bar {
+  display: flex;
+  white-space: nowrap;
+  padding: 24rpx 32rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.tab-item {
+  display: inline-block;
+  padding: 12rpx 32rpx;
+  margin-right: 16rpx;
+  font-size: 26rpx;
+  color: #163422;
+  background: #f0f2ec;
+  border-radius: 32rpx;
+  flex-shrink: 0;
+
+  &--active {
+    background: #163422;
+    color: #ffffff;
+  }
+}
+
+.list-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80rpx 0;
+}
+
+.loading-text {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.list-wrap {
+  padding: 24rpx 32rpx;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  background: #f9faf4;
+  border-radius: 24rpx;
+}
+
+.item-image {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 16rpx;
+  flex-shrink: 0;
+  margin-right: 24rpx;
+}
+
+.item-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.item-name {
+  font-size: 28rpx;
+  color: #163422;
+  font-weight: 500;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-desc {
+  font-size: 24rpx;
+  color: #666666;
+  margin-top: 8rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.item-meta {
+  display: flex;
+  align-items: center;
+  margin-top: 12rpx;
+  gap: 16rpx;
+}
+
+.meta-tag {
+  font-size: 22rpx;
+  color: #163422;
+  background: #e8ebe3;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.meta-price {
+  font-size: 24rpx;
+  color: #944a00;
+  font-weight: 500;
+}
+
+.list-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80rpx 0;
+  color: #999999;
+  font-size: 24rpx;
+}

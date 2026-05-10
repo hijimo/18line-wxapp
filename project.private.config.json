@@ -22,11 +22,18 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/login/index",
-          "pathName": "pages/trip/index",
+          "name": "行程详情",
+          "pathName": "pages/itinerary-detail/index",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "添加行程",
+          "pathName": "pages/create-itinerary/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

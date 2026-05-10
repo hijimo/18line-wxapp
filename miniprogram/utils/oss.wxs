@@ -1,0 +1,9 @@
+var ossResize = function(url, w, h) {
+  if (!url || url.indexOf('/assets/') === 0 || url.indexOf('http') !== 0) return url;
+  var sep = url.indexOf('?') >= 0 ? '&' : '?';
+  return url + sep + 'x-oss-process=image/resize,m_fill,w_' + w + ',h_' + h;
+}
+
+module.exports = {
+  ossResize: ossResize
+};

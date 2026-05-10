@@ -1,0 +1,15 @@
+{
+  "usingComponents": {
+    "attraction-card": "/components/attraction-card/attraction-card",
+    "hotel-card": "/components/hotel-card/hotel-card",
+    "dining-card": "/components/dining-card/dining-card",
+    "car-card": "/components/car-card/car-card",
+    "photography-card": "/components/photography-card/photography-card",
+    "add-schedule-drawer": "/components/add-schedule-drawer/add-schedule-drawer",
+    "attraction-intro-drawer": "/components/attraction-intro-drawer/attraction-intro-drawer",
+    "hotel-intro-drawer": "/components/hotel-intro-drawer/hotel-intro-drawer",
+    "dining-intro-drawer": "/components/dining-intro-drawer/dining-intro-drawer",
+    "car-intro-drawer": "/components/car-intro-drawer/car-intro-drawer",
+    "photography-intro-drawer": "/components/photography-intro-drawer/photography-intro-drawer"
+  }
+}

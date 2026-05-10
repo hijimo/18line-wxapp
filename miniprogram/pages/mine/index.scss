@@ -58,7 +58,6 @@ page {
 .scrollarea {
   flex: 1;
   overflow-y: hidden;
-  padding-top: 120rpx;
 }
 
 .page-main {
@@ -248,6 +247,24 @@ page {
   gap: 24rpx;
 }
 
+.func-icon-wrap {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.func-icon-wrap--green {
+  background: #c8ebd0;
+}
+
+.func-icon-wrap--grey {
+  background: #edeee8;
+}
+
 .func-icon {
   width: 40rpx;
   height: 40rpx;
@@ -271,7 +288,7 @@ page {
 }
 
 .func-arrow {
-  width: 24rpx;
+  width: 15rpx;
   height: 24rpx;
   opacity: 0.4;
 }

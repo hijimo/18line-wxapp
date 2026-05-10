@@ -1,0 +1,162 @@
+<view class="page-container">
+  <navigation-bar title="{{itinerary.itineraryName || '行程详情'}}" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
+
+  <!-- Loading -->
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="loading-spinner" />
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <block wx:elif="{{itinerary}}">
+    <!-- 行程信息卡 -->
+    <view class="info-card">
+      <view class="info-header">
+        <text class="info-title">{{itinerary.itineraryName || '未命名行程'}}</text>
+        <view class="info-status">
+          <text class="info-status-text">{{itinerary.statusLabel || '规划中'}}</text>
+        </view>
+      </view>
+      <view class="info-meta">
+        <view class="meta-item">
+          <image class="meta-icon" src="/assets/images/icon-location.svg" mode="aspectFit" />
+          <text class="meta-text">{{itinerary.city || ''}}{{itinerary.district ? ' · ' + itinerary.district : ''}}</text>
+        </view>
+        <view class="meta-item">
+          <image class="meta-icon" src="/assets/images/icon-calendar.svg" mode="aspectFit" />
+          <text class="meta-text">{{itinerary.startDate || ''}} · {{itinerary.days || 0}}天</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Day 导航 -->
+    <view class="day-nav-wrapper">
+      <scroll-view class="day-nav" scroll-x enhanced show-scrollbar="{{false}}">
+        <view class="day-nav-inner">
+          <view
+            wx:for="{{itinerary.daysList}}"
+            wx:key="dayNumber"
+            class="day-tab {{currentDay === item.dayNumber ? 'day-tab--active' : ''}}"
+            bindtap="onDayTap"
+            data-day="{{item.dayNumber}}"
+          >
+            <text class="day-tab-text">Day {{item.dayNumber}}</text>
+            <text wx:if="{{item.dayTheme}}" class="day-tab-theme">{{item.dayTheme}}</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- Timeline 区域 -->
+    <scroll-view class="scrollarea" scroll-y type="list">
+      <view class="timeline" wx:if="{{currentDayData}}">
+        <!-- 景点列表 -->
+        <block wx:if="{{currentDayData.attractionList && currentDayData.attractionList.length > 0}}">
+          <view class="timeline-section">
+            <text class="timeline-section-title">景点</text>
+            <view class="timeline-cards">
+              <attraction-card
+                wx:for="{{currentDayData.attractionList}}"
+                wx:key="attractionId"
+                item="{{item}}"
+                bind:carddetail="onCardDetail"
+              />
+            </view>
+          </view>
+        </block>
+
+        <!-- 住宿 -->
+        <block wx:if="{{currentDayData.accommodation}}">
+          <view class="timeline-section">
+            <text class="timeline-section-title">住宿</text>
+            <hotel-card item="{{currentDayData.accommodation}}" bind:carddetail="onCardDetail" />
+          </view>
+        </block>
+
+        <!-- 餐饮 -->
+        <block wx:if="{{currentDayData.breakfast || currentDayData.lunch || currentDayData.dinner}}">
+          <view class="timeline-section">
+            <text class="timeline-section-title">餐饮</text>
+            <view class="timeline-cards">
+              <dining-card wx:if="{{currentDayData.breakfast}}" item="{{currentDayData.breakfast}}" meal="breakfast" bind:carddetail="onCardDetail" />
+              <dining-card wx:if="{{currentDayData.lunch}}" item="{{currentDayData.lunch}}" meal="lunch" bind:carddetail="onCardDetail" />
+              <dining-card wx:if="{{currentDayData.dinner}}" item="{{currentDayData.dinner}}" meal="dinner" bind:carddetail="onCardDetail" />
+            </view>
+          </view>
+        </block>
+
+        <!-- 包车 -->
+        <block wx:if="{{currentDayData.car}}">
+          <view class="timeline-section">
+            <text class="timeline-section-title">包车</text>
+            <car-card item="{{currentDayData.car}}" bind:carddetail="onCardDetail" />
+          </view>
+        </block>
+
+        <!-- 跟拍 -->
+        <block wx:if="{{currentDayData.photography}}">
+          <view class="timeline-section">
+            <text class="timeline-section-title">跟拍</text>
+            <photography-card item="{{currentDayData.photography}}" bind:carddetail="onCardDetail" />
+          </view>
+        </block>
+
+        <!-- 添加按钮 -->
+        <view class="add-spot-btn" bindtap="onAddSpot">
+          <text class="add-spot-icon">+</text>
+          <text class="add-spot-text">添加日程项</text>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view wx:elif="{{!loading}}" class="empty-day">
+        <text class="empty-day-text">当天暂无安排</text>
+        <view class="add-spot-btn" bindtap="onAddSpot">
+          <text class="add-spot-icon">+</text>
+          <text class="add-spot-text">添加日程项</text>
+        </view>
+      </view>
+    </scroll-view>
+  </block>
+
+  <!-- Add Schedule Drawer -->
+  <add-schedule-drawer
+    wx:if="{{showAddDrawer}}"
+    show="{{showAddDrawer}}"
+    itineraryId="{{itineraryId}}"
+    dayNumber="{{addDayNumber}}"
+    bind:close="onDrawerClose"
+    bind:refresh="onScheduleRefresh"
+  />
+
+  <!-- Intro Drawers -->
+  <attraction-intro-drawer
+    wx:if="{{showIntroDrawer === 'attraction'}}"
+    show="{{showIntroDrawer === 'attraction'}}"
+    data="{{introData}}"
+    bind:close="onIntroClose"
+  />
+  <hotel-intro-drawer
+    wx:if="{{showIntroDrawer === 'hotel'}}"
+    show="{{showIntroDrawer === 'hotel'}}"
+    data="{{introData}}"
+    bind:close="onIntroClose"
+  />
+  <dining-intro-drawer
+    wx:if="{{showIntroDrawer === 'dining'}}"
+    show="{{showIntroDrawer === 'dining'}}"
+    data="{{introData}}"
+    bind:close="onIntroClose"
+  />
+  <car-intro-drawer
+    wx:if="{{showIntroDrawer === 'car'}}"
+    show="{{showIntroDrawer === 'car'}}"
+    data="{{introData}}"
+    bind:close="onIntroClose"
+  />
+  <photography-intro-drawer
+    wx:if="{{showIntroDrawer === 'photography'}}"
+    show="{{showIntroDrawer === 'photography'}}"
+    data="{{introData}}"
+    bind:close="onIntroClose"
+  />
+</view>

@@ -1,7 +1,8 @@
 <!-- survey/index.wxml -->
+<wxs src="../../utils/array.wxs" module="arr" />
 <view class="survey-page">
-  <!-- Navigation Bar -->
-  <navigation-bar title="个人偏好设置" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
+  <navigation-bar title="我的旅游特性" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
+
 
   <!-- Step 1: Intensity -->
   <scroll-view wx:if="{{currentStep === 1}}" class="step-content" scroll-y>
@@ -11,7 +12,7 @@
         <view class="avatar-ring">
           <image class="avatar-img" src="/assets/images/user-profile.png" mode="aspectFill" />
           <view class="avatar-edit-btn">
-            <image class="edit-icon" src="http://localhost:3845/assets/387cfafc9b062c2278d7913cc87b483445415f63.svg" mode="aspectFit" />
+            <image class="edit-icon" src="/assets/images/icon-edit-pen.svg" mode="aspectFit" />
           </view>
         </view>
         <text class="section-tag">个人设置</text>
@@ -60,7 +61,7 @@
       <!-- Food preferences -->
       <view class="pref-section">
         <view class="pref-header">
-          <image class="pref-icon" src="http://localhost:3845/assets/db38cdcd8d0253b5863656bd1b03c273788a7ad1.svg" mode="aspectFit" />
+          <image class="pref-icon" src="/assets/images/icon-food-section.svg" mode="aspectFit" />
           <text class="pref-title">饮食偏好</text>
         </view>
         <view class="chip-grid">
@@ -80,7 +81,7 @@
       <!-- Accommodation preferences -->
       <view class="pref-section">
         <view class="pref-header">
-          <image class="pref-icon" src="http://localhost:3845/assets/8ce5d6cd8c1cf17cca8f60bf4fedc042a32dea49.svg" mode="aspectFit" />
+          <image class="pref-icon" src="/assets/images/icon-accom-section.svg" mode="aspectFit" />
           <text class="pref-title">住宿偏好</text>
         </view>
         <view class="accom-grid">
@@ -119,7 +120,7 @@
         <view
           wx:for="{{soulOptions}}"
           wx:key="id"
-          class="soul-card {{selectedSoul.indexOf(item.id) >= 0 ? 'selected' : ''}}"
+          class="soul-card {{arr.includes(selectedSoul, item.id) ? 'selected' : ''}}"
           bindtap="onSelectSoul"
           data-id="{{item.id}}"
         >
@@ -127,18 +128,16 @@
             <image class="soul-icon" src="{{item.icon}}" mode="aspectFit" />
           </view>
           <text class="soul-label">{{item.label}}</text>
-          <image
-            class="soul-check"
-            src="{{selectedSoul.indexOf(item.id) >= 0 ? 'http://localhost:3845/assets/7ce96e3f8bb417bee1ca3d60e3468fb74bae8143.svg' : 'http://localhost:3845/assets/7ce96e3f8bb417bee1ca3d60e3468fb74bae8143.svg'}}"
-            mode="aspectFit"
-          />
+          <view class="soul-check {{arr.includes(selectedSoul, item.id) ? 'visible' : ''}}">
+            <image class="soul-check-icon" src="/assets/images/icon-check-active.svg" mode="aspectFit" />
+          </view>
         </view>
       </view>
 
       <!-- Blind mode toggle -->
       <view class="blind-mode-section">
         <view class="blind-mode-header">
-          <image class="blind-icon" src="http://localhost:3845/assets/90d56eb4c547ef919bf8a5b3b5db3e9fe103f00f.svg" mode="aspectFit" />
+          <image class="blind-icon" src="/assets/images/icon-blind-mode.svg" mode="aspectFit" />
           <text class="blind-title">盲游模式</text>
         </view>
         <text class="blind-desc">您希望在抵达前保留多少惊喜？</text>
@@ -148,7 +147,7 @@
             bindtap="onSelectBlindMode"
             data-mode="full"
           >
-            <image class="toggle-icon" src="http://localhost:3845/assets/f02e67540b312ce17c930affe171420eb83482c6.svg" mode="aspectFit" />
+            <image class="toggle-icon" src="/assets/images/icon-blind-full.svg" mode="aspectFit" />
             <text class="toggle-label">全盲惊喜</text>
           </view>
           <view
@@ -156,7 +155,7 @@
             bindtap="onSelectBlindMode"
             data-mode="clear"
           >
-            <image class="toggle-icon" src="http://localhost:3845/assets/742ce77808c63ee25d2a292e5f2fd4c7a9b3f989.svg" mode="aspectFit" />
+            <image class="toggle-icon" src="/assets/images/icon-blind-clear.svg" mode="aspectFit" />
             <text class="toggle-label">清晰路径</text>
           </view>
         </view>

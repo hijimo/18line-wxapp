@@ -2,6 +2,7 @@ import request from '../utils/request';
 import type {
   Itinerary,
   ItineraryParams,
+  ItineraryListParams,
   UpdateDayDiningParams,
   UpdateDayAttractionsParams,
   UpdateDayAccommodationParams,
@@ -9,8 +10,8 @@ import type {
 import type { AjaxResult } from '../types/common';
 
 /** 查询行程列表 */
-export const getItineraryList = () =>
-  request<AjaxResult<Itinerary[]>>('/wx/itinerary/list');
+export const getItineraryList = (params?: ItineraryListParams) =>
+  request<AjaxResult<Itinerary[]>>('/wx/itinerary/list', { data: params });
 
 /** 查询行程详情 */
 export const getItinerary = (itineraryId: number) =>
@@ -19,6 +20,13 @@ export const getItinerary = (itineraryId: number) =>
 /** 一键生成行程 */
 export const autoGenerateItinerary = (params: ItineraryParams) =>
   request<AjaxResult<Itinerary>>('/wx/itinerary/auto', {
+    method: 'POST',
+    data: params,
+  });
+
+/** 手动创建行程 */
+export const addItinerary = (params: ItineraryParams) =>
+  request<AjaxResult<Itinerary>>('/wx/itinerary/add', {
     method: 'POST',
     data: params,
   });
@@ -80,10 +88,10 @@ export const updateDayAccommodation = (params: UpdateDayAccommodationParams) => 
 };
 
 /** 添加行程跟拍 */
-export const addPhotography = (itineraryId: number, photographerId: number) =>
+export const addPhotography = (itineraryId: number, photographyId: number) =>
   request<AjaxResult>(
     `/wx/itinerary/${itineraryId}/photography/add`,
-    { method: 'POST', data: photographerId },
+    { method: 'POST', data: photographyId },
   );
 
 /** 添加行程包车 */

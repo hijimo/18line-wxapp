@@ -8,6 +8,8 @@
     "pages/survey/index",
     "pages/profile-edit/index",
     "pages/journeys/index",
+    "pages/create-itinerary/index",
+    "pages/itinerary-detail/index",
     "pages/logs/logs"
   ],
   "window": {
@@ -53,6 +55,9 @@
   },
   "resolveAlias": {
     "@/*": "/*"
+  },
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar"
   },
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",

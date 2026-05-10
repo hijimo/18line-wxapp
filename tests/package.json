@@ -1,0 +1,17 @@
+{
+  "name": "18line-wxapp-e2e-tests",
+  "version": "1.0.0",
+  "description": "微信小程序自动化测试 - 双Agent对抗验证方案",
+  "scripts": {
+    "test:build": "node agent-builder/run.js",
+    "test:review": "node agent-reviewer/run.js",
+    "test:adversarial": "node run-adversarial.js",
+    "test:all": "jest --config jest.config.js",
+    "report": "node shared/report-generator.js"
+  },
+  "devDependencies": {
+    "miniprogram-automator": "^0.12.1",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.12"
+  }
+}

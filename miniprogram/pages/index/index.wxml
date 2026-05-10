@@ -1,5 +1,4 @@
 <!--index.wxml-->
-<navigation-bar title="探索" back="{{false}}" color="black" background="#F9FAF4"></navigation-bar>
 
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="page-main">

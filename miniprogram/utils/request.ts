@@ -38,7 +38,7 @@ interface RequestOption {
 
 const defaultOption: RequestOption = {
   method: 'GET',
-  timeout: 5000,
+  timeout: 60000,
 };
 
 const interceptorResponse = (

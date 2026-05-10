@@ -1,0 +1,41 @@
+<base-drawer show="{{show}}" height="75vh" bind:close="onClose">
+  <view class="intro-drawer">
+    <!-- Cover Image -->
+    <image
+      wx:if="{{data.attachments && data.attachments.length > 0}}"
+      class="cover-image"
+      src="{{data.attachments[0].url}}"
+      mode="aspectFill"
+      lazy-load
+    />
+
+    <view class="intro-body">
+      <!-- Name -->
+      <text class="intro-name">{{data.nickname}}</text>
+
+      <!-- Meta Tags -->
+      <view class="meta-row">
+        <text wx:if="{{data.carModel}}" class="meta-tag">{{data.carModel}}</text>
+        <text wx:if="{{data.seatCount}}" class="meta-tag">{{data.seatCount}}座</text>
+        <text wx:if="{{data.drivingYears}}" class="meta-tag">{{data.drivingYears}}年驾龄</text>
+      </view>
+
+      <!-- Price -->
+      <view class="info-row">
+        <text wx:if="{{data.price}}" class="info-price">¥{{data.price}}/天</text>
+      </view>
+
+      <!-- Contact -->
+      <view wx:if="{{data.contactInfo}}" class="contact-row">
+        <text class="contact-label">联系方式:</text>
+        <text class="contact-text">{{data.contactInfo}}</text>
+      </view>
+
+      <!-- Introduction -->
+      <view wx:if="{{data.introduction}}" class="intro-section">
+        <text class="section-title">司机介绍</text>
+        <text class="section-content">{{data.introduction}}</text>
+      </view>
+    </view>
+  </view>
+</base-drawer>

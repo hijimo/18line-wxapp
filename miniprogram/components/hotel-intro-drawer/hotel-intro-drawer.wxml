@@ -1,0 +1,41 @@
+<base-drawer show="{{show}}" height="75vh" bind:close="onClose">
+  <view class="intro-drawer">
+    <!-- Cover Image -->
+    <image
+      wx:if="{{data.attachments && data.attachments.length > 0}}"
+      class="cover-image"
+      src="{{data.attachments[0].url}}"
+      mode="aspectFill"
+      lazy-load
+    />
+
+    <view class="intro-body">
+      <!-- Name -->
+      <text class="intro-name">{{data.accommodationName}}</text>
+
+      <!-- Meta Tags -->
+      <view class="meta-row">
+        <text wx:if="{{data.accommodationType}}" class="meta-tag">{{data.accommodationType}}</text>
+        <text wx:if="{{data.breakfastIncluded === 'Y'}}" class="meta-tag">含早餐</text>
+        <text wx:if="{{data.petFriendly === 'Y'}}" class="meta-tag">可带宠物</text>
+      </view>
+
+      <!-- Price -->
+      <view class="info-row">
+        <text wx:if="{{data.priceMin}}" class="info-price">¥{{data.priceMin}} ~ ¥{{data.priceMax}}</text>
+      </view>
+
+      <!-- Address -->
+      <view wx:if="{{data.address}}" class="address-row">
+        <text class="address-label">地址:</text>
+        <text class="address-text">{{data.address}}</text>
+      </view>
+
+      <!-- Description -->
+      <view wx:if="{{data.accommodationDesc}}" class="intro-section">
+        <text class="section-title">住宿介绍</text>
+        <text class="section-content">{{data.accommodationDesc}}</text>
+      </view>
+    </view>
+  </view>
+</base-drawer>

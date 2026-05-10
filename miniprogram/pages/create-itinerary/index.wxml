@@ -1,0 +1,87 @@
+<view class="page-container">
+  <navigation-bar title="创建行程" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
+
+  <scroll-view class="scrollarea" scroll-y type="list">
+    <view class="form-content">
+      <!-- 目的地选择 -->
+      <view class="form-section">
+        <text class="section-title">目的地</text>
+        <picker mode="multiSelector" range="{{regionTree}}" range-key="name" bindchange="onRegionChange">
+          <view class="picker-box">
+            <text class="picker-text {{provinceName ? '' : 'placeholder'}}">
+              {{provinceName ? provinceName + ' ' + cityName + ' ' + districtName : '请选择目的地'}}
+            </text>
+            <image class="picker-arrow" src="/assets/images/icon-arrow-right.svg" mode="aspectFit" />
+          </view>
+        </picker>
+      </view>
+
+      <!-- 出行日期 -->
+      <view class="form-section">
+        <text class="section-title">出行日期</text>
+        <view class="date-row">
+          <picker mode="date" bindchange="onStartDateChange" value="{{startDate}}">
+            <view class="date-box">
+              <text class="date-text {{startDate ? '' : 'placeholder'}}">
+                {{startDate || '开始日期'}}
+              </text>
+            </view>
+          </picker>
+          <text class="date-separator">至</text>
+          <picker mode="date" bindchange="onEndDateChange" value="{{endDate}}" start="{{startDate}}">
+            <view class="date-box">
+              <text class="date-text {{endDate ? '' : 'placeholder'}}">
+                {{endDate || '结束日期'}}
+              </text>
+            </view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 偏好标签 -->
+      <view class="form-section">
+        <text class="section-title">旅行偏好</text>
+        <view class="preference-grid">
+          <view
+            wx:for="{{preferenceOptions}}"
+            wx:key="dictValue"
+            class="preference-tag {{preferences.indexOf(item.dictValue) > -1 ? 'preference-tag--active' : ''}}"
+            bindtap="onPreferenceTap"
+            data-value="{{item.dictValue}}"
+          >
+            <text class="preference-tag-text">{{item.dictLabel}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 盲游模式 -->
+      <view class="form-section">
+        <view class="switch-row">
+          <view class="switch-info">
+            <text class="section-title">盲游模式</text>
+            <text class="switch-desc">开启后将随机推荐目的地景点</text>
+          </view>
+          <switch checked="{{blindMode}}" bindchange="onBlindModeChange" color="#163422" />
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- Loading Overlay -->
+  <view wx:if="{{loading}}" class="loading-overlay">
+    <view class="loading-content">
+      <view class="loading-spinner" />
+      <text class="loading-text">{{progressText || '创建中...'}}</text>
+    </view>
+  </view>
+
+  <!-- Footer Buttons -->
+  <view class="footer">
+    <view class="btn btn--secondary" bindtap="onManualPlan">
+      <text class="btn-text btn-text--secondary">手动创建</text>
+    </view>
+    <view class="btn btn--primary {{loading ? 'btn--disabled' : ''}}" bindtap="onAIPlan">
+      <text class="btn-text btn-text--primary">AI 智能规划</text>
+    </view>
+  </view>
+</view>

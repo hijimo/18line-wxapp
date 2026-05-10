@@ -1,4 +1,5 @@
 <!--pages/mine/index.wxml-->
+<wxs src="../../utils/oss.wxs" module="oss" />
 <view class="page-container">
   <!-- Header Bar -->
   <navigation-bar title="我的" back="{{false}}" color="black" background="#F9FAF4"></navigation-bar>
@@ -8,7 +9,7 @@
       <!-- User Profile Section -->
       <view class="profile-section">
         <view class="avatar-wrapper" bindtap="goEditProfile">
-          <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+          <image class="avatar" src="{{oss.ossResize(userInfo.avatarUrl, 120, 120)}}" mode="aspectFill" />
           <view class="avatar-edit-icon">
             <image class="edit-icon" src="/assets/images/icon-edit.svg" mode="aspectFit" />
           </view>
@@ -27,7 +28,7 @@
           <text class="section-title">我的旅途</text>
           <view class="view-all" bindtap="goJourneys">
             <text class="view-all-text">查看全部</text>
-            <image class="icon-arrow" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+            
           </view>
         </view>
         <view class="grid-3col">
@@ -93,10 +94,12 @@
       <view class="func-card">
         <view class="func-item" bindtap="goTravelTraits">
           <view class="func-item-left">
-            <image class="func-icon" src="/assets/images/icon-target.svg" mode="aspectFit" />
+            <view class="func-icon-wrap func-icon-wrap--green">
+              <image class="func-icon" src="/assets/images/icon-travel-trait.svg" mode="aspectFit" />
+            </view>
             <view class="func-text-wrap">
               <text class="func-title">我的旅游特性</text>
-              <text class="func-subtitle">查看您的旅行偏好分析</text>
+              <text class="func-subtitle">分析您的探险风格与偏好</text>
             </view>
           </view>
           <image class="func-arrow" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
@@ -104,10 +107,12 @@
         <view class="func-divider" />
         <view class="func-item" bindtap="goFAQ">
           <view class="func-item-left">
-            <image class="func-icon" src="/assets/images/icon-star.svg" mode="aspectFit" />
+            <view class="func-icon-wrap func-icon-wrap--grey">
+              <image class="func-icon" src="/assets/images/icon-faq.svg" mode="aspectFit" />
+            </view>
             <view class="func-text-wrap">
               <text class="func-title">常见问题</text>
-              <text class="func-subtitle">帮助与反馈</text>
+              <text class="func-subtitle">获取帮助与系统支持</text>
             </view>
           </view>
           <image class="func-arrow" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />

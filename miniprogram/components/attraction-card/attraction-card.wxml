@@ -1,0 +1,17 @@
+<!--attraction-card.wxml-->
+<view class="card-wrapper">
+  <view class="timeline-dot" />
+  <view class="card-body">
+    <view class="card-header">
+      <view class="card-info">
+        <text class="card-name">{{item.attractionName}}</text>
+        <text class="card-sub" wx:if="{{item.attractionBlurb}}">{{item.attractionBlurb}}</text>
+        <text class="card-sub" wx:elif="{{item.visitDuration || item.perCost}}">{{item.visitDuration}}{{item.visitDuration && item.perCost ? ' · ' : ''}}{{item.perCost ? '¥' + item.perCost + '/人' : ''}}</text>
+      </view>
+      <view class="card-action" bindtap="onDetailTap">
+        <text class="action-text">详情</text>
+      </view>
+    </view>
+    <image wx:if="{{item.attachments && item.attachments.length}}" class="card-thumb" src="{{item.attachments[0].fileUrl}}" mode="aspectFill" lazy-load />
+  </view>
+</view>

@@ -1,4 +1,5 @@
 <!--pages/profile-edit/index.wxml-->
+<wxs src="../../utils/oss.wxs" module="oss" />
 <view class="page-container">
   <!-- Navigation Bar -->
   <navigation-bar title="编辑资料" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
@@ -8,7 +9,7 @@
       <!-- Avatar Upload -->
       <view class="avatar-section">
         <view class="avatar-upload" bindtap="chooseAvatar">
-          <image class="avatar" src="{{avatarUrl}}" mode="aspectFill" />
+          <image class="avatar" src="{{oss.ossResize(avatarUrl, 120, 120)}}" mode="aspectFill" />
           <view class="camera-btn">
             <image class="camera-icon" src="/assets/images/icon-camera.svg" mode="aspectFit" />
           </view>
@@ -48,7 +49,7 @@
           <picker mode="date" fields="year" value="{{birthYear}}" bindchange="onBirthYearChange">
             <view class="form-picker">
               <text class="{{birthYear ? 'picker-value' : 'picker-placeholder'}}">{{birthYear || '请选择出生年份'}}</text>
-              <image class="picker-arrow" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+              <image class="picker-arrow" src="/assets/images/icon-calendar.svg" mode="aspectFit" />
             </view>
           </picker>
         </view>
@@ -79,9 +80,6 @@
             data-id="{{item.id}}"
           >
             <text class="chip-text">{{item.label}}</text>
-          </view>
-          <view class="chip chip--add" bindtap="addPreference">
-            <text class="chip-text-add">+</text>
           </view>
         </view>
       </view>

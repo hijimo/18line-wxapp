@@ -1,0 +1,167 @@
+<base-drawer show="{{show}}" height="70vh" bind:close="onClose">
+  <!-- Tab Bar -->
+  <scroll-view scroll-x class="tab-bar" enhanced show-scrollbar="{{false}}">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="id"
+      class="tab-item {{activeTab === item.id ? 'tab-item--active' : ''}}"
+      data-tab="{{item.id}}"
+      bindtap="onTabChange"
+    >
+      {{item.label}}
+    </view>
+  </scroll-view>
+
+  <!-- Loading -->
+  <view wx:if="{{listLoading}}" class="list-loading">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- Attraction List -->
+  <view wx:if="{{activeTab === 'attraction' && !listLoading}}" class="list-wrap">
+    <view
+      wx:for="{{attractionList}}"
+      wx:key="attractionId"
+      class="list-item"
+      data-item="{{item}}"
+      bindtap="onItemSelect"
+    >
+      <image
+        wx:if="{{item.attachments && item.attachments.length > 0}}"
+        class="item-image"
+        src="{{item.attachments[0].url}}"
+        mode="aspectFill"
+        lazy-load
+      />
+      <view class="item-info">
+        <text class="item-name">{{item.attractionName}}</text>
+        <text class="item-desc">{{item.attractionBlurb || item.attractionDescription}}</text>
+        <view class="item-meta">
+          <text wx:if="{{item.visitDuration}}" class="meta-tag">{{item.visitDuration}}</text>
+          <text wx:if="{{item.ticketPriceA}}" class="meta-price">¥{{item.ticketPriceA}}</text>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{attractionList.length === 0}}" class="list-empty">
+      <text>暂无景点数据</text>
+    </view>
+  </view>
+
+  <!-- Hotel List -->
+  <view wx:if="{{activeTab === 'hotel' && !listLoading}}" class="list-wrap">
+    <view
+      wx:for="{{accommodationList}}"
+      wx:key="accommodationId"
+      class="list-item"
+      data-item="{{item}}"
+      bindtap="onItemSelect"
+    >
+      <image
+        wx:if="{{item.attachments && item.attachments.length > 0}}"
+        class="item-image"
+        src="{{item.attachments[0].url}}"
+        mode="aspectFill"
+        lazy-load
+      />
+      <view class="item-info">
+        <text class="item-name">{{item.accommodationName}}</text>
+        <text class="item-desc">{{item.accommodationDesc}}</text>
+        <view class="item-meta">
+          <text wx:if="{{item.accommodationType}}" class="meta-tag">{{item.accommodationType}}</text>
+          <text wx:if="{{item.priceMin}}" class="meta-price">¥{{item.priceMin}}~{{item.priceMax}}</text>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{accommodationList.length === 0}}" class="list-empty">
+      <text>暂无住宿数据</text>
+    </view>
+  </view>
+
+  <!-- Dining List -->
+  <view wx:if="{{activeTab === 'dining' && !listLoading}}" class="list-wrap">
+    <view
+      wx:for="{{diningList}}"
+      wx:key="diningId"
+      class="list-item"
+      data-item="{{item}}"
+      bindtap="onItemSelect"
+    >
+      <image
+        wx:if="{{item.attachments && item.attachments.length > 0}}"
+        class="item-image"
+        src="{{item.attachments[0].url}}"
+        mode="aspectFill"
+        lazy-load
+      />
+      <view class="item-info">
+        <text class="item-name">{{item.diningName}}</text>
+        <text class="item-desc">{{item.diningDesc}}</text>
+        <view class="item-meta">
+          <text wx:if="{{item.avgCost}}" class="meta-price">人均 ¥{{item.avgCost}}</text>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{diningList.length === 0}}" class="list-empty">
+      <text>暂无餐饮数据</text>
+    </view>
+  </view>
+
+  <!-- Car List -->
+  <view wx:if="{{activeTab === 'car' && !listLoading}}" class="list-wrap">
+    <view
+      wx:for="{{carList}}"
+      wx:key="carId"
+      class="list-item"
+      data-item="{{item}}"
+      bindtap="onItemSelect"
+    >
+      <image
+        wx:if="{{item.attachments && item.attachments.length > 0}}"
+        class="item-image"
+        src="{{item.attachments[0].url}}"
+        mode="aspectFill"
+        lazy-load
+      />
+      <view class="item-info">
+        <text class="item-name">{{item.nickname}}</text>
+        <text class="item-desc">{{item.carModel}} · {{item.seatCount}}座 · {{item.drivingYears}}年驾龄</text>
+        <view class="item-meta">
+          <text wx:if="{{item.price}}" class="meta-price">¥{{item.price}}/天</text>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{carList.length === 0}}" class="list-empty">
+      <text>暂无包车数据</text>
+    </view>
+  </view>
+
+  <!-- Photography List -->
+  <view wx:if="{{activeTab === 'photography' && !listLoading}}" class="list-wrap">
+    <view
+      wx:for="{{photographyList}}"
+      wx:key="photographyId"
+      class="list-item"
+      data-item="{{item}}"
+      bindtap="onItemSelect"
+    >
+      <image
+        wx:if="{{item.attachments && item.attachments.length > 0}}"
+        class="item-image"
+        src="{{item.attachments[0].url}}"
+        mode="aspectFill"
+        lazy-load
+      />
+      <view class="item-info">
+        <text class="item-name">{{item.nickname}}</text>
+        <text class="item-desc">{{item.introduction}}</text>
+        <view class="item-meta">
+          <text wx:if="{{item.equipment}}" class="meta-tag">{{item.equipment}}</text>
+          <text wx:if="{{item.price}}" class="meta-price">¥{{item.price}}</text>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{photographyList.length === 0}}" class="list-empty">
+      <text>暂无跟拍数据</text>
+    </view>
+  </view>
+</base-drawer>

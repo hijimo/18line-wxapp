@@ -1,0 +1,36 @@
+<base-drawer show="{{show}}" height="75vh" bind:close="onClose">
+  <view class="intro-drawer">
+    <!-- Cover Image -->
+    <image
+      wx:if="{{data.attachments && data.attachments.length > 0}}"
+      class="cover-image"
+      src="{{data.attachments[0].url}}"
+      mode="aspectFill"
+      lazy-load
+    />
+
+    <view class="intro-body">
+      <!-- Name -->
+      <text class="intro-name">{{data.attractionName}}</text>
+
+      <!-- Meta Tags -->
+      <view class="meta-row">
+        <text wx:if="{{data.visitDuration}}" class="meta-tag">{{data.visitDuration}}</text>
+        <text wx:if="{{data.openTime}}" class="meta-tag">{{data.openTime}}</text>
+        <text wx:if="{{data.indoorOutdoor}}" class="meta-tag">{{data.indoorOutdoor}}</text>
+      </view>
+
+      <!-- Price & Family -->
+      <view class="info-row">
+        <text wx:if="{{data.ticketPriceA}}" class="info-price">门票: ¥{{data.ticketPriceA}}</text>
+        <text wx:if="{{data.familyFriendly === 'Y'}}" class="info-badge">亲子友好</text>
+      </view>
+
+      <!-- Description -->
+      <view wx:if="{{data.attractionDescription}}" class="intro-section">
+        <text class="section-title">景点介绍</text>
+        <text class="section-content">{{data.attractionDescription}}</text>
+      </view>
+    </view>
+  </view>
+</base-drawer>

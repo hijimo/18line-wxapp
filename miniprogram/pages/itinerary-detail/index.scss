@@ -1,0 +1,232 @@
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f9faf4;
+}
+
+.page-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Loading State */
+.loading-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24rpx;
+}
+
+.loading-spinner {
+  width: 64rpx;
+  height: 64rpx;
+  border: 6rpx solid rgba(22, 52, 34, 0.15);
+  border-top-color: #163422;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: rgba(22, 52, 34, 0.5);
+}
+
+/* Info Card */
+.info-card {
+  margin: 24rpx 48rpx 0;
+  background: #ffffff;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  box-shadow: 0 4rpx 24rpx rgba(22, 52, 34, 0.04);
+}
+
+.info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #163422;
+  flex: 1;
+}
+
+.info-status {
+  padding: 6rpx 16rpx;
+  border-radius: 9999rpx;
+  background: rgba(22, 52, 34, 0.08);
+}
+
+.info-status-text {
+  font-size: 22rpx;
+  color: #163422;
+  font-weight: 500;
+}
+
+.info-meta {
+  display: flex;
+  gap: 32rpx;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.meta-icon {
+  width: 28rpx;
+  height: 28rpx;
+  opacity: 0.5;
+}
+
+.meta-text {
+  font-size: 24rpx;
+  color: rgba(22, 52, 34, 0.6);
+}
+
+/* Day Navigation */
+.day-nav-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #f9faf4;
+  padding: 24rpx 0 16rpx;
+}
+
+.day-nav {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.day-nav-inner {
+  display: inline-flex;
+  gap: 16rpx;
+  padding: 0 48rpx;
+}
+
+.day-tab {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+  padding: 16rpx 28rpx;
+  border-radius: 9999rpx;
+  background: rgba(22, 52, 34, 0.06);
+  flex-shrink: 0;
+}
+
+.day-tab--active {
+  background: #163422;
+}
+
+.day-tab-text {
+  font-size: 26rpx;
+  color: #163422;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.day-tab--active .day-tab-text {
+  color: #ffffff;
+}
+
+.day-tab-theme {
+  font-size: 20rpx;
+  color: rgba(22, 52, 34, 0.5);
+  white-space: nowrap;
+  max-width: 120rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.day-tab--active .day-tab-theme {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Scroll Area */
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+/* Timeline */
+.timeline {
+  padding: 24rpx 48rpx 48rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+.timeline-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.timeline-section-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: rgba(22, 52, 34, 0.6);
+  padding-left: 8rpx;
+}
+
+.timeline-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+/* Add Spot Button */
+.add-spot-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  padding: 32rpx;
+  border-radius: 32rpx;
+  border: 2rpx dashed rgba(22, 52, 34, 0.2);
+  background: rgba(22, 52, 34, 0.02);
+  margin-top: 16rpx;
+}
+
+.add-spot-icon {
+  font-size: 36rpx;
+  color: #944a00;
+  font-weight: 300;
+}
+
+.add-spot-text {
+  font-size: 28rpx;
+  color: rgba(22, 52, 34, 0.5);
+  font-weight: 500;
+}
+
+/* Empty Day */
+.empty-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32rpx;
+  padding: 80rpx 48rpx;
+}
+
+.empty-day-text {
+  font-size: 28rpx;
+  color: rgba(22, 52, 34, 0.4);
+}

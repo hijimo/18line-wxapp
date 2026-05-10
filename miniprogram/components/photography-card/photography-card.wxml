@@ -1,0 +1,17 @@
+<!--photography-card.wxml-->
+<view class="card-wrapper">
+  <view class="timeline-dot" />
+  <view class="card-body">
+    <view class="type-label">PHOTO</view>
+    <view class="card-header">
+      <view class="card-info">
+        <text class="card-name">{{item.nickname}}</text>
+        <text class="card-sub">{{item.equipment}}{{item.price ? ' · ¥' + item.price : ''}}</text>
+      </view>
+      <view class="card-action" bindtap="onDetailTap">
+        <text class="action-text">详情</text>
+      </view>
+    </view>
+    <image wx:if="{{item.attachments && item.attachments.length}}" class="card-thumb" src="{{item.attachments[0].fileUrl}}" mode="aspectFill" lazy-load />
+  </view>
+</view>

@@ -1,0 +1,83 @@
+.card-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+  padding: 16rpx 0;
+}
+
+.timeline-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: #c2c8c0;
+  margin-top: 32rpx;
+  flex-shrink: 0;
+}
+
+.card-body {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 24rpx;
+  box-shadow: 0 4rpx 24rpx rgba(22, 52, 34, 0.04);
+  border-left: 6rpx solid rgba(90, 50, 120, 0.4);
+}
+
+.type-label {
+  font-size: 20rpx;
+  font-weight: 600;
+  letter-spacing: 2rpx;
+  margin-bottom: 12rpx;
+  color: rgba(90, 50, 120, 0.8);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-name {
+  font-size: 28rpx;
+  color: #163422;
+  font-weight: 700;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-sub {
+  font-size: 22rpx;
+  color: #424843;
+  margin-top: 8rpx;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-action {
+  padding: 12rpx 20rpx;
+  border-radius: 9999rpx;
+  background: rgba(90, 50, 120, 0.1);
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.action-text {
+  font-size: 22rpx;
+  color: #163422;
+}
+
+.card-thumb {
+  width: 100%;
+  height: 200rpx;
+  border-radius: 16rpx;
+  margin-top: 20rpx;
+}

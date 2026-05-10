@@ -1,0 +1,9 @@
+<root-portal wx:if="{{show}}">
+  <view class="drawer-mask {{show ? 'drawer-mask--visible' : ''}}" bindtap="onMaskTap" catchtouchmove="noop" />
+  <view class="drawer-panel {{show ? 'drawer-panel--visible' : ''}}" style="height: {{height}}" catchtouchmove="noop">
+    <view class="drawer-handle" />
+    <scroll-view scroll-y class="drawer-content">
+      <slot />
+    </scroll-view>
+  </view>
+</root-portal>

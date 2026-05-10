@@ -1,0 +1,342 @@
+{
+  "timestamp": "2026-05-09T16:48:26.629Z",
+  "summary": {
+    "builderTotal": 27,
+    "builderPassed": 0,
+    "builderFailed": 27,
+    "reviewerTotal": 11,
+    "reviewerPassed": 0,
+    "reviewerFailed": 11,
+    "conflicts": 0
+  },
+  "conflicts": [],
+  "builderResults": [
+    {
+      "title": "[Builder] 创建行程页面渲染 页面正确渲染导航栏",
+      "status": "failed",
+      "duration": 4,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'navigateTo')\n    at Object.navigateTo (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-builder/itinerary.test.js:23:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Builder] 创建行程页面渲染 目的地选择区域存在",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'navigateTo')\n    at Object.navigateTo (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-builder/itinerary.test.js:23:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Builder] 创建行程页面渲染 日期选择区域存在",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'navigateTo')\n    at Object.navigateTo (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-builder/itinerary.test.js:23:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Builder] 创建行程页面渲染 偏好标签正确加载",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'navigateTo')\n    at Object.navigateTo (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-builder/itinerary.test.js:23:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Builder] 创建行程页面渲染 AI规划按钮存在",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'navigateTo')\n    at Object.navigateTo (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-builder/itinerary.test.js:23:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Builder] 创建行程页面渲染 自主规划按钮存在",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'navigateTo')\n    at Object.navigateTo (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-builder/itinerary.test.js:23:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Builder] 创建行程页面逻辑 初始loading状态为false",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 创建行程页面逻辑 calculateDays正确计算天数",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 创建行程页面逻辑 偏好标签可以切换选中状态",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 创建行程页面逻辑 未填写必要信息时AI规划应提示",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 创建行程页面逻辑 填写完整信息后AI规划触发loading",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面渲染 页面正确加载行程数据",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'mockWxMethod')\n    at Object.mockWxMethod (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-builder/itinerary.test.js:152:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面渲染 Day导航正确渲染",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'mockWxMethod')\n    at Object.mockWxMethod (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-builder/itinerary.test.js:152:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面渲染 当前天日程数据正确",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'mockWxMethod')\n    at Object.mockWxMethod (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-builder/itinerary.test.js:152:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面渲染 景点卡片正确渲染",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'mockWxMethod')\n    at Object.mockWxMethod (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-builder/itinerary.test.js:152:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面渲染 餐饮卡片正确渲染",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'mockWxMethod')\n    at Object.mockWxMethod (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-builder/itinerary.test.js:152:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面渲染 住宿卡片正确渲染",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'mockWxMethod')\n    at Object.mockWxMethod (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-builder/itinerary.test.js:152:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面交互 切换Day导航更新日程数据",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面交互 切换回Day1恢复数据",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面交互 点击添加按钮打开抽屉",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面交互 抽屉互斥：添加抽屉打开时不能打开简介抽屉",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面交互 关闭添加抽屉",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面交互 点击卡片打开简介抽屉",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面交互 关闭简介抽屉",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面参数校验 无效id应提示并返回",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面参数校验 缺少id应提示并返回",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Builder] 行程详情页面参数校验 负数id应提示并返回",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    }
+  ],
+  "reviewerResults": [
+    {
+      "title": "[Reviewer] 创建行程边界测试 结束日期早于开始日期应阻止提交",
+      "status": "failed",
+      "duration": 4,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'navigateTo')\n    at Object.navigateTo (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-reviewer/itinerary-adversarial.test.js:25:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Reviewer] 创建行程边界测试 重复快速点击AI规划不应重复请求",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'navigateTo')\n    at Object.navigateTo (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-reviewer/itinerary-adversarial.test.js:25:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Reviewer] 创建行程边界测试 网络失败时loading应恢复为false",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'navigateTo')\n    at Object.navigateTo (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-reviewer/itinerary-adversarial.test.js:25:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Reviewer] 创建行程边界测试 超长行程天数（30天）应能正常计算",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'navigateTo')\n    at Object.navigateTo (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-reviewer/itinerary-adversarial.test.js:25:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Reviewer] 行程详情边界测试 空日程应正确渲染（无卡片，有添加按钮）",
+      "status": "failed",
+      "duration": 1,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'mockWxMethod')\n    at Object.mockWxMethod (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-reviewer/itinerary-adversarial.test.js:104:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Reviewer] 行程详情边界测试 快速切换Day不应导致数据错乱",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'mockWxMethod')\n    at Object.mockWxMethod (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-reviewer/itinerary-adversarial.test.js:104:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Reviewer] 行程详情边界测试 抽屉关闭后再打开状态应重置",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'mockWxMethod')\n    at Object.mockWxMethod (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-reviewer/itinerary-adversarial.test.js:104:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Reviewer] 行程详情边界测试 简介抽屉互斥：不能同时打开两个",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'mockWxMethod')\n    at Object.mockWxMethod (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-reviewer/itinerary-adversarial.test.js:104:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Reviewer] 行程详情边界测试 loadItinerary网络失败时不应崩溃",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)",
+        "TypeError: Cannot read properties of undefined (reading 'mockWxMethod')\n    at Object.mockWxMethod (/Users/zhaojimo/Documents/git/18line-wxapp/tests/agent-reviewer/itinerary-adversarial.test.js:104:23)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusHook (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:281:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:95:7)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/jest-runner/build/testWorker.js:106:12)"
+      ]
+    },
+    {
+      "title": "[Reviewer] 添加日程抽屉边界测试 add-schedule-drawer组件存在",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    },
+    {
+      "title": "[Reviewer] 添加日程抽屉边界测试 抽屉打开时应加载默认tab数据",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: Wait timed out after 30000 ms\n    at /Users/zhaojimo/Documents/git/18line-wxapp/tests/node_modules/licia/waitUntil.js:25:25\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+      ]
+    }
+  ]
+}

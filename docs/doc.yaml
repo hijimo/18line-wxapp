@@ -2558,6 +2558,46 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/AjaxResult'
+  /wx/dining/{diningId}:
+    get:
+      tags:
+      - C端餐饮
+      summary: 查询餐饮详情（含图片）
+      operationId: getInfo_2
+      parameters:
+      - name: diningId
+        in: path
+        description: 餐饮ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/dining/list:
+    get:
+      tags:
+      - C端餐饮
+      summary: 查询餐饮列表
+      operationId: list_11
+      parameters:
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
   /wx/dict/{dictType}:
     get:
       tags:
@@ -2591,6 +2631,46 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/AjaxResult'
+  /wx/car/{carId}:
+    get:
+      tags:
+      - C端包车
+      summary: 查询包车详情（含图片）
+      operationId: getInfo_3
+      parameters:
+      - name: carId
+        in: path
+        description: 包车ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/car/list:
+    get:
+      tags:
+      - C端包车
+      summary: 查询包车列表
+      operationId: list_12
+      parameters:
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
   /wx/auth/getUserInfo:
     get:
       tags:
@@ -2604,12 +2684,52 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/AjaxResult'
+  /wx/attraction/{attractionId}:
+    get:
+      tags:
+      - C端景点
+      summary: 查询景点详情（含图片）
+      operationId: getInfo_4
+      parameters:
+      - name: attractionId
+        in: path
+        description: 景点ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
+  /wx/attraction/list:
+    get:
+      tags:
+      - C端景点
+      summary: 查询景点列表
+      operationId: list_13
+      parameters:
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
   /wx/accommodation/{accommodationId}:
     get:
       tags:
       - C端住宿
-      summary: 查询住宿详情（含经纬度）
-      operationId: getInfo_2
+      summary: 查询住宿详情（含经纬度和图片）
+      operationId: getInfo_5
       parameters:
       - name: accommodationId
         in: path
@@ -2625,12 +2745,31 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/AjaxResult'
+  /wx/accommodation/list:
+    get:
+      tags:
+      - C端住宿
+      summary: 查询住宿列表
+      operationId: list_14
+      parameters:
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AjaxResult'
   /travel18/tourist/{touristId}:
     get:
       tags:
       - 游客管理
       summary: 获取游客详情
-      operationId: getInfo_3
+      operationId: getInfo_6
       parameters:
       - name: touristId
         in: path
@@ -2650,7 +2789,7 @@ paths:
       tags:
       - 游客管理
       summary: 查询游客列表
-      operationId: list_11
+      operationId: list_15
       parameters:
       - name: tourist
         in: query
@@ -2669,7 +2808,7 @@ paths:
       tags:
       - 行程模板管理
       summary: 查询模板详情（含日程明细）
-      operationId: getInfo_4
+      operationId: getInfo_7
       parameters:
       - name: templateId
         in: path
@@ -2689,7 +2828,7 @@ paths:
       tags:
       - 行程模板管理
       summary: 分页查询行程模板列表
-      operationId: list_12
+      operationId: list_16
       parameters:
       - name: template
         in: query
@@ -2708,7 +2847,7 @@ paths:
       tags:
       - 资源附件管理
       summary: 获取资源详情
-      operationId: getInfo_5
+      operationId: getInfo_8
       parameters:
       - name: resourceId
         in: path
@@ -2756,7 +2895,7 @@ paths:
       tags:
       - 游客喜好管理
       summary: 获取游客喜好详情
-      operationId: getInfo_6
+      operationId: getInfo_9
       parameters:
       - name: preferenceId
         in: path
@@ -2776,7 +2915,7 @@ paths:
       tags:
       - 游客喜好管理
       summary: 查询游客喜好列表
-      operationId: list_13
+      operationId: list_17
       parameters:
       - name: preference
         in: query
@@ -2795,7 +2934,7 @@ paths:
       tags:
       - 跟拍管理
       summary: 获取跟拍详情
-      operationId: getInfo_7
+      operationId: getInfo_10
       parameters:
       - name: photographyId
         in: path
@@ -2845,7 +2984,7 @@ paths:
       tags:
       - 菜品管理
       summary: 获取菜品详情
-      operationId: getInfo_8
+      operationId: getInfo_11
       parameters:
       - name: dishId
         in: path
@@ -2866,7 +3005,7 @@ paths:
       tags:
       - 餐饮管理
       summary: 获取餐饮详情
-      operationId: getInfo_9
+      operationId: getInfo_12
       parameters:
       - name: diningId
         in: path
@@ -2908,7 +3047,7 @@ paths:
       tags:
       - 打卡点管理
       summary: 查询打卡点详情
-      operationId: getInfo_10
+      operationId: getInfo_13
       parameters:
       - name: checkinId
         in: path
@@ -2929,7 +3068,7 @@ paths:
       tags:
       - 包车管理
       summary: 获取包车详情
-      operationId: getInfo_11
+      operationId: getInfo_14
       parameters:
       - name: carId
         in: path
@@ -2950,7 +3089,7 @@ paths:
       tags:
       - 景点管理
       summary: 查询景点详情
-      operationId: getInfo_12
+      operationId: getInfo_15
       parameters:
       - name: attractionId
         in: path
@@ -2992,7 +3131,7 @@ paths:
       tags:
       - 算法配置管理
       summary: 查询配置详情
-      operationId: getInfo_13
+      operationId: getInfo_16
       parameters:
       - name: configId
         in: path
@@ -3013,7 +3152,7 @@ paths:
       tags:
       - 算法配置管理
       summary: 分页查询算法配置列表
-      operationId: list_14
+      operationId: list_18
       parameters:
       - name: config
         in: query
@@ -3104,7 +3243,7 @@ paths:
       tags:
       - 住宿管理
       summary: 获取住宿详情
-      operationId: getInfo_14
+      operationId: getInfo_17
       parameters:
       - name: accommodationId
         in: path
@@ -3174,7 +3313,7 @@ paths:
       tags:
       - 用户管理
       summary: 获取用户列表
-      operationId: list_15
+      operationId: list_19
       parameters:
       - name: user
         in: query
@@ -3232,7 +3371,7 @@ paths:
       tags:
       - 用户管理
       summary: 根据用户编号获取详细信息
-      operationId: getInfo_15
+      operationId: getInfo_18
       parameters: []
       responses:
         "200":
@@ -3246,7 +3385,7 @@ paths:
       tags:
       - 用户管理
       summary: 根据用户编号获取详细信息
-      operationId: getInfo_16
+      operationId: getInfo_19
       parameters:
       - name: userId
         in: path
@@ -3266,7 +3405,7 @@ paths:
       tags:
       - 角色管理
       summary: 根据角色编号获取详细信息
-      operationId: getInfo_17
+      operationId: getInfo_20
       parameters:
       - name: roleId
         in: path
@@ -3299,7 +3438,7 @@ paths:
       tags:
       - 角色管理
       summary: 获取角色列表
-      operationId: list_16
+      operationId: list_20
       parameters:
       - name: role
         in: query
@@ -3441,7 +3580,7 @@ paths:
     get:
       tags:
       - sys-post-controller
-      operationId: getInfo_18
+      operationId: getInfo_21
       parameters:
       - name: postId
         in: path
@@ -3472,7 +3611,7 @@ paths:
     get:
       tags:
       - sys-post-controller
-      operationId: list_17
+      operationId: list_21
       parameters:
       - name: post
         in: query
@@ -3491,7 +3630,7 @@ paths:
       tags:
       - 通知公告
       summary: 根据通知公告编号获取详细信息
-      operationId: getInfo_19
+      operationId: getInfo_22
       parameters:
       - name: noticeId
         in: path
@@ -3511,7 +3650,7 @@ paths:
       tags:
       - 通知公告
       summary: 获取通知公告列表
-      operationId: list_18
+      operationId: list_22
       parameters:
       - name: notice
         in: query
@@ -3543,7 +3682,7 @@ paths:
       tags:
       - 菜单管理
       summary: 根据菜单编号获取详细信息
-      operationId: getInfo_20
+      operationId: getInfo_23
       parameters:
       - name: menuId
         in: path
@@ -3621,7 +3760,7 @@ paths:
       tags:
       - 菜单管理
       summary: 获取菜单列表
-      operationId: list_19
+      operationId: list_23
       parameters:
       - name: menu
         in: query
@@ -3640,7 +3779,7 @@ paths:
       tags:
       - 字典类型
       summary: 查询字典类型详细
-      operationId: getInfo_21
+      operationId: getInfo_24
       parameters:
       - name: dictId
         in: path
@@ -3673,7 +3812,7 @@ paths:
       tags:
       - 字典类型
       summary: 获取字典类型列表
-      operationId: list_20
+      operationId: list_24
       parameters:
       - name: dictType
         in: query
@@ -3692,7 +3831,7 @@ paths:
       tags:
       - 字典数据
       summary: 查询字典数据详细
-      operationId: getInfo_22
+      operationId: getInfo_25
       parameters:
       - name: dictCode
         in: path
@@ -3731,7 +3870,7 @@ paths:
       tags:
       - 字典数据
       summary: 获取字典数据列表
-      operationId: list_21
+      operationId: list_25
       parameters:
       - name: dictData
         in: query
@@ -3749,7 +3888,7 @@ paths:
     get:
       tags:
       - sys-dept-controller
-      operationId: getInfo_23
+      operationId: getInfo_26
       parameters:
       - name: deptId
         in: path
@@ -3786,7 +3925,7 @@ paths:
     get:
       tags:
       - sys-dept-controller
-      operationId: list_22
+      operationId: list_26
       parameters:
       - name: dept
         in: query
@@ -3824,7 +3963,7 @@ paths:
       tags:
       - 参数配置
       summary: 根据参数编号获取详细信息
-      operationId: getInfo_24
+      operationId: getInfo_27
       parameters:
       - name: configId
         in: path
@@ -3844,7 +3983,7 @@ paths:
       tags:
       - 参数配置
       summary: 获取参数配置列表
-      operationId: list_23
+      operationId: list_27
       parameters:
       - name: config
         in: query
@@ -3881,7 +4020,7 @@ paths:
     get:
       tags:
       - server-controller
-      operationId: getInfo_25
+      operationId: getInfo_28
       responses:
         "200":
           description: OK
@@ -3893,7 +4032,7 @@ paths:
     get:
       tags:
       - sys-operlog-controller
-      operationId: list_24
+      operationId: list_28
       parameters:
       - name: operLog
         in: query
@@ -3911,7 +4050,7 @@ paths:
     get:
       tags:
       - sys-user-online-controller
-      operationId: list_25
+      operationId: list_29
       parameters:
       - name: ipaddr
         in: query
@@ -3952,7 +4091,7 @@ paths:
     get:
       tags:
       - sys-logininfor-controller
-      operationId: list_26
+      operationId: list_30
       parameters:
       - name: logininfor
         in: query
@@ -3970,7 +4109,7 @@ paths:
     get:
       tags:
       - cache-controller
-      operationId: getInfo_26
+      operationId: getInfo_29
       responses:
         "200":
           description: OK
@@ -4049,7 +4188,7 @@ paths:
       tags:
       - 登录
       summary: 获取用户信息
-      operationId: getInfo_27
+      operationId: getInfo_30
       responses:
         "200":
           description: OK
@@ -5318,6 +5457,214 @@ components:
             type: object
             additionalProperties:
               type: object
+    TravelAttraction:
+      required:
+      - attractionName
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        attractionId:
+          type: integer
+          format: int64
+        lineIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelLine'
+        attractionName:
+          type: string
+        attractionShortName:
+          type: string
+        attractionDescription:
+          type: string
+        attractionBlurb:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        longitude:
+          type: number
+        latitude:
+          type: number
+        attractionNotes:
+          type: string
+        blindStatus:
+          type: string
+        classicRating:
+          type: string
+        leisureRating:
+          type: string
+        visitDuration:
+          type: string
+        openTime:
+          type: string
+        familyFriendly:
+          type: string
+        ticketPriceA:
+          type: number
+        ticketPriceC:
+          type: number
+        reservationRequired:
+          type: string
+        perCost:
+          type: string
+        indoorOutdoor:
+          type: string
+        closedDay:
+          type: string
+        specialPeriod:
+          type: string
+        badFactors:
+          type: string
+        attractionType:
+          type: string
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+    TravelCar:
+      required:
+      - nickname
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        carId:
+          type: integer
+          format: int64
+        nickname:
+          type: string
+        gender:
+          type: string
+        introduction:
+          type: string
+        contactInfo:
+          type: string
+        price:
+          type: number
+        carModel:
+          type: string
+        seatCount:
+          type: integer
+          format: int32
+        drivingYears:
+          type: integer
+          format: int32
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+    TravelDining:
+      required:
+      - diningName
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        diningId:
+          type: integer
+          format: int64
+        diningName:
+          type: string
+        diningDesc:
+          type: string
+        diningTips:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        address:
+          type: string
+        longitude:
+          type: number
+        latitude:
+          type: number
+        petFriendly:
+          type: string
+        diningNature:
+          type: string
+        avgCost:
+          type: number
+        recommendRating:
+          type: integer
+          format: int32
+        parkingAvailable:
+          type: string
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
     TravelItinerary:
       type: object
       properties:
@@ -5466,8 +5813,127 @@ components:
           $ref: '#/components/schemas/TravelAccommodation'
         touristAccommodation:
           $ref: '#/components/schemas/TravelAccommodation'
+        attractionList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelAttraction'
+        touristAttractionList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelAttraction'
+        breakfast:
+          $ref: '#/components/schemas/TravelDining'
+        touristBreakfast:
+          $ref: '#/components/schemas/TravelDining'
+        lunch:
+          $ref: '#/components/schemas/TravelDining'
+        touristLunch:
+          $ref: '#/components/schemas/TravelDining'
+        dinner:
+          $ref: '#/components/schemas/TravelDining'
+        touristDinner:
+          $ref: '#/components/schemas/TravelDining'
+        photography:
+          $ref: '#/components/schemas/TravelPhotography'
+        touristPhotography:
+          $ref: '#/components/schemas/TravelPhotography'
+        car:
+          $ref: '#/components/schemas/TravelCar'
+        touristCar:
+          $ref: '#/components/schemas/TravelCar'
         delFlag:
           type: string
+    TravelLine:
+      required:
+      - lineName
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        lineId:
+          type: integer
+          format: int64
+        lineName:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+    TravelPhotography:
+      required:
+      - nickname
+      type: object
+      properties:
+        createBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateBy:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+        remark:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        photographyId:
+          type: integer
+          format: int64
+        nickname:
+          type: string
+        gender:
+          type: string
+        introduction:
+          type: string
+        contactInfo:
+          type: string
+        price:
+          type: number
+        recommendRating:
+          type: integer
+          format: int32
+        equipment:
+          type: string
+        status:
+          type: string
+        delFlag:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
     TravelTemplate:
       type: object
       properties:
@@ -5629,97 +6095,6 @@ components:
           format: int32
         msg:
           type: string
-    TravelPhotography:
-      required:
-      - nickname
-      type: object
-      properties:
-        createBy:
-          type: string
-        createTime:
-          type: string
-          format: date-time
-        updateBy:
-          type: string
-        updateTime:
-          type: string
-          format: date-time
-        remark:
-          type: string
-        params:
-          type: object
-          additionalProperties:
-            type: object
-        photographyId:
-          type: integer
-          format: int64
-        nickname:
-          type: string
-        gender:
-          type: string
-        introduction:
-          type: string
-        contactInfo:
-          type: string
-        price:
-          type: number
-        recommendRating:
-          type: integer
-          format: int32
-        equipment:
-          type: string
-        status:
-          type: string
-        delFlag:
-          type: string
-        attachments:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-    TravelLine:
-      required:
-      - lineName
-      type: object
-      properties:
-        createBy:
-          type: string
-        createTime:
-          type: string
-          format: date-time
-        updateBy:
-          type: string
-        updateTime:
-          type: string
-          format: date-time
-        remark:
-          type: string
-        params:
-          type: object
-          additionalProperties:
-            type: object
-        lineId:
-          type: integer
-          format: int64
-        lineName:
-          type: string
-        province:
-          type: string
-        city:
-          type: string
-        district:
-          type: string
-        status:
-          type: string
-        delFlag:
-          type: string
-        attachments:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
     TravelDish:
       required:
       - dishName
@@ -5761,69 +6136,6 @@ components:
         seasonal:
           type: string
         reservation:
-          type: string
-        status:
-          type: string
-        delFlag:
-          type: string
-        attachments:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-    TravelDining:
-      required:
-      - diningName
-      type: object
-      properties:
-        createBy:
-          type: string
-        createTime:
-          type: string
-          format: date-time
-        updateBy:
-          type: string
-        updateTime:
-          type: string
-          format: date-time
-        remark:
-          type: string
-        params:
-          type: object
-          additionalProperties:
-            type: object
-        diningId:
-          type: integer
-          format: int64
-        diningName:
-          type: string
-        diningDesc:
-          type: string
-        diningTips:
-          type: string
-        province:
-          type: string
-        city:
-          type: string
-        district:
-          type: string
-        address:
-          type: string
-        longitude:
-          type: number
-        latitude:
-          type: number
-        petFriendly:
-          type: string
-        diningNature:
-          type: string
-        avgCost:
-          type: number
-        recommendRating:
-          type: integer
-          format: int32
-        parkingAvailable:
           type: string
         status:
           type: string
@@ -5914,151 +6226,6 @@ components:
         sortOrder:
           type: integer
           format: int32
-        status:
-          type: string
-        delFlag:
-          type: string
-        attachments:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-    TravelCar:
-      required:
-      - nickname
-      type: object
-      properties:
-        createBy:
-          type: string
-        createTime:
-          type: string
-          format: date-time
-        updateBy:
-          type: string
-        updateTime:
-          type: string
-          format: date-time
-        remark:
-          type: string
-        params:
-          type: object
-          additionalProperties:
-            type: object
-        carId:
-          type: integer
-          format: int64
-        nickname:
-          type: string
-        gender:
-          type: string
-        introduction:
-          type: string
-        contactInfo:
-          type: string
-        price:
-          type: number
-        carModel:
-          type: string
-        seatCount:
-          type: integer
-          format: int32
-        drivingYears:
-          type: integer
-          format: int32
-        status:
-          type: string
-        delFlag:
-          type: string
-        attachments:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-    TravelAttraction:
-      required:
-      - attractionName
-      type: object
-      properties:
-        createBy:
-          type: string
-        createTime:
-          type: string
-          format: date-time
-        updateBy:
-          type: string
-        updateTime:
-          type: string
-          format: date-time
-        remark:
-          type: string
-        params:
-          type: object
-          additionalProperties:
-            type: object
-        attractionId:
-          type: integer
-          format: int64
-        lineIds:
-          type: array
-          items:
-            type: integer
-            format: int64
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/TravelLine'
-        attractionName:
-          type: string
-        attractionShortName:
-          type: string
-        attractionDescription:
-          type: string
-        attractionBlurb:
-          type: string
-        province:
-          type: string
-        city:
-          type: string
-        district:
-          type: string
-        longitude:
-          type: number
-        latitude:
-          type: number
-        attractionNotes:
-          type: string
-        blindStatus:
-          type: string
-        classicRating:
-          type: string
-        leisureRating:
-          type: string
-        visitDuration:
-          type: string
-        openTime:
-          type: string
-        familyFriendly:
-          type: string
-        ticketPriceA:
-          type: number
-        ticketPriceC:
-          type: number
-        reservationRequired:
-          type: string
-        perCost:
-          type: string
-        indoorOutdoor:
-          type: string
-        closedDay:
-          type: string
-        specialPeriod:
-          type: string
-        badFactors:
-          type: string
-        attractionType:
-          type: string
         status:
           type: string
         delFlag:

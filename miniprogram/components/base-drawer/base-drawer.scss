@@ -1,0 +1,47 @@
+.drawer-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 300ms ease;
+  z-index: 1000;
+
+  &--visible {
+    opacity: 1;
+  }
+}
+
+.drawer-panel {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  border-radius: 32rpx 32rpx 0 0;
+  transform: translateY(100%);
+  transition: transform 300ms ease;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+
+  &--visible {
+    transform: translateY(0);
+  }
+}
+
+.drawer-handle {
+  width: 80rpx;
+  height: 8rpx;
+  border-radius: 4rpx;
+  background: #e0e0e0;
+  margin: 20rpx auto 16rpx;
+  flex-shrink: 0;
+}
+
+.drawer-content {
+  flex: 1;
+  overflow: hidden;
+}

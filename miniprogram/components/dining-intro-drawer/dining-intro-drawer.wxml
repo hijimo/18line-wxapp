@@ -1,0 +1,43 @@
+<base-drawer show="{{show}}" height="75vh" bind:close="onClose">
+  <view class="intro-drawer">
+    <!-- Cover Image -->
+    <image
+      wx:if="{{data.attachments && data.attachments.length > 0}}"
+      class="cover-image"
+      src="{{data.attachments[0].url}}"
+      mode="aspectFill"
+      lazy-load
+    />
+
+    <view class="intro-body">
+      <!-- Name -->
+      <text class="intro-name">{{data.diningName}}</text>
+
+      <!-- Meta Tags -->
+      <view class="meta-row">
+        <text wx:if="{{data.avgCost}}" class="meta-tag">人均 ¥{{data.avgCost}}</text>
+        <text wx:if="{{data.recommendRating}}" class="meta-tag">推荐指数 {{data.recommendRating}}</text>
+        <text wx:if="{{data.parkingAvailable === 'Y'}}" class="meta-tag">有停车位</text>
+        <text wx:if="{{data.petFriendly === 'Y'}}" class="meta-tag">可带宠物</text>
+      </view>
+
+      <!-- Address -->
+      <view wx:if="{{data.address}}" class="address-row">
+        <text class="address-label">地址:</text>
+        <text class="address-text">{{data.address}}</text>
+      </view>
+
+      <!-- Description -->
+      <view wx:if="{{data.diningDesc}}" class="intro-section">
+        <text class="section-title">餐厅介绍</text>
+        <text class="section-content">{{data.diningDesc}}</text>
+      </view>
+
+      <!-- Tips -->
+      <view wx:if="{{data.diningTips}}" class="intro-section">
+        <text class="section-title">用餐贴士</text>
+        <text class="section-content">{{data.diningTips}}</text>
+      </view>
+    </view>
+  </view>
+</base-drawer>
