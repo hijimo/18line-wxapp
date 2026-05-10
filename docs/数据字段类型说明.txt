@@ -1,0 +1,257 @@
+[
+    {
+        "createBy": "admin",
+        "createTime": "2026-03-29 22:24:40",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "用户性别列表",
+        "dictId": 1,
+        "dictName": "用户性别",
+        "dictType": "sys_user_sex",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-03-29 22:24:40",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "菜单状态列表",
+        "dictId": 2,
+        "dictName": "菜单状态",
+        "dictType": "sys_show_hide",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-03-29 22:24:40",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "系统开关列表",
+        "dictId": 3,
+        "dictName": "系统开关",
+        "dictType": "sys_normal_disable",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-03-29 22:24:40",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "任务状态列表",
+        "dictId": 4,
+        "dictName": "任务状态",
+        "dictType": "sys_job_status",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-03-29 22:24:40",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "任务分组列表",
+        "dictId": 5,
+        "dictName": "任务分组",
+        "dictType": "sys_job_group",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-03-29 22:24:40",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "系统是否列表",
+        "dictId": 6,
+        "dictName": "系统是否",
+        "dictType": "sys_yes_no",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-03-29 22:24:40",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "通知类型列表",
+        "dictId": 7,
+        "dictName": "通知类型",
+        "dictType": "sys_notice_type",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-03-29 22:24:41",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "通知状态列表",
+        "dictId": 8,
+        "dictName": "通知状态",
+        "dictType": "sys_notice_status",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-03-29 22:24:41",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "操作类型列表",
+        "dictId": 9,
+        "dictName": "操作类型",
+        "dictType": "sys_oper_type",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-03-29 22:24:41",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "登录状态列表",
+        "dictId": 10,
+        "dictName": "系统状态",
+        "dictType": "sys_common_status",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-03-31 17:31:19",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "住宿类型列表(酒店/民宿)",
+        "dictId": 100,
+        "dictName": "住宿类型",
+        "dictType": "travel_accommodation_type",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-03-31 17:31:19",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "餐饮性质列表",
+        "dictId": 101,
+        "dictName": "餐饮性质",
+        "dictType": "travel_dining_nature",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-03-31 21:12:04",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "黑暗程度列表(特黑/浅黑/正常)",
+        "dictId": 102,
+        "dictName": "黑暗程度",
+        "dictType": "travel_dark_level",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-04-02 09:57:00",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "体力等级",
+        "dictId": 103,
+        "dictName": "体力等级",
+        "dictType": "travel_stamina",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-04-02 09:57:00",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "旅游喜好选项",
+        "dictId": 104,
+        "dictName": "旅游喜好",
+        "dictType": "travel_tourist_like",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-04-02 09:57:00",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "美食喜好选项",
+        "dictId": 105,
+        "dictName": "美食喜好",
+        "dictType": "travel_food_like",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-04-02 09:57:00",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "住宿倾向选项",
+        "dictId": 106,
+        "dictName": "住宿倾向",
+        "dictType": "travel_stay_pref",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-04-02 09:57:00",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "健康标签选项",
+        "dictId": 107,
+        "dictName": "健康标签",
+        "dictType": "travel_health_tag",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-04-02 14:39:28",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "行程每天的主题类型",
+        "dictId": 210,
+        "dictName": "每天主题",
+        "dictType": "travel_day_theme",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-04-02 14:39:36",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "行程创建方式",
+        "dictId": 211,
+        "dictName": "创建方式",
+        "dictType": "travel_create_from",
+        "status": "0"
+    }
+]
+[
+    {
+        "createBy": "admin",
+        "createTime": "2026-04-02 14:39:36",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "行程状态",
+        "dictId": 212,
+        "dictName": "行程状态",
+        "dictType": "travel_itinerary_status",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-04-02 14:39:36",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "景点休闲程度，用于体耗计算",
+        "dictId": 213,
+        "dictName": "休闲程度",
+        "dictType": "travel_leisure",
+        "status": "0"
+    },
+    {
+        "createBy": "admin",
+        "createTime": "2026-04-02 14:39:36",
+        "updateBy": null,
+        "updateTime": null,
+        "remark": "交通方式体耗折算",
+        "dictId": 214,
+        "dictName": "交通方式",
+        "dictType": "travel_transport",
+        "status": "0"
+    }
+]

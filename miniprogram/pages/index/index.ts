@@ -200,11 +200,16 @@ Component({
     },
 
     onBannerTap(e: any) {
-      const { id } = e.detail
-      console.log('Banner tap:', id)
+      const { id } = e.detail;
+      if (id) {
+        wx.navigateTo({ url: `/pages/itinerary-detail/index?templateId=${id}` });
+      }
     },
     onViewAll() {
       wx.navigateTo({ url: '/pages/journeys/index' });
+    },
+    onAddTrip() {
+      wx.navigateTo({ url: '/pages/create-itinerary/index' });
     },
     onInspirationTap(e: any) {
       const { id } = e.detail

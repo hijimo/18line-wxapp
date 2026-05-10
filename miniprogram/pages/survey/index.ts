@@ -1,49 +1,72 @@
 import { getLatestPreference, addPreference, updatePreference } from '../../services/preference';
-import type { PreferenceParams } from '../../types/preference';
+import { getDictBatch } from '../../services/dict';
 
 Page({
   data: {
     mode: '',
     preferenceId: 0,
     currentStep: 1,
-    // Step 1: intensity selection
-    selectedIntensity: 'steady',
-    intensityOptions: [
-      { id: 'leisure', title: '悠闲漫步', desc: '轻量步行，风景路线，坡度极小。', icon: '/assets/images/icon-intensity-leisure.svg' },
-      { id: 'steady', title: '稳健探索', desc: '适度远足，2-4小时持续运动。', icon: '/assets/images/icon-intensity-steady.svg' },
-      { id: 'energetic', title: '能量爆发', desc: '陡峭攀登，地形多变，强度较高。', icon: '/assets/images/icon-intensity-energetic.svg' },
-      { id: 'extreme', title: '极限先锋', desc: '巅峰表现，耐力挑战，技术路线。', icon: '/assets/images/icon-intensity-extreme.svg' },
-    ],
-    // Step 2: food & accommodation
-    selectedFood: 'light',
-    foodOptions: [
-      { id: 'spicy', label: '麻辣鲜香', icon: '/assets/images/icon-food-spicy.svg' },
-      { id: 'light', label: '清淡健康', icon: '/assets/images/icon-food-light.svg' },
-      { id: 'street', label: '地道街味', icon: '/assets/images/icon-food-street.svg' },
-      { id: 'gourmet', label: '精致探店', icon: '/assets/images/icon-food-gourmet.svg' },
-    ],
-    selectedAccom: 'heritage',
-    accomOptions: [
-      { id: 'budget', label: '经济实用', image: '/assets/images/accom-budget.png' },
-      { id: 'heritage', label: '精品人文', image: '/assets/images/accom-heritage.png' },
-      { id: 'camping', label: '星空露营', image: '/assets/images/accom-camping.png' },
-      { id: 'luxury', label: '奢华私密', image: '/assets/images/accom-luxury.png' },
-    ],
-    // Step 3: soul / travel spirit
+    selectedIntensity: '',
+    intensityOptions: [] as any[],
+    selectedFood: '',
+    foodOptions: [] as any[],
+    selectedAccom: '',
+    accomOptions: [] as any[],
     selectedSoul: [] as string[],
-    soulOptions: [
-      { id: 'lens', label: '光影镜头', icon: '/assets/images/icon-soul-lens.svg' },
-      { id: 'history', label: '历史猎人', icon: '/assets/images/icon-soul-history.svg' },
-      { id: 'nature', label: '自然之声', icon: '/assets/images/icon-soul-nature.svg' },
-      { id: 'local', label: '地道秘境', icon: '/assets/images/icon-soul-local.svg' },
-    ],
-    blindMode: 'clear',
+    soulOptions: [] as any[],
+    blindMode: '0',
   },
 
   onLoad(options: any) {
+    this.loadDictOptions();
     if (options?.mode === 'edit') {
       this.setData({ mode: 'edit' });
       this.loadExistingPreference();
+    }
+  },
+
+  async loadDictOptions() {
+    try {
+      const res = await getDictBatch([
+        'travel_stamina',
+        'travel_tourist_like',
+        'travel_food_like',
+        'travel_stay_pref',
+      ]);
+      const dict = res.data || {};
+
+      const intensityOptions = (dict['travel_stamina'] || []).slice(0, 4).map((d) => ({
+        id: d.dictValue,
+        title: d.dictLabel,
+        desc: d.remark || '',
+      }));
+
+      const foodOptions = (dict['travel_food_like'] || []).slice(0, 4).map((d) => ({
+        id: d.dictValue,
+        label: d.dictLabel,
+      }));
+
+      const accomOptions = (dict['travel_stay_pref'] || []).slice(0, 4).map((d) => ({
+        id: d.dictValue,
+        label: d.dictLabel,
+      }));
+
+      const soulOptions = (dict['travel_tourist_like'] || []).slice(0, 4).map((d) => ({
+        id: d.dictValue,
+        label: d.dictLabel,
+      }));
+
+      this.setData({
+        intensityOptions,
+        foodOptions,
+        accomOptions,
+        soulOptions,
+        selectedIntensity: intensityOptions[0]?.id || '',
+        selectedFood: foodOptions[0]?.id || '',
+        selectedAccom: accomOptions[0]?.id || '',
+      });
+    } catch (err) {
+      console.error('Failed to load dict options:', err);
     }
   },
 
@@ -54,11 +77,11 @@ Page({
       if (pref) {
         this.setData({
           preferenceId: pref.preferenceId || 0,
-          selectedIntensity: pref.stamina || 'steady',
-          selectedFood: pref.foodLikes || 'light',
-          selectedAccom: pref.stayPref || 'heritage',
+          selectedIntensity: pref.stamina || '',
+          selectedFood: pref.foodLikes || '',
+          selectedAccom: pref.stayPref || '',
           selectedSoul: pref.travelLikes ? pref.travelLikes.split(',') : [],
-          blindMode: pref.healthTags || 'full',
+          blindMode: pref.blindMode || '0',
         });
       }
     } catch (err) {
@@ -67,39 +90,39 @@ Page({
   },
 
   onSelectIntensity(e: any) {
-    this.setData({ selectedIntensity: e.currentTarget.dataset.id })
+    this.setData({ selectedIntensity: e.currentTarget.dataset.id });
   },
 
   onSelectFood(e: any) {
-    this.setData({ selectedFood: e.currentTarget.dataset.id })
+    this.setData({ selectedFood: e.currentTarget.dataset.id });
   },
 
   onSelectAccom(e: any) {
-    this.setData({ selectedAccom: e.currentTarget.dataset.id })
+    this.setData({ selectedAccom: e.currentTarget.dataset.id });
   },
 
   onSelectSoul(e: any) {
-    const id = e.currentTarget.dataset.id
-    const selected = [...this.data.selectedSoul]
-    const idx = selected.indexOf(id)
+    const id = e.currentTarget.dataset.id;
+    const selected = [...this.data.selectedSoul];
+    const idx = selected.indexOf(id);
     if (idx >= 0) {
-      selected.splice(idx, 1)
+      selected.splice(idx, 1);
     } else {
-      selected.push(id)
+      selected.push(id);
     }
-    this.setData({ selectedSoul: selected })
+    this.setData({ selectedSoul: selected });
   },
 
   onSelectBlindMode(e: any) {
-    this.setData({ blindMode: e.currentTarget.dataset.mode })
+    this.setData({ blindMode: e.currentTarget.dataset.mode });
   },
 
   onNext() {
-    const { currentStep } = this.data
+    const { currentStep } = this.data;
     if (currentStep < 3) {
-      this.setData({ currentStep: currentStep + 1 })
+      this.setData({ currentStep: currentStep + 1 });
     } else {
-      this.submitPreference()
+      this.submitPreference();
     }
   },
 
@@ -110,7 +133,7 @@ Page({
       foodLikes: selectedFood,
       stayPref: selectedAccom,
       travelLikes: selectedSoul.join(','),
-      healthTags: blindMode,
+      blindMode: blindMode,
     };
 
     try {
@@ -129,11 +152,11 @@ Page({
   },
 
   onBack() {
-    const { currentStep } = this.data
+    const { currentStep } = this.data;
     if (currentStep > 1) {
-      this.setData({ currentStep: currentStep - 1 })
+      this.setData({ currentStep: currentStep - 1 });
     } else {
-      wx.navigateBack({ delta: 1 })
+      wx.navigateBack({ delta: 1 });
     }
   },
-})
+});

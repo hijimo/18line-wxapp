@@ -15,7 +15,6 @@
             <image class="edit-icon" src="/assets/images/icon-edit-pen.svg" mode="aspectFit" />
           </view>
         </view>
-        <text class="section-tag">个人设置</text>
       </view>
 
       <!-- Header section -->
@@ -33,12 +32,9 @@
           bindtap="onSelectIntensity"
           data-id="{{item.id}}"
         >
-          <view class="card-icon-wrap {{selectedIntensity === item.id ? 'selected' : ''}}">
-            <image class="card-icon" src="{{item.icon}}" mode="aspectFit" />
-          </view>
           <view class="card-text">
             <text class="card-title {{selectedIntensity === item.id ? 'selected' : ''}}">{{item.title}}</text>
-            <text class="card-desc {{selectedIntensity === item.id ? 'selected' : ''}}">{{item.desc}}</text>
+            <text wx:if="{{item.desc}}" class="card-desc {{selectedIntensity === item.id ? 'selected' : ''}}">{{item.desc}}</text>
           </view>
           <view class="radio {{selectedIntensity === item.id ? 'selected' : ''}}" >
             <view wx:if="{{selectedIntensity === item.id}}" class="radio-dot"></view>
@@ -72,7 +68,6 @@
             bindtap="onSelectFood"
             data-id="{{item.id}}"
           >
-            <image class="chip-icon" src="{{item.icon}}" mode="aspectFit" />
             <text class="chip-label">{{item.label}}</text>
           </view>
         </view>
@@ -92,7 +87,6 @@
             bindtap="onSelectAccom"
             data-id="{{item.id}}"
           >
-            <image class="accom-img" src="{{item.image}}" mode="aspectFill" />
             <view class="accom-footer">
               <text class="accom-label">{{item.label}}</text>
               <view class="accom-radio {{selectedAccom === item.id ? 'selected' : ''}}">
@@ -124,9 +118,6 @@
           bindtap="onSelectSoul"
           data-id="{{item.id}}"
         >
-          <view class="soul-icon-wrap">
-            <image class="soul-icon" src="{{item.icon}}" mode="aspectFit" />
-          </view>
           <text class="soul-label">{{item.label}}</text>
           <view class="soul-check {{arr.includes(selectedSoul, item.id) ? 'visible' : ''}}">
             <image class="soul-check-icon" src="/assets/images/icon-check-active.svg" mode="aspectFit" />
@@ -143,20 +134,18 @@
         <text class="blind-desc">您希望在抵达前保留多少惊喜？</text>
         <view class="blind-toggle">
           <view
-            class="toggle-btn {{blindMode === 'full' ? 'active' : ''}}"
+            class="toggle-btn {{blindMode === '0' ? 'active' : ''}}"
             bindtap="onSelectBlindMode"
-            data-mode="full"
+            data-mode="0"
           >
-            <image class="toggle-icon" src="/assets/images/icon-blind-full.svg" mode="aspectFit" />
-            <text class="toggle-label">全盲惊喜</text>
+            <text class="toggle-label">清晰路径</text>
           </view>
           <view
-            class="toggle-btn {{blindMode === 'clear' ? 'active' : ''}}"
+            class="toggle-btn {{blindMode === '1' ? 'active' : ''}}"
             bindtap="onSelectBlindMode"
-            data-mode="clear"
+            data-mode="1"
           >
-            <image class="toggle-icon" src="/assets/images/icon-blind-clear.svg" mode="aspectFit" />
-            <text class="toggle-label">清晰路径</text>
+            <text class="toggle-label">全盲惊喜</text>
           </view>
         </view>
       </view>

@@ -74,6 +74,9 @@ export interface Itinerary {
   province?: string;
   city?: string;
   district?: string;
+  provinceName?: string;
+  cityName?: string;
+  districtName?: string;
   startDate?: string;
   days?: number;
   status?: string;

@@ -1,4 +1,22 @@
 <!--index.wxml-->
+<wxs src="../../utils/oss.wxs" module="oss" />
+
+<!-- TopAppBar -->
+<view class="top-app-bar">
+  <view class="top-bar-left">
+    <view class="top-bar-avatar">
+      <image class="top-bar-avatar-img" src="{{oss.ossResize(userInfo.avatarUrl, 80, 80)}}" mode="aspectFill" />
+    </view>
+    <text class="top-bar-brand">寻秘</text>
+  </view>
+  <view class="top-bar-search">
+    <image class="top-bar-search-icon" src="/assets/images/icon-search.svg" mode="aspectFit" />
+    <text class="top-bar-search-placeholder">寻找神秘之旅...</text>
+  </view>
+  <view class="top-bar-bell" bindtap="onBellTap">
+    <image class="top-bar-bell-icon" src="/assets/images/icon-bell.svg" mode="aspectFit" />
+  </view>
+</view>
 
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="page-main">
@@ -27,7 +45,7 @@
             <image class="journey-empty-icon" src="/assets/images/icon-empty-journey.svg" mode="aspectFit" />
           </view>
           <text class="journey-empty-text">开启您的第一段寻秘之旅</text>
-          <view class="journey-empty-btn" bindtap="onViewAll">
+          <view class="journey-empty-btn" bindtap="onAddTrip">
             <text class="journey-empty-btn-text">去添加</text>
           </view>
         </view>

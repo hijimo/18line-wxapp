@@ -101,7 +101,8 @@ const request = async <T>(path: string, option?: RequestOption): Promise<T> => {
 
       return interceptorResponse(response) as T;
     } catch (err: any) {
-      if (loginTimes === LOGIN_TIME_LIMIT - 1) {
+      // 只对 401 重试（token 过期可能需要重新获取），其他错误直接抛出
+      if (err.code !== 401 || loginTimes === LOGIN_TIME_LIMIT - 1) {
         wx.showToast({
           title: err.message || '接口异常',
           icon: 'none',

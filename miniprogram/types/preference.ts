@@ -14,6 +14,8 @@ export interface Preference {
   stayPrefList?: Record<string, string>[];
   healthTags?: string;
   healthTagsList?: Record<string, string>[];
+  blindMode?: string;
+  blindModeLabel?: string;
   status?: string;
   delFlag?: string;
   createBy?: string;
