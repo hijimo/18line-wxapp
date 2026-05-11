@@ -21,7 +21,7 @@
   <block wx:else>
     <swiper class="journey-swiper" next-margin="48rpx" previous-margin="0">
       <swiper-item wx:for="{{journeys}}" wx:key="id">
-        <view class="journey-card">
+        <view class="journey-card" bindtap="onCardTap" data-id="{{item.id}}">
           <view class="journey-card-inner">
             <!-- Progress Header -->
             <view class="progress-header">

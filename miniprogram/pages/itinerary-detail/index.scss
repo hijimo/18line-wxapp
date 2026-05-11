@@ -41,9 +41,33 @@ page {
   color: rgba(22, 52, 34, 0.5);
 }
 
+/* Map Section */
+.map-section {
+  position: relative;
+  width: 100%;
+  height: 400rpx;
+}
+
+.route-map {
+  width: 100%;
+  height: 100%;
+}
+
+.map-gradient-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80rpx;
+  background: linear-gradient(to bottom, rgba(249, 250, 244, 0), #f9faf4);
+  pointer-events: none;
+}
+
 /* Info Card */
 .info-card {
   margin: 24rpx 48rpx 0;
+  margin-top: -32px;
+  position: relative;
   background: #ffffff;
   border-radius: 32rpx;
   padding: 32rpx;

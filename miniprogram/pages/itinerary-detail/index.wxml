@@ -8,6 +8,22 @@
   </view>
 
   <block wx:elif="{{itinerary}}">
+    <!-- 地图区域 -->
+    <view class="map-section" wx:if="{{mapMarkers.length > 0}}">
+      <map
+        class="route-map"
+        latitude="{{mapCenter.latitude}}"
+        longitude="{{mapCenter.longitude}}"
+        scale="{{mapScale}}"
+        markers="{{mapMarkers}}"
+        polyline="{{mapPolyline}}"
+        show-location="{{false}}"
+        enable-scroll="{{true}}"
+        enable-zoom="{{true}}"
+      />
+      <view class="map-gradient-overlay" />
+    </view>
+
     <!-- 行程信息卡 -->
     <view class="info-card">
       <view class="info-header">

@@ -5,6 +5,7 @@ import {
 } from '../../services/itinerary';
 import { getTemplateDetail } from '../../services/template';
 import { getLocalSpecialtyList } from '../../services/local-specialty';
+import { getMultiStopRoute } from '../../services/map';
 import type { Itinerary, TravelItineraryDay } from '../../types/itinerary';
 import type { TravelLocalSpecialtyDish } from '../../types/local-specialty';
 
@@ -28,6 +29,10 @@ Page({
     introData: null as any,
     addDayNumber: 1,
     localSpecialtyList: [] as TravelLocalSpecialtyDish[],
+    mapMarkers: [] as any[],
+    mapPolyline: [] as any[],
+    mapCenter: { latitude: 28.45, longitude: 119.92 },
+    mapScale: 12,
   },
 
   onLoad(options: Record<string, string | undefined>) {
@@ -109,6 +114,8 @@ Page({
         currentDay: currentDayData?.dayNumber || 1,
         loading: false,
       });
+
+      this.updateMapData(currentDayData);
 
       this.loadLocalSpecialty(
         template.province,
@@ -198,6 +205,8 @@ Page({
         loading: false,
       });
 
+      this.updateMapData(currentDayData);
+
       this.loadLocalSpecialty(
         itinerary.province,
         itinerary.city,
@@ -232,6 +241,7 @@ Page({
       daysList.find((d) => d.dayNumber === dayNumber) || null;
 
     this.setData({ currentDay: dayNumber, currentDayData });
+    this.updateMapData(currentDayData);
   },
 
   onAddSpot() {
@@ -258,6 +268,107 @@ Page({
 
   onIntroClose() {
     this.setData({ showIntroDrawer: '', introData: null });
+  },
+
+  async updateMapData(dayData: TravelItineraryDay | null) {
+    if (!dayData || !dayData.attractionList || dayData.attractionList.length === 0) {
+      this.setData({ mapMarkers: [], mapPolyline: [] });
+      return;
+    }
+
+    const attractions = dayData.attractionList.filter(
+      (a) => a.latitude && a.longitude,
+    );
+
+    if (attractions.length === 0) {
+      this.setData({ mapMarkers: [], mapPolyline: [] });
+      return;
+    }
+
+    const markers = attractions.map((a, idx) => ({
+      id: idx,
+      latitude: a.latitude!,
+      longitude: a.longitude!,
+      iconPath: '/assets/images/marker-pin.png',
+      width: 28,
+      height: 28,
+      anchor: { x: 0.5, y: 1 },
+      callout: {
+        content: a.attractionName || '',
+        display: 'ALWAYS',
+        fontSize: 11,
+        borderRadius: 6,
+        padding: 6,
+        bgColor: '#ffffff',
+        color: '#163422',
+        borderWidth: 1,
+        borderColor: '#e0e0e0',
+      },
+      label: {
+        content: String(idx + 1),
+        color: '#ffffff',
+        fontSize: 10,
+        anchorX: 0,
+        anchorY: -24,
+        textAlign: 'center',
+      },
+    }));
+
+    let latSum = 0;
+    let lngSum = 0;
+    attractions.forEach((a) => {
+      latSum += a.latitude!;
+      lngSum += a.longitude!;
+    });
+    const mapCenter = {
+      latitude: latSum / attractions.length,
+      longitude: lngSum / attractions.length,
+    };
+
+    let mapScale = 12;
+    if (attractions.length >= 2) {
+      const lats = attractions.map((a) => a.latitude!);
+      const lngs = attractions.map((a) => a.longitude!);
+      const latDiff = Math.max(...lats) - Math.min(...lats);
+      const lngDiff = Math.max(...lngs) - Math.min(...lngs);
+      const maxDiff = Math.max(latDiff, lngDiff);
+      if (maxDiff > 0.5) mapScale = 9;
+      else if (maxDiff > 0.2) mapScale = 10;
+      else if (maxDiff > 0.1) mapScale = 11;
+      else if (maxDiff > 0.05) mapScale = 12;
+      else mapScale = 13;
+    }
+
+    this.setData({ mapMarkers: markers, mapCenter, mapScale });
+
+    if (attractions.length >= 2) {
+      const stops = attractions.map((a) => ({
+        latitude: a.latitude!,
+        longitude: a.longitude!,
+      }));
+      try {
+        const routePoints = await getMultiStopRoute(stops);
+        this.setData({
+          mapPolyline: [{
+            points: routePoints,
+            color: '#163422',
+            width: 4,
+            arrowLine: true,
+          }],
+        });
+      } catch {
+        this.setData({
+          mapPolyline: [{
+            points: stops,
+            color: '#163422',
+            width: 4,
+            arrowLine: true,
+          }],
+        });
+      }
+    } else {
+      this.setData({ mapPolyline: [] });
+    }
   },
 
   onShareAppMessage() {

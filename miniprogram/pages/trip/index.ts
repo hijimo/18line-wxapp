@@ -82,7 +82,7 @@ Page({
 
   onTripTap(e: any) {
     const id = e.currentTarget.dataset.id;
-    wx.showToast({ title: '行程详情开发中', icon: 'none' });
-    console.log('Trip tap:', id);
+    if (!id) return;
+    wx.navigateTo({ url: `/pages/itinerary-detail/index?id=${id}` });
   },
 });
