@@ -14,44 +14,46 @@ interface JourneyItem {
 }
 
 const STATUS_MAP: Record<string, { label: string; type: string }> = {
-  '0': { label: '规划中', type: 'planning' },
-  '1': { label: '进行中', type: 'active' },
-  '2': { label: '待开始', type: 'pending' },
-  '3': { label: '已完成', type: 'completed' },
-  '4': { label: '已取消', type: 'cancelled' },
+  '0': { label: '草稿', type: 'draft' },
+  '1': { label: '已确认', type: 'confirmed' },
+  '2': { label: '已完成', type: 'completed' },
+  '3': { label: '已取消', type: 'cancelled' },
+};
+
+const FILTER_STATUS_MAP: Record<string, string> = {
+  active: '1',
+  pending: '0',
+  completed: '2',
 };
 
 Page({
   data: {
-    currentFilter: 'active',
+    currentFilter: 'all',
     filters: [
-      { id: 'active', label: '进行中', active: true },
+      { id: 'all', label: '全部', active: true },
       { id: 'pending', label: '待开始', active: false },
+      { id: 'active', label: '进行中', active: false },
       { id: 'completed', label: '已完成', active: false },
     ],
     journeys: [] as JourneyItem[],
-    allJourneys: [] as JourneyItem[],
   },
 
   onLoad(options: any) {
     if (options?.filter) {
-      const filterMap: Record<string, string> = {
-        pending: 'pending',
-        cancelled: 'completed',
-        completed: 'completed',
-      };
-      const filterId = filterMap[options.filter] || 'active';
-      this.setFilter(filterId);
+      this.setFilter(options.filter);
     }
-
     this.loadJourneys();
   },
 
   async loadJourneys() {
     try {
-      const res = await getItineraryList();
+      const { currentFilter } = this.data;
+      const params = currentFilter !== 'all'
+        ? { status: FILTER_STATUS_MAP[currentFilter] }
+        : undefined;
+      const res = await getItineraryList(params);
       const list: Itinerary[] = res.data || [];
-      const allJourneys: JourneyItem[] = list.map((item) => {
+      const journeys: JourneyItem[] = list.map((item) => {
         const statusInfo = STATUS_MAP[item.status || '0'] || STATUS_MAP['0'];
         return {
           id: item.itineraryId || 0,
@@ -66,8 +68,7 @@ Page({
         };
       });
 
-      this.setData({ allJourneys });
-      this.applyFilter();
+      this.setData({ journeys });
     } catch (err) {
       console.error('Failed to load journeys:', err);
     }
@@ -81,16 +82,10 @@ Page({
     this.setData({ currentFilter: filterId, filters });
   },
 
-  applyFilter() {
-    const { allJourneys, currentFilter } = this.data;
-    const filtered = allJourneys.filter((j) => j.statusType === currentFilter);
-    this.setData({ journeys: filtered.length > 0 ? filtered : allJourneys });
-  },
-
   onFilterTap(e: any) {
     const id = e.currentTarget.dataset.id;
     this.setFilter(id);
-    this.applyFilter();
+    this.loadJourneys();
   },
 
   onJourneyTap(e: any) {

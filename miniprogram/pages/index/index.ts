@@ -14,7 +14,8 @@ Component({
         image: '/assets/images/hero-banner-songyang.png',
         tag: 'NEW EXPEDITION',
         title: '松阳.经典3天2晚\n盲游',
-        description: '深入江南最后的秘境，在云端古村开启未知的探索。由寻秘向导为您定制全程惊喜。',
+        description:
+          '深入江南最后的秘境，在云端古村开启未知的探索。由寻秘向导为您定制全程惊喜。',
         buttonText: '立即启程',
         priceLabel: 'STARTING FROM',
         price: '¥2,499',
@@ -24,7 +25,8 @@ Component({
         image: '/assets/images/lingyin-temple.png',
         tag: 'HIDDEN JOURNEY',
         title: '灵隐.寻宝之旅',
-        description: '跟随千年古刹的指引，在杭州最灵验的寺庙间解锁三件神秘宝物。',
+        description:
+          '跟随千年古刹的指引，在杭州最灵验的寺庙间解锁三件神秘宝物。',
         buttonText: '开始寻宝',
         priceLabel: 'STARTING FROM',
         price: '¥800',
@@ -183,7 +185,7 @@ Component({
             budget: item.totalCost ? `¥${item.totalCost}` : '',
             days: Array.from({ length: item.days || 0 }, (_, i) => ({
               day: i + 1,
-              label: `DAY ${i + 1}`,
+              label: `第${i + 1}天`,
               number: String(i + 1).padStart(2, '0'),
               status: i === 0 ? 'active' : 'upcoming',
             })),
@@ -202,7 +204,9 @@ Component({
     onBannerTap(e: any) {
       const { id } = e.detail;
       if (id) {
-        wx.navigateTo({ url: `/pages/itinerary-detail/index?templateId=${id}` });
+        wx.navigateTo({
+          url: `/pages/itinerary-detail/index?templateId=${id}`,
+        });
       }
     },
     onViewAll() {
@@ -212,19 +216,19 @@ Component({
       wx.navigateTo({ url: '/pages/create-itinerary/index' });
     },
     onInspirationTap(e: any) {
-      const { id } = e.detail
-      console.log('Inspiration tap:', id)
+      const { id } = e.detail;
+      console.log('Inspiration tap:', id);
     },
     onEggTap(e: any) {
-      const { id } = e.detail
-      console.log('Egg tap:', id)
+      const { id } = e.detail;
+      console.log('Egg tap:', id);
     },
     onFoodTap(e: any) {
-      const { id } = e.detail
-      console.log('Food tap:', id)
+      const { id } = e.detail;
+      console.log('Food tap:', id);
     },
     onBellTap() {
-      console.log('Bell tap')
+      console.log('Bell tap');
     },
   },
-})
+});

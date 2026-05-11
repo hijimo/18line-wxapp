@@ -150,11 +150,17 @@ Page({
   },
 
   async createFromTemplate() {
-    const { templateId } = this.data;
+    const { templateId, itinerary } = this.data;
     wx.showLoading({ title: '创建中...' });
 
     try {
-      const res = await autoGenerateItinerary({ templateId });
+      const res = await autoGenerateItinerary({
+        templateId,
+        province: itinerary?.province,
+        city: itinerary?.city,
+        district: itinerary?.district,
+        days: itinerary?.days,
+      });
       wx.hideLoading();
       const newItinerary = res.data;
       if (newItinerary?.itineraryId) {

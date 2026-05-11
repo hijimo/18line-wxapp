@@ -31,7 +31,7 @@
           <view class="journey-section-subtitle">正在进行的奇遇记</view>
         </view>
         <view class="journey-view-all" bindtap="onViewAll">
-          <text class="journey-view-all-text">全部轨迹 ></text>
+          <text class="journey-view-all-text">全部轨迹</text>
         </view>
       </view>
 

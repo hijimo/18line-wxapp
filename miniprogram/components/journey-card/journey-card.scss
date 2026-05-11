@@ -284,3 +284,113 @@
   width: 100%;
   height: 100%;
 }
+
+/* Empty State */
+.empty-state {
+  padding: 0 24rpx;
+}
+
+.empty-state-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 48rpx;
+  background: #ffffff;
+  border-radius: 48rpx;
+  border: 1rpx solid rgba(194, 200, 192, 0.15);
+}
+
+.empty-icon-wrapper {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: #f3f4ee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+}
+
+.empty-icon {
+  width: 56rpx;
+  height: 56rpx;
+  opacity: 0.6;
+}
+
+.empty-text-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 48rpx;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #163422;
+  line-height: 48rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #727972;
+  line-height: 36rpx;
+}
+
+.empty-action {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 20rpx 40rpx;
+  background: linear-gradient(to right, #163422, #2d4b37);
+  border-radius: 9999rpx;
+}
+
+.empty-action-text {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.empty-action-arrow {
+  width: 14rpx;
+  height: 14rpx;
+  opacity: 0.8;
+}
+
+/* Day Empty State (within a card) */
+.day-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 32rpx;
+  background: #f3f4ee;
+  border-radius: 32rpx;
+  gap: 16rpx;
+}
+
+.day-empty-line {
+  width: 64rpx;
+  height: 4rpx;
+  background: rgba(194, 200, 192, 0.4);
+  border-radius: 2rpx;
+}
+
+.day-empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.day-empty-text {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #424843;
+}
+
+.day-empty-hint {
+  font-size: 24rpx;
+  color: #727972;
+}

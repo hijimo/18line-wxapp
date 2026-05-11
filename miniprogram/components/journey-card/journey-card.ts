@@ -7,7 +7,10 @@ Component({
   },
   methods: {
     onViewAll() {
-      this.triggerEvent('viewall')
+      this.triggerEvent('viewall');
+    },
+    onCreateTrip() {
+      wx.navigateTo({ url: '/pages/create-itinerary/index' });
     },
   },
 })

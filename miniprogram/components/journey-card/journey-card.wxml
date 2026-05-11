@@ -1,75 +1,93 @@
 <!--journey-card.wxml-->
 <view class="journey-section">
-  <view class="journey-header">
-    <view class="journey-header-left">
-      <text class="journey-heading">我的寻觅之旅</text>
-      <text class="journey-subheading">正在进行的奇遇记</text>
-    </view>
-    <view class="journey-header-btn" bindtap="onViewAll">
-      <text class="journey-header-btn-text">全部轨迹</text>
-      <image class="icon-chevron" src="/assets/images/icon-chevron-right.svg" />
+  <!-- Empty State -->
+  <view wx:if="{{!journeys || journeys.length === 0}}" class="empty-state">
+    <view class="empty-state-inner">
+      <view class="empty-icon-wrapper">
+        <image class="empty-icon" src="/assets/images/icon-target.svg" mode="aspectFit" />
+      </view>
+      <view class="empty-text-group">
+        <text class="empty-title">还没有行程安排</text>
+        <text class="empty-desc">创建你的第一段旅程，开启探索之旅</text>
+      </view>
+      <view class="empty-action" bindtap="onCreateTrip">
+        <text class="empty-action-text">创建行程</text>
+        <image class="empty-action-arrow" src="/assets/images/icon-arrow-right.svg" mode="aspectFit" />
+      </view>
     </view>
   </view>
 
-  <swiper class="journey-swiper" next-margin="48rpx" previous-margin="0">
-    <swiper-item wx:for="{{journeys}}" wx:key="id">
-      <view class="journey-card">
-        <view class="journey-card-inner">
-          <!-- Progress Header -->
-          <view class="progress-header">
-            <view class="progress-left">
-              <text class="progress-title">{{item.title}}</text>
-              <view class="progress-date">
-                <image class="icon-calendar" src="/assets/images/icon-calendar.svg" />
-                <text class="progress-date-text">{{item.date}}</text>
-              </view>
-            </view>
-            <view class="progress-right">
-              <text class="progress-budget">{{item.budget}}</text>
-              <text class="progress-budget-label">TOTAL BUDGET</text>
-            </view>
-          </view>
-
-          <!-- Day Progress Tracker -->
-          <view class="day-tracker">
-            <view class="tracker-line" />
-            <view class="tracker-dots">
-              <view wx:for="{{item.days}}" wx:key="day" wx:for-item="day" class="day-item {{day.status === 'completed' ? 'day-completed' : day.status === 'active' ? 'day-active' : 'day-upcoming'}}">
-                <view class="day-dot">
-                  <image wx:if="{{day.status === 'completed'}}" class="icon-check" src="/assets/images/icon-check.svg" />
-                  <text wx:else class="day-number">{{day.number}}</text>
+  <!-- Journey Cards -->
+  <block wx:else>
+    <swiper class="journey-swiper" next-margin="48rpx" previous-margin="0">
+      <swiper-item wx:for="{{journeys}}" wx:key="id">
+        <view class="journey-card">
+          <view class="journey-card-inner">
+            <!-- Progress Header -->
+            <view class="progress-header">
+              <view class="progress-left">
+                <text class="progress-title">{{item.title}}</text>
+                <view class="progress-date">
+                  <image class="icon-calendar" src="/assets/images/icon-calendar.svg" />
+                  <text class="progress-date-text">{{item.date}}</text>
                 </view>
-                <text class="day-label">{{day.label}}</text>
+              </view>
+              <view class="progress-right">
+                <text class="progress-budget">{{item.budget}}</text>
+                <text class="progress-budget-label">TOTAL BUDGET</text>
               </view>
             </view>
-          </view>
 
-          <!-- Current Goal -->
-          <view class="current-goal">
-            <image class="icon-target" src="/assets/images/icon-target.svg" />
-            <view class="goal-text">
-              <text class="goal-label">当前目标</text>
-              <text class="goal-title">{{item.currentGoal}}</text>
-            </view>
-          </view>
-
-          <!-- Location Images -->
-          <view class="location-images">
-            <view class="location-main">
-              <image class="location-main-img" src="{{item.locations[0].image}}" mode="aspectFill" />
-              <view class="location-overlay" />
-            </view>
-            <view class="location-side">
-              <view class="location-side-item">
-                <image class="location-side-img" src="{{item.locations[1].image}}" mode="aspectFill" />
+            <!-- Day Progress Tracker -->
+            <view wx:if="{{item.days && item.days.length > 0}}" class="day-tracker">
+              <view class="tracker-line" />
+              <view class="tracker-dots">
+                <view wx:for="{{item.days}}" wx:key="day" wx:for-item="day" class="day-item {{day.status === 'completed' ? 'day-completed' : day.status === 'active' ? 'day-active' : 'day-upcoming'}}">
+                  <view class="day-dot">
+                    <image wx:if="{{day.status === 'completed'}}" class="icon-check" src="/assets/images/icon-check.svg" />
+                    <text wx:else class="day-number">{{day.number}}</text>
+                  </view>
+                  <text class="day-label">{{day.label}}</text>
+                </view>
               </view>
-              <view class="location-side-item">
-                <image class="location-side-img" src="{{item.locations[2].image}}" mode="aspectFill" />
+            </view>
+
+            <!-- Day Empty State -->
+            <view wx:if="{{!item.days || item.days.length === 0}}" class="day-empty">
+              <view class="day-empty-line" />
+              <view class="day-empty-content">
+                <text class="day-empty-text">暂无日程安排</text>
+                <text class="day-empty-hint">点击进入行程添加每日计划</text>
+              </view>
+            </view>
+
+            <!-- Current Goal -->
+            <view wx:if="{{item.currentGoal}}" class="current-goal">
+              <image class="icon-target" src="/assets/images/icon-target.svg" />
+              <view class="goal-text">
+                <text class="goal-label">当前目标</text>
+                <text class="goal-title">{{item.currentGoal}}</text>
+              </view>
+            </view>
+
+            <!-- Location Images -->
+            <view wx:if="{{item.locations && item.locations.length >= 3}}" class="location-images">
+              <view class="location-main">
+                <image class="location-main-img" src="{{item.locations[0].image}}" mode="aspectFill" />
+                <view class="location-overlay" />
+              </view>
+              <view class="location-side">
+                <view class="location-side-item">
+                  <image class="location-side-img" src="{{item.locations[1].image}}" mode="aspectFill" />
+                </view>
+                <view class="location-side-item">
+                  <image class="location-side-img" src="{{item.locations[2].image}}" mode="aspectFill" />
+                </view>
               </view>
             </view>
           </view>
         </view>
-      </view>
-    </swiper-item>
-  </swiper>
+      </swiper-item>
+    </swiper>
+  </block>
 </view>

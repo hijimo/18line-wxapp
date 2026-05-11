@@ -56,10 +56,12 @@
   font-size: 22rpx;
   color: #424843;
   margin-top: 8rpx;
-  display: block;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  word-break: break-all;
 }
 
 .card-action {
@@ -68,16 +70,11 @@
   background: rgba(148, 74, 0, 0.1);
   flex-shrink: 0;
   margin-left: 16rpx;
+  line-height: 1;
+  font-size: 0;
 }
 
 .action-text {
   font-size: 22rpx;
   color: #163422;
-}
-
-.card-thumb {
-  width: 100%;
-  height: 200rpx;
-  border-radius: 16rpx;
-  margin-top: 20rpx;
 }

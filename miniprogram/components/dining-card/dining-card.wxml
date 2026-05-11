@@ -13,6 +13,5 @@
         <text class="action-text">详情</text>
       </view>
     </view>
-    <image wx:if="{{item.attachments && item.attachments.length}}" class="card-thumb" src="{{item.attachments[0].fileUrl}}" mode="aspectFill" lazy-load />
   </view>
 </view>

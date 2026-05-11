@@ -12,6 +12,10 @@
         <text class="action-text">详情</text>
       </view>
     </view>
-    <image wx:if="{{item.attachments && item.attachments.length}}" class="card-thumb" src="{{item.attachments[0].fileUrl}}" mode="aspectFill" lazy-load />
+    <swiper wx:if="{{item.attachments && item.attachments.length}}" class="card-swiper" indicator-dots="{{item.attachments.length > 1}}" indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#ffffff" autoplay circular>
+      <swiper-item wx:for="{{item.attachments}}" wx:key="url">
+        <image class="card-swiper-img" src="{{item.url}}" mode="aspectFill" lazy-load />
+      </swiper-item>
+    </swiper>
   </view>
 </view>

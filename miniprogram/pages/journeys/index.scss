@@ -114,11 +114,11 @@ page {
   flex-shrink: 0;
 }
 
-.status-badge--active {
+.status-badge--confirmed {
   background: #163422;
 }
 
-.status-badge--pending {
+.status-badge--draft {
   background: #edeee8;
 }
 
@@ -126,7 +126,7 @@ page {
   background: #edeee8;
 }
 
-.status-badge--planning {
+.status-badge--cancelled {
   background: #edeee8;
 }
 
@@ -135,11 +135,11 @@ page {
   font-weight: 500;
 }
 
-.status-text--active {
+.status-text--confirmed {
   color: #ffffff;
 }
 
-.status-text--pending {
+.status-text--draft {
   color: #424843;
 }
 
@@ -147,7 +147,7 @@ page {
   color: #424843;
 }
 
-.status-text--planning {
+.status-text--cancelled {
   color: #424843;
 }
 

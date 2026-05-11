@@ -39,8 +39,8 @@
             bindtap="onDayTap"
             data-day="{{item.dayNumber}}"
           >
-            <text class="day-tab-text">Day {{item.dayNumber}}</text>
-            <text wx:if="{{item.dayTheme}}" class="day-tab-theme">{{item.dayTheme}}</text>
+            <text class="day-tab-text">第{{item.dayNumber}}天</text>
+            
           </view>
         </view>
       </scroll-view>
@@ -121,9 +121,9 @@
         <view class="specialty-header">
           <view class="specialty-heading">
             <text class="specialty-subtitle">CULINARY EXPLORER</text>
-            <text class="specialty-title">Local Must-Eat</text>
+            <text class="specialty-title">地方特色菜</text>
           </view>
-          <view class="specialty-view-all">
+          <view class="specialty-view-all" style="display:none">
             <text class="specialty-view-all-text">View All</text>
             <text class="specialty-view-all-arrow">›</text>
           </view>

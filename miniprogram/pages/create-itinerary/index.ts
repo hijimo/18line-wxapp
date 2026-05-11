@@ -1,7 +1,5 @@
-import { getRegionTree } from '../../services/region';
 import { getDictByType } from '../../services/dict';
 import { autoGenerateItinerary, addItinerary } from '../../services/itinerary';
-import type { Region } from '../../types/region';
 import type { DictData } from '../../types/dict';
 
 const AI_PROGRESS_TEXTS = [
@@ -19,35 +17,27 @@ Page({
     provinceName: '',
     cityName: '',
     districtName: '',
+    regionValue: [] as string[],
     startDate: '',
     endDate: '',
-    travelerType: '',
+    startDateDisplay: '',
+    endDateDisplay: '',
     preferences: [] as string[],
     preferenceOptions: [] as DictData[],
-    blindMode: false,
+    blindMode: true,
     loading: false,
-    regionTree: [] as Region[],
     progressText: '',
+    showDatePicker: false,
   },
 
   _progressTimer: null as any,
 
   onLoad() {
-    this.loadRegionTree();
     this.loadPreferenceOptions();
   },
 
   onUnload() {
     this.clearProgressTimer();
-  },
-
-  async loadRegionTree() {
-    try {
-      const res = await getRegionTree();
-      this.setData({ regionTree: res.data || [] });
-    } catch (err) {
-      console.error('Failed to load region tree:', err);
-    }
   },
 
   async loadPreferenceOptions() {
@@ -60,29 +50,50 @@ Page({
   },
 
   onRegionChange(e: any) {
-    const { value } = e.detail;
-    const { regionTree } = this.data;
-
-    const province = regionTree[value[0]] || {};
-    const city = (province.children || [])[value[1]] || {};
-    const district = (city.children || [])[value[2]] || {};
-
+    const { value, code } = e.detail;
     this.setData({
-      provinceCode: province.code || '',
-      provinceName: province.name || '',
-      cityCode: city.code || '',
-      cityName: city.name || '',
-      districtCode: district.code || '',
-      districtName: district.name || '',
+      regionValue: value,
+      provinceName: value[0] || '',
+      cityName: value[1] || '',
+      districtName: value[2] || '',
+      provinceCode: code[0] || '',
+      cityCode: code[1] || '',
+      districtCode: code[2] || '',
     });
   },
 
+  onDateTap() {
+    this.setData({ showDatePicker: true });
+  },
+
+  onCloseDatePicker() {
+    this.setData({ showDatePicker: false });
+  },
+
+  onConfirmDate() {
+    this.setData({ showDatePicker: false });
+  },
+
+  formatDateDisplay(dateStr: string): string {
+    if (!dateStr) return '';
+    const parts = dateStr.split('-');
+    return `${parseInt(parts[1])}.${parseInt(parts[2])}`;
+  },
+
   onStartDateChange(e: any) {
-    this.setData({ startDate: e.detail.value });
+    const startDate = e.detail.value;
+    this.setData({
+      startDate,
+      startDateDisplay: this.formatDateDisplay(startDate),
+    });
   },
 
   onEndDateChange(e: any) {
-    this.setData({ endDate: e.detail.value });
+    const endDate = e.detail.value;
+    this.setData({
+      endDate,
+      endDateDisplay: this.formatDateDisplay(endDate),
+    });
   },
 
   onPreferenceTap(e: any) {
@@ -98,8 +109,9 @@ Page({
     this.setData({ preferences: [...preferences] });
   },
 
-  onBlindModeChange(e: any) {
-    this.setData({ blindMode: e.detail.value });
+  onBlindModeSelect(e: any) {
+    const value = e.currentTarget.dataset.value;
+    this.setData({ blindMode: value === 'true' || value === true });
   },
 
   calculateDays(): number {
@@ -134,16 +146,19 @@ Page({
       startDate, endDate, preferences, blindMode,
     } = this.data;
 
+    const days = this.calculateDays();
+
     return {
-      province: provinceName,
-      city: cityName,
-      district: districtName,
+      province: provinceCode,
+      city: cityCode,
+      district: districtCode,
+      provinceName,
+      cityName,
+      districtName,
       startDate,
-      days: this.calculateDays(),
+      days,
+      itineraryName: `${cityName}${days}日游`,
       remark: JSON.stringify({
-        provinceCode,
-        cityCode,
-        districtCode,
         preferences,
         blindMode,
         endDate,
