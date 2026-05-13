@@ -3,7 +3,7 @@
   <!-- 返回按钮 -->
   <view class="back-btn" bindtap="onBack">
     <view class="back-icon-wrap">
-      <image class="back-icon" src="/assets/images/icon-arrow-back.svg" mode="aspectFit" />
+      <image class="back-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-arrow-back.svg" mode="aspectFit" />
     </view>
     <text class="back-text">返回</text>
   </view>
@@ -20,6 +20,6 @@
   <!-- 下一步 / 完成 按钮 -->
   <view class="next-btn" bindtap="onNext">
     <text class="next-text">{{step === 3 ? '完成' : '下一步'}}</text>
-    <image wx:if="{{step !== 3}}" class="next-icon" src="/assets/images/icon-arrow-next.svg" mode="aspectFit" />
+    <image wx:if="{{step !== 3}}" class="next-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-arrow-next.svg" mode="aspectFit" />
   </view>
 </view>

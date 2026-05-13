@@ -1,7 +1,10 @@
-var ossResize = function(url, w, h) {
-  if (!url || url.indexOf('/assets/') === 0 || url.indexOf('http') !== 0) return url;
+var ossResize = function(url, w, h, mode) {
+  if (!url || url.indexOf('http') !== 0 || url.indexOf('.svg') >= 0 || url.indexOf('x-oss-process=') >= 0) return url;
   var sep = url.indexOf('?') >= 0 ? '&' : '?';
-  return url + sep + 'x-oss-process=image/resize,m_fill,w_' + w + ',h_' + h;
+  var params = 'x-oss-process=image/resize,m_' + (mode || 'fill');
+  if (w) params = params + ',w_' + Math.ceil(w * 2);
+  if (h) params = params + ',h_' + Math.ceil(h * 2);
+  return url + sep + params;
 }
 
 module.exports = {

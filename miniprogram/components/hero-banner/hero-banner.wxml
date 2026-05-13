@@ -1,8 +1,9 @@
 <!--hero-banner.wxml-->
+<wxs src="../../utils/oss.wxs" module="oss" />
 <swiper class="hero-swiper" autoplay circular indicator-dots indicator-color="rgba(255,255,255,0.3)" indicator-active-color="#ffffff">
   <swiper-item wx:for="{{banners}}" wx:key="id">
     <view class="banner-card">
-      <image class="banner-image" src="{{item.image}}" mode="aspectFill" />
+      <image class="banner-image" src="{{oss.ossResize(item.image, 654, 420)}}" mode="aspectFill" />
       <view class="banner-gradient" />
       <view class="banner-content">
         <view class="banner-tag">
@@ -17,7 +18,7 @@
         <view class="banner-footer">
           <view class="banner-btn" bindtap="onBannerTap" data-id="{{item.id}}">
             <text class="banner-btn-text">{{item.buttonText}}</text>
-            <image class="icon-arrow" src="/assets/images/icon-arrow-right.svg" />
+            <image class="icon-arrow" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-arrow-right.svg" />
           </view>
           <view class="banner-price-wrap">
             <text class="banner-price-label">{{item.priceLabel}}</text>

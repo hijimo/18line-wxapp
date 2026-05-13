@@ -1,4 +1,5 @@
 <!--inspiration-card.wxml-->
+<wxs src="../../utils/oss.wxs" module="oss" />
 <view class="inspiration-section">
   <view class="inspiration-heading">
     <text class="inspiration-heading-text">{{title}}</text>
@@ -8,9 +9,9 @@
       <view class="swiper-item-inner">
         <view class="inspiration-card" bindtap="onCardTap" data-id="{{item.id}}">
           <view class="card-image-wrap">
-            <image class="card-image" src="{{item.image}}" mode="aspectFill" />
+            <image class="card-image" src="{{oss.ossResize(item.image, 560, 640)}}" mode="aspectFill" />
             <view class="card-rating">
-              <image class="icon-star" src="/assets/images/icon-star.svg" />
+              <image class="icon-star" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-star.svg" />
               <text class="card-rating-text">{{item.rating}}</text>
             </view>
             <view class="card-tag {{item.tagColor === 'green' ? 'tag-green' : item.tagColor === 'brown' ? 'tag-brown' : 'tag-dark'}}">

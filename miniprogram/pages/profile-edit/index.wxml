@@ -11,7 +11,7 @@
         <view class="avatar-upload" bindtap="chooseAvatar">
           <image class="avatar" src="{{oss.ossResize(avatarUrl, 120, 120)}}" mode="aspectFill" />
           <view class="camera-btn">
-            <image class="camera-icon" src="/assets/images/icon-camera.svg" mode="aspectFit" />
+            <image class="camera-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-camera.svg" mode="aspectFit" />
           </view>
         </view>
         <text class="avatar-hint">更新头像</text>
@@ -49,7 +49,7 @@
           <picker mode="date" fields="year" value="{{birthYear}}" bindchange="onBirthYearChange">
             <view class="form-picker">
               <text class="{{birthYear ? 'picker-value' : 'picker-placeholder'}}">{{birthYear || '请选择出生年份'}}</text>
-              <image class="picker-arrow" src="/assets/images/icon-calendar.svg" mode="aspectFit" />
+              <image class="picker-arrow" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-calendar.svg" mode="aspectFit" />
             </view>
           </picker>
         </view>

@@ -30,9 +30,11 @@ export function getDrivingRoute(
           resolve({ points: [from, to] });
           return;
         }
-        const polyline = data.result.routes[0].polyline;
-        const points = decodePolyline(polyline);
+        const coors = data.result.routes[0].polyline;
+        console.log('[Map] Raw polyline first 10 values:', coors.slice(0, 10));
+        const points = decodePolyline(coors);
         console.log('[Map] Got route with', points.length, 'points');
+        console.log('[Map] First decoded point:', points[0]);
         resolve({ points });
       },
       fail(err: any) {
@@ -64,17 +66,18 @@ export async function getMultiStopRoute(
 
 function decodePolyline(encoded: number[]): RoutePoint[] {
   const points: RoutePoint[] = [];
-  let lat = 0;
-  let lng = 0;
-
-  for (let i = 0; i < encoded.length; i += 2) {
-    lat += encoded[i];
-    lng += encoded[i + 1];
+  // 腾讯地图polyline压缩：先解压差值，再累加
+  // 第一步：将压缩数组解压（每个值除以前一个值的差值）
+  const decoded = [...encoded];
+  for (let i = 2; i < decoded.length; i++) {
+    decoded[i] = decoded[i - 2] + decoded[i];
+  }
+  // 第二步：每两个值组成一个坐标点 (lat, lng)
+  for (let i = 0; i < decoded.length; i += 2) {
     points.push({
-      latitude: lat / 1e6,
-      longitude: lng / 1e6,
+      latitude: decoded[i] / 1e6,
+      longitude: decoded[i + 1] / 1e6,
     });
   }
-
   return points;
 }

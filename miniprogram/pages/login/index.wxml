@@ -1,8 +1,9 @@
+<wxs src="../../utils/oss.wxs" module="oss" />
 <view class="container">
   <navigation-bar title="" back="{{false}}" color="white" background="transparent"></navigation-bar>
 
   <!-- Background image -->
-  <image class="bg-image" src="/assets/images/login-bg.png" mode="aspectFill" />
+  <image class="bg-image" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/login-bg.png" mode="aspectFill" />
 
   <!-- Gradient overlay -->
   <view class="bg-overlay" />
@@ -12,7 +13,7 @@
     <!-- Brand identity -->
     <view class="brand-section">
       <view class="logo-container">
-        <image class="logo" src="/assets/images/logo.png" mode="aspectFit" />
+        <image class="logo" src="{{oss.ossResize('https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/logo.png', 192, 192, 'lfit')}}" mode="aspectFit" />
       </view>
       <view class="brand-name">18线</view>
       <view class="brand-tagline">探索未至之境</view>
@@ -22,7 +23,7 @@
     <view class="actions-section">
       <!-- Main login button -->
       <view class="login-btn {{loading ? 'login-btn--loading' : ''}}" bindtap="handleLogin">
-        <image class="wechat-icon" src="/assets/images/icon-wechat.svg" mode="aspectFit" />
+        <image class="wechat-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-wechat.svg" mode="aspectFit" />
         <text class="login-btn-text">{{loading ? '登录中...' : '一键授权登录'}}</text>
       </view>
 
@@ -30,7 +31,7 @@
       <view class="compliance-row">
         <view class="checkbox-container" bindtap="toggleAgreed">
           <view class="checkbox {{agreed ? 'checkbox--checked' : ''}}">
-            <image wx:if="{{agreed}}" class="check-icon" src="/assets/images/icon-check-white.svg" mode="aspectFit" />
+            <image wx:if="{{agreed}}" class="check-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-check-white.svg" mode="aspectFit" />
           </view>
         </view>
         <view class="compliance-text">

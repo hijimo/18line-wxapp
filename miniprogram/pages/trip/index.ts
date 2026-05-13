@@ -50,8 +50,8 @@ Page({
           date: item.startDate || '',
           days: item.days || 0,
           distance: '',
-          image: '/assets/images/lingyin-temple.png',
-          days_detail: (item.daysList || []).map((d, i) => ({
+          image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/lingyin-temple.png',
+          days_detail: (item.daysList || []).map((_, i) => ({
             day: i + 1,
             status: 'upcoming',
           })),

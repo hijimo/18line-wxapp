@@ -4,7 +4,7 @@ import { TOKEN_KEY } from '../../utils/request';
 Page({
   data: {
     userInfo: {
-      avatarUrl: '/assets/images/user-profile.png',
+      avatarUrl: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/user-profile.png',
       nickname: '林舒逸',
       role: '首席探索官',
     },
@@ -35,7 +35,7 @@ Page({
       if (tourist) {
         this.setData({
           'userInfo.nickname': tourist.nickname || '林舒逸',
-          'userInfo.avatarUrl': tourist.avatarUrl || '/assets/images/user-profile.png',
+          'userInfo.avatarUrl': tourist.avatarUrl || 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/user-profile.png',
         });
       }
     } catch (err) {

@@ -1,4 +1,5 @@
 <!--pages/journeys/index.wxml-->
+<wxs src="../../utils/oss.wxs" module="oss" />
 <view class="page-container">
   <navigation-bar title="我的旅途" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
 
@@ -23,7 +24,7 @@
   <scroll-view class="scrollarea" scroll-y type="list">
     <view class="journey-list">
       <view wx:for="{{journeys}}" wx:key="id" class="journey-card" bindtap="onJourneyTap" data-id="{{item.id}}">
-        <image class="journey-image" src="{{item.image}}" mode="aspectFill" />
+        <image class="journey-image" src="{{oss.ossResize(item.image, 200, 150)}}" mode="aspectFill" />
         <view class="journey-info">
           <view class="journey-top">
             <text class="journey-title">{{item.title}}</text>
@@ -32,7 +33,7 @@
             </view>
           </view>
           <view class="journey-meta">
-            <image class="meta-icon" src="/assets/images/icon-calendar.svg" mode="aspectFit" />
+            <image class="meta-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-calendar.svg" mode="aspectFit" />
             <text class="meta-text">{{item.date}}</text>
             <text class="meta-dot">·</text>
             <text class="meta-text">{{item.location}}</text>
@@ -42,7 +43,7 @@
               <text wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this" class="journey-tag">{{tag}}</text>
             </view>
             <view wx:if="{{item.rating}}" class="journey-rating">
-              <image class="rating-icon" src="/assets/images/icon-star.svg" mode="aspectFit" />
+              <image class="rating-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-star.svg" mode="aspectFit" />
               <text class="rating-text">{{item.rating}}</text>
             </view>
           </view>

@@ -3,7 +3,7 @@ import Uploader from '../../utils/Uploader';
 
 Page({
   data: {
-    avatarUrl: '/assets/images/user-profile.png',
+    avatarUrl: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/user-profile.png',
     nickname: '',
     role: '',
     birthYear: '',
@@ -30,7 +30,7 @@ Page({
       const tourist = res.data;
       if (tourist) {
         this.setData({
-          avatarUrl: tourist.avatarUrl || '/assets/images/user-profile.png',
+          avatarUrl: tourist.avatarUrl || 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/user-profile.png',
           nickname: tourist.nickname || '',
         });
       }

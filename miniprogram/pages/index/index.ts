@@ -4,14 +4,14 @@ import { getItineraryList } from '../../services/itinerary';
 Component({
   data: {
     userInfo: {
-      avatarUrl: '/assets/images/user-profile.png',
+      avatarUrl: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/user-profile.png',
       nickName: '',
     },
     hasJourneys: true,
     banners: [
       {
         id: 'songyang-3d',
-        image: '/assets/images/hero-banner-songyang.png',
+        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/hero-banner-songyang.png',
         tag: 'NEW EXPEDITION',
         title: '松阳.经典3天2晚\n盲游',
         description:
@@ -22,7 +22,7 @@ Component({
       },
       {
         id: 'lingyin-tour',
-        image: '/assets/images/lingyin-temple.png',
+        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/lingyin-temple.png',
         tag: 'HIDDEN JOURNEY',
         title: '灵隐.寻宝之旅',
         description:
@@ -45,9 +45,9 @@ Component({
         ],
         currentGoal: '永福寺隐秘茶室探寻',
         locations: [
-          { image: '/assets/images/lingyin-temple.png' },
-          { image: '/assets/images/bamboo-forest.png' },
-          { image: '/assets/images/hidden-tea-house.png' },
+          { image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/lingyin-temple.png' },
+          { image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/bamboo-forest.png' },
+          { image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/hidden-tea-house.png' },
         ],
       },
       {
@@ -62,9 +62,9 @@ Component({
         ],
         currentGoal: '杨家堂古村探访',
         locations: [
-          { image: '/assets/images/yangjiatang.png' },
-          { image: '/assets/images/xianfeng-bookstore.png' },
-          { image: '/assets/images/huang-family-compound.png' },
+          { image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/yangjiatang.png' },
+          { image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/xianfeng-bookstore.png' },
+          { image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/huang-family-compound.png' },
         ],
       },
     ],
@@ -72,7 +72,7 @@ Component({
     inspirationCards: [
       {
         id: 'golden-sunset',
-        image: '/assets/images/golden-sunset.png',
+        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/golden-sunset.png',
         rating: '4.9',
         tag: 'PHOTOGRAPHY',
         tagColor: 'green',
@@ -81,7 +81,7 @@ Component({
       },
       {
         id: 'secret-paddle',
-        image: '/assets/images/paddle-boarding.png',
+        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/paddle-boarding.png',
         rating: '4.8',
         tag: 'SPORTY',
         tagColor: 'brown',
@@ -90,7 +90,7 @@ Component({
       },
       {
         id: 'cloud-trek',
-        image: '/assets/images/mountain-trek.png',
+        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/mountain-trek.png',
         rating: '5.0',
         tag: 'ADVENTUROUS',
         tagColor: 'dark',
@@ -106,7 +106,7 @@ Component({
         description: '江南地区的"布达拉宫"，土黄色的民居错落有致。',
         duration: '1.5h',
         distance: '2.4km',
-        image: '/assets/images/yangjiatang.png',
+        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/yangjiatang.png',
       },
       {
         id: 'xianfeng',
@@ -115,7 +115,7 @@ Component({
         description: '陈家铺村里的精神高地，在云雾中阅读时光。',
         duration: '2.0h',
         distance: '3.1km',
-        image: '/assets/images/xianfeng-bookstore.png',
+        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/xianfeng-bookstore.png',
       },
       {
         id: 'huang-compound',
@@ -124,7 +124,7 @@ Component({
         description: '木雕艺术的巅峰之作，讲述着松阳望族的兴衰。',
         duration: '1.0h',
         distance: '5.8km',
-        image: '/assets/images/huang-family-compound.png',
+        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/huang-family-compound.png',
       },
     ],
     foods: [
@@ -133,14 +133,14 @@ Component({
         name: '红烧大黄鱼',
         tag: 'MUST TRY',
         tagType: 'must-try',
-        image: '/assets/images/braised-croaker.png',
+        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/braised-croaker.png',
       },
       {
         id: 'mixed-fish-pot',
         name: '杂鱼煲',
         tag: 'SEASONAL',
         tagType: 'seasonal',
-        image: '/assets/images/mixed-fish-pot.png',
+        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/mixed-fish-pot.png',
       },
     ],
   },
@@ -158,7 +158,7 @@ Component({
         if (templates.length > 0) {
           const banners = templates.map((t: any) => ({
             id: String(t.templateId || ''),
-            image: t.coverImage || '/assets/images/hero-banner-songyang.png',
+            image: t.coverImage || 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/hero-banner-songyang.png',
             tag: t.tag || 'NEW EXPEDITION',
             title: t.templateName || '',
             description: t.description || '',

@@ -58,7 +58,7 @@ Page({
         return {
           id: item.itineraryId || 0,
           title: item.itineraryName || '未命名旅途',
-          image: '/assets/images/lingyin-temple.png',
+          image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/lingyin-temple.png',
           status: statusInfo.label,
           statusType: statusInfo.type,
           date: item.startDate || '',

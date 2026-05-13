@@ -1,5 +1,6 @@
 <!-- survey/index.wxml -->
 <wxs src="../../utils/array.wxs" module="arr" />
+<wxs src="../../utils/oss.wxs" module="oss" />
 <view class="survey-page">
   <navigation-bar title="我的旅游特性" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
 
@@ -10,9 +11,9 @@
       <!-- Avatar section -->
       <view class="avatar-section">
         <view class="avatar-ring">
-          <image class="avatar-img" src="/assets/images/user-profile.png" mode="aspectFill" />
+          <image class="avatar-img" src="{{oss.ossResize('https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/user-profile.png', 144, 144)}}" mode="aspectFill" />
           <view class="avatar-edit-btn">
-            <image class="edit-icon" src="/assets/images/icon-edit-pen.svg" mode="aspectFit" />
+            <image class="edit-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-edit-pen.svg" mode="aspectFit" />
           </view>
         </view>
       </view>
@@ -57,7 +58,7 @@
       <!-- Food preferences -->
       <view class="pref-section">
         <view class="pref-header">
-          <image class="pref-icon" src="/assets/images/icon-food-section.svg" mode="aspectFit" />
+          <image class="pref-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-food-section.svg" mode="aspectFit" />
           <text class="pref-title">饮食偏好</text>
         </view>
         <view class="chip-grid">
@@ -76,7 +77,7 @@
       <!-- Accommodation preferences -->
       <view class="pref-section">
         <view class="pref-header">
-          <image class="pref-icon" src="/assets/images/icon-accom-section.svg" mode="aspectFit" />
+          <image class="pref-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-accom-section.svg" mode="aspectFit" />
           <text class="pref-title">住宿偏好</text>
         </view>
         <view class="accom-grid">
@@ -120,7 +121,7 @@
         >
           <text class="soul-label">{{item.label}}</text>
           <view class="soul-check {{arr.includes(selectedSoul, item.id) ? 'visible' : ''}}">
-            <image class="soul-check-icon" src="/assets/images/icon-check-active.svg" mode="aspectFit" />
+            <image class="soul-check-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-check-active.svg" mode="aspectFit" />
           </view>
         </view>
       </view>
@@ -128,7 +129,7 @@
       <!-- Blind mode toggle -->
       <view class="blind-mode-section">
         <view class="blind-mode-header">
-          <image class="blind-icon" src="/assets/images/icon-blind-mode.svg" mode="aspectFit" />
+          <image class="blind-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-blind-mode.svg" mode="aspectFit" />
           <text class="blind-title">盲游模式</text>
         </view>
         <text class="blind-desc">您希望在抵达前保留多少惊喜？</text>

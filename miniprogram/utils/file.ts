@@ -1,9 +1,8 @@
-// 图标路径 - 请将对应图片放到 /assets/files/ 目录下
-const docIcon = '/assets/files/doc.png';
-const pdfIcon = '/assets/files/pdf.png';
-const txtIcon = '/assets/files/txt.png';
-const xlsIcon = '/assets/files/xls.png';
-const otherIcon = '/assets/files/other.png';
+const docIcon = 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-faq.svg';
+const pdfIcon = 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-faq.svg';
+const txtIcon = 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-faq.svg';
+const xlsIcon = 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-faq.svg';
+const otherIcon = 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-faq.svg';
 
 const ImageExtList = ['.jpeg', '.jpg', '.png', '.gif', '.webp'];
 const VideoExtList = ['.mp4'];

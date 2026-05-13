@@ -25,7 +25,7 @@
       <block wx:if="{{currentTab === 'nearby'}}">
         <!-- Location hint -->
         <view class="location-hint">
-          <image class="location-icon" src="/assets/images/icon-distance.svg" mode="aspectFit" />
+          <image class="location-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-distance.svg" mode="aspectFit" />
           <text class="location-text">当前位置：{{currentLocation}}</text>
         </view>
 
@@ -34,7 +34,7 @@
           <view class="treasure-card" wx:for="{{nearbyTreasures}}" wx:key="id" bindtap="onTreasureTap" data-id="{{item.id}}">
             <view class="treasure-card-left">
               <view class="treasure-icon-wrap treasure-icon--{{item.rarity}}">
-                <image class="treasure-icon" src="/assets/images/icon-star.svg" mode="aspectFit" />
+                <image class="treasure-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-star.svg" mode="aspectFit" />
               </view>
             </view>
             <view class="treasure-card-center">
@@ -45,13 +45,13 @@
                   <text class="meta-tag-text">{{item.rarityLabel}}</text>
                 </view>
                 <view class="meta-distance">
-                  <image class="meta-icon" src="/assets/images/icon-distance.svg" mode="aspectFit" />
+                  <image class="meta-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-distance.svg" mode="aspectFit" />
                   <text class="meta-text">{{item.distance}}</text>
                 </view>
               </view>
             </view>
             <view class="treasure-card-right">
-              <image class="arrow-icon" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+              <image class="arrow-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-chevron-right.svg" mode="aspectFit" />
             </view>
           </view>
         </view>
@@ -64,7 +64,7 @@
             <view class="treasure-card" wx:for="{{myTreasures}}" wx:key="id" bindtap="onTreasureTap" data-id="{{item.id}}">
               <view class="treasure-card-left">
                 <view class="treasure-icon-wrap treasure-icon--{{item.rarity}}">
-                  <image class="treasure-icon" src="/assets/images/icon-star.svg" mode="aspectFit" />
+                  <image class="treasure-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-star.svg" mode="aspectFit" />
                 </view>
               </view>
               <view class="treasure-card-center">
@@ -77,13 +77,13 @@
                 </view>
               </view>
               <view class="treasure-card-right">
-                <image class="arrow-icon" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+                <image class="arrow-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-chevron-right.svg" mode="aspectFit" />
               </view>
             </view>
           </view>
         </block>
         <view wx:else class="empty-state">
-          <image class="empty-icon" src="/assets/images/icon-star.svg" mode="aspectFit" />
+          <image class="empty-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-star.svg" mode="aspectFit" />
           <text class="empty-title">暂无收藏的宝藏</text>
           <text class="empty-desc">发现感兴趣的宝藏后可以收藏</text>
         </view>
@@ -96,7 +96,7 @@
             <view class="treasure-card treasure-card--found" wx:for="{{foundTreasures}}" wx:key="id">
               <view class="treasure-card-left">
                 <view class="treasure-icon-wrap treasure-icon--found">
-                  <image class="treasure-icon" src="/assets/images/icon-check.svg" mode="aspectFit" />
+                  <image class="treasure-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-check.svg" mode="aspectFit" />
                 </view>
               </view>
               <view class="treasure-card-center">
@@ -107,7 +107,7 @@
           </view>
         </block>
         <view wx:else class="empty-state">
-          <image class="empty-icon" src="/assets/images/icon-check.svg" mode="aspectFit" />
+          <image class="empty-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-check.svg" mode="aspectFit" />
           <text class="empty-title">暂无已发现的宝藏</text>
           <text class="empty-desc">去附近探索，发现隐藏的宝藏吧</text>
         </view>

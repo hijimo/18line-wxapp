@@ -1,10 +1,11 @@
 <!--journey-card.wxml-->
+<wxs src="../../utils/oss.wxs" module="oss" />
 <view class="journey-section">
   <!-- Empty State -->
   <view wx:if="{{!journeys || journeys.length === 0}}" class="empty-state">
     <view class="empty-state-inner">
       <view class="empty-icon-wrapper">
-        <image class="empty-icon" src="/assets/images/icon-target.svg" mode="aspectFit" />
+        <image class="empty-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-target.svg" mode="aspectFit" />
       </view>
       <view class="empty-text-group">
         <text class="empty-title">还没有行程安排</text>
@@ -12,7 +13,7 @@
       </view>
       <view class="empty-action" bindtap="onCreateTrip">
         <text class="empty-action-text">创建行程</text>
-        <image class="empty-action-arrow" src="/assets/images/icon-arrow-right.svg" mode="aspectFit" />
+        <image class="empty-action-arrow" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-arrow-right.svg" mode="aspectFit" />
       </view>
     </view>
   </view>
@@ -28,7 +29,7 @@
               <view class="progress-left">
                 <text class="progress-title">{{item.title}}</text>
                 <view class="progress-date">
-                  <image class="icon-calendar" src="/assets/images/icon-calendar.svg" />
+                  <image class="icon-calendar" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-calendar.svg" />
                   <text class="progress-date-text">{{item.date}}</text>
                 </view>
               </view>
@@ -44,7 +45,7 @@
               <view class="tracker-dots">
                 <view wx:for="{{item.days}}" wx:key="day" wx:for-item="day" class="day-item {{day.status === 'completed' ? 'day-completed' : day.status === 'active' ? 'day-active' : 'day-upcoming'}}">
                   <view class="day-dot">
-                    <image wx:if="{{day.status === 'completed'}}" class="icon-check" src="/assets/images/icon-check.svg" />
+                    <image wx:if="{{day.status === 'completed'}}" class="icon-check" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-check.svg" />
                     <text wx:else class="day-number">{{day.number}}</text>
                   </view>
                   <text class="day-label">{{day.label}}</text>
@@ -63,7 +64,7 @@
 
             <!-- Current Goal -->
             <view wx:if="{{item.currentGoal}}" class="current-goal">
-              <image class="icon-target" src="/assets/images/icon-target.svg" />
+              <image class="icon-target" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-target.svg" />
               <view class="goal-text">
                 <text class="goal-label">当前目标</text>
                 <text class="goal-title">{{item.currentGoal}}</text>
@@ -73,15 +74,15 @@
             <!-- Location Images -->
             <view wx:if="{{item.locations && item.locations.length >= 3}}" class="location-images">
               <view class="location-main">
-                <image class="location-main-img" src="{{item.locations[0].image}}" mode="aspectFill" />
+                <image class="location-main-img" src="{{oss.ossResize(item.locations[0].image, 350, 384)}}" mode="aspectFill" />
                 <view class="location-overlay" />
               </view>
               <view class="location-side">
                 <view class="location-side-item">
-                  <image class="location-side-img" src="{{item.locations[1].image}}" mode="aspectFill" />
+                  <image class="location-side-img" src="{{oss.ossResize(item.locations[1].image, 210, 180)}}" mode="aspectFill" />
                 </view>
                 <view class="location-side-item">
-                  <image class="location-side-img" src="{{item.locations[2].image}}" mode="aspectFill" />
+                  <image class="location-side-img" src="{{oss.ossResize(item.locations[2].image, 210, 180)}}" mode="aspectFill" />
                 </view>
               </view>
             </view>

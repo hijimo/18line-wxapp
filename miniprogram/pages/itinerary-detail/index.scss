@@ -1,19 +1,33 @@
 page {
   height: 100vh;
-  display: flex;
-  flex-direction: column;
   background: #f9faf4;
+  overflow: hidden;
 }
 
 .page-container {
   height: 100vh;
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background: #f9faf4;
+}
+
+.nav-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  pointer-events: auto;
 }
 
 /* Loading State */
 .loading-state {
-  flex: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,14 +57,19 @@ page {
 
 /* Map Section */
 .map-section {
-  position: relative;
-  width: 100%;
-  height: 400rpx;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
 }
 
 .route-map {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 }
 
 .map-gradient-overlay {
@@ -58,23 +77,65 @@ page {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 80rpx;
-  background: linear-gradient(to bottom, rgba(249, 250, 244, 0), #f9faf4);
+  height: 320rpx;
+  background: linear-gradient(to bottom, rgba(249, 250, 244, 0), rgba(249, 250, 244, 0.88));
   pointer-events: none;
+}
+
+/* Detail Drawer */
+.detail-drawer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  min-height: 20vh;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #f9faf4;
+  border-radius: 40rpx 40rpx 0 0;
+  box-shadow: 0 -16rpx 48rpx rgba(22, 52, 34, 0.16);
+  transition: height 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: height;
+}
+
+.detail-drawer--dragging {
+  transition: none;
+}
+
+.detail-drawer--20 {
+  box-shadow: 0 -12rpx 40rpx rgba(22, 52, 34, 0.14);
 }
 
 /* Info Card */
 .info-card {
-  margin: 24rpx 48rpx 0;
-  margin-top: -32px;
+  margin: 16rpx 32rpx 0;
   position: relative;
   background: #ffffff;
-  border-radius: 32rpx;
-  padding: 32rpx;
+  border-radius: 28rpx;
+  padding: 16rpx 28rpx 28rpx;
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
-  box-shadow: 0 4rpx 24rpx rgba(22, 52, 34, 0.04);
+  gap: 18rpx;
+  box-shadow: 0 8rpx 28rpx rgba(22, 52, 34, 0.08);
+  flex: none;
+}
+
+.drawer-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32rpx;
+  margin: -2rpx 0 2rpx;
+}
+
+.drawer-handle-bar {
+  width: 72rpx;
+  height: 8rpx;
+  border-radius: 9999rpx;
+  background: rgba(22, 52, 34, 0.22);
 }
 
 .info-header {
@@ -88,6 +149,10 @@ page {
   font-weight: 700;
   color: #163422;
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .info-status {
@@ -105,12 +170,15 @@ page {
 .info-meta {
   display: flex;
   gap: 32rpx;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .meta-item {
   display: flex;
   align-items: center;
   gap: 8rpx;
+  min-width: 0;
 }
 
 .meta-icon {
@@ -122,15 +190,16 @@ page {
 .meta-text {
   font-size: 24rpx;
   color: rgba(22, 52, 34, 0.6);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Day Navigation */
 .day-nav-wrapper {
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  flex: none;
   background: #f9faf4;
-  padding: 24rpx 0 16rpx;
+  padding: 20rpx 0 12rpx;
 }
 
 .day-nav {
@@ -141,7 +210,7 @@ page {
 .day-nav-inner {
   display: inline-flex;
   gap: 16rpx;
-  padding: 0 48rpx;
+  padding: 0 32rpx;
 }
 
 .day-tab {
@@ -185,13 +254,19 @@ page {
 
 /* Scroll Area */
 .scrollarea {
+  height: 0;
   flex: 1;
+  min-height: 0;
   overflow-y: hidden;
+}
+
+.detail-drawer--20 .scrollarea {
+  overflow: hidden;
 }
 
 /* Timeline */
 .timeline {
-  padding: 24rpx 48rpx 48rpx;
+  padding: 20rpx 32rpx 48rpx;
   display: flex;
   flex-direction: column;
   gap: 32rpx;
@@ -257,6 +332,7 @@ page {
 
 /* Template bottom bar */
 .template-bottom-bar {
+  flex: none;
   padding: 24rpx 48rpx;
   padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
   background: rgba(249, 250, 244, 0.9);

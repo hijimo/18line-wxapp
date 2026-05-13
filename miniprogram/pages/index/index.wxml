@@ -10,11 +10,11 @@
     <text class="top-bar-brand">寻秘</text>
   </view>
   <view class="top-bar-search">
-    <image class="top-bar-search-icon" src="/assets/images/icon-search.svg" mode="aspectFit" />
+    <image class="top-bar-search-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-search.svg" mode="aspectFit" />
     <text class="top-bar-search-placeholder">寻找神秘之旅...</text>
   </view>
   <view class="top-bar-bell" bindtap="onBellTap">
-    <image class="top-bar-bell-icon" src="/assets/images/icon-bell.svg" mode="aspectFit" />
+    <image class="top-bar-bell-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-bell.svg" mode="aspectFit" />
   </view>
 </view>
 
@@ -42,7 +42,7 @@
       <block wx:else>
         <view class="journey-empty-card">
           <view class="journey-empty-icon-wrap">
-            <image class="journey-empty-icon" src="/assets/images/icon-empty-journey.svg" mode="aspectFit" />
+            <image class="journey-empty-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-empty-journey.svg" mode="aspectFit" />
           </view>
           <text class="journey-empty-text">开启您的第一段寻秘之旅</text>
           <view class="journey-empty-btn" bindtap="onAddTrip">

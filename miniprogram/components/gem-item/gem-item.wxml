@@ -1,7 +1,8 @@
 <!--gem-item.wxml-->
+<wxs src="../../utils/oss.wxs" module="oss" />
 <view class="gem-item" bindtap="onItemTap" data-id="{{item.id}}">
   <view class="gem-thumb-wrap">
-    <image class="gem-thumb" src="{{item.image}}" mode="aspectFill" />
+    <image class="gem-thumb" src="{{oss.ossResize(item.image, 160, 160)}}" mode="aspectFill" />
   </view>
   <view class="gem-info">
     <view class="gem-title-row">
@@ -11,11 +12,11 @@
     <text class="gem-desc">{{item.description}}</text>
     <view class="gem-meta">
       <view class="gem-meta-item">
-        <image class="icon-clock" src="/assets/images/icon-clock.svg" />
+        <image class="icon-clock" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-clock.svg" />
         <text class="gem-meta-text">{{item.duration}}</text>
       </view>
       <view class="gem-meta-item">
-        <image class="icon-distance" src="/assets/images/icon-distance.svg" />
+        <image class="icon-distance" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-distance.svg" />
         <text class="gem-meta-text">{{item.distance}}</text>
       </view>
     </view>

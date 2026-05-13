@@ -9,6 +9,44 @@ import { getMultiStopRoute } from '../../services/map';
 import type { Itinerary, TravelItineraryDay } from '../../types/itinerary';
 import type { TravelLocalSpecialtyDish } from '../../types/local-specialty';
 
+const DRAWER_LEVELS = [20, 60, 80] as const;
+const DEFAULT_DRAWER_HEIGHT = 60;
+const DRAWER_FLING_THRESHOLD = 0.35;
+const MAP_SCALE_BOOST = 2;
+const MAX_MAP_SCALE = 20;
+const MAP_FOCUS_SCREEN_OFFSET_RATIO = 0.28;
+
+let drawerWindowHeight = 1;
+let drawerTouchActive = false;
+let drawerTouchStartY = 0;
+let drawerTouchStartHeight = DEFAULT_DRAWER_HEIGHT;
+let drawerLastTouchY = 0;
+let drawerLastTouchTime = 0;
+let drawerVelocityY = 0;
+
+function clampDrawerHeight(height: number) {
+  return Math.min(DRAWER_LEVELS[2], Math.max(DRAWER_LEVELS[0], height));
+}
+
+function getNearestDrawerLevel(height: number) {
+  return DRAWER_LEVELS.reduce((nearest, level) =>
+    Math.abs(level - height) < Math.abs(nearest - height) ? level : nearest,
+  );
+}
+
+function getDrawerLevelIndex(level: number) {
+  const index = DRAWER_LEVELS.findIndex((item) => item === level);
+  return index >= 0 ? index : 1;
+}
+
+function getLatitudeOffsetForMapFocus(latitude: number, scale: number) {
+  const latitudeRadians = (latitude * Math.PI) / 180;
+  const degreesPerPixel =
+    (360 * Math.cos(latitudeRadians)) / (256 * Math.pow(2, scale));
+
+  return degreesPerPixel * drawerWindowHeight * MAP_FOCUS_SCREEN_OFFSET_RATIO;
+}
+
 Page({
   data: {
     itineraryId: 0,
@@ -33,9 +71,15 @@ Page({
     mapPolyline: [] as any[],
     mapCenter: { latitude: 28.45, longitude: 119.92 },
     mapScale: 12,
+    drawerHeight: DEFAULT_DRAWER_HEIGHT,
+    drawerHeightLevel: DEFAULT_DRAWER_HEIGHT,
+    drawerDragging: false,
   },
 
   onLoad(options: Record<string, string | undefined>) {
+    const systemInfo = wx.getSystemInfoSync();
+    drawerWindowHeight = systemInfo.windowHeight || 1;
+
     const rawId = options.id;
     const rawTemplateId = options.templateId;
 
@@ -270,6 +314,72 @@ Page({
     this.setData({ showIntroDrawer: '', introData: null });
   },
 
+  onDrawerTouchStart(e: any) {
+    if (drawerTouchActive) return;
+
+    const dragScope = e.currentTarget?.dataset?.dragScope;
+    const canDrag = this.data.drawerHeightLevel === 20 || dragScope === 'handle';
+
+    if (!canDrag) return;
+
+    const touch = e.touches?.[0];
+    if (!touch) return;
+
+    drawerTouchActive = true;
+    drawerTouchStartY = touch.clientY;
+    drawerTouchStartHeight = this.data.drawerHeight;
+    drawerLastTouchY = touch.clientY;
+    drawerLastTouchTime = Date.now();
+    drawerVelocityY = 0;
+
+    this.setData({ drawerDragging: true });
+  },
+
+  onDrawerTouchMove(e: any) {
+    if (!drawerTouchActive) return;
+
+    const touch = e.touches?.[0];
+    if (!touch) return;
+
+    const now = Date.now();
+    const deltaY = touch.clientY - drawerTouchStartY;
+    const nextHeight = clampDrawerHeight(
+      drawerTouchStartHeight - (deltaY / drawerWindowHeight) * 100,
+    );
+    const elapsed = Math.max(now - drawerLastTouchTime, 1);
+
+    drawerVelocityY = (touch.clientY - drawerLastTouchY) / elapsed;
+    drawerLastTouchY = touch.clientY;
+    drawerLastTouchTime = now;
+
+    this.setData({ drawerHeight: Number(nextHeight.toFixed(2)) });
+  },
+
+  onDrawerTouchEnd() {
+    if (!drawerTouchActive) return;
+
+    drawerTouchActive = false;
+
+    const nearestLevel = getNearestDrawerLevel(this.data.drawerHeight);
+    let targetLevel = nearestLevel;
+
+    if (Math.abs(drawerVelocityY) > DRAWER_FLING_THRESHOLD) {
+      const nearestIndex = getDrawerLevelIndex(nearestLevel);
+      const flingDirection = drawerVelocityY < 0 ? 1 : -1;
+      const targetIndex = Math.min(
+        DRAWER_LEVELS.length - 1,
+        Math.max(0, nearestIndex + flingDirection),
+      );
+      targetLevel = DRAWER_LEVELS[targetIndex];
+    }
+
+    this.setData({
+      drawerHeight: targetLevel,
+      drawerHeightLevel: targetLevel,
+      drawerDragging: false,
+    });
+  },
+
   async updateMapData(dayData: TravelItineraryDay | null) {
     if (!dayData || !dayData.attractionList || dayData.attractionList.length === 0) {
       this.setData({ mapMarkers: [], mapPolyline: [] });
@@ -289,7 +399,7 @@ Page({
       id: idx,
       latitude: a.latitude!,
       longitude: a.longitude!,
-      iconPath: '/assets/images/marker-pin.png',
+      iconPath: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/marker-pin.png?x-oss-process=image/resize,m_lfit,w_56,h_56',
       width: 28,
       height: 28,
       anchor: { x: 0.5, y: 1 },
@@ -320,7 +430,7 @@ Page({
       latSum += a.latitude!;
       lngSum += a.longitude!;
     });
-    const mapCenter = {
+    const routeCenter = {
       latitude: latSum / attractions.length,
       longitude: lngSum / attractions.length,
     };
@@ -338,8 +448,16 @@ Page({
       else if (maxDiff > 0.05) mapScale = 12;
       else mapScale = 13;
     }
+    mapScale = Math.min(MAX_MAP_SCALE, mapScale + MAP_SCALE_BOOST);
 
-    this.setData({ mapMarkers: markers, mapCenter, mapScale });
+    const mapCenter = {
+      latitude:
+        routeCenter.latitude -
+        getLatitudeOffsetForMapFocus(routeCenter.latitude, mapScale),
+      longitude: routeCenter.longitude,
+    };
+
+    this.setData({ mapMarkers: markers, mapPolyline: [], mapCenter, mapScale });
 
     if (attractions.length >= 2) {
       const stops = attractions.map((a) => ({
@@ -348,20 +466,22 @@ Page({
       }));
       try {
         const routePoints = await getMultiStopRoute(stops);
+        console.log('[Map] Setting polyline with points:', JSON.stringify(routePoints.slice(0, 3)), '... total:', routePoints.length);
         this.setData({
           mapPolyline: [{
             points: routePoints,
             color: '#163422',
-            width: 4,
+            width: 6,
             arrowLine: true,
           }],
         });
-      } catch {
+      } catch (err) {
+        console.error('[Map] getMultiStopRoute error:', err);
         this.setData({
           mapPolyline: [{
             points: stops,
             color: '#163422',
-            width: 4,
+            width: 6,
             arrowLine: true,
           }],
         });

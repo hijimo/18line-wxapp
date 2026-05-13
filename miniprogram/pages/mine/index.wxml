@@ -11,7 +11,7 @@
         <view class="avatar-wrapper" bindtap="goEditProfile">
           <image class="avatar" src="{{oss.ossResize(userInfo.avatarUrl, 120, 120)}}" mode="aspectFill" />
           <view class="avatar-edit-icon">
-            <image class="edit-icon" src="/assets/images/icon-edit.svg" mode="aspectFit" />
+            <image class="edit-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-edit.svg" mode="aspectFit" />
           </view>
         </view>
         <view class="profile-info">
@@ -34,7 +34,7 @@
         <view class="grid-3col">
           <view class="grid-item" bindtap="goJourneys" data-filter="pending">
             <view class="grid-icon-wrap">
-              <image class="grid-icon" src="/assets/images/icon-trip-pending.svg" mode="aspectFit" />
+              <image class="grid-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-trip-pending.svg" mode="aspectFit" />
               <view wx:if="{{journeyCount.pending > 0}}" class="badge">
                 <text class="badge-text">{{journeyCount.pending}}</text>
               </view>
@@ -43,13 +43,13 @@
           </view>
           <view class="grid-item" bindtap="goJourneys" data-filter="cancelled">
             <view class="grid-icon-wrap">
-              <image class="grid-icon" src="/assets/images/icon-trip-cancelled.svg" mode="aspectFit" />
+              <image class="grid-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-trip-cancelled.svg" mode="aspectFit" />
             </view>
             <text class="grid-label">已取消</text>
           </view>
           <view class="grid-item" bindtap="goJourneys" data-filter="completed">
             <view class="grid-icon-wrap">
-              <image class="grid-icon" src="/assets/images/icon-trip-completed.svg" mode="aspectFit" />
+              <image class="grid-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-trip-completed.svg" mode="aspectFit" />
             </view>
             <text class="grid-label">已完成</text>
           </view>
@@ -62,13 +62,13 @@
           <text class="section-title">我的寻宝</text>
           <view class="view-all">
             <text class="view-all-text">查看全部</text>
-            <image class="icon-arrow" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+            <image class="icon-arrow" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-chevron-right.svg" mode="aspectFit" />
           </view>
         </view>
         <view class="grid-3col">
           <view class="grid-item">
             <view class="grid-icon-wrap">
-              <image class="grid-icon" src="/assets/images/icon-clock.svg" mode="aspectFit" />
+              <image class="grid-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-clock.svg" mode="aspectFit" />
               <view wx:if="{{treasureCount.pending > 0}}" class="badge">
                 <text class="badge-text">{{treasureCount.pending}}</text>
               </view>
@@ -77,13 +77,13 @@
           </view>
           <view class="grid-item">
             <view class="grid-icon-wrap">
-              <image class="grid-icon" src="/assets/images/icon-calendar.svg" mode="aspectFit" />
+              <image class="grid-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-calendar.svg" mode="aspectFit" />
             </view>
             <text class="grid-label">已取消</text>
           </view>
           <view class="grid-item">
             <view class="grid-icon-wrap">
-              <image class="grid-icon" src="/assets/images/icon-check.svg" mode="aspectFit" />
+              <image class="grid-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-check.svg" mode="aspectFit" />
             </view>
             <text class="grid-label">已完成</text>
           </view>
@@ -95,27 +95,27 @@
         <view class="func-item" bindtap="goTravelTraits">
           <view class="func-item-left">
             <view class="func-icon-wrap func-icon-wrap--green">
-              <image class="func-icon" src="/assets/images/icon-travel-trait.svg" mode="aspectFit" />
+              <image class="func-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-travel-trait.svg" mode="aspectFit" />
             </view>
             <view class="func-text-wrap">
               <text class="func-title">我的旅游特性</text>
               <text class="func-subtitle">分析您的探险风格与偏好</text>
             </view>
           </view>
-          <image class="func-arrow" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+          <image class="func-arrow" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-chevron-right.svg" mode="aspectFit" />
         </view>
         <view class="func-divider" />
         <view class="func-item" bindtap="goFAQ">
           <view class="func-item-left">
             <view class="func-icon-wrap func-icon-wrap--grey">
-              <image class="func-icon" src="/assets/images/icon-faq.svg" mode="aspectFit" />
+              <image class="func-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-faq.svg" mode="aspectFit" />
             </view>
             <view class="func-text-wrap">
               <text class="func-title">常见问题</text>
               <text class="func-subtitle">获取帮助与系统支持</text>
             </view>
           </view>
-          <image class="func-arrow" src="/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+          <image class="func-arrow" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-chevron-right.svg" mode="aspectFit" />
         </view>
       </view>
 

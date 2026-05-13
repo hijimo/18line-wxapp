@@ -1,3 +1,4 @@
+<wxs src="../../utils/oss.wxs" module="oss" />
 <view class="page-container">
   <navigation-bar title="创建行程" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
 
@@ -5,7 +6,7 @@
     <view class="main-content">
       <!-- Hero Banner -->
       <view class="hero-section">
-        <image class="hero-image" src="/assets/images/hero-banner-songyang.png" mode="aspectFill" />
+        <image class="hero-image" src="{{oss.ossResize('https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/hero-banner-songyang.png', 654, 384)}}" mode="aspectFill" />
         <view class="hero-gradient" />
         <view class="hero-text-container">
           <text class="hero-title">开启一段新旅程</text>
@@ -21,7 +22,7 @@
         </view>
         <picker mode="region" bindchange="onRegionChange" value="{{regionValue}}">
           <view class="search-input">
-            <image class="search-icon" src="/assets/images/icon-search.svg" mode="aspectFit" />
+            <image class="search-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-search.svg" mode="aspectFit" />
             <text class="search-placeholder {{provinceName ? 'search-value' : ''}}">
               {{provinceName ? provinceName + ' ' + cityName + (districtName ? ' ' + districtName : '') : '搜索目的地、城市或景点'}}
             </text>
@@ -33,7 +34,7 @@
       <view class="section">
         <text class="section-subtitle">出发日期</text>
         <view class="date-card" bindtap="onDateTap">
-          <image class="date-icon" src="/assets/images/icon-calendar.svg" mode="aspectFit" />
+          <image class="date-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-calendar.svg" mode="aspectFit" />
           <text class="date-value {{startDate ? '' : 'date-placeholder'}}">
             {{startDate ? startDateDisplay + ' — ' + endDateDisplay : '选择出行日期'}}
           </text>
@@ -43,7 +44,7 @@
       <!-- Preferences -->
       <view class="section">
         <view class="section-header-with-icon">
-          <image class="section-icon" src="/assets/images/icon-travel-trait.svg" mode="aspectFit" />
+          <image class="section-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-travel-trait.svg" mode="aspectFit" />
           <text class="section-title">旅行偏好</text>
         </view>
         <view class="preference-grid">
@@ -78,7 +79,7 @@
               bindtap="onBlindModeSelect"
               data-value="{{true}}"
             >
-              <image class="toggle-icon" src="/assets/images/icon-blind-full.svg" mode="aspectFit" />
+              <image class="toggle-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-blind-full.svg" mode="aspectFit" />
               <text class="toggle-text {{blindMode ? 'toggle-text--active' : ''}}">全盲惊喜</text>
             </view>
             <view
@@ -86,7 +87,7 @@
               bindtap="onBlindModeSelect"
               data-value="{{false}}"
             >
-              <image class="toggle-icon" src="/assets/images/icon-blind-clear.svg" mode="aspectFit" />
+              <image class="toggle-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-blind-clear.svg" mode="aspectFit" />
               <text class="toggle-text {{!blindMode ? 'toggle-text--active' : ''}}">清晰路径</text>
             </view>
           </view>
@@ -99,12 +100,12 @@
   <view class="footer">
     <view class="footer-inner">
       <view class="btn-primary {{loading ? 'btn--disabled' : ''}}" bindtap="onAIPlan">
-        <image class="btn-icon" src="/assets/images/icon-target.svg" mode="aspectFit" />
+        <image class="btn-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-target.svg" mode="aspectFit" />
         <text class="btn-primary-text">AI 智能规划</text>
       </view>
       <view class="btn-secondary" bindtap="onManualPlan">
         <text class="btn-secondary-text">自主规划</text>
-        <image class="btn-secondary-arrow" src="/assets/images/icon-arrow-right.svg" mode="aspectFit" />
+        <image class="btn-secondary-arrow" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-arrow-right.svg" mode="aspectFit" />
       </view>
     </view>
   </view>
