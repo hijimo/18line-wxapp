@@ -118,27 +118,11 @@
     </view>
   </view>
 
-  <!-- Date Picker Modal -->
-  <view wx:if="{{showDatePicker}}" class="date-picker-overlay" bindtap="onCloseDatePicker">
-    <view class="date-picker-modal" catchtap="">
-      <view class="date-picker-header">
-        <text class="date-picker-title">选择出行日期</text>
-        <text class="date-picker-confirm" bindtap="onConfirmDate">确定</text>
-      </view>
-      <view class="date-picker-body">
-        <view class="date-picker-row">
-          <text class="date-picker-label">开始日期</text>
-          <picker mode="date" bindchange="onStartDateChange" value="{{startDate}}">
-            <text class="date-picker-value {{startDate ? '' : 'date-placeholder'}}">{{startDate || '请选择'}}</text>
-          </picker>
-        </view>
-        <view class="date-picker-row">
-          <text class="date-picker-label">结束日期</text>
-          <picker mode="date" bindchange="onEndDateChange" value="{{endDate}}" start="{{startDate}}">
-            <text class="date-picker-value {{endDate ? '' : 'date-placeholder'}}">{{endDate || '请选择'}}</text>
-          </picker>
-        </view>
-      </view>
-    </view>
-  </view>
+  <travel-date-picker
+    show="{{showDatePicker}}"
+    startDate="{{startDate}}"
+    endDate="{{endDate}}"
+    bind:close="onCloseDatePicker"
+    bind:confirm="onDateConfirm"
+  />
 </view>

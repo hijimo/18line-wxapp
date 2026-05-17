@@ -2,6 +2,7 @@ import {
   getItinerary,
   getItineraryList,
   autoGenerateItinerary,
+  editItinerary,
 } from '../../services/itinerary';
 import { getTemplateDetail } from '../../services/template';
 import { getLocalSpecialtyList } from '../../services/local-specialty';
@@ -68,12 +69,28 @@ function formatMonthDay(date: Date) {
 
 function formatDateRange(startDate?: string, days?: number) {
   const start = parseLocalDate(startDate);
-  if (!start || !days || days <= 0) return '';
+  if (!start || !days || days <= 0) return '选择出行日期';
 
   const end = new Date(start.getTime());
   end.setDate(start.getDate() + days - 1);
 
   return `${formatMonthDay(start)} - ${formatMonthDay(end)}`;
+}
+
+function formatInputDate(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function getEndDate(startDate?: string, days?: number) {
+  const start = parseLocalDate(startDate);
+  if (!start || !days || days <= 0) return '';
+
+  const end = new Date(start.getTime());
+  end.setDate(start.getDate() + days - 1);
+  return formatInputDate(end);
 }
 
 function normalizeItineraryDisplay(itinerary: Itinerary): Itinerary {
@@ -110,6 +127,8 @@ Page({
     drawerHeight: DEFAULT_DRAWER_HEIGHT,
     drawerHeightLevel: DEFAULT_DRAWER_HEIGHT,
     drawerDragging: false,
+    showDatePicker: false,
+    datePickerEndDate: '',
   },
 
   onLoad(options: Record<string, string | undefined>) {
@@ -337,6 +356,51 @@ Page({
     const { showAddDrawer } = this.data;
     if (showAddDrawer) return; // 抽屉互斥
     this.setData({ showIntroDrawer: type, introData: data });
+  },
+
+  onDateMetaTap() {
+    const { itinerary, isTemplate } = this.data;
+    if (isTemplate) {
+      wx.showToast({ title: '模板暂不支持设置日期', icon: 'none' });
+      return;
+    }
+
+    this.setData({
+      showDatePicker: true,
+      datePickerEndDate: getEndDate(itinerary?.startDate, itinerary?.days),
+    });
+  },
+
+  onDatePickerClose() {
+    this.setData({ showDatePicker: false });
+  },
+
+  async onDateConfirm(e: any) {
+    const { itineraryId, itinerary } = this.data;
+    const { startDate, days } = e.detail;
+    if (!itineraryId || !itinerary) return;
+
+    wx.showLoading({ title: '保存中...' });
+    try {
+      await editItinerary({ itineraryId, startDate, days });
+      const nextItinerary = normalizeItineraryDisplay({
+        ...itinerary,
+        startDate,
+        days,
+      });
+
+      this.setData({
+        itinerary: nextItinerary,
+        showDatePicker: false,
+        datePickerEndDate: getEndDate(startDate, days),
+      });
+      wx.hideLoading();
+      wx.showToast({ title: '已保存', icon: 'success' });
+    } catch (err) {
+      console.error('Failed to update itinerary date:', err);
+      wx.hideLoading();
+      wx.showToast({ title: '保存失败，请重试', icon: 'none' });
+    }
   },
 
   onScheduleRefresh() {

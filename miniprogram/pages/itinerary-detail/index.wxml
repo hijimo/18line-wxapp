@@ -36,15 +36,17 @@
       bindtouchcancel="onDrawerTouchEnd"
     >
       <!-- 行程信息卡 -->
-      <view
-        class="info-card"
-        data-drag-scope="handle"
-        catchtouchstart="onDrawerTouchStart"
-        catchtouchmove="onDrawerTouchMove"
-        catchtouchend="onDrawerTouchEnd"
-        catchtouchcancel="onDrawerTouchEnd"
-      >
-        <view class="drawer-handle" aria-role="button" aria-label="拖动调整详情高度">
+      <view class="info-card">
+        <view
+          class="drawer-handle"
+          aria-role="button"
+          aria-label="拖动调整详情高度"
+          data-drag-scope="handle"
+          catchtouchstart="onDrawerTouchStart"
+          catchtouchmove="onDrawerTouchMove"
+          catchtouchend="onDrawerTouchEnd"
+          catchtouchcancel="onDrawerTouchEnd"
+        >
           <view class="drawer-handle-bar" />
         </view>
         <view class="info-header">
@@ -58,9 +60,9 @@
             <image class="meta-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-distance.svg" mode="aspectFit" />
             <text class="meta-text">{{itinerary.cityName || itinerary.city || ''}}{{(itinerary.districtName || itinerary.district) ? ' · ' + (itinerary.districtName || itinerary.district) : ''}}</text>
           </view>
-          <view class="meta-item">
+          <view class="meta-item meta-item--date" bindtap="onDateMetaTap">
             <image class="meta-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-calendar.svg" mode="aspectFit" />
-            <text class="meta-text">{{itinerary.dateRangeText || ''}}</text>
+            <text class="meta-text {{itinerary.startDate ? '' : 'meta-text--placeholder'}}">{{itinerary.dateRangeText || '选择出行日期'}}</text>
           </view>
         </view>
       </view>
@@ -240,5 +242,12 @@
     show="{{showIntroDrawer === 'photography'}}"
     data="{{introData}}"
     bind:close="onIntroClose"
+  />
+  <travel-date-picker
+    show="{{showDatePicker}}"
+    startDate="{{itinerary.startDate || ''}}"
+    endDate="{{datePickerEndDate}}"
+    bind:close="onDatePickerClose"
+    bind:confirm="onDateConfirm"
   />
 </view>

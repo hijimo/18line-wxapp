@@ -1,0 +1,22 @@
+<view wx:if="{{show}}" class="date-picker-overlay" bindtap="onMaskTap">
+  <view class="date-picker-modal" catchtap="noop">
+    <view class="date-picker-header">
+      <text class="date-picker-title">{{title}}</text>
+      <text class="date-picker-confirm" bindtap="onConfirm">确定</text>
+    </view>
+    <view class="date-picker-body">
+      <view class="date-picker-row">
+        <text class="date-picker-label">开始日期</text>
+        <picker mode="date" bindchange="onStartDateChange" value="{{draftStartDate}}">
+          <text class="date-picker-value {{draftStartDate ? '' : 'date-placeholder'}}">{{draftStartDateDisplay || '请选择'}}</text>
+        </picker>
+      </view>
+      <view class="date-picker-row">
+        <text class="date-picker-label">结束日期</text>
+        <picker mode="date" bindchange="onEndDateChange" value="{{draftEndDate}}" start="{{draftStartDate}}">
+          <text class="date-picker-value {{draftEndDate ? '' : 'date-placeholder'}}">{{draftEndDateDisplay || '请选择'}}</text>
+        </picker>
+      </view>
+    </view>
+  </view>
+</view>

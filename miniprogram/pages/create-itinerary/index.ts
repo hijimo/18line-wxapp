@@ -70,29 +70,14 @@ Page({
     this.setData({ showDatePicker: false });
   },
 
-  onConfirmDate() {
-    this.setData({ showDatePicker: false });
-  },
-
-  formatDateDisplay(dateStr: string): string {
-    if (!dateStr) return '';
-    const parts = dateStr.split('-');
-    return `${parseInt(parts[1])}.${parseInt(parts[2])}`;
-  },
-
-  onStartDateChange(e: any) {
-    const startDate = e.detail.value;
+  onDateConfirm(e: any) {
+    const { startDate, endDate, startDateDisplay, endDateDisplay } = e.detail;
     this.setData({
       startDate,
-      startDateDisplay: this.formatDateDisplay(startDate),
-    });
-  },
-
-  onEndDateChange(e: any) {
-    const endDate = e.detail.value;
-    this.setData({
       endDate,
-      endDateDisplay: this.formatDateDisplay(endDate),
+      startDateDisplay,
+      endDateDisplay,
+      showDatePicker: false,
     });
   },
 

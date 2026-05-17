@@ -186,6 +186,14 @@ page {
   min-width: 0;
 }
 
+.meta-item--date {
+  max-width: 260rpx;
+  padding: 6rpx 14rpx 6rpx 8rpx;
+  margin: -6rpx -14rpx -6rpx -8rpx;
+  border-radius: 9999rpx;
+  background: rgba(148, 74, 0, 0.08);
+}
+
 .meta-icon {
   width: 28rpx;
   height: 28rpx;
@@ -198,6 +206,11 @@ page {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.meta-text--placeholder {
+  color: #944a00;
+  font-weight: 500;
 }
 
 /* Day Navigation */

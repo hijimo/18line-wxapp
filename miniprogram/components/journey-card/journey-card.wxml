@@ -70,6 +70,16 @@
                 <text class="goal-title">{{item.currentGoal}}</text>
               </view>
             </view>
+            <view wx:else class="current-goal current-goal--placeholder">
+              <view class="goal-placeholder-icon">
+                <image class="icon-target icon-target--placeholder" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-target.svg" />
+              </view>
+              <view class="goal-text">
+                <text class="goal-label">当前目标</text>
+                <text class="goal-title goal-title--placeholder">暂未设置探索目标</text>
+                <text class="goal-hint">进入行程后添加今天想完成的计划</text>
+              </view>
+            </view>
 
             <!-- Location Images -->
             <view wx:if="{{item.locations && item.locations.length >= 3}}" class="location-images">
@@ -83,6 +93,22 @@
                 </view>
                 <view class="location-side-item">
                   <image class="location-side-img" src="{{oss.ossResize(item.locations[2].image, 210, 180)}}" mode="aspectFill" />
+                </view>
+              </view>
+            </view>
+            <view wx:else class="location-images location-images--placeholder">
+              <view class="location-main location-placeholder-main">
+                <view class="location-placeholder-content">
+                  <text class="location-placeholder-title">目的地影像待补充</text>
+                  <text class="location-placeholder-desc">添加景点后会展示旅途画面</text>
+                </view>
+              </view>
+              <view class="location-side">
+                <view class="location-side-item location-placeholder-side">
+                  <view class="location-placeholder-dot" />
+                </view>
+                <view class="location-side-item location-placeholder-side location-placeholder-side--muted">
+                  <view class="location-placeholder-dot" />
                 </view>
               </view>
             </view>
