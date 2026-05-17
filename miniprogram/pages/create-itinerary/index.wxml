@@ -35,9 +35,9 @@
         <text class="section-subtitle">出发日期</text>
         <view class="date-card" bindtap="onDateTap">
           <image class="date-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-calendar.svg" mode="aspectFit" />
-          <text class="date-value {{startDate ? '' : 'date-placeholder'}}">
+          <view class="date-value {{startDate ? '' : 'date-placeholder'}}">
             {{startDate ? startDateDisplay + ' — ' + endDateDisplay : '选择出行日期'}}
-          </text>
+          </view>
         </view>
       </view>
 

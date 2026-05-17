@@ -78,7 +78,11 @@ page {
   left: 0;
   right: 0;
   height: 320rpx;
-  background: linear-gradient(to bottom, rgba(249, 250, 244, 0), rgba(249, 250, 244, 0.88));
+  background: linear-gradient(
+    to bottom,
+    rgba(249, 250, 244, 0),
+    rgba(249, 250, 244, 0.88)
+  );
   pointer-events: none;
 }
 
@@ -159,6 +163,7 @@ page {
   padding: 6rpx 16rpx;
   border-radius: 9999rpx;
   background: rgba(22, 52, 34, 0.08);
+  line-height: 1;
 }
 
 .info-status-text {

@@ -1,6 +1,6 @@
 <wxs src="../../utils/oss.wxs" module="oss" />
 <view class="container">
-  <navigation-bar title="" back="{{false}}" color="white" background="transparent"></navigation-bar>
+  
 
   <!-- Background image -->
   <image class="bg-image" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/login-bg.png" mode="aspectFill" />
