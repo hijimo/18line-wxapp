@@ -47,6 +47,42 @@ function getLatitudeOffsetForMapFocus(latitude: number, scale: number) {
   return degreesPerPixel * drawerWindowHeight * MAP_FOCUS_SCREEN_OFFSET_RATIO;
 }
 
+function parseLocalDate(value?: string) {
+  if (!value) return null;
+
+  const matched = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!matched) return null;
+
+  return new Date(
+    Number(matched[1]),
+    Number(matched[2]) - 1,
+    Number(matched[3]),
+  );
+}
+
+function formatMonthDay(date: Date) {
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${month}.${day}`;
+}
+
+function formatDateRange(startDate?: string, days?: number) {
+  const start = parseLocalDate(startDate);
+  if (!start || !days || days <= 0) return '';
+
+  const end = new Date(start.getTime());
+  end.setDate(start.getDate() + days - 1);
+
+  return `${formatMonthDay(start)} - ${formatMonthDay(end)}`;
+}
+
+function normalizeItineraryDisplay(itinerary: Itinerary): Itinerary {
+  return {
+    ...itinerary,
+    dateRangeText: formatDateRange(itinerary.startDate, itinerary.days),
+  };
+}
+
 Page({
   data: {
     itineraryId: 0,
@@ -135,11 +171,12 @@ Page({
         }),
       );
 
-      const itinerary: Itinerary = {
+      const itinerary: Itinerary = normalizeItineraryDisplay({
         itineraryId: 0,
         templateId,
         itineraryName: template.templateName,
         province: template.province,
+        provinceName: template.provinceName,
         city: template.city,
         cityName: template.cityName,
         district: template.district,
@@ -147,7 +184,7 @@ Page({
         days: template.baseDays || daysList.length,
         status: '0',
         daysList,
-      };
+      });
 
       const currentDayData =
         daysList.find((d) => d.dayNumber === currentDay) || daysList[0] || null;
@@ -238,12 +275,13 @@ Page({
         return;
       }
 
-      const daysList = itinerary.daysList || [];
+      const normalizedItinerary = normalizeItineraryDisplay(itinerary);
+      const daysList = normalizedItinerary.daysList || [];
       const currentDayData =
         daysList.find((d) => d.dayNumber === currentDay) || daysList[0] || null;
 
       this.setData({
-        itinerary,
+        itinerary: normalizedItinerary,
         currentDayData,
         currentDay: currentDayData?.dayNumber || 1,
         loading: false,
@@ -252,9 +290,9 @@ Page({
       this.updateMapData(currentDayData);
 
       this.loadLocalSpecialty(
-        itinerary.province,
-        itinerary.city,
-        itinerary.district,
+        normalizedItinerary.province,
+        normalizedItinerary.city,
+        normalizedItinerary.district,
       );
     } catch (err) {
       console.error('Failed to load itinerary:', err);
@@ -466,7 +504,6 @@ Page({
       }));
       try {
         const routePoints = await getMultiStopRoute(stops);
-        console.log('[Map] Setting polyline with points:', JSON.stringify(routePoints.slice(0, 3)), '... total:', routePoints.length);
         this.setData({
           mapPolyline: [{
             points: routePoints,

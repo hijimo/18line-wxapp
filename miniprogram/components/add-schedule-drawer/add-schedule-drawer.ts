@@ -55,8 +55,9 @@ Component({
 
   lifetimes: {
     attached() {
-      this._debounceTimer = null
-      this._pendingAttractionIds = [] as number[]
+      const instance = this as any
+      instance._debounceTimer = null
+      instance._pendingAttractionIds = [] as number[]
     },
   },
 
@@ -114,18 +115,19 @@ Component({
     async onItemSelect(e: any) {
       const { item } = e.currentTarget.dataset
       const { activeTab, itineraryId, dayNumber } = this.data as any
+      const instance = this as any
 
       try {
         switch (activeTab) {
           case 'attraction':
-            this._pendingAttractionIds.push(item.attractionId)
-            if (this._debounceTimer) {
-              clearTimeout(this._debounceTimer)
+            instance._pendingAttractionIds.push(item.attractionId)
+            if (instance._debounceTimer) {
+              clearTimeout(instance._debounceTimer)
             }
-            this._debounceTimer = setTimeout(async () => {
-              const ids = this._pendingAttractionIds.join(',')
+            instance._debounceTimer = setTimeout(async () => {
+              const ids = instance._pendingAttractionIds.join(',')
               await updateDayAttractions({ itineraryId, dayNumber, attractionIds: ids })
-              this._pendingAttractionIds = []
+              instance._pendingAttractionIds = []
               this.triggerEvent('refresh')
             }, 300)
             return
@@ -159,10 +161,10 @@ Component({
             }
             break
           case 'car':
-            await addCar(itineraryId, item.carId)
+            await addCar({ itineraryId, dayNumber, carId: item.carId })
             break
           case 'photography':
-            await addPhotography(itineraryId, item.photographyId)
+            await addPhotography({ itineraryId, dayNumber, photographyId: item.photographyId })
             break
         }
         wx.showToast({ title: '添加成功', icon: 'success' })

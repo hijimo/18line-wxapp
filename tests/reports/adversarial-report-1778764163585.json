@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-05-14T13:09:23.585Z",
+  "summary": {
+    "builderTotal": 2,
+    "builderPassed": 1,
+    "builderFailed": 1,
+    "reviewerTotal": 0,
+    "reviewerPassed": 0,
+    "reviewerFailed": 0,
+    "conflicts": 0
+  },
+  "conflicts": [],
+  "builderResults": [
+    {
+      "title": "[Unit] 地图路线服务 多点路线应请求腾讯步行路线接口",
+      "status": "failed",
+      "duration": 33,
+      "failureMessages": [
+        "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 1\n\n  Array [\n-   \"https://apis.map.qq.com/ws/direction/v1/walking/\",\n+   \"https://apis.map.qq.com/ws/direction/v1/driving/\",\n  ]\n    at Object.toEqual (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/agent-builder/map-route.test.js:67:27)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)"
+      ]
+    },
+    {
+      "title": "[Unit] 地图路线服务 腾讯地图返回度单位 polyline 时不应再次除以 1e6",
+      "status": "passed",
+      "duration": 6,
+      "failureMessages": []
+    }
+  ],
+  "reviewerResults": []
+}

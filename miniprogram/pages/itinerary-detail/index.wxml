@@ -60,7 +60,7 @@
           </view>
           <view class="meta-item">
             <image class="meta-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-calendar.svg" mode="aspectFit" />
-            <text class="meta-text">{{itinerary.startDate || ''}} · {{itinerary.days || 0}}天</text>
+            <text class="meta-text">{{itinerary.dateRangeText || ''}}</text>
           </view>
         </view>
       </view>

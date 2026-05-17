@@ -5,18 +5,17 @@ interface RoutePoint {
   longitude: number;
 }
 
-interface DrivingRouteResult {
+interface RouteResult {
   points: RoutePoint[];
 }
 
-export function getDrivingRoute(
+export function getWalkingRoute(
   from: RoutePoint,
   to: RoutePoint,
-): Promise<DrivingRouteResult> {
-  console.log('[Map] getDrivingRoute called:', from, '->', to);
+): Promise<RouteResult> {
   return new Promise((resolve) => {
     wx.request({
-      url: 'https://apis.map.qq.com/ws/direction/v1/driving/',
+      url: 'https://apis.map.qq.com/ws/direction/v1/walking/',
       data: {
         from: `${from.latitude},${from.longitude}`,
         to: `${to.latitude},${to.longitude}`,
@@ -24,17 +23,13 @@ export function getDrivingRoute(
       },
       success(res: any) {
         const data = res.data;
-        console.log('[Map] API response status:', data.status, 'message:', data.message);
         if (data.status !== 0 || !data.result?.routes?.length) {
           console.warn('[Map] Route API failed, falling back to straight line');
           resolve({ points: [from, to] });
           return;
         }
         const coors = data.result.routes[0].polyline;
-        console.log('[Map] Raw polyline first 10 values:', coors.slice(0, 10));
         const points = decodePolyline(coors);
-        console.log('[Map] Got route with', points.length, 'points');
-        console.log('[Map] First decoded point:', points[0]);
         resolve({ points });
       },
       fail(err: any) {
@@ -53,7 +48,7 @@ export async function getMultiStopRoute(
   const allPoints: RoutePoint[] = [];
 
   for (let i = 0; i < stops.length - 1; i++) {
-    const result = await getDrivingRoute(stops[i], stops[i + 1]);
+    const result = await getWalkingRoute(stops[i], stops[i + 1]);
     if (i === 0) {
       allPoints.push(...result.points);
     } else {
@@ -66,17 +61,16 @@ export async function getMultiStopRoute(
 
 function decodePolyline(encoded: number[]): RoutePoint[] {
   const points: RoutePoint[] = [];
-  // 腾讯地图polyline压缩：先解压差值，再累加
-  // 第一步：将压缩数组解压（每个值除以前一个值的差值）
+  // 腾讯地图 polyline：前两个值是度单位坐标，后续值是相对前一个同轴坐标的微度差值。
   const decoded = [...encoded];
   for (let i = 2; i < decoded.length; i++) {
-    decoded[i] = decoded[i - 2] + decoded[i];
+    decoded[i] = decoded[i - 2] + decoded[i] / 1e6;
   }
-  // 第二步：每两个值组成一个坐标点 (lat, lng)
+
   for (let i = 0; i < decoded.length; i += 2) {
     points.push({
-      latitude: decoded[i] / 1e6,
-      longitude: decoded[i + 1] / 1e6,
+      latitude: decoded[i],
+      longitude: decoded[i + 1],
     });
   }
   return points;

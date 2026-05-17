@@ -1,6 +1,35 @@
 import { getTemplateList } from '../../services/template';
 import { getItineraryList } from '../../services/itinerary';
 
+function parseLocalDate(value?: string) {
+  if (!value) return null;
+
+  const matched = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!matched) return null;
+
+  return new Date(
+    Number(matched[1]),
+    Number(matched[2]) - 1,
+    Number(matched[3]),
+  );
+}
+
+function formatMonthDay(date: Date) {
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${month}.${day}`;
+}
+
+function formatJourneyDateRange(startDate?: string, days?: number) {
+  const start = parseLocalDate(startDate);
+  if (!start || !days || days <= 0) return '';
+
+  const end = new Date(start.getTime());
+  end.setDate(start.getDate() + days - 1);
+
+  return `${formatMonthDay(start)}-${formatMonthDay(end)}`;
+}
+
 Component({
   data: {
     userInfo: {
@@ -36,7 +65,7 @@ Component({
       {
         id: 'lingyin',
         title: '灵隐寻宝之旅',
-        date: '2025.8.20 - 8.22',
+        date: '08.20-08.22',
         budget: '¥8000',
         days: [
           { day: 1, label: 'DAY 1', number: '01', status: 'completed' },
@@ -53,7 +82,7 @@ Component({
       {
         id: 'songyang-blind',
         title: '松阳盲游',
-        date: '2025.9.10 - 9.12',
+        date: '09.10-09.12',
         budget: '¥2499',
         days: [
           { day: 1, label: 'DAY 1', number: '01', status: 'active' },
@@ -181,7 +210,7 @@ Component({
           const journeys = list.map((item: any) => ({
             id: String(item.itineraryId || ''),
             title: item.itineraryName || '未命名旅途',
-            date: item.startDate || '',
+            date: formatJourneyDateRange(item.startDate, item.days),
             budget: item.totalCost ? `¥${item.totalCost}` : '',
             days: Array.from({ length: item.days || 0 }, (_, i) => ({
               day: i + 1,

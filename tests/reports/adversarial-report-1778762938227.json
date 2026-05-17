@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-05-14T12:48:58.227Z",
+  "summary": {
+    "builderTotal": 1,
+    "builderPassed": 1,
+    "builderFailed": 0,
+    "reviewerTotal": 0,
+    "reviewerPassed": 0,
+    "reviewerFailed": 0,
+    "conflicts": 0
+  },
+  "conflicts": [],
+  "builderResults": [
+    {
+      "title": "[Unit] 地图路线服务 腾讯地图返回度单位 polyline 时不应再次除以 1e6",
+      "status": "passed",
+      "duration": 40,
+      "failureMessages": []
+    }
+  ],
+  "reviewerResults": []
+}

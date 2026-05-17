@@ -40,6 +40,7 @@
 ## 静态资源与 OSS
 
 - 本项目的 `miniprogram/assets/images/` 图片资源默认上传到阿里云 OSS，后续页面和组件应优先使用 OSS 在线地址，避免继续扩大小程序包体积。
+- `tabBar` 图标是微信小程序配置项的特殊资源，必须放在本地 `miniprogram/assets/tabbar/`，并在 `miniprogram/app.json` 中使用本地相对路径；这些文件不上传 OSS，也不要替换成线上 URL。
 - OSS 上传工具是开发辅助工具，不属于小程序运行时代码。工具位于 `tools/oss/assets.mjs`。
 - 本地 OSS 参数放在 `.env.local`，不要提交真实 AccessKey；可参考 `.env.example`。
 - 上传全部图片：`pnpm upload:assets`。

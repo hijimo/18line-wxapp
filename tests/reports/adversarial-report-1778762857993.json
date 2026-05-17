@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-05-14T12:47:37.993Z",
+  "summary": {
+    "builderTotal": 1,
+    "builderPassed": 0,
+    "builderFailed": 1,
+    "reviewerTotal": 0,
+    "reviewerPassed": 0,
+    "reviewerFailed": 0,
+    "conflicts": 0
+  },
+  "conflicts": [],
+  "builderResults": [
+    {
+      "title": "[Unit] 地图路线服务 腾讯地图返回度单位 polyline 时不应再次除以 1e6",
+      "status": "failed",
+      "duration": 43,
+      "failureMessages": [
+        "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 2\n+ Received  + 2\n\n  Object {\n-   \"latitude\": 28.44433,\n-   \"longitude\": 119.486155,\n+   \"latitude\": 0.00002844433,\n+   \"longitude\": 0.00011948615499999999,\n  }\n    at Object.toEqual (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/agent-builder/map-route.test.js:67:30)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)"
+      ]
+    }
+  ],
+  "reviewerResults": []
+}

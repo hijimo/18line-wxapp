@@ -25,20 +25,20 @@
       {
         "pagePath": "pages/index/index",
         "text": "探索",
-        "iconPath": "https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/tab-explore.png",
-        "selectedIconPath": "https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/tab-explore-active.png"
+        "iconPath": "assets/tabbar/tab-explore.png",
+        "selectedIconPath": "assets/tabbar/tab-explore-active.png"
       },
       {
         "pagePath": "pages/treasure/index",
         "text": "集市",
-        "iconPath": "https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/tab-market.png",
-        "selectedIconPath": "https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/tab-market-active.png"
+        "iconPath": "assets/tabbar/tab-market.png",
+        "selectedIconPath": "assets/tabbar/tab-market-active.png"
       },
       {
         "pagePath": "pages/mine/index",
         "text": "我的",
-        "iconPath": "https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/tab-mine.png",
-        "selectedIconPath": "https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/tab-mine-active.png"
+        "iconPath": "assets/tabbar/tab-mine.png",
+        "selectedIconPath": "assets/tabbar/tab-mine-active.png"
       }
     ]
   },

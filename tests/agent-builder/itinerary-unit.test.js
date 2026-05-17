@@ -233,6 +233,20 @@ describe('[Unit] itinerary-detail 页面逻辑验证', () => {
   });
 });
 
+describe('[Unit] 首页行程卡片日期展示', () => {
+  let indexTs;
+
+  beforeAll(() => {
+    indexTs = readFile('pages/index/index.ts');
+  });
+
+  test('journey-card 使用 MM.DD-MM.DD 日期范围', () => {
+    expect(indexTs).toContain('function formatJourneyDateRange');
+    expect(indexTs).toContain("return `${formatMonthDay(start)}-${formatMonthDay(end)}`");
+    expect(indexTs).toContain('date: formatJourneyDateRange(item.startDate, item.days)');
+  });
+});
+
 describe('[Unit] add-schedule-drawer 逻辑验证', () => {
   let compTs;
 
@@ -278,6 +292,11 @@ describe('[Unit] add-schedule-drawer 逻辑验证', () => {
 
   test('导入了 addPhotography', () => {
     expect(compTs).toContain('addPhotography');
+  });
+
+  test('包车和跟拍添加时传入 dayNumber', () => {
+    expect(compTs).toContain('await addCar({ itineraryId, dayNumber, carId: item.carId })');
+    expect(compTs).toContain('await addPhotography({ itineraryId, dayNumber, photographyId: item.photographyId })');
   });
 
   test('包含 showActionSheet 餐饮选择', () => {
@@ -408,5 +427,23 @@ describe('[Unit] photography.ts 服务验证', () => {
 
   test('导入 TravelPhotography 类型', () => {
     expect(serviceTs).toContain('TravelPhotography');
+  });
+});
+
+describe('[Unit] itinerary.ts 服务路径验证', () => {
+  let serviceTs;
+
+  beforeAll(() => {
+    serviceTs = readFile('services/itinerary.ts');
+  });
+
+  test('包车添加接口使用日程维度路径', () => {
+    expect(serviceTs).toContain('`/wx/itinerary/${itineraryId}/day/${dayNumber}/car/add`');
+    expect(serviceTs).not.toContain('`/wx/itinerary/${itineraryId}/car/add`');
+  });
+
+  test('跟拍添加接口使用日程维度路径', () => {
+    expect(serviceTs).toContain('`/wx/itinerary/${itineraryId}/day/${dayNumber}/photography/add`');
+    expect(serviceTs).not.toContain('`/wx/itinerary/${itineraryId}/photography/add`');
   });
 });

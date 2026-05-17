@@ -78,6 +78,7 @@ export interface Itinerary {
   cityName?: string;
   districtName?: string;
   startDate?: string;
+  dateRangeText?: string;
   days?: number;
   status?: string;
   statusLabel?: string;
@@ -119,4 +120,16 @@ export interface UpdateDayAccommodationParams {
   itineraryId: number;
   dayNumber: number;
   accommodationId: number;
+}
+
+export interface AddItineraryCarParams {
+  itineraryId: number;
+  dayNumber: number;
+  carId: number;
+}
+
+export interface AddItineraryPhotographyParams {
+  itineraryId: number;
+  dayNumber: number;
+  photographyId: number;
 }

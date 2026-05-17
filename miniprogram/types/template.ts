@@ -14,6 +14,10 @@ export interface Template {
   days?: number;
   province?: string;
   city?: string;
+  district?: string;
+  provinceName?: string;
+  cityName?: string;
+  districtName?: string;
 }
 
 export interface TravelTemplateDay {
@@ -49,6 +53,9 @@ export interface TravelTemplate {
   province?: string;
   city?: string;
   district?: string;
+  provinceName?: string;
+  cityName?: string;
+  districtName?: string;
   baseDays?: number;
   minDays?: number;
   maxDays?: number;

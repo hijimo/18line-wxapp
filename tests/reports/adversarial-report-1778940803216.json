@@ -1,0 +1,548 @@
+{
+  "timestamp": "2026-05-16T14:13:23.215Z",
+  "summary": {
+    "builderTotal": 88,
+    "builderPassed": 86,
+    "builderFailed": 2,
+    "reviewerTotal": 0,
+    "reviewerPassed": 0,
+    "reviewerFailed": 0,
+    "conflicts": 0
+  },
+  "conflicts": [],
+  "builderResults": [
+    {
+      "title": "[Unit] 文件完整性验证 create-itinerary 页面四个文件完整",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 itinerary-detail 页面四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 base-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 add-schedule-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 attraction-card 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 hotel-card 组件四个文件完整",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 dining-card 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 car-card 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 photography-card 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 attraction-intro-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 hotel-intro-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 dining-intro-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 car-intro-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 photography-intro-drawer 组件四个文件完整",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 文件完整性验证 photography.ts 服务文件存在",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] app.json 页面注册 create-itinerary 已注册",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] app.json 页面注册 itinerary-detail 已注册",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail/index.json 组件注册 usingComponents 包含所有必要组件",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail/index.json 组件注册 组件路径指向存在的文件",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 base-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 add-schedule-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 attraction-card.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 hotel-card.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 dining-card.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 car-card.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 photography-card.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 attraction-intro-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 hotel-intro-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 dining-intro-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 car-intro-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 组件 JSON 格式验证 photography-intro-drawer.json 是有效的组件配置",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 导入了 autoGenerateItinerary",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 导入了 addItinerary",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 导入了 getRegionTree 或 getProvinces",
+      "status": "failed",
+      "duration": 1,
+      "failureMessages": [
+        "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/agent-builder/itinerary-unit.test.js:157:81)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusTest (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/run.js:316:40)\n    at _runTest (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/run.js:252:3)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/run.js:126:9)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)"
+      ]
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 导入了 getDictByType",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 使用 wx.redirectTo 而非 navigateTo",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 包含 calculateDays 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 包含 loading 状态管理",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 AI生成时调用 setKeepScreenOn",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] create-itinerary 页面逻辑验证 使用 travel_tourist_like 字典类型",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 导入了 getItinerary",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 onLoad 中校验 id 参数",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 loadItinerary 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 onDayTap 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 onAddSpot 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 onCardDetail 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 onScheduleRefresh 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 onDrawerClose 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含 onIntroClose 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] itinerary-detail 页面逻辑验证 包含抽屉互斥逻辑",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 首页行程卡片日期展示 journey-card 使用 MM.DD-MM.DD 日期范围",
+      "status": "failed",
+      "duration": 0,
+      "failureMessages": [
+        "Error: expect(received).toContain(expected) // indexOf\n\nExpected substring: \"function formatJourneyDateRange\"\nReceived string:    \"import { getTemplateList } from '../../services/template';\nimport { getItineraryList } from '../../services/itinerary';·\nComponent({\n  data: {\n    userInfo: {\n      avatarUrl: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/user-profile.png',\n      nickName: '',\n    },\n    hasJourneys: true,\n    banners: [\n      {\n        id: 'songyang-3d',\n        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/hero-banner-songyang.png',\n        tag: 'NEW EXPEDITION',\n        title: '松阳.经典3天2晚\\\\n盲游',\n        description:\n          '深入江南最后的秘境，在云端古村开启未知的探索。由寻秘向导为您定制全程惊喜。',\n        buttonText: '立即启程',\n        priceLabel: 'STARTING FROM',\n        price: '¥2,499',\n      },\n      {\n        id: 'lingyin-tour',\n        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/lingyin-temple.png',\n        tag: 'HIDDEN JOURNEY',\n        title: '灵隐.寻宝之旅',\n        description:\n          '跟随千年古刹的指引，在杭州最灵验的寺庙间解锁三件神秘宝物。',\n        buttonText: '开始寻宝',\n        priceLabel: 'STARTING FROM',\n        price: '¥800',\n      },\n    ],\n    journeys: [\n      {\n        id: 'lingyin',\n        title: '灵隐寻宝之旅',\n        date: '2025.8.20 - 8.22',\n        budget: '¥8000',\n        days: [\n          { day: 1, label: 'DAY 1', number: '01', status: 'completed' },\n          { day: 2, label: 'DAY 2', number: '02', status: 'active' },\n          { day: 3, label: 'DAY 3', number: '03', status: 'upcoming' },\n        ],\n        currentGoal: '永福寺隐秘茶室探寻',\n        locations: [\n          { image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/lingyin-temple.png' },\n          { image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/bamboo-forest.png' },\n          { image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/hidden-tea-house.png' },\n        ],\n      },\n      {\n        id: 'songyang-blind',\n        title: '松阳盲游',\n        date: '2025.9.10 - 9.12',\n        budget: '¥2499',\n        days: [\n          { day: 1, label: 'DAY 1', number: '01', status: 'active' },\n          { day: 2, label: 'DAY 2', number: '02', status: 'upcoming' },\n          { day: 3, label: 'DAY 3', number: '03', status: 'upcoming' },\n        ],\n        currentGoal: '杨家堂古村探访',\n        locations: [\n          { image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/yangjiatang.png' },\n          { image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/xianfeng-bookstore.png' },\n          { image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/huang-family-compound.png' },\n        ],\n      },\n    ],\n    inspirationTitle: '地道灵感：探索秘境',\n    inspirationCards: [\n      {\n        id: 'golden-sunset',\n        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/golden-sunset.png',\n        rating: '4.9',\n        tag: 'PHOTOGRAPHY',\n        tagColor: 'green',\n        title: '金色落日 (Golden Sunset)',\n        description: '在西湖最隐秘的角度，看晚霞染红整座古城。',\n      },\n      {\n        id: 'secret-paddle',\n        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/paddle-boarding.png',\n        rating: '4.8',\n        tag: 'SPORTY',\n        tagColor: 'brown',\n        title: '秘境桨板 (Secret Paddle)',\n        description: '穿梭在无人的水上森林，感受只有你与自然的静谧。',\n      },\n      {\n        id: 'cloud-trek',\n        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/mountain-trek.png',\n        rating: '5.0',\n        tag: 'ADVENTUROUS',\n        tagColor: 'dark',\n        title: '云端漫步 (Cloud Trek)',\n        description: '踏上千年古道，感受隐于深山的古朴村落文明。',\n      },\n    ],\n    eggs: [\n      {\n        id: 'yangjiatang',\n        title: '杨家堂 (Yangjiatang)',\n        price: '免费',\n        description: '江南地区的\\\"布达拉宫\\\"，土黄色的民居错落有致。',\n        duration: '1.5h',\n        distance: '2.4km',\n        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/yangjiatang.png',\n      },\n      {\n        id: 'xianfeng',\n        title: '先锋书店 (Xianfeng)',\n        price: '免费',\n        description: '陈家铺村里的精神高地，在云雾中阅读时光。',\n        duration: '2.0h',\n        distance: '3.1km',\n        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/xianfeng-bookstore.png',\n      },\n      {\n        id: 'huang-compound',\n        title: '黄家大院',\n        price: '¥25',\n        description: '木雕艺术的巅峰之作，讲述着松阳望族的兴衰。',\n        duration: '1.0h',\n        distance: '5.8km',\n        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/huang-family-compound.png',\n      },\n    ],\n    foods: [\n      {\n        id: 'braised-croaker',\n        name: '红烧大黄鱼',\n        tag: 'MUST TRY',\n        tagType: 'must-try',\n        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/braised-croaker.png',\n      },\n      {\n        id: 'mixed-fish-pot',\n        name: '杂鱼煲',\n        tag: 'SEASONAL',\n        tagType: 'seasonal',\n        image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/mixed-fish-pot.png',\n      },\n    ],\n  },\n  pageLifetimes: {\n    show() {\n      this.loadBanners();\n      this.loadJourneys();\n    },\n  },\n  methods: {\n    async loadBanners() {\n      try {\n        const res = await getTemplateList();\n        const templates = (res.data || []).slice(0, 5);\n        if (templates.length > 0) {\n          const banners = templates.map((t: any) => ({\n            id: String(t.templateId || ''),\n            image: t.coverImage || 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/hero-banner-songyang.png',\n            tag: t.tag || 'NEW EXPEDITION',\n            title: t.templateName || '',\n            description: t.description || '',\n            buttonText: '立即启程',\n            priceLabel: 'STARTING FROM',\n            price: t.price ? `¥${t.price}` : '',\n          }));\n          this.setData({ banners });\n        }\n      } catch (err) {\n        console.error('Failed to load banners:', err);\n      }\n    },·\n    async loadJourneys() {\n      try {\n        const res = await getItineraryList();\n        const list = (res.data || []).slice(0, 5);\n        if (list.length > 0) {\n          const journeys = list.map((item: any) => ({\n            id: String(item.itineraryId || ''),\n            title: item.itineraryName || '未命名旅途',\n            date: item.startDate || '',\n            budget: item.totalCost ? `¥${item.totalCost}` : '',\n            days: Array.from({ length: item.days || 0 }, (_, i) => ({\n              day: i + 1,\n              label: `第${i + 1}天`,\n              number: String(i + 1).padStart(2, '0'),\n              status: i === 0 ? 'active' : 'upcoming',\n            })),\n            currentGoal: '',\n            locations: [],\n          }));\n          this.setData({ journeys, hasJourneys: true });\n        } else {\n          this.setData({ journeys: [], hasJourneys: false });\n        }\n      } catch (err) {\n        console.error('Failed to load journeys:', err);\n      }\n    },·\n    onBannerTap(e: any) {\n      const { id } = e.detail;\n      if (id) {\n        wx.navigateTo({\n          url: `/pages/itinerary-detail/index?templateId=${id}`,\n        });\n      }\n    },\n    onViewAll() {\n      wx.navigateTo({ url: '/pages/journeys/index' });\n    },\n    onAddTrip() {\n      wx.navigateTo({ url: '/pages/create-itinerary/index' });\n    },\n    onInspirationTap(e: any) {\n      const { id } = e.detail;\n      console.log('Inspiration tap:', id);\n    },\n    onEggTap(e: any) {\n      const { id } = e.detail;\n      console.log('Egg tap:', id);\n    },\n    onFoodTap(e: any) {\n      const { id } = e.detail;\n      console.log('Food tap:', id);\n    },\n    onBellTap() {\n      console.log('Bell tap');\n    },\n  },\n});\n\"\n    at Object.toContain (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/agent-builder/itinerary-unit.test.js:244:21)\n    at Promise.then.completed (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusTest (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/run.js:316:40)\n    at _runTest (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/run.js:252:3)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/run.js:126:9)\n    at _runTestsForDescribeBlock (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/run.js:121:9)\n    at run (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/Users/zhaojimo/Documents/git/18line-workspace/18line-wxapp/tests/node_modules/jest-runner/build/runTest.js:444:34)"
+      ]
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 getAttractionList",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 getAccommodationList",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 getDiningList",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 getCarList",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 getPhotographyList",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 updateDayAttractions",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 updateDayDining",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 updateDayAccommodation",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 addCar",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 导入了 addPhotography",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 包含 showActionSheet 餐饮选择",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 包含防抖逻辑（setTimeout）",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 包含 triggerEvent refresh",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] add-schedule-drawer 逻辑验证 包含 5 个 tab",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 卡片组件接口验证 attraction-card 触发 carddetail 事件",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 卡片组件接口验证 hotel-card 触发 carddetail 事件",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 卡片组件接口验证 dining-card 触发 carddetail 事件",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 卡片组件接口验证 car-card 触发 carddetail 事件",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 卡片组件接口验证 photography-card 触发 carddetail 事件",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] 卡片组件接口验证 dining-card 包含 meal 属性",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] base-drawer 组件验证 使用 root-portal",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] base-drawer 组件验证 包含 catchtouchmove 防穿透",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] base-drawer 组件验证 包含 noop 方法",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] base-drawer 组件验证 触发 close 事件",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] base-drawer 组件验证 包含 show 和 height 属性",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.attractionList",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.breakfast",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.lunch",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.dinner",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.accommodation",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.photography",
+      "status": "passed",
+      "duration": 1,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 引用 currentDayData.car",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] WXML 字段引用验证 dining-card 传入 meal 属性",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] photography.ts 服务验证 导出 getPhotographyList",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] photography.ts 服务验证 导出 getPhotographyDetail",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] photography.ts 服务验证 使用正确的 API 路径",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    },
+    {
+      "title": "[Unit] photography.ts 服务验证 导入 TravelPhotography 类型",
+      "status": "passed",
+      "duration": 0,
+      "failureMessages": []
+    }
+  ],
+  "reviewerResults": []
+}

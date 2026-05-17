@@ -4,7 +4,7 @@
 <!-- TopAppBar -->
 <view class="top-app-bar">
   <view class="top-bar-left">
-    <view class="top-bar-avatar">
+    <view class="top-bar-avatar" bindtap="onAddTrip">
       <image class="top-bar-avatar-img" src="{{oss.ossResize(userInfo.avatarUrl, 80, 80)}}" mode="aspectFill" />
     </view>
     <text class="top-bar-brand">寻秘</text>

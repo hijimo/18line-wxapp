@@ -6,6 +6,8 @@ import type {
   UpdateDayDiningParams,
   UpdateDayAttractionsParams,
   UpdateDayAccommodationParams,
+  AddItineraryCarParams,
+  AddItineraryPhotographyParams,
 } from '../types/itinerary';
 import type { AjaxResult } from '../types/common';
 
@@ -88,15 +90,19 @@ export const updateDayAccommodation = (params: UpdateDayAccommodationParams) => 
 };
 
 /** 添加行程跟拍 */
-export const addPhotography = (itineraryId: number, photographyId: number) =>
-  request<AjaxResult>(
-    `/wx/itinerary/${itineraryId}/photography/add`,
+export const addPhotography = (params: AddItineraryPhotographyParams) => {
+  const { itineraryId, dayNumber, photographyId } = params;
+  return request<AjaxResult>(
+    `/wx/itinerary/${itineraryId}/day/${dayNumber}/photography/add`,
     { method: 'POST', data: photographyId },
   );
+};
 
 /** 添加行程包车 */
-export const addCar = (itineraryId: number, carId: number) =>
-  request<AjaxResult>(`/wx/itinerary/${itineraryId}/car/add`, {
-    method: 'POST',
-    data: carId,
-  });
+export const addCar = (params: AddItineraryCarParams) => {
+  const { itineraryId, dayNumber, carId } = params;
+  return request<AjaxResult>(
+    `/wx/itinerary/${itineraryId}/day/${dayNumber}/car/add`,
+    { method: 'POST', data: carId },
+  );
+};

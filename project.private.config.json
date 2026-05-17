@@ -18,24 +18,5 @@
     "checkInvalidKey": true,
     "ignoreDevUnusedFiles": true
   },
-  "condition": {
-    "miniprogram": {
-      "list": [
-        {
-          "name": "行程详情",
-          "pathName": "pages/itinerary-detail/index",
-          "query": "",
-          "scene": null,
-          "launchMode": "default"
-        },
-        {
-          "name": "添加行程",
-          "pathName": "pages/create-itinerary/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        }
-      ]
-    }
-  }
+  "condition": {}
 }
