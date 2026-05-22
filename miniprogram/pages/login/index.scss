@@ -72,7 +72,7 @@ page {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100vh;
+  height: calc(100vh - 400rpx);
   padding: 120rpx 64rpx env(safe-area-inset-bottom);
   box-sizing: border-box;
 }
