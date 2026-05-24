@@ -7,6 +7,7 @@
     "test:review": "node agent-reviewer/run.js",
     "test:adversarial": "node run-adversarial.js",
     "test:dining-intro-drawer": "jest --config jest.config.js --testMatch \"**/dining-intro-drawer/**/*.test.js\" --runInBand",
+    "test:hotel-intro-drawer": "jest --config jest.config.js --runTestsByPath agent-builder/hotel-intro-drawer.test.js --runInBand --forceExit",
     "test:all": "jest --config jest.config.js",
     "report": "node shared/report-generator.js"
   },
