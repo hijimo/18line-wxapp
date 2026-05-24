@@ -2,7 +2,6 @@
   <view class="dining-drawer">
     <view class="dining-drawer-header">
       <view>
-        <text class="dining-kicker">{{data.diningNature || 'LOCAL DINING'}}</text>
         <text class="dining-drawer-title">{{data.diningName}}</text>
       </view>
       <button class="dining-drawer-close" hover-class="dining-drawer-close--active" bindtap="onClose" aria-label="关闭餐厅介绍">
