@@ -11,7 +11,11 @@ Component({
   },
   methods: {
     onDetailTap() {
-      this.triggerEvent('carddetail', { type: 'dining', data: this.data.item })
+      this.triggerEvent('carddetail', {
+        type: 'dining',
+        data: this.data.item,
+        meal: this.data.meal,
+      })
     },
   },
 })

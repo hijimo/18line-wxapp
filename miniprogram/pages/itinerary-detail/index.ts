@@ -100,6 +100,80 @@ function normalizeItineraryDisplay(itinerary: Itinerary): Itinerary {
   };
 }
 
+type DiningIntroMeal = 'breakfast' | 'lunch' | 'dinner';
+
+type DiningIntroPathItem = {
+  type: 'attraction' | 'dining' | 'hotel';
+  title: string;
+  meta: string;
+  active?: boolean;
+};
+
+function getDiningMealText(meal?: string) {
+  if (meal === 'breakfast') return '早餐';
+  if (meal === 'dinner') return '晚餐';
+  return '午餐';
+}
+
+function getDiningMealTime(meal?: string) {
+  if (meal === 'breakfast') return '08:30';
+  if (meal === 'dinner') return '18:30';
+  return '12:30';
+}
+
+function buildDiningIntroData(
+  data: Record<string, unknown>,
+  meal: DiningIntroMeal | undefined,
+  dayData: TravelItineraryDay | null,
+) {
+  const pathItems: DiningIntroPathItem[] = [];
+  const firstAttraction = dayData?.attractionList?.[0];
+  const accommodation = dayData?.accommodation;
+
+  if (firstAttraction?.attractionName) {
+    pathItems.push({
+      type: 'attraction',
+      title: firstAttraction.attractionShortName || firstAttraction.attractionName,
+      meta: firstAttraction.visitDuration
+        ? `建议游玩 ${firstAttraction.visitDuration}`
+        : '行程景点',
+    });
+  }
+
+  pathItems.push({
+    type: 'dining',
+    title: typeof data.diningName === 'string' ? data.diningName : '餐饮安排',
+    meta: `${getDiningMealText(meal)} · ${getDiningMealTime(meal)}`,
+    active: true,
+  });
+
+  if (accommodation?.accommodationName) {
+    pathItems.push({
+      type: 'hotel',
+      title: accommodation.accommodationName,
+      meta: '入住安排',
+    });
+  }
+
+  return {
+    ...data,
+    __meal: meal || 'lunch',
+    __pathItems: pathItems,
+  };
+}
+
+function getDiningShareTitle(data: unknown) {
+  const dining = data as { diningName?: string; avgCost?: number | string } | null;
+  const name = typeof dining?.diningName === 'string' ? dining.diningName.trim() : '';
+  const avgCost =
+    dining?.avgCost === undefined || dining?.avgCost === null
+      ? ''
+      : String(dining.avgCost).trim();
+
+  if (!name) return '推荐一家旅行餐厅';
+  return avgCost ? `${name} · 人均¥${avgCost}` : `推荐餐厅：${name}`;
+}
+
 Page({
   data: {
     itineraryId: 0,
@@ -352,10 +426,16 @@ Page({
   },
 
   onCardDetail(e: any) {
-    const { type, data } = e.detail;
-    const { showAddDrawer } = this.data;
+    const { type, data, meal } = e.detail;
+    const { showAddDrawer, currentDayData } = this.data;
     if (showAddDrawer) return; // 抽屉互斥
-    this.setData({ showIntroDrawer: type, introData: data });
+    this.setData({
+      showIntroDrawer: type,
+      introData:
+        type === 'dining'
+          ? buildDiningIntroData(data || {}, meal, currentDayData)
+          : data,
+    });
   },
 
   onDateMetaTap() {
@@ -593,7 +673,15 @@ Page({
   },
 
   onShareAppMessage() {
-    const { itinerary, itineraryId } = this.data;
+    const { itinerary, itineraryId, showIntroDrawer, introData } = this.data;
+
+    if (showIntroDrawer === 'dining') {
+      return {
+        title: getDiningShareTitle(introData),
+        path: `/pages/itinerary-detail/index?id=${itineraryId}`,
+      };
+    }
+
     return {
       title: itinerary?.itineraryName || '我的旅行行程',
       path: `/pages/itinerary-detail/index?id=${itineraryId}`,

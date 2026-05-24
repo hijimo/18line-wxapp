@@ -1,7 +1,11 @@
 <root-portal wx:if="{{show}}">
   <view class="drawer-mask {{show ? 'drawer-mask--visible' : ''}}" bindtap="onMaskTap" catchtouchmove="noop" />
-  <view class="drawer-panel {{show ? 'drawer-panel--visible' : ''}}" style="height: {{height}}" catchtouchmove="noop">
-    <view class="drawer-handle" />
+  <view
+    class="drawer-panel {{show ? 'drawer-panel--visible' : ''}}"
+    style="height: {{height}}; border-radius: {{panelRadius}}; background: {{panelBackground}};"
+    catchtouchmove="noop"
+  >
+    <view class="drawer-handle" style="background: {{handleBackground}};" />
     <scroll-view scroll-y class="drawer-content">
       <slot />
     </scroll-view>

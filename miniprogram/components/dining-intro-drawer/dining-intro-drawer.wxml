@@ -1,82 +1,168 @@
-<base-drawer show="{{show}}" height="82vh" bind:close="onClose">
-  <view class="dining-drawer">
-    <view class="dining-drawer-header">
-      <view>
-        <text class="dining-drawer-title">{{data.diningName}}</text>
+<base-drawer
+  show="{{show}}"
+  height="86vh"
+  panel-radius="80rpx 80rpx 0 0"
+  panel-background="#f9faf4"
+  handle-background="rgba(194, 200, 192, 0.3)"
+  bind:close="onClose"
+>
+  <view class="dining-intro">
+    <view class="dining-intro__hero">
+      <view class="dining-intro__heading">
+        <view class="dining-intro__title-block">
+          <text class="dining-intro__title">{{viewModel.title}}</text>
+          <view class="dining-intro__meta">
+            <text wx:if="{{viewModel.ratingText}}" class="dining-intro__star">★</text>
+            <text wx:if="{{viewModel.ratingText}}" class="dining-intro__rating">{{viewModel.ratingText}}</text>
+            <text wx:if="{{viewModel.ratingText && viewModel.costText}}" class="dining-intro__dot">•</text>
+            <text wx:if="{{viewModel.costText}}" class="dining-intro__cost">{{viewModel.costText}}</text>
+          </view>
+        </view>
+        <button
+          class="dining-intro__share"
+          hover-class="dining-intro__share--active"
+          open-type="share"
+          aria-label="分享餐厅"
+        >
+          <image
+            class="dining-intro__share-icon"
+            src="{{iconUrls.share}}"
+            mode="aspectFit"
+          />
+        </button>
       </view>
-      <button class="dining-drawer-close" hover-class="dining-drawer-close--active" bindtap="onClose" aria-label="关闭餐厅介绍">
-        <text class="dining-close-icon">×</text>
+
+      <view wx:if="{{viewModel.hasGallery}}" class="dining-intro__gallery">
+        <view class="dining-intro__gallery-main">
+          <image
+            class="dining-intro__image"
+            src="{{viewModel.images[0]}}"
+            mode="aspectFill"
+            lazy-load
+          />
+          <view class="dining-intro__image-label">
+            <text>Signature Dish</text>
+          </view>
+        </view>
+        <view wx:if="{{viewModel.images.length > 1}}" class="dining-intro__gallery-side">
+          <image
+            class="dining-intro__thumb"
+            src="{{viewModel.images[1]}}"
+            mode="aspectFill"
+            lazy-load
+          />
+          <view wx:if="{{viewModel.images.length > 2}}" class="dining-intro__thumb-wrap">
+            <image
+              class="dining-intro__thumb"
+              src="{{viewModel.images[2]}}"
+              mode="aspectFill"
+              lazy-load
+            />
+            <view class="dining-intro__photo-mask">
+              <text>{{viewModel.photoCountText}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="dining-intro__gallery dining-intro__gallery--empty">
+        <text class="dining-intro__empty-mark">18</text>
+        <text class="dining-intro__empty-text">Local Flavor</text>
+      </view>
+    </view>
+
+    <view class="dining-intro__content">
+      <view wx:if="{{viewModel.address}}" class="dining-intro__section">
+        <text class="dining-intro__section-label">LOCATION</text>
+        <view
+          class="dining-intro__location-row"
+          hover-class="dining-intro__location-row--active"
+          bindtap="onLocationTap"
+        >
+          <image
+            class="dining-intro__location-icon"
+            src="{{iconUrls.location}}"
+            mode="aspectFit"
+          />
+          <text class="dining-intro__location-text">{{viewModel.address}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{viewModel.dishes.length}}" class="dining-intro__section">
+        <text class="dining-intro__section-label">SIGNATURE DISHES</text>
+        <view class="dining-intro__pills">
+          <text
+            wx:for="{{viewModel.dishes}}"
+            wx:key="*this"
+            class="dining-intro__pill"
+          >{{item}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{viewModel.tags.length}}" class="dining-intro__section">
+        <text class="dining-intro__section-label">DETAILS</text>
+        <view class="dining-intro__pills">
+          <text
+            wx:for="{{viewModel.tags}}"
+            wx:key="*this"
+            class="dining-intro__pill"
+          >{{item}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{viewModel.description}}" class="dining-intro__section">
+        <text class="dining-intro__section-label">ABOUT</text>
+        <text class="dining-intro__body-text">{{viewModel.description}}</text>
+      </view>
+
+      <view wx:if="{{viewModel.pathItems.length}}" class="dining-intro__path-card">
+        <text class="dining-intro__path-title">The Itinerary Path</text>
+        <view class="dining-intro__path-list">
+          <view
+            wx:for="{{viewModel.pathItems}}"
+            wx:key="title"
+            class="dining-intro__path-item {{item.active ? 'dining-intro__path-item--active' : ''}}"
+          >
+            <view class="dining-intro__path-rail">
+              <text class="dining-intro__path-icon">{{item.type === 'hotel' ? '▰' : item.type === 'attraction' ? '⌃' : '♨'}}</text>
+              <view wx:if="{{index < viewModel.pathItems.length - 1}}" class="dining-intro__path-line" />
+            </view>
+            <view class="dining-intro__path-copy">
+              <text class="dining-intro__path-name">{{item.title}}</text>
+              <text class="dining-intro__path-meta">{{item.meta}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{!viewModel.hasDetails}}" class="dining-intro__empty-state">
+        <text class="dining-intro__empty-state-title">暂无餐厅详情</text>
+        <text class="dining-intro__empty-state-text">可先查看行程安排，餐厅信息更新后会在这里展示。</text>
+      </view>
+    </view>
+
+    <view class="dining-intro__actions">
+      <button
+        class="dining-intro__action dining-intro__action--secondary"
+        hover-class="dining-intro__action--secondary-active"
+        bindtap="onAddTap"
+      >
+        <text class="dining-intro__action-icon">⊞</text>
+        <view class="dining-intro__action-copy">
+          <text class="dining-intro__action-text">Add to</text>
+          <text class="dining-intro__action-text">Itinerary</text>
+        </view>
       </button>
-    </view>
-
-    <view wx:if="{{data.attachments && data.attachments.length > 0}}" class="dining-hero">
-      <image
-        class="dining-hero-main"
-        src="{{data.attachments[0].url || data.attachments[0].fileUrl}}"
-        mode="aspectFill"
-        lazy-load
-      />
-      <view wx:if="{{data.attachments.length > 1}}" class="dining-hero-side">
-        <image
-          class="dining-hero-thumb"
-          src="{{data.attachments[1].url || data.attachments[1].fileUrl}}"
-          mode="aspectFill"
-          lazy-load
-        />
-        <image
-          wx:if="{{data.attachments.length > 2}}"
-          class="dining-hero-thumb"
-          src="{{data.attachments[2].url || data.attachments[2].fileUrl}}"
-          mode="aspectFill"
-          lazy-load
-        />
-      </view>
-    </view>
-    <view wx:else class="dining-hero dining-hero--empty">
-      <text class="dining-hero-empty-mark">18</text>
-      <text class="dining-hero-empty-text">本地风味餐厅</text>
-    </view>
-
-    <view class="dining-meta-grid">
-      <view wx:if="{{data.avgCost}}" class="dining-meta-chip">
-        <text class="dining-meta-label">人均</text>
-        <text class="dining-meta-value">¥{{data.avgCost}}</text>
-      </view>
-      <view wx:if="{{data.recommendRating}}" class="dining-meta-chip">
-        <text class="dining-meta-label">推荐</text>
-        <text class="dining-meta-value">{{data.recommendRating}}</text>
-      </view>
-      <view wx:if="{{data.parkingAvailable === 'Y'}}" class="dining-meta-chip">
-        <text class="dining-meta-label">停车</text>
-        <text class="dining-meta-value">可停车</text>
-      </view>
-      <view wx:if="{{data.petFriendly === 'Y'}}" class="dining-meta-chip">
-        <text class="dining-meta-label">宠物</text>
-        <text class="dining-meta-value">友好</text>
-      </view>
-    </view>
-
-    <view wx:if="{{data.address}}" class="dining-address-card">
-      <text class="dining-address-icon">⌖</text>
-      <view class="dining-address-content">
-        <text class="dining-section-label">位置</text>
-        <text class="dining-address-text">{{data.address}}</text>
-      </view>
-    </view>
-
-    <view wx:if="{{data.diningDesc}}" class="dining-section">
-      <text class="dining-section-label">餐厅介绍</text>
-      <text class="dining-section-content">{{data.diningDesc}}</text>
-    </view>
-
-    <view wx:if="{{data.diningTips}}" class="dining-section dining-section--tips">
-      <text class="dining-section-label">用餐贴士</text>
-      <text class="dining-section-content">{{data.diningTips}}</text>
-    </view>
-
-    <view class="dining-drawer-footer">
-      <button class="dining-secondary-action" hover-class="dining-secondary-action--active" bindtap="onClose">稍后再看</button>
-      <button class="dining-primary-action" hover-class="dining-primary-action--active" bindtap="onPrimaryTap">我知道了</button>
+      <button
+        class="dining-intro__action dining-intro__action--primary"
+        hover-class="dining-intro__action--primary-active"
+        bindtap="onBookTap"
+      >
+        <text class="dining-intro__action-icon">□</text>
+        <view class="dining-intro__action-copy">
+          <text class="dining-intro__action-text">Book</text>
+          <text class="dining-intro__action-text">Table</text>
+        </view>
+      </button>
     </view>
   </view>
 </base-drawer>

@@ -16,6 +16,18 @@
 - 路径别名 `@/*` 指向 `miniprogram/*`。
 - 自动化测试相关代码位于 `tests/`。
 
+## 微信官方快速上手参考
+
+- 官方文档入口：https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/
+- 开发前优先遵循微信小程序官方框架约定：项目由全局入口、页面、组件、配置、样式和资源组成，运行在微信开发者工具与微信客户端环境中。
+- 全局配置以 `app.json` 为核心，声明页面路径、窗口表现、`tabBar`、网络超时等；新增或删除页面时必须同步维护 `pages` 列表，且路径不写文件后缀。
+- 页面通常由同名的 `.ts`/`.js`、`.wxml`、`.scss`/`.wxss`、`.json` 文件组成：逻辑写在 Page/Component 脚本中，结构写在 WXML，样式写在 SCSS/WXSS，页面级配置写在同名 JSON。
+- 视图层使用 WXML 数据绑定、条件渲染、列表渲染和事件绑定；不要使用浏览器 DOM API。界面状态必须通过 `setData` 或组件属性驱动。
+- 逻辑层使用 `App`、`Page`、`Component` 的生命周期和事件方法组织代码；页面跳转、网络请求、存储、授权等能力通过 `wx.*` API 或项目已有封装调用。
+- 样式层遵循 WXSS/SCSS 能力和小程序尺寸体系，优先使用 `rpx` 做移动端适配；公共样式放全局或复用组件内，页面私有样式保持局部。
+- 组件使用前需要在对应页面或组件的 `.json` 中通过 `usingComponents` 声明；跨页面复用组件应放在 `miniprogram/components/`。
+- 本项目使用 TypeScript 与 Sass 编译插件，落地官方示例时应转换为当前项目的 `.ts`、`.scss` 和路径别名写法，避免直接照搬 JavaScript 示例。
+
 ## 目录约定
 
 - `miniprogram/pages/`：页面目录，通常包含 `index.ts`、`index.wxml`、`index.scss`、`index.json`。
