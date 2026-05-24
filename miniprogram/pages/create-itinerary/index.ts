@@ -143,11 +143,9 @@ Page({
       startDate,
       days,
       itineraryName: `${cityName}${days}日游`,
-      remark: JSON.stringify({
-        preferences,
-        blindMode,
-        endDate,
-      }),
+      preferences,
+      blindMode,
+      endDate,
     };
   },
 
