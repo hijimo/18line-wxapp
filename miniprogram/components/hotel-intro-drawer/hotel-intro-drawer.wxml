@@ -1,40 +1,61 @@
-<base-drawer show="{{show}}" height="75vh" bind:close="onClose">
-  <view class="intro-drawer">
-    <!-- Cover Image -->
+<base-drawer show="{{show}}" height="82vh" bind:close="onClose">
+  <view class="hotel-intro-drawer">
+    <view class="hotel-intro-drawer__media">
     <image
-      wx:if="{{data.attachments && data.attachments.length > 0}}"
-      class="cover-image"
-      src="{{data.attachments[0].url}}"
+        wx:if="{{viewModel.coverUrl}}"
+        class="hotel-intro-drawer__image"
+        src="{{viewModel.coverUrl}}"
       mode="aspectFill"
       lazy-load
     />
+      <view wx:else class="hotel-intro-drawer__image-fallback">
+        <text class="hotel-intro-drawer__fallback-label">STAY</text>
+      </view>
+      <view class="hotel-intro-drawer__media-shade" />
+    </view>
 
-    <view class="intro-body">
-      <!-- Name -->
-      <text class="intro-name">{{data.accommodationName}}</text>
-
-      <!-- Meta Tags -->
-      <view class="meta-row">
-        <text wx:if="{{data.accommodationType}}" class="meta-tag">{{data.accommodationType}}</text>
-        <text wx:if="{{data.breakfastIncluded === 'Y'}}" class="meta-tag">含早餐</text>
-        <text wx:if="{{data.petFriendly === 'Y'}}" class="meta-tag">可带宠物</text>
+    <view class="hotel-intro-drawer__body">
+      <view class="hotel-intro-drawer__header">
+        <view class="hotel-intro-drawer__heading">
+          <text class="hotel-intro-drawer__eyebrow">STAY</text>
+          <text class="hotel-intro-drawer__title">{{viewModel.title}}</text>
+        </view>
+        <button
+          class="hotel-intro-drawer__close"
+          hover-class="hotel-intro-drawer__close--hover"
+          aria-label="关闭住宿介绍"
+          catchtap="onClose"
+        >
+          <text class="hotel-intro-drawer__close-text">关闭</text>
+        </button>
       </view>
 
-      <!-- Price -->
-      <view class="info-row">
-        <text wx:if="{{data.priceMin}}" class="info-price">¥{{data.priceMin}} ~ ¥{{data.priceMax}}</text>
+      <view wx:if="{{viewModel.tags.length}}" class="hotel-intro-drawer__meta">
+        <text
+          wx:for="{{viewModel.tags}}"
+          wx:key="*this"
+          class="hotel-intro-drawer__tag"
+        >{{item}}</text>
       </view>
 
-      <!-- Address -->
-      <view wx:if="{{data.address}}" class="address-row">
-        <text class="address-label">地址:</text>
-        <text class="address-text">{{data.address}}</text>
+      <view wx:if="{{viewModel.priceText}}" class="hotel-intro-drawer__price-card">
+        <text class="hotel-intro-drawer__price-label">参考价格</text>
+        <text class="hotel-intro-drawer__price">{{viewModel.priceText}}</text>
       </view>
 
-      <!-- Description -->
-      <view wx:if="{{data.accommodationDesc}}" class="intro-section">
-        <text class="section-title">住宿介绍</text>
-        <text class="section-content">{{data.accommodationDesc}}</text>
+      <view wx:if="{{viewModel.address}}" class="hotel-intro-drawer__info">
+        <text class="hotel-intro-drawer__info-label">地址</text>
+        <text class="hotel-intro-drawer__info-text">{{viewModel.address}}</text>
+      </view>
+
+      <view wx:if="{{viewModel.description}}" class="hotel-intro-drawer__section">
+        <text class="hotel-intro-drawer__section-title">住宿介绍</text>
+        <text class="hotel-intro-drawer__section-content">{{viewModel.description}}</text>
+      </view>
+
+      <view wx:if="{{!viewModel.hasDetails}}" class="hotel-intro-drawer__empty">
+        <text class="hotel-intro-drawer__empty-title">暂无住宿详情</text>
+        <text class="hotel-intro-drawer__empty-text">可先查看行程安排，住宿信息更新后会在这里展示。</text>
       </view>
     </view>
   </view>
