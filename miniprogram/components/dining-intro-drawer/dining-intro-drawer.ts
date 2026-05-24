@@ -13,5 +13,9 @@ Component({
     onClose() {
       this.triggerEvent('close')
     },
+    onPrimaryTap() {
+      this.triggerEvent('primarytap', { data: this.data.data })
+      this.triggerEvent('close')
+    },
   },
 })
