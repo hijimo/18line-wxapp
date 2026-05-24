@@ -4,7 +4,9 @@
   "description": "",
   "scripts": {
     "upload:assets": "node tools/oss/assets.mjs upload",
-    "oss:image-url": "node tools/oss/assets.mjs url"
+    "oss:image-url": "node tools/oss/assets.mjs url",
+    "test:automator": "npm --prefix tests run test:hotel-intro-drawer",
+    "build": "tsc --noEmit --skipLibCheck"
   },
   "keywords": [],
   "author": "",
