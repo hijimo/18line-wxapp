@@ -1,40 +1,97 @@
-<base-drawer show="{{show}}" height="75vh" bind:close="onClose">
-  <view class="intro-drawer">
-    <!-- Cover Image -->
-    <image
-      wx:if="{{data.attachments && data.attachments.length > 0}}"
-      class="cover-image"
-      src="{{data.attachments[0].url}}"
-      mode="aspectFill"
-      lazy-load
-    />
-
-    <view class="intro-body">
-      <!-- Name -->
-      <text class="intro-name">{{data.nickname}}</text>
-
-      <!-- Meta Tags -->
-      <view class="meta-row">
-        <text wx:if="{{data.equipment}}" class="meta-tag">{{data.equipment}}</text>
-        <text wx:if="{{data.recommendRating}}" class="meta-tag">推荐指数 {{data.recommendRating}}</text>
+<base-drawer
+  show="{{show}}"
+  height="86vh"
+  panel-radius="80rpx 80rpx 0 0"
+  panel-background="#f9faf4"
+  handle-background="rgba(194, 200, 192, 0.3)"
+  bind:close="onClose"
+>
+  <view class="photography-intro">
+    <view class="photography-intro__hero">
+      <view class="photography-intro__heading">
+        <view class="photography-intro__title-block">
+          <text class="photography-intro__title">{{viewModel.title}}</text>
+          <view class="photography-intro__meta">
+            <text wx:if="{{viewModel.ratingText}}" class="photography-intro__star">★</text>
+            <text wx:if="{{viewModel.ratingText}}" class="photography-intro__rating">{{viewModel.ratingText}}</text>
+            <text wx:if="{{viewModel.ratingText && viewModel.costText}}" class="photography-intro__dot">•</text>
+            <text wx:if="{{viewModel.costText}}" class="photography-intro__cost">{{viewModel.costText}}</text>
+          </view>
+        </view>
+        <button class="photography-intro__share" hover-class="photography-intro__share--active" open-type="share" aria-label="分享跟拍">
+          <image class="photography-intro__share-icon" src="{{iconUrls.share}}" mode="aspectFit" />
+        </button>
       </view>
 
-      <!-- Price -->
-      <view class="info-row">
-        <text wx:if="{{data.price}}" class="info-price">¥{{data.price}}</text>
+      <view wx:if="{{viewModel.hasGallery}}" class="photography-intro__gallery">
+        <view class="photography-intro__gallery-main">
+          <image class="photography-intro__image" src="{{viewModel.images[0]}}" mode="aspectFill" lazy-load />
+          <view class="photography-intro__image-label">
+            <text>Photo Service</text>
+          </view>
+        </view>
+        <view wx:if="{{viewModel.images.length > 1}}" class="photography-intro__gallery-side">
+          <image class="photography-intro__thumb" src="{{viewModel.images[1]}}" mode="aspectFill" lazy-load />
+          <view wx:if="{{viewModel.images.length > 2}}" class="photography-intro__thumb-wrap">
+            <image class="photography-intro__thumb" src="{{viewModel.images[2]}}" mode="aspectFill" lazy-load />
+            <view class="photography-intro__photo-mask">
+              <text>{{viewModel.photoCountText}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="photography-intro__gallery photography-intro__gallery--empty">
+        <text class="photography-intro__empty-mark">18</text>
+        <text class="photography-intro__empty-text">Photo Walk</text>
+      </view>
+    </view>
+
+    <view class="photography-intro__content">
+      <view wx:if="{{viewModel.serviceTags.length}}" class="photography-intro__section">
+        <text class="photography-intro__section-label">SERVICE</text>
+        <view class="photography-intro__pills">
+          <text wx:for="{{viewModel.serviceTags}}" wx:key="*this" class="photography-intro__pill">{{item}}</text>
+        </view>
       </view>
 
-      <!-- Contact -->
-      <view wx:if="{{data.contactInfo}}" class="contact-row">
-        <text class="contact-label">联系方式:</text>
-        <text class="contact-text">{{data.contactInfo}}</text>
+      <view wx:if="{{viewModel.profileTags.length}}" class="photography-intro__section">
+        <text class="photography-intro__section-label">PROFILE</text>
+        <view class="photography-intro__pills">
+          <text wx:for="{{viewModel.profileTags}}" wx:key="*this" class="photography-intro__pill">{{item}}</text>
+        </view>
       </view>
 
-      <!-- Introduction -->
-      <view wx:if="{{data.introduction}}" class="intro-section">
-        <text class="section-title">摄影师介绍</text>
-        <text class="section-content">{{data.introduction}}</text>
+      <view wx:if="{{viewModel.contactInfo}}" class="photography-intro__section">
+        <text class="photography-intro__section-label">CONTACT</text>
+        <text class="photography-intro__body-text">{{viewModel.contactInfo}}</text>
       </view>
+
+      <view wx:if="{{viewModel.description}}" class="photography-intro__section">
+        <text class="photography-intro__section-label">ABOUT</text>
+        <text class="photography-intro__body-text">{{viewModel.description}}</text>
+      </view>
+
+      <view wx:if="{{!viewModel.hasDetails}}" class="photography-intro__empty-state">
+        <text class="photography-intro__empty-state-title">暂无跟拍详情</text>
+        <text class="photography-intro__empty-state-text">可先查看行程安排，摄影服务信息更新后会在这里展示。</text>
+      </view>
+    </view>
+
+    <view class="photography-intro__actions">
+      <button class="photography-intro__action photography-intro__action--secondary" hover-class="photography-intro__action--secondary-active" bindtap="onAddTap">
+        <text class="photography-intro__action-icon">⊞</text>
+        <view class="photography-intro__action-copy">
+          <text class="photography-intro__action-text">Add to</text>
+          <text class="photography-intro__action-text">Itinerary</text>
+        </view>
+      </button>
+      <button class="photography-intro__action photography-intro__action--primary" hover-class="photography-intro__action--primary-active" bindtap="onContactTap">
+        <text class="photography-intro__action-icon">□</text>
+        <view class="photography-intro__action-copy">
+          <text class="photography-intro__action-text">Contact</text>
+          <text class="photography-intro__action-text">Photographer</text>
+        </view>
+      </button>
     </view>
   </view>
 </base-drawer>

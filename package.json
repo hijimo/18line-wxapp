@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "lint": "npm run build && node --test tests/drawer-redesign/*.test.js",
     "test:dining-intro-drawer": "npm --prefix tests install --cache ../.npm-cache --legacy-peer-deps && npm --prefix tests run test:dining-intro-drawer",
     "upload:assets": "node tools/oss/assets.mjs upload",
     "oss:image-url": "node tools/oss/assets.mjs url",
