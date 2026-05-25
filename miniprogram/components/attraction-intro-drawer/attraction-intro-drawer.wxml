@@ -1,36 +1,121 @@
-<base-drawer show="{{show}}" height="75vh" bind:close="onClose">
-  <view class="intro-drawer">
-    <!-- Cover Image -->
-    <image
-      wx:if="{{data.attachments && data.attachments.length > 0}}"
-      class="cover-image"
-      src="{{data.attachments[0].url}}"
-      mode="aspectFill"
-      lazy-load
-    />
-
-    <view class="intro-body">
-      <!-- Name -->
-      <text class="intro-name">{{data.attractionName}}</text>
-
-      <!-- Meta Tags -->
-      <view class="meta-row">
-        <text wx:if="{{data.visitDuration}}" class="meta-tag">{{data.visitDuration}}</text>
-        <text wx:if="{{data.openTime}}" class="meta-tag">{{data.openTime}}</text>
-        <text wx:if="{{data.indoorOutdoor}}" class="meta-tag">{{data.indoorOutdoor}}</text>
+<base-drawer
+  show="{{show}}"
+  height="86vh"
+  panel-radius="80rpx 80rpx 0 0"
+  panel-background="#f9faf4"
+  handle-background="rgba(194, 200, 192, 0.3)"
+  bind:close="onClose"
+>
+  <view class="attraction-intro">
+    <view class="attraction-intro__hero">
+      <view class="attraction-intro__heading">
+        <view class="attraction-intro__title-block">
+          <text class="attraction-intro__title">{{viewModel.title}}</text>
+          <view class="attraction-intro__meta">
+            <text wx:if="{{viewModel.ratingText}}" class="attraction-intro__star">★</text>
+            <text wx:if="{{viewModel.ratingText}}" class="attraction-intro__rating">{{viewModel.ratingText}}</text>
+            <text wx:if="{{viewModel.ratingText && viewModel.costText}}" class="attraction-intro__dot">•</text>
+            <text wx:if="{{viewModel.costText}}" class="attraction-intro__cost">{{viewModel.costText}}</text>
+          </view>
+        </view>
+        <button class="attraction-intro__share" hover-class="attraction-intro__share--active" open-type="share" aria-label="分享景点">
+          <image class="attraction-intro__share-icon" src="{{iconUrls.share}}" mode="aspectFit" />
+        </button>
       </view>
 
-      <!-- Price & Family -->
-      <view class="info-row">
-        <text wx:if="{{data.ticketPriceA}}" class="info-price">门票: ¥{{data.ticketPriceA}}</text>
-        <text wx:if="{{data.familyFriendly === 'Y'}}" class="info-badge">亲子友好</text>
+      <view wx:if="{{viewModel.hasGallery}}" class="attraction-intro__gallery">
+        <view class="attraction-intro__gallery-main">
+          <image class="attraction-intro__image" src="{{viewModel.images[0]}}" mode="aspectFill" lazy-load />
+          <view class="attraction-intro__image-label">
+            <text>Scenic Spot</text>
+          </view>
+        </view>
+        <view wx:if="{{viewModel.images.length > 1}}" class="attraction-intro__gallery-side">
+          <image class="attraction-intro__thumb" src="{{viewModel.images[1]}}" mode="aspectFill" lazy-load />
+          <view wx:if="{{viewModel.images.length > 2}}" class="attraction-intro__thumb-wrap">
+            <image class="attraction-intro__thumb" src="{{viewModel.images[2]}}" mode="aspectFill" lazy-load />
+            <view class="attraction-intro__photo-mask">
+              <text>{{viewModel.photoCountText}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="attraction-intro__gallery attraction-intro__gallery--empty">
+        <text class="attraction-intro__empty-mark">18</text>
+        <text class="attraction-intro__empty-text">Scenic Point</text>
+      </view>
+    </view>
+
+    <view class="attraction-intro__content">
+      <view wx:if="{{viewModel.address}}" class="attraction-intro__section">
+        <text class="attraction-intro__section-label">LOCATION</text>
+        <view class="attraction-intro__location-row" hover-class="attraction-intro__location-row--active" bindtap="onLocationTap">
+          <image class="attraction-intro__location-icon" src="{{iconUrls.location}}" mode="aspectFit" />
+          <text class="attraction-intro__location-text">{{viewModel.address}}</text>
+        </view>
       </view>
 
-      <!-- Description -->
-      <view wx:if="{{data.attractionDescription}}" class="intro-section">
-        <text class="section-title">景点介绍</text>
-        <text class="section-content">{{data.attractionDescription}}</text>
+      <view wx:if="{{viewModel.tags.length}}" class="attraction-intro__section">
+        <text class="attraction-intro__section-label">DETAILS</text>
+        <view class="attraction-intro__pills">
+          <text wx:for="{{viewModel.tags}}" wx:key="*this" class="attraction-intro__pill">{{item}}</text>
+        </view>
       </view>
+
+      <view wx:if="{{viewModel.description}}" class="attraction-intro__section">
+        <text class="attraction-intro__section-label">ABOUT</text>
+        <text class="attraction-intro__body-text">{{viewModel.description}}</text>
+      </view>
+
+      <view wx:if="{{viewModel.notes}}" class="attraction-intro__section">
+        <text class="attraction-intro__section-label">NOTES</text>
+        <text class="attraction-intro__body-text">{{viewModel.notes}}</text>
+      </view>
+
+      <view wx:if="{{viewModel.checkInPoints.length}}" class="attraction-intro__checkin-card">
+        <text class="attraction-intro__path-title">打卡点</text>
+        <view class="attraction-intro__checkin-list">
+          <view
+            wx:for="{{viewModel.checkInPoints}}"
+            wx:key="name"
+            class="attraction-intro__checkin-item {{item.checked ? 'attraction-intro__checkin-item--checked' : ''}}"
+          >
+            <view class="attraction-intro__checkin-media">
+              <image wx:if="{{item.imageUrl}}" class="attraction-intro__checkin-image" src="{{item.imageUrl}}" mode="aspectFill" lazy-load />
+              <text wx:else class="attraction-intro__checkin-icon">{{item.checked ? '✓' : '○'}}</text>
+            </view>
+            <view class="attraction-intro__checkin-copy">
+              <view class="attraction-intro__checkin-heading">
+                <text class="attraction-intro__checkin-name">{{item.name}}</text>
+                <text class="attraction-intro__checkin-status">{{item.statusText}}</text>
+              </view>
+              <text wx:if="{{item.description}}" class="attraction-intro__checkin-desc">{{item.description}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{!viewModel.hasDetails}}" class="attraction-intro__empty-state">
+        <text class="attraction-intro__empty-state-title">暂无景点详情</text>
+        <text class="attraction-intro__empty-state-text">可先查看行程安排，景点信息更新后会在这里展示。</text>
+      </view>
+    </view>
+
+    <view class="attraction-intro__actions">
+      <button class="attraction-intro__action attraction-intro__action--secondary" hover-class="attraction-intro__action--secondary-active" bindtap="onAddTap">
+        <text class="attraction-intro__action-icon">⊞</text>
+        <view class="attraction-intro__action-copy">
+          <text class="attraction-intro__action-text">Add to</text>
+          <text class="attraction-intro__action-text">Itinerary</text>
+        </view>
+      </button>
+      <button class="attraction-intro__action attraction-intro__action--primary" hover-class="attraction-intro__action--primary-active" bindtap="onRouteTap">
+        <text class="attraction-intro__action-icon">⌁</text>
+        <view class="attraction-intro__action-copy">
+          <text class="attraction-intro__action-text">View</text>
+          <text class="attraction-intro__action-text">Route</text>
+        </view>
+      </button>
     </view>
   </view>
 </base-drawer>

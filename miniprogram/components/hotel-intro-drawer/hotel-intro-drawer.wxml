@@ -1,62 +1,97 @@
-<base-drawer show="{{show}}" height="82vh" bind:close="onClose">
-  <view class="hotel-intro-drawer">
-    <view class="hotel-intro-drawer__media">
-    <image
-        wx:if="{{viewModel.coverUrl}}"
-        class="hotel-intro-drawer__image"
-        src="{{viewModel.coverUrl}}"
-      mode="aspectFill"
-      lazy-load
-    />
-      <view wx:else class="hotel-intro-drawer__image-fallback">
-        <text class="hotel-intro-drawer__fallback-label">STAY</text>
-      </view>
-      <view class="hotel-intro-drawer__media-shade" />
-    </view>
-
-    <view class="hotel-intro-drawer__body">
-      <view class="hotel-intro-drawer__header">
-        <view class="hotel-intro-drawer__heading">
-          <text class="hotel-intro-drawer__eyebrow">STAY</text>
-          <text class="hotel-intro-drawer__title">{{viewModel.title}}</text>
+<base-drawer
+  show="{{show}}"
+  height="86vh"
+  panel-radius="80rpx 80rpx 0 0"
+  panel-background="#f9faf4"
+  handle-background="rgba(194, 200, 192, 0.3)"
+  bind:close="onClose"
+>
+  <view class="hotel-intro">
+    <view class="hotel-intro__hero">
+      <view class="hotel-intro__heading">
+        <view class="hotel-intro__title-block">
+          <text class="hotel-intro__title">{{viewModel.title}}</text>
+          <view class="hotel-intro__meta">
+            <text wx:if="{{viewModel.ratingText}}" class="hotel-intro__rating">{{viewModel.ratingText}}</text>
+            <text wx:if="{{viewModel.ratingText && viewModel.costText}}" class="hotel-intro__dot">•</text>
+            <text wx:if="{{viewModel.costText}}" class="hotel-intro__cost">{{viewModel.costText}}</text>
+          </view>
         </view>
-        <button
-          class="hotel-intro-drawer__close"
-          hover-class="hotel-intro-drawer__close--hover"
-          aria-label="关闭住宿介绍"
-          catchtap="onClose"
-        >
-          <text class="hotel-intro-drawer__close-text">关闭</text>
+        <button class="hotel-intro__share" hover-class="hotel-intro__share--active" open-type="share" aria-label="分享住宿">
+          <image class="hotel-intro__share-icon" src="{{iconUrls.share}}" mode="aspectFit" />
         </button>
       </view>
 
-      <view wx:if="{{viewModel.tags.length}}" class="hotel-intro-drawer__meta">
-        <text
-          wx:for="{{viewModel.tags}}"
-          wx:key="*this"
-          class="hotel-intro-drawer__tag"
-        >{{item}}</text>
+      <view wx:if="{{viewModel.hasGallery}}" class="hotel-intro__gallery">
+        <view class="hotel-intro__gallery-main">
+          <image class="hotel-intro__image" src="{{viewModel.images[0]}}" mode="aspectFill" lazy-load />
+          <view class="hotel-intro__image-label">
+            <text>Stay</text>
+          </view>
+        </view>
+        <view wx:if="{{viewModel.images.length > 1}}" class="hotel-intro__gallery-side">
+          <image class="hotel-intro__thumb" src="{{viewModel.images[1]}}" mode="aspectFill" lazy-load />
+          <view wx:if="{{viewModel.images.length > 2}}" class="hotel-intro__thumb-wrap">
+            <image class="hotel-intro__thumb" src="{{viewModel.images[2]}}" mode="aspectFill" lazy-load />
+            <view class="hotel-intro__photo-mask">
+              <text>{{viewModel.photoCountText}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="hotel-intro__gallery hotel-intro__gallery--empty">
+        <text class="hotel-intro__empty-mark">18</text>
+        <text class="hotel-intro__empty-text">Local Stay</text>
+      </view>
+    </view>
+
+    <view class="hotel-intro__content">
+      <view wx:if="{{viewModel.address}}" class="hotel-intro__section">
+        <text class="hotel-intro__section-label">LOCATION</text>
+        <view class="hotel-intro__location-row" hover-class="hotel-intro__location-row--active" bindtap="onLocationTap">
+          <image class="hotel-intro__location-icon" src="{{iconUrls.location}}" mode="aspectFit" />
+          <text class="hotel-intro__location-text">{{viewModel.address}}</text>
+        </view>
       </view>
 
-      <view wx:if="{{viewModel.priceText}}" class="hotel-intro-drawer__price-card">
-        <text class="hotel-intro-drawer__price-label">参考价格</text>
-        <text class="hotel-intro-drawer__price">{{viewModel.priceText}}</text>
+      <view wx:if="{{viewModel.tags.length}}" class="hotel-intro__section">
+        <text class="hotel-intro__section-label">FACILITIES</text>
+        <view class="hotel-intro__pills">
+          <text wx:for="{{viewModel.tags}}" wx:key="*this" class="hotel-intro__pill">{{item}}</text>
+        </view>
       </view>
 
-      <view wx:if="{{viewModel.address}}" class="hotel-intro-drawer__info">
-        <text class="hotel-intro-drawer__info-label">地址</text>
-        <text class="hotel-intro-drawer__info-text">{{viewModel.address}}</text>
+      <view wx:if="{{viewModel.contactPhone}}" class="hotel-intro__section">
+        <text class="hotel-intro__section-label">CONTACT</text>
+        <text class="hotel-intro__body-text">{{viewModel.contactPhone}}</text>
       </view>
 
-      <view wx:if="{{viewModel.description}}" class="hotel-intro-drawer__section">
-        <text class="hotel-intro-drawer__section-title">住宿介绍</text>
-        <text class="hotel-intro-drawer__section-content">{{viewModel.description}}</text>
+      <view wx:if="{{viewModel.description}}" class="hotel-intro__section">
+        <text class="hotel-intro__section-label">ABOUT</text>
+        <text class="hotel-intro__body-text">{{viewModel.description}}</text>
       </view>
 
-      <view wx:if="{{!viewModel.hasDetails}}" class="hotel-intro-drawer__empty">
-        <text class="hotel-intro-drawer__empty-title">暂无住宿详情</text>
-        <text class="hotel-intro-drawer__empty-text">可先查看行程安排，住宿信息更新后会在这里展示。</text>
+      <view wx:if="{{!viewModel.hasDetails}}" class="hotel-intro__empty-state">
+        <text class="hotel-intro__empty-state-title">暂无住宿详情</text>
+        <text class="hotel-intro__empty-state-text">可先查看行程安排，住宿信息更新后会在这里展示。</text>
       </view>
+    </view>
+
+    <view class="hotel-intro__actions">
+      <button class="hotel-intro__action hotel-intro__action--secondary" hover-class="hotel-intro__action--secondary-active" bindtap="onAddTap">
+        <text class="hotel-intro__action-icon">⊞</text>
+        <view class="hotel-intro__action-copy">
+          <text class="hotel-intro__action-text">Add to</text>
+          <text class="hotel-intro__action-text">Itinerary</text>
+        </view>
+      </button>
+      <button class="hotel-intro__action hotel-intro__action--primary" hover-class="hotel-intro__action--primary-active" bindtap="onBookTap">
+        <text class="hotel-intro__action-icon">□</text>
+        <view class="hotel-intro__action-copy">
+          <text class="hotel-intro__action-text">Book</text>
+          <text class="hotel-intro__action-text">Stay</text>
+        </view>
+      </button>
     </view>
   </view>
 </base-drawer>
