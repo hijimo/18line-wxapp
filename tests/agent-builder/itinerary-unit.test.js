@@ -140,9 +140,11 @@ describe('[Unit] 组件 JSON 格式验证', () => {
 
 describe('[Unit] create-itinerary 页面逻辑验证', () => {
   let pageTs;
+  let pageWxml;
 
   beforeAll(() => {
     pageTs = readFile('pages/create-itinerary/index.ts');
+    pageWxml = readFile('pages/create-itinerary/index.wxml');
   });
 
   test('导入了 autoGenerateItinerary', () => {
@@ -153,8 +155,21 @@ describe('[Unit] create-itinerary 页面逻辑验证', () => {
     expect(pageTs).toContain('addItinerary');
   });
 
-  test('导入了 getRegionTree 或 getProvinces', () => {
-    expect(pageTs.includes('getRegionTree') || pageTs.includes('getProvinces')).toBe(true);
+  test('使用微信原生 region picker 选择目的地', () => {
+    expect(pageWxml).toContain('mode="region"');
+    expect(pageWxml).toContain('bindchange="onRegionChange"');
+    expect(pageWxml).toContain('value="{{regionValue}}"');
+  });
+
+  test('onRegionChange 同步地区名称和编码', () => {
+    expect(pageTs).toContain('onRegionChange');
+    expect(pageTs).toContain('const { value, code } = e.detail');
+    expect(pageTs).toContain('provinceName: value[0]');
+    expect(pageTs).toContain('cityName: value[1]');
+    expect(pageTs).toContain('districtName: value[2]');
+    expect(pageTs).toContain('provinceCode: code[0]');
+    expect(pageTs).toContain('cityCode: code[1]');
+    expect(pageTs).toContain('districtCode: code[2]');
   });
 
   test('导入了 getDictByType', () => {
