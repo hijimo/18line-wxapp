@@ -81,17 +81,20 @@ Page({
     });
   },
 
-  onPreferenceTap(e: any) {
+  onPreferenceToggle(e: any) {
     const value = e.currentTarget.dataset.value;
-    const { preferences } = this.data;
-    const index = preferences.indexOf(value);
+    if (!value) return;
 
-    if (index > -1) {
-      preferences.splice(index, 1);
-    } else {
-      preferences.push(value);
-    }
-    this.setData({ preferences: [...preferences] });
+    const preferences = this.data.preferences || [];
+    const nextPreferences = preferences.includes(value)
+      ? preferences.filter((item) => item !== value)
+      : [...preferences, value];
+
+    this.setData({ preferences: nextPreferences });
+  },
+
+  onPreferenceTap(e: any) {
+    this.onPreferenceToggle(e);
   },
 
   onBlindModeSelect(e: any) {
