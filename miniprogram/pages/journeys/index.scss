@@ -109,9 +109,11 @@ page {
 }
 
 .status-badge {
-  padding: 4rpx 16rpx;
+  padding: 8rpx 16rpx;
   border-radius: 9999rpx;
   flex-shrink: 0;
+  font-size: 0;
+  line-height: 1;
 }
 
 .status-badge--confirmed {
