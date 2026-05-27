@@ -217,30 +217,35 @@
     wx:if="{{showIntroDrawer === 'attraction'}}"
     show="{{showIntroDrawer === 'attraction'}}"
     data="{{introData}}"
+    source="schedule"
     bind:close="onIntroClose"
   />
   <hotel-intro-drawer
     wx:if="{{showIntroDrawer === 'hotel'}}"
     show="{{showIntroDrawer === 'hotel'}}"
     data="{{introData}}"
+    source="schedule"
     bind:close="onIntroClose"
   />
   <dining-intro-drawer
     wx:if="{{showIntroDrawer === 'dining'}}"
     show="{{showIntroDrawer === 'dining'}}"
     data="{{introData}}"
+    source="schedule"
     bind:close="onIntroClose"
   />
   <car-intro-drawer
     wx:if="{{showIntroDrawer === 'car'}}"
     show="{{showIntroDrawer === 'car'}}"
     data="{{introData}}"
+    source="schedule"
     bind:close="onIntroClose"
   />
   <photography-intro-drawer
     wx:if="{{showIntroDrawer === 'photography'}}"
     show="{{showIntroDrawer === 'photography'}}"
     data="{{introData}}"
+    source="schedule"
     bind:close="onIntroClose"
   />
   <travel-date-picker

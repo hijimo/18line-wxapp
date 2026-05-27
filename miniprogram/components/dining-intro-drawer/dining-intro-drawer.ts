@@ -164,6 +164,10 @@ Component({
       type: Object,
       value: {},
     },
+    source: {
+      type: String,
+      value: '',
+    },
   },
   data: {
     viewModel: createDiningIntroViewModel({}),

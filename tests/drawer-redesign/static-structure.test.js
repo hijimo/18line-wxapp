@@ -16,6 +16,14 @@ const drawers = [
   'attraction-intro-drawer',
 ];
 
+const scheduleEntryDrawers = [
+  'attraction-intro-drawer',
+  'hotel-intro-drawer',
+  'dining-intro-drawer',
+  'car-intro-drawer',
+  'photography-intro-drawer',
+];
+
 for (const drawer of drawers) {
   test(`${drawer} follows the dining drawer shell`, () => {
     const wxml = readDrawer(drawer, 'wxml');
@@ -47,4 +55,46 @@ test('attraction drawer has dedicated check-in point rendering', () => {
   assert.match(wxml, /viewModel\.checkInPoints/);
   assert.match(ts, /checkInPoints/);
   assert.match(ts, /checked/);
+});
+
+test('itinerary detail marks all intro drawers as schedule-origin', () => {
+  const pageWxml = fs.readFileSync(
+    path.resolve(__dirname, '../../miniprogram/pages/itinerary-detail/index.wxml'),
+    'utf8',
+  );
+
+  for (const drawer of scheduleEntryDrawers) {
+    const drawerTag = drawer.replace(/-drawer$/, '');
+    const drawerBlock = pageWxml.match(
+      new RegExp(`<${drawerTag}-drawer[\\s\\S]*?/>`),
+    )?.[0] || '';
+
+    assert.match(drawerBlock, /source="schedule"/);
+  }
+});
+
+for (const drawer of scheduleEntryDrawers) {
+  test(`${drawer} hides only the add-to-itinerary button for schedule-origin openings`, () => {
+    const wxml = readDrawer(drawer, 'wxml');
+    const ts = readDrawer(drawer, 'ts');
+
+    assert.match(ts, /source:\s*{/);
+    assert.match(ts, /type:\s*String/);
+    assert.match(wxml, /wx:if="{{source !== 'schedule'}}"[\s\S]*?bindtap="onAddTap"/);
+    assert.match(wxml, /open-type="share"/);
+  });
+}
+
+test('hotel and attraction share icons match the dining drawer share icon', () => {
+  const diningTs = readDrawer('dining-intro-drawer', 'ts');
+  const hotelTs = readDrawer('hotel-intro-drawer', 'ts');
+  const attractionTs = readDrawer('attraction-intro-drawer', 'ts');
+
+  const diningPath = diningTs.match(/const DINING_INTRO_SHARE_ICON =[\s\S]*?<path d="([^"]+)"/)?.[1];
+  const hotelPath = hotelTs.match(/const HOTEL_INTRO_SHARE_ICON =[\s\S]*?<path d="([^"]+)"/)?.[1];
+  const attractionPath = attractionTs.match(/const ATTRACTION_INTRO_SHARE_ICON =[\s\S]*?<path d="([^"]+)"/)?.[1];
+
+  assert.ok(diningPath);
+  assert.equal(hotelPath, diningPath);
+  assert.equal(attractionPath, diningPath);
 });

@@ -78,7 +78,7 @@
     </view>
 
     <view class="hotel-intro__actions">
-      <button class="hotel-intro__action hotel-intro__action--secondary" hover-class="hotel-intro__action--secondary-active" bindtap="onAddTap">
+      <button wx:if="{{source !== 'schedule'}}" class="hotel-intro__action hotel-intro__action--secondary" hover-class="hotel-intro__action--secondary-active" bindtap="onAddTap">
         <text class="hotel-intro__action-icon">⊞</text>
         <view class="hotel-intro__action-copy">
           <text class="hotel-intro__action-text">Add to</text>

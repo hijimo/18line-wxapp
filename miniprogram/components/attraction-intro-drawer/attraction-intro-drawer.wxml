@@ -102,7 +102,7 @@
     </view>
 
     <view class="attraction-intro__actions">
-      <button class="attraction-intro__action attraction-intro__action--secondary" hover-class="attraction-intro__action--secondary-active" bindtap="onAddTap">
+      <button wx:if="{{source !== 'schedule'}}" class="attraction-intro__action attraction-intro__action--secondary" hover-class="attraction-intro__action--secondary-active" bindtap="onAddTap">
         <text class="attraction-intro__action-icon">⊞</text>
         <view class="attraction-intro__action-copy">
           <text class="attraction-intro__action-text">Add to</text>
