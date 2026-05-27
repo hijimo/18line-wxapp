@@ -23,6 +23,14 @@
         </button>
       </view>
 
+      <view wx:if="{{viewModel.featureTags.length}}" class="attraction-intro__features">
+        <view wx:for="{{viewModel.featureTags}}" wx:key="key" class="attraction-intro__feature-card">
+          <image class="attraction-intro__feature-icon" src="{{featureIcons[item.key]}}" mode="aspectFit" />
+          <text class="attraction-intro__feature-label">{{item.label}}</text>
+          <text wx:if="{{item.value}}" class="attraction-intro__feature-value">{{item.value}}</text>
+        </view>
+      </view>
+
       <view wx:if="{{viewModel.hasGallery}}" class="attraction-intro__gallery">
         <view class="attraction-intro__gallery-main">
           <image class="attraction-intro__image" src="{{viewModel.images[0]}}" mode="aspectFill" lazy-load />
@@ -70,6 +78,35 @@
       <view wx:if="{{viewModel.notes}}" class="attraction-intro__section">
         <text class="attraction-intro__section-label">NOTES</text>
         <text class="attraction-intro__body-text">{{viewModel.notes}}</text>
+      </view>
+
+      <view wx:if="{{viewModel.bestTime}}" class="attraction-intro__section">
+        <text class="attraction-intro__section-label">最佳观景时间</text>
+        <text class="attraction-intro__body-text">{{viewModel.bestTime}}</text>
+      </view>
+
+      <view wx:if="{{viewModel.badFactors}}" class="attraction-intro__section">
+        <text class="attraction-intro__section-label">不宜出行因素</text>
+        <text class="attraction-intro__body-text">{{viewModel.badFactors}}</text>
+      </view>
+
+      <view wx:if="{{viewModel.ticketPriceA || viewModel.ticketPriceC}}" class="attraction-intro__section">
+        <text class="attraction-intro__section-label">门票价格</text>
+        <view class="attraction-intro__detail-rows">
+          <view wx:if="{{viewModel.ticketPriceA}}" class="attraction-intro__detail-row">
+            <text class="attraction-intro__detail-key">成人</text>
+            <text class="attraction-intro__detail-val">{{viewModel.ticketPriceA}}</text>
+          </view>
+          <view wx:if="{{viewModel.ticketPriceC}}" class="attraction-intro__detail-row">
+            <text class="attraction-intro__detail-key">儿童</text>
+            <text class="attraction-intro__detail-val">{{viewModel.ticketPriceC}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{viewModel.reservationRequired}}" class="attraction-intro__section">
+        <text class="attraction-intro__section-label">提前预约</text>
+        <text class="attraction-intro__body-text">需要提前预约{{viewModel.reservationRequired !== '1' && viewModel.reservationRequired !== 'Y' ? '（' + viewModel.reservationRequired + '）' : ''}}</text>
       </view>
 
       <view wx:if="{{viewModel.checkInPoints.length}}" class="attraction-intro__checkin-card">

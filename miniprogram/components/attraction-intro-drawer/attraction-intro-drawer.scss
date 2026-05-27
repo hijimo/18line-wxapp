@@ -67,7 +67,7 @@
 
 .attraction-intro__share {
   width: 78rpx !important;
-  height: 92rpx;
+  height: 78rpx;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -92,6 +92,51 @@
   display: block;
   width: 36rpx;
   height: 40rpx;
+}
+
+.attraction-intro__features {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140rpx, 1fr));
+  gap: 16rpx;
+}
+
+.attraction-intro__feature-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx 16rpx;
+  border-radius: 32rpx;
+  background: #f3f4ee;
+  box-sizing: border-box;
+}
+
+.attraction-intro__feature-icon {
+  display: block;
+  width: 40rpx;
+  height: 40rpx;
+  margin-bottom: 16rpx;
+}
+
+.attraction-intro__feature-label {
+  display: block;
+  color: #727972;
+  font-size: 20rpx;
+  font-weight: 700;
+  line-height: 30rpx;
+  text-align: center;
+  letter-spacing: -0.5rpx;
+  text-transform: uppercase;
+}
+
+.attraction-intro__feature-value {
+  display: block;
+  color: #727972;
+  font-size: 20rpx;
+  font-weight: 700;
+  line-height: 30rpx;
+  text-align: center;
+  letter-spacing: -0.5rpx;
 }
 
 .attraction-intro__gallery {
@@ -251,6 +296,32 @@
   font-weight: 400;
   line-height: 48rpx;
   word-break: break-word;
+}
+
+.attraction-intro__detail-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.attraction-intro__detail-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.attraction-intro__detail-key {
+  color: #727972;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 44rpx;
+}
+
+.attraction-intro__detail-val {
+  color: #163422;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 44rpx;
 }
 
 .attraction-intro__pills {
