@@ -11,6 +11,78 @@ import {
   addPhotography,
 } from '../../services/itinerary'
 
+type ScheduleTabId = 'attraction' | 'hotel' | 'dining' | 'car' | 'photography'
+
+type TabKeywordMap = Record<ScheduleTabId, string>
+
+const TAB_IDS: ScheduleTabId[] = ['attraction', 'hotel', 'dining', 'car', 'photography']
+
+const LIST_KEY_MAP: Record<ScheduleTabId, string> = {
+  attraction: 'attractionList',
+  hotel: 'accommodationList',
+  dining: 'diningList',
+  car: 'carList',
+  photography: 'photographyList',
+}
+
+const FILTERED_LIST_KEY_MAP: Record<ScheduleTabId, string> = {
+  attraction: 'filteredAttractionList',
+  hotel: 'filteredAccommodationList',
+  dining: 'filteredDiningList',
+  car: 'filteredCarList',
+  photography: 'filteredPhotographyList',
+}
+
+const TAB_LABEL_MAP: Record<ScheduleTabId, string> = {
+  attraction: '景点',
+  hotel: '住宿',
+  dining: '餐饮',
+  car: '包车',
+  photography: '跟拍',
+}
+
+const SEARCH_FIELD_MAP: Record<ScheduleTabId, string[]> = {
+  attraction: [
+    'attractionName',
+    'attractionShortName',
+    'attractionBlurb',
+    'attractionDescription',
+    'city',
+    'district',
+  ],
+  hotel: ['accommodationName', 'accommodationDesc', 'accommodationType', 'address', 'city', 'district'],
+  dining: ['diningName', 'diningDesc', 'diningTips', 'diningNature', 'address', 'city', 'district'],
+  car: ['nickname', 'carModel', 'introduction', 'contactInfo'],
+  photography: ['nickname', 'introduction', 'equipment', 'contactInfo'],
+}
+
+const EMPTY_TAB_KEYWORDS = TAB_IDS.reduce((keywords, tab) => {
+  keywords[tab] = ''
+  return keywords
+}, {} as TabKeywordMap)
+
+function normalizeSearchValue(value: unknown) {
+  return value === undefined || value === null ? '' : String(value).toLowerCase()
+}
+
+function filterDrawerList(list: any[], tab: ScheduleTabId, keyword: string) {
+  const normalizedKeyword = keyword.trim().toLowerCase()
+  if (!normalizedKeyword) return list
+
+  const fields = SEARCH_FIELD_MAP[tab]
+  return list.filter((item) =>
+    fields.some((field) => normalizeSearchValue(item?.[field]).includes(normalizedKeyword)),
+  )
+}
+
+function getSearchPlaceholder(tab: ScheduleTabId) {
+  return `搜索${TAB_LABEL_MAP[tab]}名称或关键词`
+}
+
+function getSearchEmptyText(tab: ScheduleTabId, keyword: string) {
+  return keyword.trim() ? `未找到与“${keyword.trim()}”相关的${TAB_LABEL_MAP[tab]}` : ''
+}
+
 Component({
   properties: {
     show: {
@@ -41,6 +113,15 @@ Component({
     diningList: [] as any[],
     carList: [] as any[],
     photographyList: [] as any[],
+    filteredAttractionList: [] as any[],
+    filteredAccommodationList: [] as any[],
+    filteredDiningList: [] as any[],
+    filteredCarList: [] as any[],
+    filteredPhotographyList: [] as any[],
+    tabKeywords: { ...EMPTY_TAB_KEYWORDS } as TabKeywordMap,
+    currentKeyword: '',
+    currentSearchPlaceholder: getSearchPlaceholder('attraction'),
+    searchEmptyText: '',
     listLoading: false,
     mealType: '',
   },
@@ -49,6 +130,8 @@ Component({
     show(val: boolean) {
       if (val) {
         this.loadTabData()
+      } else {
+        this.resetKeywordSearch()
       }
     },
   },
@@ -63,46 +146,110 @@ Component({
 
   methods: {
     onTabChange(e: any) {
-      const tab = e.currentTarget.dataset.tab
-      this.setData({ activeTab: tab })
-      const listMap: Record<string, string> = {
-        attraction: 'attractionList',
-        hotel: 'accommodationList',
-        dining: 'diningList',
-        car: 'carList',
-        photography: 'photographyList',
-      }
-      const listKey = listMap[tab]
+      const tab = e.currentTarget.dataset.tab as ScheduleTabId
+      const keyword = (this.data as any).tabKeywords[tab] || ''
+      const listKey = LIST_KEY_MAP[tab]
+      const filteredListKey = FILTERED_LIST_KEY_MAP[tab]
+      const list = ((this.data as any)[listKey] || []) as any[]
+      this.setData({
+        activeTab: tab,
+        currentKeyword: keyword,
+        currentSearchPlaceholder: getSearchPlaceholder(tab),
+        searchEmptyText: getSearchEmptyText(tab, keyword),
+        [filteredListKey]: filterDrawerList(list, tab, keyword),
+      })
       if (listKey && (this.data as any)[listKey].length === 0) {
         this.loadTabData()
       }
     },
 
+    onKeywordInput(e: any) {
+      const keyword = e.detail.value || ''
+      this.updateKeywordSearch(keyword)
+    },
+
+    onKeywordClear() {
+      this.updateKeywordSearch('')
+    },
+
+    updateKeywordSearch(keyword: string) {
+      const activeTab = this.data.activeTab as ScheduleTabId
+      const listKey = LIST_KEY_MAP[activeTab]
+      const filteredListKey = FILTERED_LIST_KEY_MAP[activeTab]
+      const list = ((this.data as any)[listKey] || []) as any[]
+      const tabKeywords = {
+        ...((this.data as any).tabKeywords as TabKeywordMap),
+        [activeTab]: keyword,
+      }
+
+      this.setData({
+        tabKeywords,
+        currentKeyword: keyword,
+        searchEmptyText: getSearchEmptyText(activeTab, keyword),
+        [filteredListKey]: filterDrawerList(list, activeTab, keyword),
+      })
+    },
+
+    resetKeywordSearch() {
+      this.setData({
+        tabKeywords: { ...EMPTY_TAB_KEYWORDS },
+        currentKeyword: '',
+        currentSearchPlaceholder: getSearchPlaceholder(this.data.activeTab as ScheduleTabId),
+        searchEmptyText: '',
+        filteredAttractionList: this.data.attractionList,
+        filteredAccommodationList: this.data.accommodationList,
+        filteredDiningList: this.data.diningList,
+        filteredCarList: this.data.carList,
+        filteredPhotographyList: this.data.photographyList,
+      })
+    },
+
     async loadTabData() {
-      const { activeTab } = this.data
+      const activeTab = this.data.activeTab as ScheduleTabId
+      const keyword = ((this.data as any).tabKeywords[activeTab] || '') as string
       this.setData({ listLoading: true })
       try {
         let res: any
         switch (activeTab) {
           case 'attraction':
             res = await getAttractionList()
-            this.setData({ attractionList: res.data || [] })
+            this.setData({
+              attractionList: res.data || [],
+              filteredAttractionList: filterDrawerList(res.data || [], activeTab, keyword),
+              searchEmptyText: getSearchEmptyText(activeTab, keyword),
+            })
             break
           case 'hotel':
             res = await getAccommodationList()
-            this.setData({ accommodationList: res.data || [] })
+            this.setData({
+              accommodationList: res.data || [],
+              filteredAccommodationList: filterDrawerList(res.data || [], activeTab, keyword),
+              searchEmptyText: getSearchEmptyText(activeTab, keyword),
+            })
             break
           case 'dining':
             res = await getDiningList()
-            this.setData({ diningList: res.data || [] })
+            this.setData({
+              diningList: res.data || [],
+              filteredDiningList: filterDrawerList(res.data || [], activeTab, keyword),
+              searchEmptyText: getSearchEmptyText(activeTab, keyword),
+            })
             break
           case 'car':
             res = await getCarList()
-            this.setData({ carList: res.data || [] })
+            this.setData({
+              carList: res.data || [],
+              filteredCarList: filterDrawerList(res.data || [], activeTab, keyword),
+              searchEmptyText: getSearchEmptyText(activeTab, keyword),
+            })
             break
           case 'photography':
             res = await getPhotographyList()
-            this.setData({ photographyList: res.data || [] })
+            this.setData({
+              photographyList: res.data || [],
+              filteredPhotographyList: filterDrawerList(res.data || [], activeTab, keyword),
+              searchEmptyText: getSearchEmptyText(activeTab, keyword),
+            })
             break
         }
       } catch (err) {

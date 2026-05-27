@@ -12,6 +12,26 @@
     </view>
   </scroll-view>
 
+  <!-- Keyword Search -->
+  <view class="keyword-search">
+    <view class="keyword-search__field">
+      <image
+        class="keyword-search__icon"
+        src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-search.svg"
+        mode="aspectFit"
+      />
+      <input
+        class="keyword-search__input"
+        value="{{currentKeyword}}"
+        placeholder="{{currentSearchPlaceholder}}"
+        placeholder-class="keyword-search__placeholder"
+        confirm-type="search"
+        bindinput="onKeywordInput"
+      />
+      <view wx:if="{{currentKeyword}}" class="keyword-search__clear" bindtap="onKeywordClear">清除</view>
+    </view>
+  </view>
+
   <!-- Loading -->
   <view wx:if="{{listLoading}}" class="list-loading">
     <text class="loading-text">加载中...</text>
@@ -20,7 +40,7 @@
   <!-- Attraction List -->
   <view wx:if="{{activeTab === 'attraction' && !listLoading}}" class="list-wrap">
     <view
-      wx:for="{{attractionList}}"
+      wx:for="{{filteredAttractionList}}"
       wx:key="attractionId"
       class="list-item"
       data-item="{{item}}"
@@ -42,15 +62,15 @@
         </view>
       </view>
     </view>
-    <view wx:if="{{attractionList.length === 0}}" class="list-empty">
-      <text>暂无景点数据</text>
+    <view wx:if="{{filteredAttractionList.length === 0}}" class="list-empty">
+      <text>{{searchEmptyText || '暂无景点数据'}}</text>
     </view>
   </view>
 
   <!-- Hotel List -->
   <view wx:if="{{activeTab === 'hotel' && !listLoading}}" class="list-wrap">
     <view
-      wx:for="{{accommodationList}}"
+      wx:for="{{filteredAccommodationList}}"
       wx:key="accommodationId"
       class="list-item"
       data-item="{{item}}"
@@ -72,15 +92,15 @@
         </view>
       </view>
     </view>
-    <view wx:if="{{accommodationList.length === 0}}" class="list-empty">
-      <text>暂无住宿数据</text>
+    <view wx:if="{{filteredAccommodationList.length === 0}}" class="list-empty">
+      <text>{{searchEmptyText || '暂无住宿数据'}}</text>
     </view>
   </view>
 
   <!-- Dining List -->
   <view wx:if="{{activeTab === 'dining' && !listLoading}}" class="list-wrap">
     <view
-      wx:for="{{diningList}}"
+      wx:for="{{filteredDiningList}}"
       wx:key="diningId"
       class="list-item"
       data-item="{{item}}"
@@ -101,15 +121,15 @@
         </view>
       </view>
     </view>
-    <view wx:if="{{diningList.length === 0}}" class="list-empty">
-      <text>暂无餐饮数据</text>
+    <view wx:if="{{filteredDiningList.length === 0}}" class="list-empty">
+      <text>{{searchEmptyText || '暂无餐饮数据'}}</text>
     </view>
   </view>
 
   <!-- Car List -->
   <view wx:if="{{activeTab === 'car' && !listLoading}}" class="list-wrap">
     <view
-      wx:for="{{carList}}"
+      wx:for="{{filteredCarList}}"
       wx:key="carId"
       class="list-item"
       data-item="{{item}}"
@@ -130,15 +150,15 @@
         </view>
       </view>
     </view>
-    <view wx:if="{{carList.length === 0}}" class="list-empty">
-      <text>暂无包车数据</text>
+    <view wx:if="{{filteredCarList.length === 0}}" class="list-empty">
+      <text>{{searchEmptyText || '暂无包车数据'}}</text>
     </view>
   </view>
 
   <!-- Photography List -->
   <view wx:if="{{activeTab === 'photography' && !listLoading}}" class="list-wrap">
     <view
-      wx:for="{{photographyList}}"
+      wx:for="{{filteredPhotographyList}}"
       wx:key="photographyId"
       class="list-item"
       data-item="{{item}}"
@@ -160,8 +180,8 @@
         </view>
       </view>
     </view>
-    <view wx:if="{{photographyList.length === 0}}" class="list-empty">
-      <text>暂无跟拍数据</text>
+    <view wx:if="{{filteredPhotographyList.length === 0}}" class="list-empty">
+      <text>{{searchEmptyText || '暂无跟拍数据'}}</text>
     </view>
   </view>
 </base-drawer>

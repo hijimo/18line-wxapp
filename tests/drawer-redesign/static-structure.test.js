@@ -98,3 +98,29 @@ test('hotel and attraction share icons match the dining drawer share icon', () =
   assert.equal(hotelPath, diningPath);
   assert.equal(attractionPath, diningPath);
 });
+
+test('add schedule drawer has per-tab keyword search and filtered rendering', () => {
+  const wxml = readDrawer('add-schedule-drawer', 'wxml');
+  const ts = readDrawer('add-schedule-drawer', 'ts');
+  const scss = readDrawer('add-schedule-drawer', 'scss');
+
+  assert.match(wxml, /class="keyword-search"/);
+  assert.match(wxml, /bindinput="onKeywordInput"/);
+  assert.match(wxml, /bindtap="onKeywordClear"/);
+  assert.match(wxml, /filteredAttractionList/);
+  assert.match(wxml, /filteredAccommodationList/);
+  assert.match(wxml, /filteredDiningList/);
+  assert.match(wxml, /filteredCarList/);
+  assert.match(wxml, /filteredPhotographyList/);
+  assert.match(wxml, /searchEmptyText/);
+
+  assert.match(ts, /type ScheduleTabId/);
+  assert.match(ts, /tabKeywords/);
+  assert.match(ts, /SEARCH_FIELD_MAP/);
+  assert.match(ts, /filterDrawerList/);
+  assert.match(ts, /resetKeywordSearch/);
+  assert.match(ts, /未找到与/);
+
+  assert.match(scss, /\.keyword-search/);
+  assert.match(scss, /keyword-search__field/);
+});
