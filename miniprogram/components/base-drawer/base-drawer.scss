@@ -21,6 +21,7 @@
   bottom: 0;
   background: #ffffff;
   border-radius: 32rpx 32rpx 0 0;
+  overflow: hidden;
   transform: translateY(100%);
   transition: transform 300ms ease;
   z-index: 1001;
