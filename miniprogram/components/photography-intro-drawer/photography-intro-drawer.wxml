@@ -78,7 +78,7 @@
     </view>
 
     <view class="photography-intro__actions">
-      <button class="photography-intro__action photography-intro__action--secondary" hover-class="photography-intro__action--secondary-active" bindtap="onAddTap">
+      <button wx:if="{{source !== 'schedule'}}" class="photography-intro__action photography-intro__action--secondary" hover-class="photography-intro__action--secondary-active" bindtap="onAddTap">
         <text class="photography-intro__action-icon">⊞</text>
         <view class="photography-intro__action-copy">
           <text class="photography-intro__action-text">Add to</text>

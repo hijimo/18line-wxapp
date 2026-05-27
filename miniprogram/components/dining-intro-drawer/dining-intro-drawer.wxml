@@ -142,6 +142,7 @@
 
     <view class="dining-intro__actions">
       <button
+        wx:if="{{source !== 'schedule'}}"
         class="dining-intro__action dining-intro__action--secondary"
         hover-class="dining-intro__action--secondary-active"
         bindtap="onAddTap"

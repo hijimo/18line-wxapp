@@ -82,7 +82,7 @@
     </view>
 
     <view class="car-intro__actions">
-      <button class="car-intro__action car-intro__action--secondary" hover-class="car-intro__action--secondary-active" bindtap="onAddTap">
+      <button wx:if="{{source !== 'schedule'}}" class="car-intro__action car-intro__action--secondary" hover-class="car-intro__action--secondary-active" bindtap="onAddTap">
         <text class="car-intro__action-icon">⊞</text>
         <view class="car-intro__action-copy">
           <text class="car-intro__action-text">Add to</text>
