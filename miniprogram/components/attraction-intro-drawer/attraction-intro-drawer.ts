@@ -1,3 +1,5 @@
+import { previewImageList } from '../../utils/image-preview';
+
 const ATTRACTION_INTRO_LOCATION_ICON =
   'data:image/svg+xml,' +
   encodeURIComponent(
@@ -338,6 +340,10 @@ Component({
   methods: {
     onClose() {
       this.triggerEvent('close');
+    },
+    onPreviewImageTap(event: WechatMiniprogram.TouchEvent) {
+      const index = Number(event.currentTarget.dataset.index);
+      previewImageList((this.data.viewModel as AttractionIntroViewModel).images, index);
     },
     onLocationTap() {
       const attraction = this.data.data as AttractionIntroData;

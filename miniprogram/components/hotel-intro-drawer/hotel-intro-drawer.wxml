@@ -23,15 +23,15 @@
       </view>
 
       <view wx:if="{{viewModel.hasGallery}}" class="hotel-intro__gallery">
-        <view class="hotel-intro__gallery-main">
+        <view class="hotel-intro__gallery-main" bindtap="onPreviewImageTap" data-index="0">
           <image class="hotel-intro__image" src="{{viewModel.images[0]}}" mode="aspectFill" lazy-load />
           <view class="hotel-intro__image-label">
             <text>Stay</text>
           </view>
         </view>
         <view wx:if="{{viewModel.images.length > 1}}" class="hotel-intro__gallery-side">
-          <image class="hotel-intro__thumb" src="{{viewModel.images[1]}}" mode="aspectFill" lazy-load />
-          <view wx:if="{{viewModel.images.length > 2}}" class="hotel-intro__thumb-wrap">
+          <image class="hotel-intro__thumb" src="{{viewModel.images[1]}}" mode="aspectFill" lazy-load bindtap="onPreviewImageTap" data-index="1" />
+          <view wx:if="{{viewModel.images.length > 2}}" class="hotel-intro__thumb-wrap" bindtap="onPreviewImageTap" data-index="2">
             <image class="hotel-intro__thumb" src="{{viewModel.images[2]}}" mode="aspectFill" lazy-load />
             <view class="hotel-intro__photo-mask">
               <text>{{viewModel.photoCountText}}</text>

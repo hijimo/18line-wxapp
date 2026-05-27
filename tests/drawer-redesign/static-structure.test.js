@@ -85,6 +85,19 @@ for (const drawer of scheduleEntryDrawers) {
   });
 }
 
+for (const drawer of scheduleEntryDrawers) {
+  test(`${drawer} gallery images can open preview from the tapped image`, () => {
+    const wxml = readDrawer(drawer, 'wxml');
+    const ts = readDrawer(drawer, 'ts');
+
+    assert.match(ts, /previewImageList/);
+    assert.match(ts, /onPreviewImageTap/);
+    assert.match(wxml, /bindtap="onPreviewImageTap"[\s\S]*?data-index="0"/);
+    assert.match(wxml, /bindtap="onPreviewImageTap"[\s\S]*?data-index="1"/);
+    assert.match(wxml, /bindtap="onPreviewImageTap"[\s\S]*?data-index="2"/);
+  });
+}
+
 test('hotel and attraction share icons match the dining drawer share icon', () => {
   const diningTs = readDrawer('dining-intro-drawer', 'ts');
   const hotelTs = readDrawer('hotel-intro-drawer', 'ts');
