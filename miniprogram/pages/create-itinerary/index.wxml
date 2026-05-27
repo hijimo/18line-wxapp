@@ -1,4 +1,5 @@
 <wxs src="../../utils/oss.wxs" module="oss" />
+<wxs src="../../utils/array.wxs" module="arr" />
 <view class="page-container">
   <navigation-bar title="创建行程" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
 
@@ -51,8 +52,8 @@
           <view
             wx:for="{{preferenceOptions}}"
             wx:key="dictValue"
-            class="preference-tag {{preferences.indexOf(item.dictValue) > -1 ? 'preference-tag--active' : ''}}"
-            bindtap="onPreferenceTap"
+            class="preference-tag {{arr.includes(preferences, item.dictValue) ? 'preference-tag--active' : ''}}"
+            bindtap="onPreferenceToggle"
             data-value="{{item.dictValue}}"
           >
             <text class="preference-tag-text">{{item.dictLabel}}</text>
