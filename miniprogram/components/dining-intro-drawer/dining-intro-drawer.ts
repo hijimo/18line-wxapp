@@ -30,6 +30,7 @@ type DiningPathItem = {
 };
 
 type DiningIntroData = {
+  attractionName?: string;
   diningName?: string;
   diningDesc?: string;
   diningTips?: string;
@@ -55,6 +56,7 @@ type DiningIntroViewModel = {
   costText: string;
   images: string[];
   photoCountText: string;
+  attractionName: string;
   address: string;
   description: string;
   dishes: string[];
@@ -127,6 +129,7 @@ function createDiningIntroViewModel(data: DiningIntroData | null | undefined): D
   const costText = normalizeDiningIntroText(source.avgCost);
   const dishes = getDishList(source);
   const pathItems = normalizePathItems(source.__pathItems);
+  const attractionName = normalizeDiningIntroText(source.attractionName);
   const address = normalizeDiningIntroText(source.address);
   const description = normalizeDiningIntroText(source.diningDesc);
   const tags = getTags(source);
@@ -138,6 +141,7 @@ function createDiningIntroViewModel(data: DiningIntroData | null | undefined): D
     images,
     photoCountText:
       images.length > 2 ? `+${Math.max(images.length - 2, 1)} Photos` : '',
+    attractionName,
     address,
     description,
     dishes,
@@ -147,7 +151,7 @@ function createDiningIntroViewModel(data: DiningIntroData | null | undefined): D
     hasDetails: Boolean(
       ratingText ||
         costText ||
-        address ||
+        attractionName ||
         description ||
         dishes.length ||
         pathItems.length ||

@@ -121,11 +121,33 @@ function getDiningMealTime(meal?: string) {
   return '12:30';
 }
 
+function normalizeIntroDataWithAttractionName(
+  data: unknown,
+  dayData: TravelItineraryDay | null,
+) {
+  const source =
+    data && typeof data === 'object' ? (data as Record<string, unknown>) : {};
+  const rawAttractionName = source.attractionName;
+  const attractionName =
+    typeof rawAttractionName === 'string' ? rawAttractionName.trim() : '';
+  if (attractionName) return source;
+
+  const fallbackAttractionName =
+    dayData?.attractionList?.[0]?.attractionName?.trim();
+  if (!fallbackAttractionName) return source;
+
+  return {
+    ...source,
+    attractionName: fallbackAttractionName,
+  };
+}
+
 function buildDiningIntroData(
-  data: Record<string, unknown>,
+  data: unknown,
   meal: DiningIntroMeal | undefined,
   dayData: TravelItineraryDay | null,
 ) {
+  const source = normalizeIntroDataWithAttractionName(data, dayData);
   const pathItems: DiningIntroPathItem[] = [];
   const firstAttraction = dayData?.attractionList?.[0];
   const accommodation = dayData?.accommodation;
@@ -142,7 +164,7 @@ function buildDiningIntroData(
 
   pathItems.push({
     type: 'dining',
-    title: typeof data.diningName === 'string' ? data.diningName : '餐饮安排',
+    title: typeof source.diningName === 'string' ? source.diningName : '餐饮安排',
     meta: `${getDiningMealText(meal)} · ${getDiningMealTime(meal)}`,
     active: true,
   });
@@ -156,7 +178,7 @@ function buildDiningIntroData(
   }
 
   return {
-    ...data,
+    ...source,
     __meal: meal || 'lunch',
     __pathItems: pathItems,
   };
@@ -429,12 +451,13 @@ Page({
     const { type, data, meal } = e.detail;
     const { showAddDrawer, currentDayData } = this.data;
     if (showAddDrawer) return; // 抽屉互斥
+    const introData =
+      type === 'dining'
+        ? buildDiningIntroData(data, meal, currentDayData)
+        : normalizeIntroDataWithAttractionName(data, currentDayData);
     this.setData({
       showIntroDrawer: type,
-      introData:
-        type === 'dining'
-          ? buildDiningIntroData(data || {}, meal, currentDayData)
-          : data,
+      introData,
     });
   },
 

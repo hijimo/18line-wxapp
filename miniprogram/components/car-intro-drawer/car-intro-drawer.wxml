@@ -51,6 +51,14 @@
     </view>
 
     <view class="car-intro__content">
+      <view wx:if="{{viewModel.attractionName}}" class="car-intro__section">
+        <text class="car-intro__section-label">LOCATION</text>
+        <view class="car-intro__location-row">
+          <image class="car-intro__location-icon" src="{{iconUrls.location}}" mode="aspectFit" />
+          <text class="car-intro__location-text">{{viewModel.attractionName}}</text>
+        </view>
+      </view>
+
       <view wx:if="{{viewModel.serviceTags.length}}" class="car-intro__section">
         <text class="car-intro__section-label">VEHICLE</text>
         <view class="car-intro__pills">

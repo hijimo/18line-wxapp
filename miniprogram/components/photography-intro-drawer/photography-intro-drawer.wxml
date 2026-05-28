@@ -47,6 +47,14 @@
     </view>
 
     <view class="photography-intro__content">
+      <view wx:if="{{viewModel.attractionName}}" class="photography-intro__section">
+        <text class="photography-intro__section-label">LOCATION</text>
+        <view class="photography-intro__location-row">
+          <image class="photography-intro__location-icon" src="{{iconUrls.location}}" mode="aspectFit" />
+          <text class="photography-intro__location-text">{{viewModel.attractionName}}</text>
+        </view>
+      </view>
+
       <view wx:if="{{viewModel.serviceTags.length}}" class="photography-intro__section">
         <text class="photography-intro__section-label">SERVICE</text>
         <view class="photography-intro__pills">

@@ -113,6 +113,7 @@ type AttractionIntroViewModel = {
   costText: string;
   images: string[];
   photoCountText: string;
+  attractionName: string;
   address: string;
   description: string;
   notes: string;
@@ -205,6 +206,7 @@ function createAttractionIntroViewModel(
     .map(getAttractionIntroAttachmentUrl)
     .filter(Boolean)
     .slice(0, 8);
+  const attractionName = normalizeAttractionIntroText(source.attractionName);
   const address =
     normalizeAttractionIntroText(source.address) ||
     [source.province, source.city, source.district]
@@ -275,6 +277,7 @@ function createAttractionIntroViewModel(
     images,
     photoCountText:
       images.length > 2 ? `+${Math.max(images.length - 2, 1)} Photos` : '',
+    attractionName,
     address,
     description,
     notes,
@@ -290,6 +293,7 @@ function createAttractionIntroViewModel(
     hasDetails: Boolean(
       ratingText ||
         costText ||
+        attractionName ||
         address ||
         description ||
         notes ||
