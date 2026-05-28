@@ -20,14 +20,24 @@ function formatMonthDay(date: Date) {
   return `${month}.${day}`;
 }
 
-function formatJourneyDateRange(startDate?: string, days?: number) {
+function getEndDate(startDate?: string, endDate?: string, days?: number) {
+  const end = parseLocalDate(endDate);
+  if (end) return end;
+
   const start = parseLocalDate(startDate);
-  if (!start || !days || days <= 0) return '';
+  if (!start || !days || days <= 0) return null;
 
-  const end = new Date(start.getTime());
-  end.setDate(start.getDate() + days - 1);
+  const calculatedEnd = new Date(start.getTime());
+  calculatedEnd.setDate(start.getDate() + days - 1);
+  return calculatedEnd;
+}
 
-  return `${formatMonthDay(start)}-${formatMonthDay(end)}`;
+function formatJourneyDateRange(startDate?: string, endDate?: string, days?: number) {
+  const start = parseLocalDate(startDate);
+  const end = getEndDate(startDate, endDate, days);
+  if (!start || !end) return '规划中';
+
+  return `${formatMonthDay(start)} - ${formatMonthDay(end)}`;
 }
 
 Component({
@@ -65,7 +75,7 @@ Component({
       {
         id: 'lingyin',
         title: '灵隐寻宝之旅',
-        date: '08.20-08.22',
+        date: '08.20 - 08.22',
         budget: '¥8000',
         days: [
           { day: 1, label: 'DAY 1', number: '01', status: 'completed' },
@@ -82,7 +92,7 @@ Component({
       {
         id: 'songyang-blind',
         title: '松阳盲游',
-        date: '09.10-09.12',
+        date: '09.10 - 09.12',
         budget: '¥2499',
         days: [
           { day: 1, label: 'DAY 1', number: '01', status: 'active' },
@@ -210,7 +220,7 @@ Component({
           const journeys = list.map((item: any) => ({
             id: String(item.itineraryId || ''),
             title: item.itineraryName || '未命名旅途',
-            date: formatJourneyDateRange(item.startDate, item.days),
+            date: formatJourneyDateRange(item.startDate, item.endDate, item.days),
             budget: item.totalCost ? `¥${item.totalCost}` : '',
             days: Array.from({ length: item.days || 0 }, (_, i) => ({
               day: i + 1,

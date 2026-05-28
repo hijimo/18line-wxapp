@@ -13,6 +13,45 @@ interface JourneyItem {
   rating: string;
 }
 
+function parseLocalDate(value?: string) {
+  if (!value) return null;
+
+  const matched = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!matched) return null;
+
+  return new Date(
+    Number(matched[1]),
+    Number(matched[2]) - 1,
+    Number(matched[3]),
+  );
+}
+
+function formatMonthDay(date: Date) {
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${month}.${day}`;
+}
+
+function getEndDate(startDate?: string, endDate?: string, days?: number) {
+  const end = parseLocalDate(endDate);
+  if (end) return end;
+
+  const start = parseLocalDate(startDate);
+  if (!start || !days || days <= 0) return null;
+
+  const calculatedEnd = new Date(start.getTime());
+  calculatedEnd.setDate(start.getDate() + days - 1);
+  return calculatedEnd;
+}
+
+function formatJourneyDateRange(startDate?: string, endDate?: string, days?: number) {
+  const start = parseLocalDate(startDate);
+  const end = getEndDate(startDate, endDate, days);
+  if (!start || !end) return '规划中';
+
+  return `${formatMonthDay(start)} - ${formatMonthDay(end)}`;
+}
+
 const STATUS_MAP: Record<string, { label: string; type: string }> = {
   '0': { label: '草稿', type: 'draft' },
   '1': { label: '已确认', type: 'confirmed' },
@@ -61,8 +100,8 @@ Page({
           image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/lingyin-temple.png',
           status: statusInfo.label,
           statusType: statusInfo.type,
-          date: item.startDate || '',
-          location: `${item.city || ''}${item.district || ''}`,
+          date: formatJourneyDateRange(item.startDate, item.endDate, item.days),
+          location: item.districtName || '',
           tags: item.createFromLabel ? [item.createFromLabel] : [],
           rating: '',
         };
@@ -90,7 +129,7 @@ Page({
 
   onJourneyTap(e: any) {
     const id = e.currentTarget.dataset.id;
-    console.log('Journey tap:', id);
-    wx.showToast({ title: '行程详情开发中', icon: 'none' });
+    if (!id) return;
+    wx.navigateTo({ url: `/pages/itinerary-detail/index?id=${id}` });
   },
 });

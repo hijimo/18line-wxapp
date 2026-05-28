@@ -255,10 +255,39 @@ describe('[Unit] 首页行程卡片日期展示', () => {
     indexTs = readFile('pages/index/index.ts');
   });
 
-  test('journey-card 使用 MM.DD-MM.DD 日期范围', () => {
+  test('journey-card 使用 MM.DD - MM.DD 日期范围', () => {
     expect(indexTs).toContain('function formatJourneyDateRange');
-    expect(indexTs).toContain("return `${formatMonthDay(start)}-${formatMonthDay(end)}`");
-    expect(indexTs).toContain('date: formatJourneyDateRange(item.startDate, item.days)');
+    expect(indexTs).toContain("return `${formatMonthDay(start)} - ${formatMonthDay(end)}`");
+    expect(indexTs).toContain("if (!start || !end) return '规划中'");
+    expect(indexTs).toContain('date: formatJourneyDateRange(item.startDate, item.endDate, item.days)');
+  });
+});
+
+describe('[Unit] 我的行程页面卡片展示和跳转', () => {
+  let journeysTs;
+  let journeysWxml;
+
+  beforeAll(() => {
+    journeysTs = readFile('pages/journeys/index.ts');
+    journeysWxml = readFile('pages/journeys/index.wxml');
+  });
+
+  test('日期使用 MM.DD - MM.DD，缺少日期展示规划中', () => {
+    expect(journeysTs).toContain('function formatJourneyDateRange');
+    expect(journeysTs).toContain("return `${formatMonthDay(start)} - ${formatMonthDay(end)}`");
+    expect(journeysTs).toContain("if (!start || !end) return '规划中'");
+    expect(journeysTs).toContain('date: formatJourneyDateRange(item.startDate, item.endDate, item.days)');
+  });
+
+  test('meta-text 使用 districtName 字段', () => {
+    expect(journeysTs).toContain("location: item.districtName || ''");
+    expect(journeysWxml).toContain('<text class="meta-text">{{item.location}}</text>');
+  });
+
+  test('点击卡片跳转行程详情页且不再提示功能未实现', () => {
+    expect(journeysTs).toContain("wx.navigateTo({ url: `/pages/itinerary-detail/index?id=${id}` })");
+    expect(journeysTs).not.toContain('行程详情开发中');
+    expect(journeysTs).not.toContain('功能未实现');
   });
 });
 
