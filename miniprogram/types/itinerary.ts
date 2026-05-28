@@ -78,6 +78,7 @@ export interface Itinerary {
   cityName?: string;
   districtName?: string;
   startDate?: string;
+  endDate?: string;
   dateRangeText?: string;
   days?: number;
   status?: string;
