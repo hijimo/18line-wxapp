@@ -18,6 +18,7 @@ type HotelIntroAttachment = {
 };
 
 type HotelIntroData = {
+  attractionName?: string;
   accommodationName?: string;
   accommodationDesc?: string;
   contactPhone?: string;
@@ -41,6 +42,7 @@ type HotelIntroViewModel = {
   costText: string;
   images: string[];
   photoCountText: string;
+  attractionName: string;
   address: string;
   contactPhone: string;
   description: string;
@@ -79,6 +81,7 @@ function createHotelIntroViewModel(data: HotelIntroData | null | undefined): Hot
       .map(normalizeHotelIntroText)
       .filter(Boolean)
       .join('');
+  const attractionName = normalizeHotelIntroText(source.attractionName);
   const tags = [
     normalizeHotelIntroText(source.accommodationType),
     source.breakfastIncluded === 'Y' ? '含早餐' : '',
@@ -95,12 +98,13 @@ function createHotelIntroViewModel(data: HotelIntroData | null | undefined): Hot
     images,
     photoCountText:
       images.length > 2 ? `+${Math.max(images.length - 2, 1)} Photos` : '',
+    attractionName,
     address,
     contactPhone,
     description,
     tags,
     hasGallery: images.length > 0,
-    hasDetails: Boolean(costText || address || contactPhone || description || tags.length),
+    hasDetails: Boolean(costText || attractionName || contactPhone || description || tags.length),
   };
 }
 

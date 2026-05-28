@@ -73,6 +73,34 @@ test('itinerary detail marks all intro drawers as schedule-origin', () => {
   }
 });
 
+test('itinerary detail maps schedule drawer data to attractionName', () => {
+  const pageTs = fs.readFileSync(
+    path.resolve(__dirname, '../../miniprogram/pages/itinerary-detail/index.ts'),
+    'utf8',
+  );
+
+  assert.match(pageTs, /function normalizeIntroDataWithAttractionName/);
+  assert.match(pageTs, /dayData\?\.attractionList\?\.\[0\]\?\.attractionName/);
+  assert.match(pageTs, /buildDiningIntroData\(data, meal, currentDayData\)/);
+  assert.match(pageTs, /normalizeIntroDataWithAttractionName\(data, currentDayData\)/);
+});
+
+for (const drawer of scheduleEntryDrawers) {
+  test(`${drawer} renders location text from attractionName`, () => {
+    const wxml = readDrawer(drawer, 'wxml');
+    const ts = readDrawer(drawer, 'ts');
+    const classPrefix = drawer.replace('-drawer', '');
+
+    assert.ok(
+      wxml.includes(
+        `${classPrefix}__location-text">{{viewModel.attractionName}}`,
+      ),
+    );
+    assert.match(wxml, /wx:if="{{viewModel\.attractionName}}"/);
+    assert.match(ts, /attractionName/);
+  });
+}
+
 for (const drawer of scheduleEntryDrawers) {
   test(`${drawer} hides only the add-to-itinerary button for schedule-origin openings`, () => {
     const wxml = readDrawer(drawer, 'wxml');

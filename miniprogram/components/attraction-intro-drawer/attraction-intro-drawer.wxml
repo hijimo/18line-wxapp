@@ -55,11 +55,11 @@
     </view>
 
     <view class="attraction-intro__content">
-      <view wx:if="{{viewModel.address}}" class="attraction-intro__section">
+      <view wx:if="{{viewModel.attractionName}}" class="attraction-intro__section">
         <text class="attraction-intro__section-label">LOCATION</text>
         <view class="attraction-intro__location-row" hover-class="attraction-intro__location-row--active" bindtap="onLocationTap">
           <image class="attraction-intro__location-icon" src="{{iconUrls.location}}" mode="aspectFit" />
-          <text class="attraction-intro__location-text">{{viewModel.address}}</text>
+          <text class="attraction-intro__location-text">{{viewModel.attractionName}}</text>
         </view>
       </view>
 

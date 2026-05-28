@@ -73,7 +73,7 @@
     </view>
 
     <view class="dining-intro__content">
-      <view wx:if="{{viewModel.address}}" class="dining-intro__section">
+      <view wx:if="{{viewModel.attractionName}}" class="dining-intro__section">
         <text class="dining-intro__section-label">LOCATION</text>
         <view
           class="dining-intro__location-row"
@@ -85,7 +85,7 @@
             src="{{iconUrls.location}}"
             mode="aspectFit"
           />
-          <text class="dining-intro__location-text">{{viewModel.address}}</text>
+          <text class="dining-intro__location-text">{{viewModel.attractionName}}</text>
         </view>
       </view>
 

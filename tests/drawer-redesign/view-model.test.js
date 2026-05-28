@@ -44,6 +44,7 @@ test('car drawer view model handles complete and empty car data', () => {
     'createCarIntroViewModel',
   );
   const complete = createViewModel({
+    attractionName: '古城集合点',
     nickname: '阿明司机',
     price: 680,
     carModel: '丰田商务',
@@ -55,12 +56,14 @@ test('car drawer view model handles complete and empty car data', () => {
   const empty = createViewModel({});
 
   assert.equal(complete.title, '阿明司机');
+  assert.equal(complete.attractionName, '古城集合点');
   assert.equal(complete.costText, '¥680/day');
   assert.deepEqual(complete.images, ['https://example.com/car.jpg']);
   assert.ok(complete.serviceTags.includes('丰田商务'));
   assert.ok(complete.serviceTags.includes('7座'));
   assert.ok(complete.hasDetails);
   assert.equal(empty.title, '包车详情');
+  assert.equal(empty.attractionName, '');
   assert.equal(empty.hasGallery, false);
   assert.equal(empty.hasDetails, false);
 });
@@ -71,6 +74,7 @@ test('hotel drawer view model handles address, price, facilities and empty image
     'createHotelIntroViewModel',
   );
   const complete = createViewModel({
+    attractionName: '梯田观景台',
     accommodationName: '云上民宿',
     province: '浙江省',
     city: '丽水市',
@@ -85,6 +89,7 @@ test('hotel drawer view model handles address, price, facilities and empty image
   const empty = createViewModel({ accommodationName: '' });
 
   assert.equal(complete.title, '云上民宿');
+  assert.equal(complete.attractionName, '梯田观景台');
   assert.equal(complete.address, '浙江省丽水市云和县');
   assert.equal(complete.costText, '¥580 - ¥920');
   assert.ok(complete.tags.includes('精品民宿'));
@@ -92,6 +97,7 @@ test('hotel drawer view model handles address, price, facilities and empty image
   assert.ok(complete.tags.includes('宠物友好'));
   assert.equal(complete.hasGallery, false);
   assert.equal(empty.title, '住宿详情');
+  assert.equal(empty.attractionName, '');
   assert.equal(empty.hasDetails, false);
 });
 
@@ -101,6 +107,7 @@ test('photography drawer view model handles service content, price, tags and fal
     'createPhotographyIntroViewModel',
   );
   const complete = createViewModel({
+    attractionName: '古桥湿地',
     nickname: '林溪摄影',
     price: 399,
     recommendRating: 4.9,
@@ -112,12 +119,14 @@ test('photography drawer view model handles service content, price, tags and fal
   const empty = createViewModel(null);
 
   assert.equal(complete.title, '林溪摄影');
+  assert.equal(complete.attractionName, '古桥湿地');
   assert.equal(complete.costText, '¥399');
   assert.ok(complete.serviceTags.includes('无人机跟拍'));
   assert.ok(complete.serviceTags.includes('推荐指数 4.9'));
   assert.ok(complete.profileTags.includes('摄影师 女'));
   assert.deepEqual(complete.images, ['https://example.com/photo.jpg']);
   assert.equal(empty.title, '跟拍详情');
+  assert.equal(empty.attractionName, '');
   assert.equal(empty.hasDetails, false);
 });
 
@@ -154,6 +163,7 @@ test('attraction drawer view model handles empty and multiple check-in points', 
   });
 
   assert.equal(complete.title, '古桥');
+  assert.equal(complete.attractionName, '古桥湿地');
   assert.equal(complete.costText, '¥20/person');
   assert.ok(complete.tags.includes('自然风光'));
   assert.equal(complete.checkInPoints.length, 2);
@@ -162,5 +172,28 @@ test('attraction drawer view model handles empty and multiple check-in points', 
   assert.equal(complete.checkInPoints[1].name, '打卡点 2');
   assert.equal(complete.checkInPoints[1].statusText, '未打卡');
   assert.equal(emptyPoints.checkInPoints.length, 0);
+  assert.equal(emptyPoints.attractionName, '空点位景区');
   assert.equal(emptyPoints.hasGallery, false);
+});
+
+test('dining drawer view model uses attractionName for location display safely', () => {
+  const createViewModel = loadViewModelFactory(
+    'dining-intro-drawer',
+    'createDiningIntroViewModel',
+  );
+  const complete = createViewModel({
+    attractionName: '云溪古街',
+    diningName: '山谷小馆',
+    address: '浙江省丽水市莲都区山谷路 18 号',
+    avgCost: 88,
+    diningDesc: '本地菜',
+  });
+  const empty = createViewModel({ attractionName: null, address: '不会作为位置文案展示' });
+
+  assert.equal(complete.title, '山谷小馆');
+  assert.equal(complete.attractionName, '云溪古街');
+  assert.equal(complete.address, '浙江省丽水市莲都区山谷路 18 号');
+  assert.equal(complete.costText, '¥88/person');
+  assert.equal(empty.attractionName, '');
+  assert.equal(empty.hasDetails, false);
 });
