@@ -1,3 +1,5 @@
+import { previewImageList } from '../../utils/image-preview';
+
 const DINING_INTRO_LOCATION_ICON =
   'data:image/svg+xml,' +
   encodeURIComponent(
@@ -184,6 +186,10 @@ Component({
   methods: {
     onClose() {
       this.triggerEvent('close');
+    },
+    onPreviewImageTap(event: WechatMiniprogram.TouchEvent) {
+      const index = Number(event.currentTarget.dataset.index);
+      previewImageList((this.data.viewModel as DiningIntroViewModel).images, index);
     },
     onLocationTap() {
       const dining = this.data.data as DiningIntroData;
