@@ -1,8 +1,7 @@
 .tab-bar {
   display: flex;
   white-space: nowrap;
-  padding: 24rpx 32rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  padding: 24rpx 32rpx 12rpx;
 }
 
 .tab-item {
@@ -19,6 +18,47 @@
     background: #163422;
     color: #ffffff;
   }
+}
+
+.keyword-search {
+  padding: 12rpx 32rpx 16rpx;
+  background: #ffffff;
+}
+
+.keyword-search__field {
+  display: flex;
+  align-items: center;
+  min-height: 72rpx;
+  padding: 0 20rpx;
+  background: #f6f7ef;
+  border-radius: 24rpx;
+}
+
+.keyword-search__icon {
+  width: 28rpx;
+  height: 28rpx;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+  opacity: 0.72;
+}
+
+.keyword-search__input {
+  flex: 1;
+  min-width: 0;
+  height: 72rpx;
+  font-size: 26rpx;
+  color: #163422;
+}
+
+.keyword-search__placeholder {
+  color: #8a9584;
+}
+
+.keyword-search__clear {
+  flex-shrink: 0;
+  padding-left: 20rpx;
+  font-size: 24rpx;
+  color: #944a00;
 }
 
 .list-loading {
