@@ -57,6 +57,15 @@ test('attraction drawer has dedicated check-in point rendering', () => {
   assert.match(ts, /checked/);
 });
 
+test('attraction drawer renders classic rating label before rating and star', () => {
+  const wxml = readDrawer('attraction-intro-drawer', 'wxml');
+
+  assert.match(
+    wxml,
+    /class="attraction-intro__rating-label">经典指数<\/text>[\s\S]*class="attraction-intro__rating">\{\{viewModel\.ratingText\}\}<text class="attraction-intro__star">★<\/text>/,
+  );
+});
+
 test('itinerary detail marks all intro drawers as schedule-origin', () => {
   const pageWxml = fs.readFileSync(
     path.resolve(__dirname, '../../miniprogram/pages/itinerary-detail/index.wxml'),
