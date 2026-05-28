@@ -1,5 +1,37 @@
 import { getUserInfo, updateProfile } from '../../services/auth';
+import { getDictByType } from '../../services/dict';
+import { addPreference, getLatestPreference, updatePreference } from '../../services/preference';
 import Uploader from '../../utils/Uploader';
+import type { DictData } from '../../types/dict';
+
+const TRAVEL_PREFERENCE_DICT_TYPE = 'travel_tourist_like';
+
+interface TravelPreferenceOption {
+  id: string;
+  label: string;
+  selected: boolean;
+}
+
+const parsePreferenceValues = (value?: string) =>
+  (value || '')
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+const buildPreferenceOptions = (
+  dictList: DictData[],
+  selectedValues: string[],
+): TravelPreferenceOption[] => {
+  const selectedSet = new Set(selectedValues);
+
+  return dictList
+    .filter((item) => item.dictLabel && item.dictValue)
+    .map((item) => ({
+      id: item.dictValue,
+      label: item.dictLabel,
+      selected: selectedSet.has(item.dictValue),
+    }));
+};
 
 Page({
   data: {
@@ -8,13 +40,10 @@ Page({
     role: '',
     birthYear: '',
     bio: '',
-    preferences: [
-      { id: 'nature', label: '自然风光', selected: true },
-      { id: 'culture', label: '人文历史', selected: true },
-      { id: 'food', label: '美食探店', selected: false },
-      { id: 'adventure', label: '户外探险', selected: true },
-      { id: 'photography', label: '摄影打卡', selected: false },
-    ],
+    preferenceId: 0,
+    selectedPreferenceValues: [] as string[],
+    preferences: [] as TravelPreferenceOption[],
+    preferenceLoadFailed: false,
   },
 
   uploader: null as any,
@@ -22,6 +51,8 @@ Page({
   onLoad() {
     this.uploader = new Uploader();
     this.loadUserInfo();
+    this.loadTravelPreferenceOptions();
+    this.loadExistingPreference();
   },
 
   async loadUserInfo() {
@@ -36,6 +67,49 @@ Page({
       }
     } catch (err) {
       console.error('Failed to load user info:', err);
+    }
+  },
+
+  async loadTravelPreferenceOptions() {
+    try {
+      const res = await getDictByType(TRAVEL_PREFERENCE_DICT_TYPE);
+      const preferences = buildPreferenceOptions(res.data || [], this.data.selectedPreferenceValues);
+
+      this.setData({
+        preferences,
+        preferenceLoadFailed: false,
+      });
+    } catch (err) {
+      console.error('Failed to load travel preference options:', err);
+      this.setData({
+        preferences: [],
+        preferenceLoadFailed: true,
+      });
+    }
+  },
+
+  async loadExistingPreference() {
+    try {
+      const res = await getLatestPreference();
+      const preference = res.data;
+      if (!preference) return;
+
+      const selectedPreferenceValues = parsePreferenceValues(preference.travelLikes);
+
+      this.setData({
+        preferenceId: preference.preferenceId || 0,
+        selectedPreferenceValues,
+        preferences: buildPreferenceOptions(
+          this.data.preferences.map((item) => ({
+            dictLabel: item.label,
+            dictValue: item.id,
+            dictType: TRAVEL_PREFERENCE_DICT_TYPE,
+          })),
+          selectedPreferenceValues,
+        ),
+      });
+    } catch (err) {
+      console.error('Failed to load existing travel preference:', err);
     }
   },
 
@@ -57,13 +131,17 @@ Page({
 
   togglePreference(e: any) {
     const id = e.currentTarget.dataset.id;
-    const preferences = this.data.preferences.map((item) => {
-      if (item.id === id) {
-        return { ...item, selected: !item.selected };
-      }
-      return item;
-    });
-    this.setData({ preferences });
+    if (!id) return;
+
+    const selectedPreferenceValues = this.data.selectedPreferenceValues.includes(id)
+      ? this.data.selectedPreferenceValues.filter((item) => item !== id)
+      : [...this.data.selectedPreferenceValues, id];
+    const preferences = this.data.preferences.map((item) => ({
+      ...item,
+      selected: selectedPreferenceValues.includes(item.id),
+    }));
+
+    this.setData({ selectedPreferenceValues, preferences });
   },
 
   addPreference() {
@@ -111,11 +189,14 @@ Page({
     wx.showLoading({ title: '保存中...' });
 
     try {
-      await updateProfile({
-        nickname: nickname.trim(),
-        avatarUrl,
-        remark: bio,
-      });
+      await Promise.all([
+        updateProfile({
+          nickname: nickname.trim(),
+          avatarUrl,
+          remark: bio,
+        }),
+        this.saveTravelPreference(),
+      ]);
       wx.hideLoading();
       wx.showToast({ title: '保存成功', icon: 'success' });
       setTimeout(() => {
@@ -124,6 +205,23 @@ Page({
     } catch (err) {
       wx.hideLoading();
       wx.showToast({ title: '保存失败', icon: 'none' });
+    }
+  },
+
+  async saveTravelPreference() {
+    const { preferenceId, selectedPreferenceValues } = this.data;
+    const travelLikes = selectedPreferenceValues.join(',');
+
+    if (preferenceId) {
+      await updatePreference({
+        preferenceId,
+        travelLikes,
+      });
+      return;
+    }
+
+    if (travelLikes) {
+      await addPreference({ travelLikes });
     }
   },
 
