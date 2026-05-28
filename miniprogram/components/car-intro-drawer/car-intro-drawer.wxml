@@ -28,15 +28,15 @@
       </view>
 
       <view wx:if="{{viewModel.hasGallery}}" class="car-intro__gallery">
-        <view class="car-intro__gallery-main">
+        <view class="car-intro__gallery-main" bindtap="onPreviewImageTap" data-index="0">
           <image class="car-intro__image" src="{{viewModel.images[0]}}" mode="aspectFill" lazy-load />
           <view class="car-intro__image-label">
             <text>Travel Car</text>
           </view>
         </view>
         <view wx:if="{{viewModel.images.length > 1}}" class="car-intro__gallery-side">
-          <image class="car-intro__thumb" src="{{viewModel.images[1]}}" mode="aspectFill" lazy-load />
-          <view wx:if="{{viewModel.images.length > 2}}" class="car-intro__thumb-wrap">
+          <image class="car-intro__thumb" src="{{viewModel.images[1]}}" mode="aspectFill" lazy-load bindtap="onPreviewImageTap" data-index="1" />
+          <view wx:if="{{viewModel.images.length > 2}}" class="car-intro__thumb-wrap" bindtap="onPreviewImageTap" data-index="2">
             <image class="car-intro__thumb" src="{{viewModel.images[2]}}" mode="aspectFill" lazy-load />
             <view class="car-intro__photo-mask">
               <text>{{viewModel.photoCountText}}</text>

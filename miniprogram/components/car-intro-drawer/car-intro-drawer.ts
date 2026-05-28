@@ -1,3 +1,5 @@
+import { previewImageList } from '../../utils/image-preview';
+
 const CAR_INTRO_SHARE_ICON =
   'data:image/svg+xml,' +
   encodeURIComponent(
@@ -119,6 +121,10 @@ Component({
   methods: {
     onClose() {
       this.triggerEvent('close');
+    },
+    onPreviewImageTap(event: WechatMiniprogram.TouchEvent) {
+      const index = Number(event.currentTarget.dataset.index);
+      previewImageList((this.data.viewModel as CarIntroViewModel).images, index);
     },
     onAddTap() {
       this.triggerEvent('primarytap', { data: this.data.data });

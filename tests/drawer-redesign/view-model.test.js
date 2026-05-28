@@ -23,6 +23,12 @@ function loadViewModelFactory(drawer, factoryName) {
     Component() {},
     module: { exports: {} },
     exports: {},
+    require(request) {
+      if (request.endsWith('/utils/image-preview')) {
+        return { previewImageList() {} };
+      }
+      throw new Error(`Unexpected require: ${request}`);
+    },
     wx: {},
   };
 
