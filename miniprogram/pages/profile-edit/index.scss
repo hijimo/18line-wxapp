@@ -170,6 +170,11 @@ page {
   font-weight: 500;
 }
 
+.preferences-empty {
+  font-size: 24rpx;
+  color: rgba(22, 52, 34, 0.5);
+}
+
 .chip--add {
   border: 2rpx dashed rgba(22, 52, 34, 0.3);
   background: transparent;

@@ -81,6 +81,9 @@
           >
             <text class="chip-text">{{item.label}}</text>
           </view>
+          <text wx:if="{{!preferences.length}}" class="preferences-empty">
+            {{preferenceLoadFailed ? '旅行偏好加载失败，请稍后重试' : '暂无旅行偏好选项'}}
+          </text>
         </view>
       </view>
     </view>
