@@ -271,6 +271,50 @@ page {
   color: rgba(255, 255, 255, 0.7);
 }
 
+/* Weather Bar */
+.weather-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 32rpx;
+  background: rgba(22, 52, 34, 0.04);
+  border-bottom: 1rpx solid rgba(22, 52, 34, 0.06);
+}
+
+.weather-info {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.weather-text {
+  font-size: 24rpx;
+  color: #163422;
+  font-weight: 600;
+}
+
+.weather-temp {
+  font-size: 24rpx;
+  color: #424843;
+}
+
+.weather-extra {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.weather-wind {
+  font-size: 22rpx;
+  color: rgba(22, 52, 34, 0.5);
+}
+
+.weather-humidity {
+  font-size: 22rpx;
+  color: rgba(22, 52, 34, 0.5);
+}
+
 /* Scroll Area */
 .scrollarea {
   height: 0;

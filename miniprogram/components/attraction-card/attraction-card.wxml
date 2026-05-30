@@ -4,9 +4,32 @@
   <view class="card-body">
     <view class="card-header">
       <view class="card-info">
-        <text class="card-name">{{item.attractionName}}</text>
+        <view class="card-name-row">
+          <text class="card-name">{{item.attractionName}}</text>
+          <view class="card-ratings" wx:if="{{item.leisureRating || item.classicRating}}">
+            <text class="card-rating-tag card-rating-tag--leisure" wx:if="{{item.leisureRating}}">休闲{{item.leisureRating}}</text>
+            <text class="card-rating-tag card-rating-tag--classic" wx:if="{{item.classicRating}}">经典{{item.classicRating}}</text>
+          </view>
+        </view>
         <text class="card-sub" wx:if="{{item.attractionBlurb}}">{{item.attractionBlurb}}</text>
-        <text class="card-sub" wx:elif="{{item.visitDuration || item.perCost}}">{{item.visitDuration}}{{item.visitDuration && item.perCost ? ' · ' : ''}}{{item.perCost ? '¥' + item.perCost + '/人' : ''}}</text>
+        <view class="card-meta" wx:if="{{item.visitDuration || item.ticketPriceA || item.openTime || item.perCost}}">
+          <view class="card-meta-item" wx:if="{{item.visitDuration}}">
+            <text class="card-meta-label">游玩时间</text>
+            <text class="card-meta-value">{{item.visitDuration}}</text>
+          </view>
+          <view class="card-meta-item" wx:if="{{item.ticketPriceA}}">
+            <text class="card-meta-label">门票</text>
+            <text class="card-meta-value">¥{{item.ticketPriceA}}/成人{{item.ticketPriceC ? ' · ¥' + item.ticketPriceC + '/儿童' : ''}}</text>
+          </view>
+          <view class="card-meta-item" wx:if="{{item.perCost}}">
+            <text class="card-meta-label">人均</text>
+            <text class="card-meta-value">¥{{item.perCost}}/人</text>
+          </view>
+          <view class="card-meta-item" wx:if="{{item.openTime}}">
+            <text class="card-meta-label">开放时间</text>
+            <text class="card-meta-value">{{item.openTime}}</text>
+          </view>
+        </view>
       </view>
       <view class="card-action" bindtap="onDetailTap">
         <text class="action-text">详情</text>

@@ -139,12 +139,19 @@
             bindtap="onSelectBlindMode"
             data-mode="0"
           >
-            <text class="toggle-label">清晰路径</text>
+            <text class="toggle-label">半盲模式</text>
           </view>
           <view
             class="toggle-btn {{blindMode === '1' ? 'active' : ''}}"
             bindtap="onSelectBlindMode"
             data-mode="1"
+          >
+            <text class="toggle-label">全明模式</text>
+          </view>
+          <view
+            class="toggle-btn {{blindMode === '2' ? 'active' : ''}}"
+            bindtap="onSelectBlindMode"
+            data-mode="2"
           >
             <text class="toggle-label">全盲惊喜</text>
           </view>

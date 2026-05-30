@@ -84,6 +84,18 @@
         </scroll-view>
       </view>
 
+      <!-- 天气信息 -->
+      <view wx:if="{{currentDayWeather}}" class="weather-bar">
+        <view class="weather-info">
+          <text class="weather-text">{{currentDayWeather.textDay}}</text>
+          <text class="weather-temp">{{currentDayWeather.tempMin}}°~{{currentDayWeather.tempMax}}°</text>
+        </view>
+        <view class="weather-extra">
+          <text class="weather-wind">{{currentDayWeather.windDirDay}} {{currentDayWeather.windScaleDay}}级</text>
+          <text class="weather-humidity">湿度 {{currentDayWeather.humidity}}%</text>
+        </view>
+      </view>
+
       <!-- Timeline 区域 -->
       <scroll-view
         class="scrollarea"

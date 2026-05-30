@@ -34,14 +34,48 @@
   min-width: 0;
 }
 
+.card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  flex-wrap: wrap;
+}
+
 .card-name {
   font-size: 28rpx;
   color: #163422;
   font-weight: 700;
-  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.card-ratings {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  flex-shrink: 0;
+}
+
+.card-rating-tag {
+  font-size: 20rpx;
+  font-weight: 500;
+  padding: 4rpx 12rpx;
+  border-radius: 9999rpx;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.card-rating-tag--leisure {
+  color: #2e7d32;
+  background: rgba(46, 125, 50, 0.1);
+}
+
+.card-rating-tag--classic {
+  color: #e65100;
+  background: rgba(230, 81, 0, 0.1);
 }
 
 .card-sub {
@@ -54,6 +88,33 @@
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-all;
+}
+
+.card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  margin-top: 12rpx;
+}
+
+.card-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.card-meta-label {
+  font-size: 20rpx;
+  color: rgba(22, 52, 34, 0.5);
+  flex-shrink: 0;
+}
+
+.card-meta-value {
+  font-size: 20rpx;
+  color: #424843;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .card-action {

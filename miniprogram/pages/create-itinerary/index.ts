@@ -24,7 +24,7 @@ Page({
     endDateDisplay: '',
     preferences: [] as string[],
     preferenceOptions: [] as DictData[],
-    blindMode: true,
+    blindMode: '0' as string,
     loading: false,
     progressText: '',
     showDatePicker: false,
@@ -99,7 +99,7 @@ Page({
 
   onBlindModeSelect(e: any) {
     const value = e.currentTarget.dataset.value;
-    this.setData({ blindMode: value === 'true' || value === true });
+    this.setData({ blindMode: value });
   },
 
   calculateDays(): number {

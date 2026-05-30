@@ -7,6 +7,8 @@ import {
 import { getTemplateDetail } from '../../services/template';
 import { getLocalSpecialtyList } from '../../services/local-specialty';
 import { getMultiStopRoute } from '../../services/map';
+import { getWeatherForecast } from '../../services/weather';
+import type { WeatherDay } from '../../services/weather';
 import type { Itinerary, TravelItineraryDay } from '../../types/itinerary';
 import type { TravelLocalSpecialtyDish } from '../../types/local-specialty';
 
@@ -216,6 +218,8 @@ Page({
     introData: null as any,
     addDayNumber: 1,
     localSpecialtyList: [] as TravelLocalSpecialtyDish[],
+    weatherList: [] as WeatherDay[],
+    currentDayWeather: null as WeatherDay | null,
     mapMarkers: [] as any[],
     mapPolyline: [] as any[],
     mapCenter: { latitude: 28.45, longitude: 119.92 },
@@ -318,6 +322,11 @@ Page({
         template.city,
         template.district,
       );
+
+      this.loadWeather(
+        template.cityName || template.city,
+        itinerary.days,
+      );
     } catch (err) {
       console.error('Failed to load template:', err);
       wx.showToast({ title: '加载失败', icon: 'none' });
@@ -409,6 +418,11 @@ Page({
         normalizedItinerary.city,
         normalizedItinerary.district,
       );
+
+      this.loadWeather(
+        normalizedItinerary.cityName || normalizedItinerary.city,
+        normalizedItinerary.days,
+      );
     } catch (err) {
       console.error('Failed to load itinerary:', err);
       wx.showToast({ title: '加载失败', icon: 'none' });
@@ -430,14 +444,58 @@ Page({
     }
   },
 
+  async loadWeather(cityName?: string, days?: number) {
+    if (!cityName) return;
+    try {
+      const res = await getWeatherForecast({
+        city: cityName,
+        days: Math.min(days || 7, 7),
+      });
+      const weatherList = res.data || [];
+      const { currentDay, itinerary } = this.data;
+      const currentDayWeather = this.matchWeatherForDay(
+        weatherList,
+        currentDay,
+        itinerary?.startDate,
+      );
+      this.setData({ weatherList, currentDayWeather });
+    } catch (err) {
+      console.error('Failed to load weather:', err);
+    }
+  },
+
+  matchWeatherForDay(
+    weatherList: WeatherDay[],
+    dayNumber: number,
+    startDate?: string,
+  ): WeatherDay | null {
+    if (!weatherList.length) return null;
+    if (!startDate) {
+      return weatherList[dayNumber - 1] || null;
+    }
+    const start = parseLocalDate(startDate);
+    if (!start) return weatherList[dayNumber - 1] || null;
+
+    const targetDate = new Date(start.getTime());
+    targetDate.setDate(start.getDate() + dayNumber - 1);
+    const targetStr = formatInputDate(targetDate);
+
+    return weatherList.find((w) => w.date === targetStr) || null;
+  },
+
   onDayTap(e: any) {
     const dayNumber = e.currentTarget.dataset.day;
-    const { itinerary } = this.data;
+    const { itinerary, weatherList } = this.data;
     const daysList = itinerary?.daysList || [];
     const currentDayData =
       daysList.find((d) => d.dayNumber === dayNumber) || null;
+    const currentDayWeather = this.matchWeatherForDay(
+      weatherList,
+      dayNumber,
+      itinerary?.startDate,
+    );
 
-    this.setData({ currentDay: dayNumber, currentDayData });
+    this.setData({ currentDay: dayNumber, currentDayData, currentDayWeather });
     this.updateMapData(currentDayData);
   },
 

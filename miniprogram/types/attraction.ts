@@ -37,4 +37,6 @@ export interface TravelAttraction {
 
 export interface AttractionListParams {
   keyword?: string;
+  pageNum?: number;
+  pageSize?: number;
 }

@@ -20,4 +20,6 @@ export interface TravelCar {
 
 export interface CarListParams {
   keyword?: string;
+  pageNum?: number;
+  pageSize?: number;
 }

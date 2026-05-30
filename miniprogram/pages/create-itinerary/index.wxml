@@ -76,20 +76,28 @@
           </view>
           <view class="blind-mode-toggle">
             <view
-              class="toggle-option {{blindMode ? 'toggle-option--active' : ''}}"
+              class="toggle-option {{blindMode === '0' ? 'toggle-option--active' : ''}}"
               bindtap="onBlindModeSelect"
-              data-value="{{true}}"
+              data-value="0"
             >
-              <image class="toggle-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-blind-full.svg" mode="aspectFit" />
-              <text class="toggle-text {{blindMode ? 'toggle-text--active' : ''}}">全盲惊喜</text>
+              <image class="toggle-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-blind-semi.svg" mode="aspectFit" />
+              <text class="toggle-text {{blindMode === '0' ? 'toggle-text--active' : ''}}">半盲模式</text>
             </view>
             <view
-              class="toggle-option {{!blindMode ? 'toggle-option--active' : ''}}"
+              class="toggle-option {{blindMode === '1' ? 'toggle-option--active' : ''}}"
               bindtap="onBlindModeSelect"
-              data-value="{{false}}"
+              data-value="1"
             >
               <image class="toggle-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-blind-clear.svg" mode="aspectFit" />
-              <text class="toggle-text {{!blindMode ? 'toggle-text--active' : ''}}">清晰路径</text>
+              <text class="toggle-text {{blindMode === '1' ? 'toggle-text--active' : ''}}">全明模式</text>
+            </view>
+            <view
+              class="toggle-option {{blindMode === '2' ? 'toggle-option--active' : ''}}"
+              bindtap="onBlindModeSelect"
+              data-value="2"
+            >
+              <image class="toggle-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-blind-full.svg" mode="aspectFit" />
+              <text class="toggle-text {{blindMode === '2' ? 'toggle-text--active' : ''}}">全盲惊喜</text>
             </view>
           </view>
         </view>

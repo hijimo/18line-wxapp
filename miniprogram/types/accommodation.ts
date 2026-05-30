@@ -26,4 +26,6 @@ export interface TravelAccommodation {
 
 export interface AccommodationListParams {
   keyword?: string;
+  pageNum?: number;
+  pageSize?: number;
 }

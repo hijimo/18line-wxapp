@@ -26,4 +26,6 @@ export interface TravelDining {
 
 export interface DiningListParams {
   keyword?: string;
+  pageNum?: number;
+  pageSize?: number;
 }
