@@ -480,7 +480,7 @@ Page({
     targetDate.setDate(start.getDate() + dayNumber - 1);
     const targetStr = formatInputDate(targetDate);
 
-    return weatherList.find((w) => w.date === targetStr) || null;
+    return weatherList.find((w) => w.date === targetStr) || weatherList[dayNumber - 1] || null;
   },
 
   onDayTap(e: any) {

@@ -57,12 +57,15 @@
         </view>
         <view class="info-meta">
           <view class="meta-item">
-            <image class="meta-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-distance.svg" mode="aspectFit" />
+            <image class="meta-icon meta-icon-location " src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-distance.svg" mode="aspectFit" />
             <text class="meta-text">{{itinerary.cityName || itinerary.city || ''}}{{(itinerary.districtName || itinerary.district) ? ' · ' + (itinerary.districtName || itinerary.district) : ''}}</text>
           </view>
           <view class="meta-item meta-item--date" bindtap="onDateMetaTap">
             <image class="meta-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-calendar.svg" mode="aspectFit" />
             <text class="meta-text {{itinerary.startDate ? '' : 'meta-text--placeholder'}}">{{itinerary.dateRangeText || '选择出行日期'}}</text>
+          </view>
+          <view wx:if="{{currentDayWeather}}" class="meta-item">
+            <text class="meta-text">{{currentDayWeather.textDay}} {{currentDayWeather.tempMin}}°~{{currentDayWeather.tempMax}}°</text>
           </view>
         </view>
       </view>
@@ -82,18 +85,6 @@
             </view>
           </view>
         </scroll-view>
-      </view>
-
-      <!-- 天气信息 -->
-      <view wx:if="{{currentDayWeather}}" class="weather-bar">
-        <view class="weather-info">
-          <text class="weather-text">{{currentDayWeather.textDay}}</text>
-          <text class="weather-temp">{{currentDayWeather.tempMin}}°~{{currentDayWeather.tempMax}}°</text>
-        </view>
-        <view class="weather-extra">
-          <text class="weather-wind">{{currentDayWeather.windDirDay}} {{currentDayWeather.windScaleDay}}级</text>
-          <text class="weather-humidity">湿度 {{currentDayWeather.humidity}}%</text>
-        </view>
       </view>
 
       <!-- Timeline 区域 -->
