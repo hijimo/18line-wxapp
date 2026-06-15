@@ -4,8 +4,8 @@
 <!-- TopAppBar -->
 <view class="top-app-bar">
   <view class="top-bar-left">
-    <view class="top-bar-avatar" bindtap="onAddTrip">
-      <image class="top-bar-avatar-img" src="{{oss.ossResize(userInfo.avatarUrl, 80, 80)}}" mode="aspectFill" />
+    <view class="top-bar-create-btn" bindtap="onAddTrip">
+      <image class="top-bar-create-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-create-itinerary.svg" mode="aspectFit" />
     </view>
     <text class="top-bar-brand">寻秘</text>
   </view>

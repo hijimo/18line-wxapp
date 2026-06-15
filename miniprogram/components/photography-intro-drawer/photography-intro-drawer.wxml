@@ -27,7 +27,7 @@
         <view class="photography-intro__gallery-main" bindtap="onPreviewImageTap" data-index="0">
           <image class="photography-intro__image" src="{{viewModel.images[0]}}" mode="aspectFill" lazy-load />
           <view class="photography-intro__image-label">
-            <text>Photo Service</text>
+            <text>跟拍服务</text>
           </view>
         </view>
         <view wx:if="{{viewModel.images.length > 1}}" class="photography-intro__gallery-side">
@@ -42,13 +42,13 @@
       </view>
       <view wx:else class="photography-intro__gallery photography-intro__gallery--empty">
         <text class="photography-intro__empty-mark">18</text>
-        <text class="photography-intro__empty-text">Photo Walk</text>
+        <text class="photography-intro__empty-text">旅拍</text>
       </view>
     </view>
 
     <view class="photography-intro__content">
       <view wx:if="{{viewModel.attractionName}}" class="photography-intro__section">
-        <text class="photography-intro__section-label">LOCATION</text>
+        <text class="photography-intro__section-label">位置</text>
         <view class="photography-intro__location-row">
           <image class="photography-intro__location-icon" src="{{iconUrls.location}}" mode="aspectFit" />
           <text class="photography-intro__location-text">{{viewModel.attractionName}}</text>
@@ -56,26 +56,26 @@
       </view>
 
       <view wx:if="{{viewModel.serviceTags.length}}" class="photography-intro__section">
-        <text class="photography-intro__section-label">SERVICE</text>
+        <text class="photography-intro__section-label">服务内容</text>
         <view class="photography-intro__pills">
           <text wx:for="{{viewModel.serviceTags}}" wx:key="*this" class="photography-intro__pill">{{item}}</text>
         </view>
       </view>
 
       <view wx:if="{{viewModel.profileTags.length}}" class="photography-intro__section">
-        <text class="photography-intro__section-label">PROFILE</text>
+        <text class="photography-intro__section-label">摄影师</text>
         <view class="photography-intro__pills">
           <text wx:for="{{viewModel.profileTags}}" wx:key="*this" class="photography-intro__pill">{{item}}</text>
         </view>
       </view>
 
       <view wx:if="{{viewModel.contactInfo}}" class="photography-intro__section">
-        <text class="photography-intro__section-label">CONTACT</text>
+        <text class="photography-intro__section-label">联系方式</text>
         <text class="photography-intro__body-text">{{viewModel.contactInfo}}</text>
       </view>
 
       <view wx:if="{{viewModel.description}}" class="photography-intro__section">
-        <text class="photography-intro__section-label">ABOUT</text>
+        <text class="photography-intro__section-label">简介</text>
         <text class="photography-intro__body-text">{{viewModel.description}}</text>
       </view>
 
@@ -87,17 +87,17 @@
 
     <view class="photography-intro__actions">
       <button wx:if="{{source !== 'schedule'}}" class="photography-intro__action photography-intro__action--secondary" hover-class="photography-intro__action--secondary-active" bindtap="onAddTap">
-        <text class="photography-intro__action-icon">⊞</text>
+        <image class="photography-intro__action-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-add-itinerary.svg" mode="aspectFit" />
         <view class="photography-intro__action-copy">
-          <text class="photography-intro__action-text">Add to</text>
-          <text class="photography-intro__action-text">Itinerary</text>
+          <text class="photography-intro__action-text">添加到行程</text>
+          
         </view>
       </button>
       <button class="photography-intro__action photography-intro__action--primary" hover-class="photography-intro__action--primary-active" bindtap="onContactTap">
-        <text class="photography-intro__action-icon">□</text>
+        <image class="photography-intro__action-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-phone.svg" mode="aspectFit" />
         <view class="photography-intro__action-copy">
-          <text class="photography-intro__action-text">Contact</text>
-          <text class="photography-intro__action-text">Photographer</text>
+          <text class="photography-intro__action-text">联系摄影师</text>
+          
         </view>
       </button>
     </view>

@@ -134,6 +134,39 @@ function normalizeAttractionIntroText(value?: string | number) {
   return String(value).trim();
 }
 
+function formatLeisureRating(value?: string | number) {
+  const text = normalizeAttractionIntroText(value);
+  if (!text) return '';
+  const map: Record<string, string> = {
+    '0': '休闲',
+    '1': '较休闲',
+    '2': '适中',
+    '3': '中等',
+    '4': '较累',
+    '5': '困难',
+  };
+  return map[text] || text;
+}
+
+const BAD_FACTORS_LABEL: Record<string, string> = {
+  '0': '高温',
+  '1': '暴雨',
+  '2': '冰冻',
+  '3': '心脏病',
+  '4': '高血压',
+  '5': '恐高',
+};
+
+function formatBadFactors(value?: string) {
+  const text = normalizeAttractionIntroText(value);
+  if (!text) return '';
+  return text
+    .split(',')
+    .map((v) => BAD_FACTORS_LABEL[v.trim()] || v.trim())
+    .filter(Boolean)
+    .join('、');
+}
+
 function getAttractionIntroAttachmentUrl(attachment?: AttractionIntroAttachment) {
   return normalizeAttractionIntroText(attachment?.url || attachment?.fileUrl);
 }
@@ -189,7 +222,7 @@ function normalizeCheckInPoints(source: AttractionIntroData) {
 
 function formatAttractionCost(source: AttractionIntroData) {
   const perCost = normalizeAttractionIntroText(source.perCost);
-  if (perCost) return `¥${perCost}/person`;
+  if (perCost) return `¥${perCost}/人`;
   const adult = normalizeAttractionIntroText(source.ticketPriceA);
   const child = normalizeAttractionIntroText(source.ticketPriceC);
   if (adult && child) return `成人¥${adult} / 儿童¥${child}`;
@@ -228,7 +261,7 @@ function createAttractionIntroViewModel(
   const costText = formatAttractionCost(source);
 
   const featureTags: AttractionFeatureTag[] = [];
-  const leisureRating = normalizeAttractionIntroText(source.leisureRating);
+  const leisureRating = formatLeisureRating(source.leisureRating);
   if (leisureRating) {
     featureTags.push({
       key: 'leisure',
@@ -261,7 +294,7 @@ function createAttractionIntroViewModel(
   }
 
   const bestTime = normalizeAttractionIntroText(source.specialPeriod);
-  const badFactorsText = normalizeAttractionIntroText(source.badFactors);
+  const badFactorsText = formatBadFactors(source.badFactors);
   const ticketA = normalizeAttractionIntroText(source.ticketPriceA);
   const ticketC = normalizeAttractionIntroText(source.ticketPriceC);
   const reservationText = normalizeAttractionIntroText(source.reservationRequired);
@@ -276,7 +309,7 @@ function createAttractionIntroViewModel(
     costText,
     images,
     photoCountText:
-      images.length > 2 ? `+${Math.max(images.length - 2, 1)} Photos` : '',
+      images.length > 2 ? `+${Math.max(images.length - 2, 1)} 张` : '',
     attractionName,
     address,
     description,
@@ -370,8 +403,20 @@ Component({
       this.triggerEvent('close');
     },
     onRouteTap() {
-      this.triggerEvent('routetap', { data: this.data.data });
-      wx.showToast({ title: '可在地图中查看路线', icon: 'none' });
+      const attraction = this.data.data as AttractionIntroData;
+      const latitude = Number(attraction.latitude);
+      const longitude = Number(attraction.longitude);
+      if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+        wx.showToast({ title: '暂无景点定位', icon: 'none' });
+        return;
+      }
+      wx.openLocation({
+        latitude,
+        longitude,
+        name: normalizeAttractionIntroText(attraction.attractionName) || '景点位置',
+        address: normalizeAttractionIntroText(attraction.address),
+        scale: 16,
+      });
     },
   },
 });

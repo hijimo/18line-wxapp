@@ -78,7 +78,7 @@ function createPhotographyIntroViewModel(
     costText: price ? `¥${price}` : '',
     images,
     photoCountText:
-      images.length > 2 ? `+${Math.max(images.length - 2, 1)} Photos` : '',
+      images.length > 2 ? `+${Math.max(images.length - 2, 1)} 张` : '',
     attractionName,
     contactInfo,
     description,
@@ -138,10 +138,16 @@ Component({
     },
     onContactTap() {
       const viewModel = this.data.viewModel as PhotographyIntroViewModel;
-      wx.showToast({
-        title: viewModel.contactInfo ? `联系 ${viewModel.contactInfo}` : '暂无摄影师联系方式',
-        icon: 'none',
-      });
+      if (viewModel.contactInfo) {
+        wx.makePhoneCall({
+          phoneNumber: viewModel.contactInfo,
+          fail: () => {
+            wx.showToast({ title: '拨号失败，号码：' + viewModel.contactInfo, icon: 'none' });
+          },
+        });
+      } else {
+        wx.showToast({ title: '暂无摄影师联系方式', icon: 'none' });
+      }
     },
   },
 });

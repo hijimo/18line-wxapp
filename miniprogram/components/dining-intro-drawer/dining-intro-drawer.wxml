@@ -41,7 +41,7 @@
             lazy-load
           />
           <view class="dining-intro__image-label">
-            <text>Signature Dish</text>
+            <text>招牌菜</text>
           </view>
         </view>
         <view wx:if="{{viewModel.images.length > 1}}" class="dining-intro__gallery-side">
@@ -68,13 +68,13 @@
       </view>
       <view wx:else class="dining-intro__gallery dining-intro__gallery--empty">
         <text class="dining-intro__empty-mark">18</text>
-        <text class="dining-intro__empty-text">Local Flavor</text>
+        <text class="dining-intro__empty-text">地道美食</text>
       </view>
     </view>
 
     <view class="dining-intro__content">
       <view wx:if="{{viewModel.attractionName}}" class="dining-intro__section">
-        <text class="dining-intro__section-label">LOCATION</text>
+        <text class="dining-intro__section-label">位置</text>
         <view
           class="dining-intro__location-row"
           hover-class="dining-intro__location-row--active"
@@ -90,7 +90,7 @@
       </view>
 
       <view wx:if="{{viewModel.dishes.length}}" class="dining-intro__section">
-        <text class="dining-intro__section-label">SIGNATURE DISHES</text>
+        <text class="dining-intro__section-label">招牌菜品</text>
         <view class="dining-intro__pills">
           <text
             wx:for="{{viewModel.dishes}}"
@@ -101,7 +101,7 @@
       </view>
 
       <view wx:if="{{viewModel.tags.length}}" class="dining-intro__section">
-        <text class="dining-intro__section-label">DETAILS</text>
+        <text class="dining-intro__section-label">详情</text>
         <view class="dining-intro__pills">
           <text
             wx:for="{{viewModel.tags}}"
@@ -112,12 +112,12 @@
       </view>
 
       <view wx:if="{{viewModel.description}}" class="dining-intro__section">
-        <text class="dining-intro__section-label">ABOUT</text>
+        <text class="dining-intro__section-label">简介</text>
         <text class="dining-intro__body-text">{{viewModel.description}}</text>
       </view>
 
       <view wx:if="{{viewModel.pathItems.length}}" class="dining-intro__path-card">
-        <text class="dining-intro__path-title">The Itinerary Path</text>
+        <text class="dining-intro__path-title">行程路线</text>
         <view class="dining-intro__path-list">
           <view
             wx:for="{{viewModel.pathItems}}"
@@ -149,10 +149,10 @@
         hover-class="dining-intro__action--secondary-active"
         bindtap="onAddTap"
       >
-        <text class="dining-intro__action-icon">⊞</text>
+        <image class="dining-intro__action-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-add-itinerary.svg" mode="aspectFit" />
         <view class="dining-intro__action-copy">
-          <text class="dining-intro__action-text">Add to</text>
-          <text class="dining-intro__action-text">Itinerary</text>
+          <text class="dining-intro__action-text">添加到行程</text>
+          
         </view>
       </button>
       <button
@@ -160,10 +160,10 @@
         hover-class="dining-intro__action--primary-active"
         bindtap="onBookTap"
       >
-        <text class="dining-intro__action-icon">□</text>
+        <image class="dining-intro__action-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-phone.svg" mode="aspectFit" />
         <view class="dining-intro__action-copy">
-          <text class="dining-intro__action-text">Book</text>
-          <text class="dining-intro__action-text">Table</text>
+          <text class="dining-intro__action-text">预订餐位</text>
+          
         </view>
       </button>
     </view>

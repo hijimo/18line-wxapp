@@ -64,14 +64,30 @@
   word-break: break-all;
 }
 
+.card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
 .card-action {
   padding: 12rpx 20rpx;
   border-radius: 9999rpx;
   background: rgba(148, 74, 0, 0.1);
   flex-shrink: 0;
-  margin-left: 16rpx;
   line-height: 1;
   font-size: 0;
+  text-align: center;
+}
+
+.card-action--delete {
+  background: rgba(220, 38, 38, 0.08);
+}
+
+.card-action--delete .action-text {
+  color: #dc2626;
 }
 
 .action-text {

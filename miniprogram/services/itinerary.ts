@@ -106,3 +106,31 @@ export const addCar = (params: AddItineraryCarParams) => {
     { method: 'POST', data: carId },
   );
 };
+
+/** 删除日程住宿 */
+export const removeDayAccommodation = (itineraryId: number, dayNumber: number) =>
+  request<AjaxResult>(
+    `/wx/itinerary/${itineraryId}/day/${dayNumber}/accommodation/remove`,
+    { method: 'POST' },
+  );
+
+/** 删除日程餐饮（按餐次） */
+export const removeDayDining = (itineraryId: number, dayNumber: number, meal: string) =>
+  request<AjaxResult>(
+    `/wx/itinerary/${itineraryId}/day/${dayNumber}/dining/remove?meal=${meal}`,
+    { method: 'POST' },
+  );
+
+/** 删除日程包车 */
+export const removeDayCar = (itineraryId: number, dayNumber: number) =>
+  request<AjaxResult>(
+    `/wx/itinerary/${itineraryId}/day/${dayNumber}/car/remove`,
+    { method: 'POST' },
+  );
+
+/** 删除日程跟拍 */
+export const removeDayPhotography = (itineraryId: number, dayNumber: number) =>
+  request<AjaxResult>(
+    `/wx/itinerary/${itineraryId}/day/${dayNumber}/photography/remove`,
+    { method: 'POST' },
+  );

@@ -56,6 +56,16 @@ function normalizeHotelIntroText(value?: string | number) {
   return String(value).trim();
 }
 
+function formatAccommodationType(value?: string) {
+  const text = normalizeHotelIntroText(value);
+  if (!text) return '';
+  const map: Record<string, string> = {
+    '0': '酒店',
+    '1': '民宿',
+  };
+  return map[text] || text;
+}
+
 function getHotelIntroAttachmentUrl(attachment?: HotelIntroAttachment) {
   return normalizeHotelIntroText(attachment?.url || attachment?.fileUrl);
 }
@@ -83,9 +93,9 @@ function createHotelIntroViewModel(data: HotelIntroData | null | undefined): Hot
       .join('');
   const attractionName = normalizeHotelIntroText(source.attractionName);
   const tags = [
-    normalizeHotelIntroText(source.accommodationType),
-    source.breakfastIncluded === 'Y' ? '含早餐' : '',
-    source.petFriendly === 'Y' ? '宠物友好' : '',
+    formatAccommodationType(source.accommodationType),
+    source.breakfastIncluded === 'Y' || source.breakfastIncluded === '1' ? '含早餐' : '',
+    source.petFriendly === 'Y' || source.petFriendly === '1' ? '宠物友好' : '',
   ].filter(Boolean);
   const costText = formatHotelPrice(source.priceMin, source.priceMax);
   const contactPhone = normalizeHotelIntroText(source.contactPhone);
@@ -93,11 +103,11 @@ function createHotelIntroViewModel(data: HotelIntroData | null | undefined): Hot
 
   return {
     title: normalizeHotelIntroText(source.accommodationName) || '住宿详情',
-    ratingText: normalizeHotelIntroText(source.accommodationType),
+    ratingText: formatAccommodationType(source.accommodationType),
     costText,
     images,
     photoCountText:
-      images.length > 2 ? `+${Math.max(images.length - 2, 1)} Photos` : '',
+      images.length > 2 ? `+${Math.max(images.length - 2, 1)} 张` : '',
     attractionName,
     address,
     contactPhone,
@@ -165,10 +175,16 @@ Component({
     },
     onBookTap() {
       const viewModel = this.data.viewModel as HotelIntroViewModel;
-      wx.showToast({
-        title: viewModel.contactPhone ? `联系 ${viewModel.contactPhone}` : '请联系住宿商家预订',
-        icon: 'none',
-      });
+      if (viewModel.contactPhone) {
+        wx.makePhoneCall({
+          phoneNumber: viewModel.contactPhone,
+          fail: () => {
+            wx.showToast({ title: '拨号失败，号码：' + viewModel.contactPhone, icon: 'none' });
+          },
+        });
+      } else {
+        wx.showToast({ title: '暂无联系电话', icon: 'none' });
+      }
     },
   },
 });

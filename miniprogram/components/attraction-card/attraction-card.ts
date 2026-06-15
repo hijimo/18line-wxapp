@@ -9,5 +9,8 @@ Component({
     onDetailTap() {
       this.triggerEvent('carddetail', { type: 'attraction', data: this.data.item })
     },
+    onDeleteTap() {
+      this.triggerEvent('carddelete', { type: 'attraction', data: this.data.item })
+    },
   },
 })

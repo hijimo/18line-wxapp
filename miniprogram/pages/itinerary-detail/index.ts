@@ -3,6 +3,11 @@ import {
   getItineraryList,
   autoGenerateItinerary,
   editItinerary,
+  updateDayAttractions,
+  removeDayAccommodation,
+  removeDayDining,
+  removeDayCar,
+  removeDayPhotography,
 } from '../../services/itinerary';
 import { getTemplateDetail } from '../../services/template';
 import { getLocalSpecialtyList } from '../../services/local-specialty';
@@ -517,6 +522,69 @@ Page({
       showIntroDrawer: type,
       introData,
     });
+  },
+
+  onCardDelete(e: any) {
+    const { type, data, meal } = e.detail;
+    const { isTemplate } = this.data;
+    if (isTemplate) return;
+
+    const typeLabels: Record<string, string> = {
+      attraction: '景点',
+      hotel: '住宿',
+      dining: '餐饮',
+      car: '包车',
+      photography: '跟拍',
+    };
+
+    wx.showModal({
+      title: '确认删除',
+      content: `确定删除该${typeLabels[type] || '项目'}吗？`,
+      success: (res) => {
+        if (res.confirm) {
+          this.doDelete(type, data, meal);
+        }
+      },
+    });
+  },
+
+  async doDelete(type: string, data: any, meal?: string) {
+    const { itineraryId, currentDay, currentDayData } = this.data;
+    wx.showLoading({ title: '删除中...' });
+
+    try {
+      if (type === 'attraction') {
+        const currentIds = (currentDayData?.attractionList || [])
+          .map((a: any) => a.attractionId)
+          .filter((id: number) => String(id) !== String(data.attractionId));
+        await updateDayAttractions({
+          itineraryId,
+          dayNumber: currentDay,
+          attractionIds: currentIds.join(','),
+        });
+      } else if (type === 'hotel') {
+        await removeDayAccommodation(itineraryId, currentDay);
+      } else if (type === 'dining') {
+        if (!meal || !['breakfast', 'lunch', 'dinner'].includes(meal)) {
+          wx.hideLoading();
+          wx.showToast({ title: '删除失败：未知餐次', icon: 'none' });
+          return;
+        }
+        await removeDayDining(itineraryId, currentDay, meal);
+      } else if (type === 'car') {
+        await removeDayCar(itineraryId, currentDay);
+      } else if (type === 'photography') {
+        await removeDayPhotography(itineraryId, currentDay);
+      }
+
+      wx.hideLoading();
+      wx.showToast({ title: '已删除', icon: 'success' });
+      this.loadItinerary();
+    } catch (err) {
+      console.error('Failed to delete:', err);
+      wx.hideLoading();
+      wx.showToast({ title: '删除失败', icon: 'none' });
+    }
   },
 
   onDateMetaTap() {

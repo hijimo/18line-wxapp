@@ -2,14 +2,19 @@
 <view class="card-wrapper">
   <view class="timeline-dot" />
   <view class="card-body">
-    <view class="type-label">PHOTO</view>
+    <view class="type-label">跟拍</view>
     <view class="card-header">
       <view class="card-info">
         <text class="card-name">{{item.nickname}}</text>
         <text class="card-sub">{{item.equipment}}{{item.price ? ' · ¥' + item.price : ''}}</text>
       </view>
-      <view class="card-action" bindtap="onDetailTap">
-        <text class="action-text">详情</text>
+      <view class="card-actions">
+        <view class="card-action" bindtap="onDetailTap">
+          <text class="action-text">详情</text>
+        </view>
+        <view class="card-action card-action--delete" bindtap="onDeleteTap">
+          <text class="action-text">删除</text>
+        </view>
       </view>
     </view>
   </view>

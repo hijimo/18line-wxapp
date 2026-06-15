@@ -35,7 +35,7 @@
         <view class="attraction-intro__gallery-main" bindtap="onPreviewImageTap" data-index="0">
           <image class="attraction-intro__image" src="{{viewModel.images[0]}}" mode="aspectFill" lazy-load />
           <view class="attraction-intro__image-label">
-            <text>Scenic Spot</text>
+            <text>景点</text>
           </view>
         </view>
         <view wx:if="{{viewModel.images.length > 1}}" class="attraction-intro__gallery-side">
@@ -50,13 +50,13 @@
       </view>
       <view wx:else class="attraction-intro__gallery attraction-intro__gallery--empty">
         <text class="attraction-intro__empty-mark">18</text>
-        <text class="attraction-intro__empty-text">Scenic Point</text>
+        <text class="attraction-intro__empty-text">景点</text>
       </view>
     </view>
 
     <view class="attraction-intro__content">
       <view wx:if="{{viewModel.attractionName}}" class="attraction-intro__section">
-        <text class="attraction-intro__section-label">LOCATION</text>
+        <text class="attraction-intro__section-label">位置</text>
         <view class="attraction-intro__location-row" hover-class="attraction-intro__location-row--active" bindtap="onLocationTap">
           <image class="attraction-intro__location-icon" src="{{iconUrls.location}}" mode="aspectFit" />
           <text class="attraction-intro__location-text">{{viewModel.attractionName}}</text>
@@ -64,19 +64,19 @@
       </view>
 
       <view wx:if="{{viewModel.tags.length}}" class="attraction-intro__section">
-        <text class="attraction-intro__section-label">DETAILS</text>
+        <text class="attraction-intro__section-label">详情</text>
         <view class="attraction-intro__pills">
           <text wx:for="{{viewModel.tags}}" wx:key="*this" class="attraction-intro__pill">{{item}}</text>
         </view>
       </view>
 
       <view wx:if="{{viewModel.description}}" class="attraction-intro__section">
-        <text class="attraction-intro__section-label">ABOUT</text>
+        <text class="attraction-intro__section-label">简介</text>
         <text class="attraction-intro__body-text">{{viewModel.description}}</text>
       </view>
 
       <view wx:if="{{viewModel.notes}}" class="attraction-intro__section">
-        <text class="attraction-intro__section-label">NOTES</text>
+        <text class="attraction-intro__section-label">备注</text>
         <text class="attraction-intro__body-text">{{viewModel.notes}}</text>
       </view>
 
@@ -140,17 +140,16 @@
 
     <view class="attraction-intro__actions">
       <button wx:if="{{source !== 'schedule'}}" class="attraction-intro__action attraction-intro__action--secondary" hover-class="attraction-intro__action--secondary-active" bindtap="onAddTap">
-        <text class="attraction-intro__action-icon">⊞</text>
+        <image class="attraction-intro__action-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-add-itinerary.svg" mode="aspectFit" />
         <view class="attraction-intro__action-copy">
-          <text class="attraction-intro__action-text">Add to</text>
-          <text class="attraction-intro__action-text">Itinerary</text>
+          <text class="attraction-intro__action-text">添加到行程</text>
         </view>
       </button>
       <button class="attraction-intro__action attraction-intro__action--primary" hover-class="attraction-intro__action--primary-active" bindtap="onRouteTap">
-        <text class="attraction-intro__action-icon">⌁</text>
+        <image class="attraction-intro__action-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-navigate.svg" mode="aspectFit" />
         <view class="attraction-intro__action-copy">
-          <text class="attraction-intro__action-text">View</text>
-          <text class="attraction-intro__action-text">Route</text>
+          <text class="attraction-intro__action-text">导航</text>
+          
         </view>
       </button>
     </view>

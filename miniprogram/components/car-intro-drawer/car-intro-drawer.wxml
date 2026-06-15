@@ -31,7 +31,7 @@
         <view class="car-intro__gallery-main" bindtap="onPreviewImageTap" data-index="0">
           <image class="car-intro__image" src="{{viewModel.images[0]}}" mode="aspectFill" lazy-load />
           <view class="car-intro__image-label">
-            <text>Travel Car</text>
+            <text>包车</text>
           </view>
         </view>
         <view wx:if="{{viewModel.images.length > 1}}" class="car-intro__gallery-side">
@@ -46,13 +46,13 @@
       </view>
       <view wx:else class="car-intro__gallery car-intro__gallery--empty">
         <text class="car-intro__empty-mark">18</text>
-        <text class="car-intro__empty-text">Private Ride</text>
+        <text class="car-intro__empty-text">专属座驾</text>
       </view>
     </view>
 
     <view class="car-intro__content">
       <view wx:if="{{viewModel.attractionName}}" class="car-intro__section">
-        <text class="car-intro__section-label">LOCATION</text>
+        <text class="car-intro__section-label">位置</text>
         <view class="car-intro__location-row">
           <image class="car-intro__location-icon" src="{{iconUrls.location}}" mode="aspectFit" />
           <text class="car-intro__location-text">{{viewModel.attractionName}}</text>
@@ -60,26 +60,26 @@
       </view>
 
       <view wx:if="{{viewModel.serviceTags.length}}" class="car-intro__section">
-        <text class="car-intro__section-label">VEHICLE</text>
+        <text class="car-intro__section-label">车辆信息</text>
         <view class="car-intro__pills">
           <text wx:for="{{viewModel.serviceTags}}" wx:key="*this" class="car-intro__pill">{{item}}</text>
         </view>
       </view>
 
       <view wx:if="{{viewModel.profileTags.length}}" class="car-intro__section">
-        <text class="car-intro__section-label">DRIVER</text>
+        <text class="car-intro__section-label">司机信息</text>
         <view class="car-intro__pills">
           <text wx:for="{{viewModel.profileTags}}" wx:key="*this" class="car-intro__pill">{{item}}</text>
         </view>
       </view>
 
       <view wx:if="{{viewModel.contactInfo}}" class="car-intro__section">
-        <text class="car-intro__section-label">CONTACT</text>
+        <text class="car-intro__section-label">联系方式</text>
         <text class="car-intro__body-text">{{viewModel.contactInfo}}</text>
       </view>
 
       <view wx:if="{{viewModel.description}}" class="car-intro__section">
-        <text class="car-intro__section-label">ABOUT</text>
+        <text class="car-intro__section-label">简介</text>
         <text class="car-intro__body-text">{{viewModel.description}}</text>
       </view>
 
@@ -91,17 +91,17 @@
 
     <view class="car-intro__actions">
       <button wx:if="{{source !== 'schedule'}}" class="car-intro__action car-intro__action--secondary" hover-class="car-intro__action--secondary-active" bindtap="onAddTap">
-        <text class="car-intro__action-icon">⊞</text>
+        <image class="car-intro__action-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-add-itinerary.svg" mode="aspectFit" />
         <view class="car-intro__action-copy">
-          <text class="car-intro__action-text">Add to</text>
-          <text class="car-intro__action-text">Itinerary</text>
+          <text class="car-intro__action-text">添加到行程</text>
+          
         </view>
       </button>
       <button class="car-intro__action car-intro__action--primary" hover-class="car-intro__action--primary-active" bindtap="onContactTap">
-        <text class="car-intro__action-icon">☎</text>
+        <image class="car-intro__action-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-phone.svg" mode="aspectFit" />
         <view class="car-intro__action-copy">
-          <text class="car-intro__action-text">Contact</text>
-          <text class="car-intro__action-text">Driver</text>
+          <text class="car-intro__action-text">联系司机</text>
+          
         </view>
       </button>
     </view>

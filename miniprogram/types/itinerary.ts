@@ -106,9 +106,9 @@ export interface ItineraryListParams {
 export interface UpdateDayDiningParams {
   itineraryId: number;
   dayNumber: number;
-  breakfastId?: number;
-  lunchId?: number;
-  dinnerId?: number;
+  breakfastId?: number | null;
+  lunchId?: number | null;
+  dinnerId?: number | null;
 }
 
 export interface UpdateDayAttractionsParams {
@@ -120,7 +120,7 @@ export interface UpdateDayAttractionsParams {
 export interface UpdateDayAccommodationParams {
   itineraryId: number;
   dayNumber: number;
-  accommodationId: number;
+  accommodationId: number | null;
 }
 
 export interface AddItineraryCarParams {

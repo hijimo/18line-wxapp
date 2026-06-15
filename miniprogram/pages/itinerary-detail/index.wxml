@@ -106,6 +106,7 @@
                   wx:key="attractionId"
                   item="{{item}}"
                   bind:carddetail="onCardDetail"
+                  bind:carddelete="onCardDelete"
                 />
               </view>
             </view>
@@ -115,7 +116,7 @@
           <block wx:if="{{currentDayData.accommodation}}">
             <view class="timeline-section">
               <text class="timeline-section-title">住宿</text>
-              <hotel-card item="{{currentDayData.accommodation}}" bind:carddetail="onCardDetail" />
+              <hotel-card item="{{currentDayData.accommodation}}" bind:carddetail="onCardDetail" bind:carddelete="onCardDelete" />
             </view>
           </block>
 
@@ -124,9 +125,9 @@
             <view class="timeline-section">
               <text class="timeline-section-title">餐饮</text>
               <view class="timeline-cards">
-                <dining-card wx:if="{{currentDayData.breakfast}}" item="{{currentDayData.breakfast}}" meal="breakfast" bind:carddetail="onCardDetail" />
-                <dining-card wx:if="{{currentDayData.lunch}}" item="{{currentDayData.lunch}}" meal="lunch" bind:carddetail="onCardDetail" />
-                <dining-card wx:if="{{currentDayData.dinner}}" item="{{currentDayData.dinner}}" meal="dinner" bind:carddetail="onCardDetail" />
+                <dining-card wx:if="{{currentDayData.breakfast}}" item="{{currentDayData.breakfast}}" meal="breakfast" bind:carddetail="onCardDetail" bind:carddelete="onCardDelete" />
+                <dining-card wx:if="{{currentDayData.lunch}}" item="{{currentDayData.lunch}}" meal="lunch" bind:carddetail="onCardDetail" bind:carddelete="onCardDelete" />
+                <dining-card wx:if="{{currentDayData.dinner}}" item="{{currentDayData.dinner}}" meal="dinner" bind:carddetail="onCardDetail" bind:carddelete="onCardDelete" />
               </view>
             </view>
           </block>
@@ -135,7 +136,7 @@
           <block wx:if="{{currentDayData.car}}">
             <view class="timeline-section">
               <text class="timeline-section-title">包车</text>
-              <car-card item="{{currentDayData.car}}" bind:carddetail="onCardDetail" />
+              <car-card item="{{currentDayData.car}}" bind:carddetail="onCardDetail" bind:carddelete="onCardDelete" />
             </view>
           </block>
 
@@ -143,7 +144,7 @@
           <block wx:if="{{currentDayData.photography}}">
             <view class="timeline-section">
               <text class="timeline-section-title">跟拍</text>
-              <photography-card item="{{currentDayData.photography}}" bind:carddetail="onCardDetail" />
+              <photography-card item="{{currentDayData.photography}}" bind:carddetail="onCardDetail" bind:carddelete="onCardDelete" />
             </view>
           </block>
 

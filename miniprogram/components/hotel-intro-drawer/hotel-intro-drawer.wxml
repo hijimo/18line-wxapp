@@ -26,7 +26,7 @@
         <view class="hotel-intro__gallery-main" bindtap="onPreviewImageTap" data-index="0">
           <image class="hotel-intro__image" src="{{viewModel.images[0]}}" mode="aspectFill" lazy-load />
           <view class="hotel-intro__image-label">
-            <text>Stay</text>
+            <text>住宿</text>
           </view>
         </view>
         <view wx:if="{{viewModel.images.length > 1}}" class="hotel-intro__gallery-side">
@@ -41,13 +41,13 @@
       </view>
       <view wx:else class="hotel-intro__gallery hotel-intro__gallery--empty">
         <text class="hotel-intro__empty-mark">18</text>
-        <text class="hotel-intro__empty-text">Local Stay</text>
+        <text class="hotel-intro__empty-text">住宿</text>
       </view>
     </view>
 
     <view class="hotel-intro__content">
       <view wx:if="{{viewModel.attractionName}}" class="hotel-intro__section">
-        <text class="hotel-intro__section-label">LOCATION</text>
+        <text class="hotel-intro__section-label">位置</text>
         <view class="hotel-intro__location-row" hover-class="hotel-intro__location-row--active" bindtap="onLocationTap">
           <image class="hotel-intro__location-icon" src="{{iconUrls.location}}" mode="aspectFit" />
           <text class="hotel-intro__location-text">{{viewModel.attractionName}}</text>
@@ -55,19 +55,19 @@
       </view>
 
       <view wx:if="{{viewModel.tags.length}}" class="hotel-intro__section">
-        <text class="hotel-intro__section-label">FACILITIES</text>
+        <text class="hotel-intro__section-label">设施</text>
         <view class="hotel-intro__pills">
           <text wx:for="{{viewModel.tags}}" wx:key="*this" class="hotel-intro__pill">{{item}}</text>
         </view>
       </view>
 
       <view wx:if="{{viewModel.contactPhone}}" class="hotel-intro__section">
-        <text class="hotel-intro__section-label">CONTACT</text>
+        <text class="hotel-intro__section-label">联系方式</text>
         <text class="hotel-intro__body-text">{{viewModel.contactPhone}}</text>
       </view>
 
       <view wx:if="{{viewModel.description}}" class="hotel-intro__section">
-        <text class="hotel-intro__section-label">ABOUT</text>
+        <text class="hotel-intro__section-label">简介</text>
         <text class="hotel-intro__body-text">{{viewModel.description}}</text>
       </view>
 
@@ -79,17 +79,17 @@
 
     <view class="hotel-intro__actions">
       <button wx:if="{{source !== 'schedule'}}" class="hotel-intro__action hotel-intro__action--secondary" hover-class="hotel-intro__action--secondary-active" bindtap="onAddTap">
-        <text class="hotel-intro__action-icon">⊞</text>
+        <image class="hotel-intro__action-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-add-itinerary.svg" mode="aspectFit" />
         <view class="hotel-intro__action-copy">
-          <text class="hotel-intro__action-text">Add to</text>
-          <text class="hotel-intro__action-text">Itinerary</text>
+          <text class="hotel-intro__action-text">添加到行程</text>
+          
         </view>
       </button>
       <button class="hotel-intro__action hotel-intro__action--primary" hover-class="hotel-intro__action--primary-active" bindtap="onBookTap">
-        <text class="hotel-intro__action-icon">□</text>
+        <image class="hotel-intro__action-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-phone.svg" mode="aspectFit" />
         <view class="hotel-intro__action-copy">
-          <text class="hotel-intro__action-text">Book</text>
-          <text class="hotel-intro__action-text">Stay</text>
+          <text class="hotel-intro__action-text">预订住宿</text>
+          
         </view>
       </button>
     </view>

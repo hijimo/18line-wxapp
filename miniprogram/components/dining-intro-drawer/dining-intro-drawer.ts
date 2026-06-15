@@ -137,10 +137,10 @@ function createDiningIntroViewModel(data: DiningIntroData | null | undefined): D
   return {
     title: normalizeDiningIntroText(source.diningName) || '餐饮详情',
     ratingText,
-    costText: costText ? `¥${costText}/person` : '',
+    costText: costText ? `¥${costText}/人` : '',
     images,
     photoCountText:
-      images.length > 2 ? `+${Math.max(images.length - 2, 1)} Photos` : '',
+      images.length > 2 ? `+${Math.max(images.length - 2, 1)} 张` : '',
     attractionName,
     address,
     description,
@@ -221,8 +221,20 @@ Component({
       this.triggerEvent('close');
     },
     onBookTap() {
-      this.triggerEvent('booktap', { data: this.data.data });
-      wx.showToast({ title: '请联系商家预订', icon: 'none' });
+      const dining = this.data.data as DiningIntroData;
+      const latitude = Number(dining.latitude);
+      const longitude = Number(dining.longitude);
+      if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+        wx.showToast({ title: '暂无餐厅定位', icon: 'none' });
+        return;
+      }
+      wx.openLocation({
+        latitude,
+        longitude,
+        name: normalizeDiningIntroText(dining.diningName) || '餐厅位置',
+        address: normalizeDiningIntroText(dining.address),
+        scale: 16,
+      });
     },
   },
 });
