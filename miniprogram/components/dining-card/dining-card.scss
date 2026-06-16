@@ -14,13 +14,45 @@
   flex-shrink: 0;
 }
 
-.card-body {
+.card-swipe-container {
   flex: 1;
+  position: relative;
+  overflow: hidden;
+  border-radius: 24rpx;
+}
+
+.card-body {
+  position: relative;
+  z-index: 2;
   background: #ffffff;
   border-radius: 24rpx;
   padding: 24rpx;
   box-shadow: 0 4rpx 24rpx rgba(22, 52, 34, 0.04);
   border-left: 6rpx solid rgba(148, 74, 0, 0.4);
+}
+
+.card-body--animated {
+  transition: transform 0.2s ease;
+}
+
+.card-delete-zone {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 160rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #dc2626;
+  border-radius: 0 24rpx 24rpx 0;
+}
+
+.card-delete-text {
+  font-size: 28rpx;
+  color: #ffffff;
+  font-weight: 500;
 }
 
 .type-label {
@@ -80,14 +112,6 @@
   line-height: 1;
   font-size: 0;
   text-align: center;
-}
-
-.card-action--delete {
-  background: rgba(220, 38, 38, 0.08);
-}
-
-.card-action--delete .action-text {
-  color: #dc2626;
 }
 
 .action-text {

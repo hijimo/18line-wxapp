@@ -26,5 +26,6 @@ Component({
     onDeleteTap() {
       this.triggerEvent('carddelete', { type: 'hotel', data: this.data.item })
     },
+    updateSwipeState() {},
   },
 })

@@ -24,5 +24,6 @@ Component({
         meal: this.data.meal,
       })
     },
+    updateSwipeState() {},
   },
 })

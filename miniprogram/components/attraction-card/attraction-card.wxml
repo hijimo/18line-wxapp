@@ -1,49 +1,56 @@
 <!--attraction-card.wxml-->
+<wxs src="./swipe.wxs" module="swipe" />
 <view class="card-wrapper">
   <view class="timeline-dot" />
-  <view class="card-body">
-    <view class="card-header">
-      <view class="card-info">
-        <view class="card-name-row">
-          <text class="card-name">{{item.attractionName}}</text>
-          <view class="card-ratings" wx:if="{{item.leisureRating || item.classicRating}}">
-            <text class="card-rating-tag card-rating-tag--leisure" wx:if="{{item.leisureRating}}">休闲{{item.leisureRating}}</text>
-            <text class="card-rating-tag card-rating-tag--classic" wx:if="{{item.classicRating}}">经典{{item.classicRating}}</text>
+  <view class="card-swipe-container">
+    <view class="card-body card-body--animated"
+      bindtouchstart="{{swipe.onSwipeStart}}"
+      bindtouchmove="{{swipe.onSwipeMove}}"
+      bindtouchend="{{swipe.onSwipeEnd}}"
+    >
+      <view class="card-header">
+        <view class="card-info">
+          <view class="card-name-row">
+            <text class="card-name">{{item.attractionName}}</text>
+            <view class="card-ratings" wx:if="{{item.leisureRating || item.classicRating}}">
+              <text class="card-rating-tag card-rating-tag--leisure" wx:if="{{item.leisureRating}}">休闲{{item.leisureRating}}</text>
+              <text class="card-rating-tag card-rating-tag--classic" wx:if="{{item.classicRating}}">经典{{item.classicRating}}</text>
+            </view>
+          </view>
+          <text class="card-sub" wx:if="{{item.attractionBlurb}}">{{item.attractionBlurb}}</text>
+          <view class="card-meta" wx:if="{{item.visitDuration || item.ticketPriceA || item.openTime || item.perCost}}">
+            <view class="card-meta-item" wx:if="{{item.visitDuration}}">
+              <text class="card-meta-label">游玩时间</text>
+              <text class="card-meta-value">{{item.visitDuration}}</text>
+            </view>
+            <view class="card-meta-item" wx:if="{{item.ticketPriceA}}">
+              <text class="card-meta-label">门票</text>
+              <text class="card-meta-value">¥{{item.ticketPriceA}}/成人{{item.ticketPriceC ? ' · ¥' + item.ticketPriceC + '/儿童' : ''}}</text>
+            </view>
+            <view class="card-meta-item" wx:if="{{item.perCost}}">
+              <text class="card-meta-label">人均</text>
+              <text class="card-meta-value">¥{{item.perCost}}/人</text>
+            </view>
+            <view class="card-meta-item" wx:if="{{item.openTime}}">
+              <text class="card-meta-label">开放时间</text>
+              <text class="card-meta-value">{{item.openTime}}</text>
+            </view>
           </view>
         </view>
-        <text class="card-sub" wx:if="{{item.attractionBlurb}}">{{item.attractionBlurb}}</text>
-        <view class="card-meta" wx:if="{{item.visitDuration || item.ticketPriceA || item.openTime || item.perCost}}">
-          <view class="card-meta-item" wx:if="{{item.visitDuration}}">
-            <text class="card-meta-label">游玩时间</text>
-            <text class="card-meta-value">{{item.visitDuration}}</text>
-          </view>
-          <view class="card-meta-item" wx:if="{{item.ticketPriceA}}">
-            <text class="card-meta-label">门票</text>
-            <text class="card-meta-value">¥{{item.ticketPriceA}}/成人{{item.ticketPriceC ? ' · ¥' + item.ticketPriceC + '/儿童' : ''}}</text>
-          </view>
-          <view class="card-meta-item" wx:if="{{item.perCost}}">
-            <text class="card-meta-label">人均</text>
-            <text class="card-meta-value">¥{{item.perCost}}/人</text>
-          </view>
-          <view class="card-meta-item" wx:if="{{item.openTime}}">
-            <text class="card-meta-label">开放时间</text>
-            <text class="card-meta-value">{{item.openTime}}</text>
+        <view class="card-actions">
+          <view class="card-action" bindtap="onDetailTap">
+            <text class="action-text">详情</text>
           </view>
         </view>
       </view>
-      <view class="card-actions">
-        <view class="card-action" bindtap="onDetailTap">
-          <text class="action-text">详情</text>
-        </view>
-        <view class="card-action card-action--delete" bindtap="onDeleteTap">
-          <text class="action-text">删除</text>
-        </view>
-      </view>
+      <swiper wx:if="{{item.attachments && item.attachments.length}}" class="card-swiper" indicator-dots="{{item.attachments.length > 1}}" indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#ffffff" autoplay circular>
+        <swiper-item wx:for="{{item.attachments}}" wx:key="url">
+          <image class="card-swiper-img" src="{{item.url}}" mode="aspectFill" lazy-load />
+        </swiper-item>
+      </swiper>
     </view>
-    <swiper wx:if="{{item.attachments && item.attachments.length}}" class="card-swiper" indicator-dots="{{item.attachments.length > 1}}" indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#ffffff" autoplay circular>
-      <swiper-item wx:for="{{item.attachments}}" wx:key="url">
-        <image class="card-swiper-img" src="{{item.url}}" mode="aspectFill" lazy-load />
-      </swiper-item>
-    </swiper>
+    <view class="card-delete-zone" bindtap="onDeleteTap">
+      <text class="card-delete-text">删除</text>
+    </view>
   </view>
 </view>

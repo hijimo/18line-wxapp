@@ -1,22 +1,29 @@
 <!--dining-card.wxml-->
+<wxs src="./swipe.wxs" module="swipe" />
 <view class="card-wrapper">
   <view class="timeline-dot" />
-  <view class="card-body">
-    <view class="type-label">{{meal === 'breakfast' ? '早餐' : meal === 'lunch' ? '午餐' : '晚餐'}}</view>
-    <view class="card-header">
-      <view class="card-info">
-        <text class="card-name">{{item.diningName}}</text>
-        <text class="card-sub" wx:if="{{item.diningDesc}}">{{item.diningDesc}}</text>
-        <text class="card-sub" wx:elif="{{item.avgCost}}">人均 ¥{{item.avgCost}}</text>
-      </view>
-      <view class="card-actions">
-        <view class="card-action" bindtap="onDetailTap">
-          <text class="action-text">详情</text>
+  <view class="card-swipe-container">
+    <view class="card-body card-body--animated"
+      bindtouchstart="{{swipe.onSwipeStart}}"
+      bindtouchmove="{{swipe.onSwipeMove}}"
+      bindtouchend="{{swipe.onSwipeEnd}}"
+    >
+      <view class="type-label">{{meal === 'breakfast' ? '早餐' : meal === 'lunch' ? '午餐' : '晚餐'}}</view>
+      <view class="card-header">
+        <view class="card-info">
+          <text class="card-name">{{item.diningName}}</text>
+          <text class="card-sub" wx:if="{{item.diningDesc}}">{{item.diningDesc}}</text>
+          <text class="card-sub" wx:elif="{{item.avgCost}}">人均 ¥{{item.avgCost}}</text>
         </view>
-        <view class="card-action card-action--delete" bindtap="onDeleteTap">
-          <text class="action-text">删除</text>
+        <view class="card-actions">
+          <view class="card-action" bindtap="onDetailTap">
+            <text class="action-text">详情</text>
+          </view>
         </view>
       </view>
+    </view>
+    <view class="card-delete-zone" bindtap="onDeleteTap">
+      <text class="card-delete-text">删除</text>
     </view>
   </view>
 </view>

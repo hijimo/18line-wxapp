@@ -1,21 +1,28 @@
 <!--hotel-card.wxml-->
+<wxs src="./swipe.wxs" module="swipe" />
 <view class="card-wrapper">
   <view class="timeline-dot" />
-  <view class="card-body">
-    <view class="type-label">住宿</view>
-    <view class="card-header">
-      <view class="card-info">
-        <text class="card-name">{{item.accommodationName}}</text>
-        <text class="card-sub">{{typeLabel}}{{item.priceMin && item.priceMax ? ' · ¥' + item.priceMin + '~' + item.priceMax : ''}}</text>
-      </view>
-      <view class="card-actions">
-        <view class="card-action" bindtap="onDetailTap">
-          <text class="action-text">详情</text>
+  <view class="card-swipe-container">
+    <view class="card-body card-body--animated"
+      bindtouchstart="{{swipe.onSwipeStart}}"
+      bindtouchmove="{{swipe.onSwipeMove}}"
+      bindtouchend="{{swipe.onSwipeEnd}}"
+    >
+      <view class="type-label">住宿</view>
+      <view class="card-header">
+        <view class="card-info">
+          <text class="card-name">{{item.accommodationName}}</text>
+          <text class="card-sub">{{typeLabel}}{{item.priceMin && item.priceMax ? ' · ¥' + item.priceMin + '~' + item.priceMax : ''}}</text>
         </view>
-        <view class="card-action card-action--delete" bindtap="onDeleteTap">
-          <text class="action-text">删除</text>
+        <view class="card-actions">
+          <view class="card-action" bindtap="onDetailTap">
+            <text class="action-text">详情</text>
+          </view>
         </view>
       </view>
+    </view>
+    <view class="card-delete-zone" bindtap="onDeleteTap">
+      <text class="card-delete-text">删除</text>
     </view>
   </view>
 </view>

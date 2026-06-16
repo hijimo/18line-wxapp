@@ -1,0 +1,65 @@
+var ZONE_WIDTH = 80;
+
+function onSwipeStart(e, ins) {
+  var state = ins.getState();
+  state.startX = e.touches[0].clientX;
+  state.startY = e.touches[0].clientY;
+  state.baseOffset = state.offset || 0;
+  state.locked = false;
+  state.horizontal = false;
+  state.moved = false;
+  ins.selectComponent('.card-body').removeClass('card-body--animated');
+  return false;
+}
+
+function onSwipeMove(e, ins) {
+  var state = ins.getState();
+  var touch = e.touches[0];
+  var dx = touch.clientX - state.startX;
+  var dy = touch.clientY - state.startY;
+
+  if (!state.locked) {
+    if (Math.abs(dx) < 5 && Math.abs(dy) < 5) return true;
+    state.locked = true;
+    state.horizontal = Math.abs(dx) > Math.abs(dy);
+  }
+
+  if (!state.horizontal) return true;
+
+  state.moved = true;
+  var offset = state.baseOffset + dx;
+  if (offset > 0) offset = 0;
+  if (offset < -ZONE_WIDTH) offset = -ZONE_WIDTH;
+  state.offset = offset;
+
+  ins.selectComponent('.card-body').setStyle({
+    transform: 'translateX(' + offset + 'px)'
+  });
+
+  return false;
+}
+
+function onSwipeEnd(e, ins) {
+  var state = ins.getState();
+  if (!state.moved) {
+    ins.selectComponent('.card-body').addClass('card-body--animated');
+    return true;
+  }
+
+  var finalOffset = state.offset < -(ZONE_WIDTH / 2) ? -ZONE_WIDTH : 0;
+  state.offset = finalOffset;
+
+  ins.selectComponent('.card-body').addClass('card-body--animated');
+  ins.selectComponent('.card-body').setStyle({
+    transform: 'translateX(' + finalOffset + 'px)'
+  });
+
+  ins.callMethod('updateSwipeState', { offset: finalOffset });
+  return false;
+}
+
+module.exports = {
+  onSwipeStart: onSwipeStart,
+  onSwipeMove: onSwipeMove,
+  onSwipeEnd: onSwipeEnd,
+};

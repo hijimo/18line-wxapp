@@ -12,5 +12,6 @@ Component({
     onDeleteTap() {
       this.triggerEvent('carddelete', { type: 'car', data: this.data.item })
     },
+    updateSwipeState() {},
   },
 })
