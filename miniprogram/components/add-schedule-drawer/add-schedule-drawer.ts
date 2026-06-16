@@ -214,40 +214,40 @@ Component({
           case 'attraction':
             res = await getAttractionList()
             this.setData({
-              attractionList: res.data || [],
-              filteredAttractionList: filterDrawerList(res.data || [], activeTab, keyword),
+              attractionList: res.rows || [],
+              filteredAttractionList: filterDrawerList(res.rows || [], activeTab, keyword),
               searchEmptyText: getSearchEmptyText(activeTab, keyword),
             })
             break
           case 'hotel':
             res = await getAccommodationList()
             this.setData({
-              accommodationList: res.data || [],
-              filteredAccommodationList: filterDrawerList(res.data || [], activeTab, keyword),
+              accommodationList: res.rows || [],
+              filteredAccommodationList: filterDrawerList(res.rows || [], activeTab, keyword),
               searchEmptyText: getSearchEmptyText(activeTab, keyword),
             })
             break
           case 'dining':
             res = await getDiningList()
             this.setData({
-              diningList: res.data || [],
-              filteredDiningList: filterDrawerList(res.data || [], activeTab, keyword),
+              diningList: res.rows || [],
+              filteredDiningList: filterDrawerList(res.rows || [], activeTab, keyword),
               searchEmptyText: getSearchEmptyText(activeTab, keyword),
             })
             break
           case 'car':
             res = await getCarList()
             this.setData({
-              carList: res.data || [],
-              filteredCarList: filterDrawerList(res.data || [], activeTab, keyword),
+              carList: res.rows || [],
+              filteredCarList: filterDrawerList(res.rows || [], activeTab, keyword),
               searchEmptyText: getSearchEmptyText(activeTab, keyword),
             })
             break
           case 'photography':
             res = await getPhotographyList()
             this.setData({
-              photographyList: res.data || [],
-              filteredPhotographyList: filterDrawerList(res.data || [], activeTab, keyword),
+              photographyList: res.rows || [],
+              filteredPhotographyList: filterDrawerList(res.rows || [], activeTab, keyword),
               searchEmptyText: getSearchEmptyText(activeTab, keyword),
             })
             break
