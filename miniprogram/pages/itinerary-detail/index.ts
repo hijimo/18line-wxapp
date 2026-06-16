@@ -392,8 +392,11 @@ Page({
   },
 
   async loadItinerary() {
-    const { itineraryId, currentDay } = this.data;
-    this.setData({ loading: true });
+    const { itineraryId, currentDay, itinerary: existingItinerary } = this.data;
+    const isInitialLoad = !existingItinerary;
+    if (isInitialLoad) {
+      this.setData({ loading: true });
+    }
 
     try {
       const res = await getItinerary(itineraryId);
