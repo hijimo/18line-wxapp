@@ -30,25 +30,22 @@
     <view
       class="detail-drawer detail-drawer--{{drawerHeightLevel}} {{drawerDragging ? 'detail-drawer--dragging' : ''}}"
       style="height: {{drawerHeight}}vh;"
-      bindtouchstart="onDrawerTouchStart"
-      bindtouchmove="onDrawerTouchMove"
-      bindtouchend="onDrawerTouchEnd"
-      bindtouchcancel="onDrawerTouchEnd"
     >
+      <!-- 拖拽手柄区域 - 独占 touch 事件 -->
+      <view
+        class="drawer-drag-zone"
+        aria-role="button"
+        aria-label="拖动调整详情高度"
+        catchtouchstart="onDrawerTouchStart"
+        catchtouchmove="onDrawerTouchMove"
+        catchtouchend="onDrawerTouchEnd"
+        catchtouchcancel="onDrawerTouchEnd"
+      >
+        <view class="drawer-handle-bar" />
+      </view>
+
       <!-- 行程信息卡 -->
-      <view class="info-card">
-        <view
-          class="drawer-handle"
-          aria-role="button"
-          aria-label="拖动调整详情高度"
-          data-drag-scope="handle"
-          catchtouchstart="onDrawerTouchStart"
-          catchtouchmove="onDrawerTouchMove"
-          catchtouchend="onDrawerTouchEnd"
-          catchtouchcancel="onDrawerTouchEnd"
-        >
-          <view class="drawer-handle-bar" />
-        </view>
+      <view class="info-card" bindtap="onInfoCardTap">
         <view class="info-header">
           <text class="info-title">{{itinerary.itineraryName || '未命名行程'}}</text>
           <view class="info-status">
@@ -93,6 +90,7 @@
         scroll-y="{{drawerHeightLevel !== 20}}"
         type="list"
         enhanced
+        bounces="{{false}}"
         show-scrollbar="{{drawerHeightLevel !== 20}}"
       >
         <view class="timeline" wx:if="{{currentDayData}}">

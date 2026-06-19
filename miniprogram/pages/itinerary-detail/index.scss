@@ -115,11 +115,11 @@ page {
 
 /* Info Card */
 .info-card {
-  margin: 16rpx 32rpx 0;
+  margin: 0 32rpx;
   position: relative;
   background: #ffffff;
   border-radius: 28rpx;
-  padding: 16rpx 28rpx 28rpx;
+  padding: 24rpx 28rpx 28rpx;
   display: flex;
   flex-direction: column;
   gap: 18rpx;
@@ -127,12 +127,13 @@ page {
   flex: none;
 }
 
-.drawer-handle {
+.drawer-drag-zone {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 32rpx;
-  margin: -2rpx 0 2rpx;
+  height: 56rpx;
+  flex: none;
+  padding: 0 32rpx;
 }
 
 .drawer-handle-bar {
@@ -278,11 +279,10 @@ page {
   height: 0;
   flex: 1;
   min-height: 0;
-  overflow-y: hidden;
 }
 
 .detail-drawer--20 .scrollarea {
-  overflow: hidden;
+  pointer-events: none;
 }
 
 /* Timeline */

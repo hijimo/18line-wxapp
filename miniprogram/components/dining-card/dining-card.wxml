@@ -16,7 +16,7 @@
           <text class="card-sub" wx:elif="{{item.avgCost}}">人均 ¥{{item.avgCost}}</text>
         </view>
         <view class="card-actions">
-          <view class="card-action" bindtap="onDetailTap">
+          <view class="card-action" catchtap="onDetailTap">
             <text class="action-text">详情</text>
           </view>
         </view>

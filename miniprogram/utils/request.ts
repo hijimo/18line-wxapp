@@ -1,4 +1,4 @@
-const API_ORIGIN = 'http://8.136.229.208:8080/api'; // TODO: 配置你的API地址
+const API_ORIGIN = 'https://18line-admin.asyncb.com/api'; // TODO: 配置你的API地址
 
 export const TOKEN_KEY = 'token';
 

@@ -28,7 +28,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to top, rgba(22, 52, 34, 0.9) 0%, rgba(22, 52, 34, 0.2) 50%, rgba(22, 52, 34, 0) 100%);
+  background: linear-gradient(
+    to top,
+    rgba(22, 52, 34, 0.9) 0%,
+    rgba(22, 52, 34, 0.2) 50%,
+    rgba(22, 52, 34, 0) 100%
+  );
 }
 
 .banner-content {
@@ -61,7 +66,7 @@
 }
 
 .banner-title {
-  font-size: 72rpx;
+  font-size: 48rpx;
   color: #ffffff;
   line-height: 80rpx;
   letter-spacing: -1.8rpx;

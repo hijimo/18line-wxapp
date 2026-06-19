@@ -648,13 +648,17 @@ Page({
     this.setData({ showIntroDrawer: '', introData: null });
   },
 
+  onInfoCardTap() {
+    if (this.data.drawerHeightLevel === 20) {
+      this.setData({
+        drawerHeight: 60,
+        drawerHeightLevel: 60,
+      });
+    }
+  },
+
   onDrawerTouchStart(e: any) {
     if (drawerTouchActive) return;
-
-    const dragScope = e.currentTarget?.dataset?.dragScope;
-    const canDrag = this.data.drawerHeightLevel === 20 || dragScope === 'handle';
-
-    if (!canDrag) return;
 
     const touch = e.touches?.[0];
     if (!touch) return;

@@ -9,7 +9,7 @@ function onSwipeStart(e, ins) {
   state.horizontal = false;
   state.moved = false;
   ins.selectComponent('.card-body').removeClass('card-body--animated');
-  return false;
+  return true;
 }
 
 function onSwipeMove(e, ins) {

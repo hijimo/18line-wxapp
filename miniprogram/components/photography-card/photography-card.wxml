@@ -15,7 +15,7 @@
           <text class="card-sub">{{item.equipment}}{{item.price ? ' · ¥' + item.price : ''}}</text>
         </view>
         <view class="card-actions">
-          <view class="card-action" bindtap="onDetailTap">
+          <view class="card-action" catchtap="onDetailTap">
             <text class="action-text">详情</text>
           </view>
         </view>
