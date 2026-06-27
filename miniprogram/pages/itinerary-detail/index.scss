@@ -312,6 +312,26 @@ page {
   gap: 16rpx;
 }
 
+/* Drag Sort */
+.drag-hint-text {
+  font-size: 22rpx;
+  color: rgba(22, 52, 34, 0.4);
+  margin-bottom: 8rpx;
+}
+
+.drag-item {
+  position: relative;
+  transition: transform 200ms ease, opacity 200ms ease;
+}
+
+.drag-item--active {
+  opacity: 0.7;
+  z-index: 100;
+  transition: none;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+  border-radius: 24rpx;
+}
+
 /* Add Spot Button */
 .add-spot-btn {
   display: flex;

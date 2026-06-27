@@ -252,7 +252,7 @@ Page({
     forceUnlockCountdown: '' as string,
     isDragging: false,
     dragIndex: -1,
-    dragState: null as any,
+    dragOffsetY: 0,
   },
 
   onLoad(options: Record<string, string | undefined>) {
@@ -942,7 +942,7 @@ Page({
     if (attractions.length <= 1) return;
 
     // blind attractions cannot be reordered
-    const blindAttractions = this.data.blindAttractions;
+    const blindAttractions = this.data.blindAttractions || [];
     if (blindAttractions.length > 0) {
       const ba = blindAttractions[index];
       if (ba && ba.blindDisplayMode !== 'visible' && ba.blindDisplayMode !== 'unlocked') {
@@ -960,38 +960,52 @@ Page({
       this.setData({
         isDragging: true,
         dragIndex: index,
-        dragState: {
-          dragIndex: index,
-          startY: dragTouchStartY,
-          itemCount: attractions.length,
-        },
       });
     }, 500);
   },
 
   onAttractionTouchMove(e: any) {
-    if (!dragLongPressTimer && !this.data.isDragging) return;
-
     const touch = e.touches[0];
     const dx = Math.abs(touch.clientX - dragTouchStartX);
     const dy = Math.abs(touch.clientY - dragTouchStartY);
 
+    // Cancel long-press if moved beyond threshold before drag starts
     if (dragLongPressTimer && (dx > 10 || dy > 10)) {
       clearTimeout(dragLongPressTimer);
       dragLongPressTimer = null;
+      return;
+    }
+
+    // During active drag: update visual position
+    if (this.data.isDragging) {
+      const deltaY = touch.clientY - dragTouchStartY;
+      this.setData({ dragOffsetY: deltaY });
     }
   },
 
-  onAttractionTouchEnd(_e: any) {
+  onAttractionTouchEnd(e: any) {
     if (dragLongPressTimer) {
       clearTimeout(dragLongPressTimer);
       dragLongPressTimer = null;
     }
+
+    if (!this.data.isDragging) return;
+
+    const { dragIndex, dragOffsetY } = this.data;
+    const CARD_HEIGHT = 80; // approximate card height in px
+    const attractions = this.data.currentDayData?.attractionList || [];
+
+    // Compute target index from drag offset
+    let toIndex = Math.round((dragOffsetY || 0) / CARD_HEIGHT) + dragIndex;
+    toIndex = Math.max(0, Math.min(toIndex, attractions.length - 1));
+
+    this.setData({ isDragging: false, dragOffsetY: 0, dragIndex: -1 });
+
+    this.onDragComplete({ fromIndex: dragIndex, toIndex });
   },
 
   onDragComplete(e: any) {
     const { fromIndex, toIndex } = e;
-    this.setData({ isDragging: false, dragState: null });
 
     if (fromIndex === toIndex || fromIndex == null || toIndex == null) {
       dragPreReorderList = null;
@@ -1056,12 +1070,15 @@ Page({
       id: a.attractionId,
       latitude: a.latitude,
       longitude: a.longitude,
+      iconPath: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/marker-pin.png?x-oss-process=image/resize,m_lfit,w_56,h_56',
       width: 28,
       height: 28,
+      anchor: { x: 0.5, y: 1 },
       callout: {
         content: a.attractionShortName || a.attractionName || '',
         display: 'ALWAYS',
-        fontSize: 12,
+        fontSize: 11,
+        borderRadius: 6,
         padding: 6,
         bgColor: '#ffffff',
         color: '#163422',

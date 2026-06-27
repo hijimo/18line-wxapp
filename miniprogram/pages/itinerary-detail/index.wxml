@@ -88,7 +88,7 @@
       <!-- Timeline 区域 -->
       <scroll-view
         class="scrollarea"
-        scroll-y="{{drawerHeightLevel !== 20}}"
+        scroll-y="{{drawerHeightLevel !== 20 && !isDragging}}"
         type="list"
         enhanced
         bounces="{{false}}"
@@ -119,15 +119,26 @@
           <block wx:elif="{{currentDayData.attractionList && currentDayData.attractionList.length > 0}}">
             <view class="timeline-section">
               <text class="timeline-section-title">景点</text>
+              <view wx:if="{{!isTemplate && currentDayData.attractionList.length > 1}}" class="drag-hint-text">长按拖动调整顺序</view>
               <view class="timeline-cards">
-                <attraction-card
+                <view
                   wx:for="{{currentDayData.attractionList}}"
                   wx:key="attractionId"
-                  item="{{item}}"
-                  index="{{index}}"
-                  bind:carddetail="onCardDetail"
-                  bind:carddelete="onCardDelete"
-                />
+                  class="drag-item {{isDragging && dragIndex === index ? 'drag-item--active' : ''}}"
+                  style="{{isDragging && dragIndex === index ? 'transform: translateY(' + dragOffsetY + 'px);' : ''}}"
+                  id="drag-item-{{index}}"
+                  data-index="{{index}}"
+                  bindtouchstart="onAttractionTouchStart"
+                  bindtouchmove="onAttractionTouchMove"
+                  bindtouchend="onAttractionTouchEnd"
+                >
+                  <attraction-card
+                    item="{{item}}"
+                    index="{{index}}"
+                    bind:carddetail="onCardDetail"
+                    bind:carddelete="onCardDelete"
+                  />
+                </view>
               </view>
             </view>
           </block>
