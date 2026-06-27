@@ -9,7 +9,7 @@
     ],
     "babelSetting": {
       "ignore": [],
-      "disablePlugins": [],
+      "disablePlugins": ["transform-runtime"],
       "outputPath": ""
     },
     "coverView": false,

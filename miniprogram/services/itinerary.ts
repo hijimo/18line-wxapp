@@ -72,10 +72,11 @@ export const updateDayDining = (params: UpdateDayDiningParams) => {
 };
 
 /** 更新日程景点 */
-export const updateDayAttractions = (params: UpdateDayAttractionsParams) => {
-  const { itineraryId, dayNumber, attractionIds } = params;
+export const updateDayAttractions = (params: UpdateDayAttractionsParams & { replace?: boolean }) => {
+  const { itineraryId, dayNumber, attractionIds, replace } = params;
+  const query = replace ? '?replace=true' : '';
   return request<AjaxResult>(
-    `/wx/itinerary/${itineraryId}/day/${dayNumber}/attractions`,
+    `/wx/itinerary/${itineraryId}/day/${dayNumber}/attractions${query}`,
     { method: 'POST', data: attractionIds },
   );
 };
@@ -107,6 +108,24 @@ export const addCar = (params: AddItineraryCarParams) => {
   );
 };
 
+/** 拖拽重排日程景点（replace模式） */
+export const reorderDayAttractions = (
+  itineraryId: number,
+  dayNumber: number,
+  attractionIds: string,
+) =>
+  request<AjaxResult>(
+    `/wx/itinerary/${itineraryId}/day/${dayNumber}/attractions?replace=true`,
+    { method: 'POST', data: attractionIds },
+  );
+
+/** 重置日程景点为系统推荐顺序 */
+export const resetDayAttractions = (itineraryId: number, dayNumber: number) =>
+  request<AjaxResult>(
+    `/wx/itinerary/${itineraryId}/day/${dayNumber}/attractions?replace=true`,
+    { method: 'POST', data: '' },
+  );
+
 /** 删除日程住宿 */
 export const removeDayAccommodation = (itineraryId: number, dayNumber: number) =>
   request<AjaxResult>(
@@ -134,3 +153,35 @@ export const removeDayPhotography = (itineraryId: number, dayNumber: number) =>
     `/wx/itinerary/${itineraryId}/day/${dayNumber}/photography/remove`,
     { method: 'POST' },
   );
+
+/** 解锁景点 */
+export const unlockAttraction = (
+  itineraryId: number,
+  dayId: number,
+  attractionId: number,
+  data: { latitude: number; longitude: number; accuracy: number },
+) =>
+  request<AjaxResult>(`/wx/itinerary/${itineraryId}/day/${dayId}/attraction/${attractionId}/unlock`, {
+    method: 'POST',
+    data,
+  });
+
+/** 跳过景点 */
+export const skipAttraction = (
+  itineraryId: number,
+  dayId: number,
+  attractionId: number,
+) =>
+  request<AjaxResult>(`/wx/itinerary/${itineraryId}/day/${dayId}/attraction/${attractionId}/skip`, {
+    method: 'POST',
+  });
+
+/** 强制解锁景点 */
+export const forceUnlockAttraction = (
+  itineraryId: number,
+  dayId: number,
+  attractionId: number,
+) =>
+  request<AjaxResult>(`/wx/itinerary/${itineraryId}/day/${dayId}/attraction/${attractionId}/force-unlock`, {
+    method: 'POST',
+  });

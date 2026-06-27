@@ -22,6 +22,30 @@ export interface TravelPhotography {
   remark?: string;
 }
 
+export type BlindDisplayMode = 'locked' | 'next' | 'unlocked' | 'visible' | 'skipped';
+
+export interface BlindAttractionInfo {
+  attractionId: number;
+  sortOrder: number;
+  blindDisplayMode: BlindDisplayMode;
+  fuzzyLongitude?: number;
+  fuzzyLatitude?: number;
+  fuzzyRadius?: number;
+  categoryHint?: string;
+  durationHint?: string;
+  prepHint?: string;
+  budgetTier?: string;
+  forceUnlockAvailableAt?: string;
+  attractionName?: string;
+  attractionDescription?: string;
+  longitude?: number;
+  latitude?: number;
+  attachments?: Record<string, any>[];
+  visitDuration?: string;
+  attractionNotes?: string;
+  unlockTime?: string;
+}
+
 export interface TravelItineraryDay {
   itineraryDayId?: number;
   itineraryId?: number;
@@ -57,6 +81,7 @@ export interface TravelItineraryDay {
   touristPhotography?: TravelPhotography;
   car?: TravelCar;
   touristCar?: TravelCar;
+  blindAttractions?: BlindAttractionInfo[];
   delFlag?: string;
   createBy?: string;
   createTime?: string;
@@ -87,6 +112,7 @@ export interface Itinerary {
   createFromLabel?: string;
   version?: number;
   totalCost?: number;
+  blindMode?: string;
   remark?: string;
   delFlag?: string;
   daysList?: TravelItineraryDay[];

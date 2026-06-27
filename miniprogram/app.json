@@ -61,5 +61,11 @@
   },
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于验证您已到达盲游景点"
+    }
+  },
+  "requiredPrivateInfos": ["getLocation"]
 }
