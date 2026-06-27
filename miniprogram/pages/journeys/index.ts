@@ -1,4 +1,4 @@
-import { getItineraryList } from '../../services/itinerary';
+import { getItineraryList, removeItinerary } from '../../services/itinerary';
 import type { Itinerary } from '../../types/itinerary';
 
 interface JourneyItem {
@@ -131,5 +131,31 @@ Page({
     const id = e.currentTarget.dataset.id;
     if (!id) return;
     wx.navigateTo({ url: `/pages/itinerary-detail/index?id=${id}` });
+  },
+
+  onDeleteTap(e: any) {
+    const id = e.currentTarget.dataset.id;
+    if (!id) return;
+    wx.showModal({
+      title: '确认删除',
+      content: '删除后无法恢复，确定要删除这个行程吗？',
+      confirmColor: '#e53e3e',
+      success: (res) => {
+        if (res.confirm) {
+          this.deleteJourney(id);
+        }
+      },
+    });
+  },
+
+  async deleteJourney(id: number) {
+    try {
+      await removeItinerary({ itineraryId: id });
+      wx.showToast({ title: '已删除', icon: 'success' });
+      this.loadJourneys();
+    } catch (err) {
+      console.error('Failed to delete journey:', err);
+      wx.showToast({ title: '删除失败', icon: 'none' });
+    }
   },
 });

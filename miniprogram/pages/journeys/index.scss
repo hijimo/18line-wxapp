@@ -97,6 +97,21 @@ page {
   gap: 12rpx;
 }
 
+.journey-top-right {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  flex-shrink: 0;
+}
+
+.status-badge--delete {
+  background: rgba(229, 62, 62, 0.08);
+}
+
+.status-text--delete {
+  color: #e53e3e;
+}
+
 .journey-title {
   font-size: 28rpx;
   font-weight: 700;
