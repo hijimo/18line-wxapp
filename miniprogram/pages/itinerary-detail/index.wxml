@@ -99,20 +99,31 @@
           <block wx:if="{{blindAttractions.length > 0}}">
             <view class="timeline-section">
               <text class="timeline-section-title">景点</text>
+              <view wx:if="{{!isTemplate && blindAttractions.length > 1}}" class="drag-hint-text">长按拖动调整顺序</view>
               <view class="timeline-cards">
-                <attraction-card
+                <view
                   wx:for="{{blindAttractions}}"
                   wx:key="attractionId"
-                  item="{{item}}"
-                  index="{{index}}"
-                  unlocking="{{unlockingAttractionId === item.attractionId}}"
-                  bind:carddetail="onCardDetail"
-                  bind:carddelete="onCardDelete"
-                  bind:unlock="onAttractionUnlock"
-                  bind:skip="onAttractionSkip"
-                  bind:navigate="onAttractionNavigate"
-                  bind:forceunlock="onAttractionForceUnlock"
-                />
+                  class="drag-item {{isDragging && dragIndex === index ? 'drag-item--active' : ''}}"
+                  style="{{isDragging && dragIndex === index ? 'transform: translateY(' + dragOffsetY + 'px);' : ''}}"
+                  id="drag-item-{{index}}"
+                  data-index="{{index}}"
+                  bindtouchstart="onAttractionTouchStart"
+                  bindtouchmove="onAttractionTouchMove"
+                  bindtouchend="onAttractionTouchEnd"
+                >
+                  <attraction-card
+                    item="{{item}}"
+                    index="{{index}}"
+                    unlocking="{{unlockingAttractionId === item.attractionId}}"
+                    bind:carddetail="onCardDetail"
+                    bind:carddelete="onCardDelete"
+                    bind:unlock="onAttractionUnlock"
+                    bind:skip="onAttractionSkip"
+                    bind:navigate="onAttractionNavigate"
+                    bind:forceunlock="onAttractionForceUnlock"
+                  />
+                </view>
               </view>
             </view>
           </block>

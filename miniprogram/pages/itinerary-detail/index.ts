@@ -933,22 +933,19 @@ Page({
 
   // ======================== 拖拽排序 ========================
 
+  _getDragAttractionList() {
+    const blindAttractions = this.data.blindAttractions || [];
+    if (blindAttractions.length > 0) return blindAttractions;
+    return this.data.currentDayData?.attractionList || [];
+  },
+
   onAttractionTouchStart(e: any) {
     const { isTemplate, isDragging } = this.data;
     if (isTemplate || isDragging) return;
 
     const { index } = e.currentTarget.dataset;
-    const attractions = this.data.currentDayData?.attractionList || [];
+    const attractions = this._getDragAttractionList();
     if (attractions.length <= 1) return;
-
-    // blind attractions cannot be reordered
-    const blindAttractions = this.data.blindAttractions || [];
-    if (blindAttractions.length > 0) {
-      const ba = blindAttractions[index];
-      if (ba && ba.blindDisplayMode !== 'visible' && ba.blindDisplayMode !== 'unlocked') {
-        return;
-      }
-    }
 
     dragTouchStartX = e.touches[0].clientX;
     dragTouchStartY = e.touches[0].clientY;
@@ -992,10 +989,9 @@ Page({
     if (!this.data.isDragging) return;
 
     const { dragIndex, dragOffsetY } = this.data;
-    const CARD_HEIGHT = 80; // approximate card height in px
-    const attractions = this.data.currentDayData?.attractionList || [];
+    const CARD_HEIGHT = 80;
+    const attractions = this._getDragAttractionList();
 
-    // Compute target index from drag offset
     let toIndex = Math.round((dragOffsetY || 0) / CARD_HEIGHT) + dragIndex;
     toIndex = Math.max(0, Math.min(toIndex, attractions.length - 1));
 
@@ -1012,40 +1008,60 @@ Page({
       return;
     }
 
-    const attractions = [...(this.data.currentDayData?.attractionList || [])];
-    const [moved] = attractions.splice(fromIndex, 1);
-    attractions.splice(toIndex, 0, moved);
+    const blindAttractions = this.data.blindAttractions || [];
+    const isBlindMode = blindAttractions.length > 0;
 
-    // Optimistic UI update
-    const currentDayData = { ...this.data.currentDayData, attractionList: attractions };
-    this.setData({ currentDayData });
-    this.updateMapPolyline(attractions);
+    if (isBlindMode) {
+      const reordered = [...blindAttractions];
+      const [moved] = reordered.splice(fromIndex, 1);
+      reordered.splice(toIndex, 0, moved);
 
-    // Save to backend
-    const { itineraryId, currentDay } = this.data;
-    const newOrder = attractions.map((a: any) => a.attractionId).join(',');
+      this.setData({ blindAttractions: reordered });
+      this.updateMapData(this.data.currentDayData);
 
-    if (dragSaveRequestTask) {
-      dragSaveRequestTask.abort();
+      const { itineraryId, currentDay } = this.data;
+      const newOrder = reordered.map((a: any) => a.attractionId).join(',');
+
+      if (dragSaveRequestTask) { dragSaveRequestTask.abort(); }
+      dragSaveRequestTask = null;
+      reorderDayAttractions(itineraryId, currentDay, newOrder)
+        .then(() => { dragPreReorderList = null; dragSaveRequestTask = null; })
+        .catch(() => {
+          if (dragPreReorderList) {
+            this.setData({ blindAttractions: dragPreReorderList as any[] });
+            this.updateMapData(this.data.currentDayData);
+            dragPreReorderList = null;
+          }
+          dragSaveRequestTask = null;
+          wx.showToast({ title: '保存失败，已恢复', icon: 'none' });
+        });
+    } else {
+      const attractions = [...(this.data.currentDayData?.attractionList || [])];
+      const [moved] = attractions.splice(fromIndex, 1);
+      attractions.splice(toIndex, 0, moved);
+
+      const currentDayData = { ...this.data.currentDayData, attractionList: attractions };
+      this.setData({ currentDayData });
+      this.updateMapPolyline(attractions);
+
+      const { itineraryId, currentDay } = this.data;
+      const newOrder = attractions.map((a: any) => a.attractionId).join(',');
+
+      if (dragSaveRequestTask) { dragSaveRequestTask.abort(); }
+      dragSaveRequestTask = null;
+      reorderDayAttractions(itineraryId, currentDay, newOrder)
+        .then(() => { dragPreReorderList = null; dragSaveRequestTask = null; })
+        .catch(() => {
+          if (dragPreReorderList) {
+            const rollbackData = { ...this.data.currentDayData, attractionList: dragPreReorderList };
+            this.setData({ currentDayData: rollbackData });
+            this.updateMapPolyline(dragPreReorderList);
+            dragPreReorderList = null;
+          }
+          dragSaveRequestTask = null;
+          wx.showToast({ title: '保存失败，已恢复', icon: 'none' });
+        });
     }
-
-    dragSaveRequestTask = null;
-    reorderDayAttractions(itineraryId, currentDay, newOrder)
-      .then(() => {
-        dragPreReorderList = null;
-        dragSaveRequestTask = null;
-      })
-      .catch(() => {
-        // Rollback on failure
-        if (dragPreReorderList) {
-          const rollbackData = { ...this.data.currentDayData, attractionList: dragPreReorderList };
-          this.setData({ currentDayData: rollbackData });
-          this.updateMapPolyline(dragPreReorderList);
-          dragPreReorderList = null;
-        }
-        dragSaveRequestTask = null;
-        wx.showToast({ title: '保存失败，已恢复', icon: 'none' });
-      });
   },
 
   async onResetOrder() {
