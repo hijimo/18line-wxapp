@@ -879,7 +879,7 @@ Page({
     // Build circles and markers for blind attractions
     const mapCircles: any[] = [];
     const blindMarkers: any[] = [];
-    let blindIndex = 1;
+    let blindIndex = 0;
 
     blindAttractions.forEach((ba: any) => {
       if ((ba.blindDisplayMode === 'next' || ba.blindDisplayMode === 'locked') && ba.fuzzyLatitude && ba.fuzzyLongitude) {
