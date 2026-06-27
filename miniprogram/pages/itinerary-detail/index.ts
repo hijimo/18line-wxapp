@@ -756,85 +756,127 @@ Page({
 
   async updateMapData(dayData: TravelItineraryDay | null) {
     if (!dayData || !dayData.attractionList || dayData.attractionList.length === 0) {
-      this.setData({ mapMarkers: [], mapPolyline: [] });
+      this.setData({ mapMarkers: [], mapPolyline: [], mapCircles: [] });
       return;
     }
+
+    const blindAttractions = this.data.blindAttractions || [];
 
     const attractions = dayData.attractionList.filter(
       (a) => a.latitude && a.longitude,
     );
 
-    if (attractions.length === 0) {
-      this.setData({ mapMarkers: [], mapPolyline: [] });
+    if (attractions.length === 0 && blindAttractions.length === 0) {
+      this.setData({ mapMarkers: [], mapPolyline: [], mapCircles: [] });
       return;
     }
 
-    const markers = attractions.map((a, idx) => ({
-      id: idx,
-      latitude: a.latitude!,
-      longitude: a.longitude!,
-      iconPath: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/marker-pin.png?x-oss-process=image/resize,m_lfit,w_56,h_56',
-      width: 28,
-      height: 28,
-      anchor: { x: 0.5, y: 1 },
-      callout: {
-        content: a.attractionName || '',
-        display: 'ALWAYS',
-        fontSize: 11,
-        borderRadius: 6,
-        padding: 6,
-        bgColor: '#ffffff',
-        color: '#163422',
-        borderWidth: 1,
-        borderColor: '#e0e0e0',
-      },
-      label: {
-        content: String(idx + 1),
-        color: '#ffffff',
-        fontSize: 10,
-        anchorX: 0,
-        anchorY: -24,
-        textAlign: 'center',
-      },
-    }));
-
-    let latSum = 0;
-    let lngSum = 0;
-    attractions.forEach((a) => {
-      latSum += a.latitude!;
-      lngSum += a.longitude!;
-    });
-    const routeCenter = {
-      latitude: latSum / attractions.length,
-      longitude: lngSum / attractions.length,
-    };
-
+    let markers: any[] = [];
     let mapScale = 12;
-    if (attractions.length >= 2) {
-      const lats = attractions.map((a) => a.latitude!);
-      const lngs = attractions.map((a) => a.longitude!);
-      const latDiff = Math.max(...lats) - Math.min(...lats);
-      const lngDiff = Math.max(...lngs) - Math.min(...lngs);
-      const maxDiff = Math.max(latDiff, lngDiff);
-      if (maxDiff > 0.5) mapScale = 9;
-      else if (maxDiff > 0.2) mapScale = 10;
-      else if (maxDiff > 0.1) mapScale = 11;
-      else if (maxDiff > 0.05) mapScale = 12;
-      else mapScale = 13;
-    }
-    mapScale = Math.min(MAX_MAP_SCALE, mapScale + MAP_SCALE_BOOST);
+    let mapCenter = { latitude: 0, longitude: 0 };
 
-    const mapCenter = {
-      latitude:
-        routeCenter.latitude -
-        getLatitudeOffsetForMapFocus(routeCenter.latitude, mapScale),
-      longitude: routeCenter.longitude,
-    };
+    if (attractions.length > 0) {
+      markers = attractions.map((a, idx) => ({
+        id: idx,
+        latitude: a.latitude!,
+        longitude: a.longitude!,
+        iconPath: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/marker-pin.png?x-oss-process=image/resize,m_lfit,w_56,h_56',
+        width: 28,
+        height: 28,
+        anchor: { x: 0.5, y: 1 },
+        callout: {
+          content: a.attractionName || '',
+          display: 'ALWAYS',
+          fontSize: 11,
+          borderRadius: 6,
+          padding: 6,
+          bgColor: '#ffffff',
+          color: '#163422',
+          borderWidth: 1,
+          borderColor: '#e0e0e0',
+        },
+        label: {
+          content: String(idx + 1),
+          color: '#ffffff',
+          fontSize: 10,
+          anchorX: 0,
+          anchorY: -24,
+          textAlign: 'center',
+        },
+      }));
+
+      let latSum = 0;
+      let lngSum = 0;
+      attractions.forEach((a) => {
+        latSum += a.latitude!;
+        lngSum += a.longitude!;
+      });
+      const routeCenter = {
+        latitude: latSum / attractions.length,
+        longitude: lngSum / attractions.length,
+      };
+
+      if (attractions.length >= 2) {
+        const lats = attractions.map((a) => a.latitude!);
+        const lngs = attractions.map((a) => a.longitude!);
+        const latDiff = Math.max(...lats) - Math.min(...lats);
+        const lngDiff = Math.max(...lngs) - Math.min(...lngs);
+        const maxDiff = Math.max(latDiff, lngDiff);
+        if (maxDiff > 0.5) mapScale = 9;
+        else if (maxDiff > 0.2) mapScale = 10;
+        else if (maxDiff > 0.1) mapScale = 11;
+        else if (maxDiff > 0.05) mapScale = 12;
+        else mapScale = 13;
+      }
+      mapScale = Math.min(MAX_MAP_SCALE, mapScale + MAP_SCALE_BOOST);
+
+      mapCenter = {
+        latitude:
+          routeCenter.latitude -
+          getLatitudeOffsetForMapFocus(routeCenter.latitude, mapScale),
+        longitude: routeCenter.longitude,
+      };
+    } else if (blindAttractions.length > 0) {
+      // 全盲模式：用 fuzzy 坐标计算地图中心
+      const fuzzyPoints = blindAttractions.filter((ba: any) => ba.fuzzyLatitude && ba.fuzzyLongitude);
+      if (fuzzyPoints.length > 0) {
+        let latSum = 0;
+        let lngSum = 0;
+        fuzzyPoints.forEach((ba: any) => {
+          latSum += ba.fuzzyLatitude;
+          lngSum += ba.fuzzyLongitude;
+        });
+        const routeCenter = {
+          latitude: latSum / fuzzyPoints.length,
+          longitude: lngSum / fuzzyPoints.length,
+        };
+
+        if (fuzzyPoints.length >= 2) {
+          const lats = fuzzyPoints.map((ba: any) => ba.fuzzyLatitude);
+          const lngs = fuzzyPoints.map((ba: any) => ba.fuzzyLongitude);
+          const latDiff = Math.max(...lats) - Math.min(...lats);
+          const lngDiff = Math.max(...lngs) - Math.min(...lngs);
+          const maxDiff = Math.max(latDiff, lngDiff);
+          if (maxDiff > 0.5) mapScale = 9;
+          else if (maxDiff > 0.2) mapScale = 10;
+          else if (maxDiff > 0.1) mapScale = 11;
+          else if (maxDiff > 0.05) mapScale = 12;
+          else mapScale = 13;
+        }
+        mapScale = Math.min(MAX_MAP_SCALE, mapScale + MAP_SCALE_BOOST);
+
+        mapCenter = {
+          latitude:
+            routeCenter.latitude -
+            getLatitudeOffsetForMapFocus(routeCenter.latitude, mapScale),
+          longitude: routeCenter.longitude,
+        };
+      }
+    }
 
     this.setData({ mapMarkers: markers, mapPolyline: [], mapCenter, mapScale });
 
     // Build circles and markers for blind attractions
-    const blindAttractions = this.data.blindAttractions || [];
     const mapCircles: any[] = [];
     const blindMarkers: any[] = [];
     let blindIndex = 1;
