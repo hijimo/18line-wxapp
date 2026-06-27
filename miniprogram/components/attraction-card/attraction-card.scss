@@ -184,3 +184,185 @@
   height: 100%;
   border-radius: 16rpx;
 }
+
+// Blind mode dot colors
+.timeline-dot--next {
+  background: #FF8C00;
+}
+.timeline-dot--locked {
+  background: #d4d4d4;
+}
+.timeline-dot--skipped {
+  background: #d4d4d4;
+}
+
+// Blind card base
+.card-body--blind {
+  position: relative;
+  padding: 28rpx;
+  min-height: 240rpx;
+}
+
+.card-body--next {
+  background: #fff9f0;
+  border: 2rpx solid rgba(255, 140, 0, 0.2);
+}
+
+.card-body--locked {
+  background: #edeee8;
+  opacity: 0.8;
+}
+
+.card-body--skipped {
+  background: #f0f0f0;
+  opacity: 0.8;
+}
+
+// Badges
+.blind-badge {
+  display: inline-flex;
+  padding: 4rpx 16rpx;
+  border-radius: 9999rpx;
+  margin-bottom: 12rpx;
+}
+.blind-badge--next {
+  background: rgba(255, 140, 0, 0.15);
+}
+.blind-badge--unlocked {
+  background: rgba(46, 125, 50, 0.1);
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+}
+.blind-badge--locked {
+  background: rgba(0, 0, 0, 0.06);
+}
+.blind-badge--skipped {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.blind-badge-text {
+  font-size: 22rpx;
+  font-weight: 600;
+  letter-spacing: 1rpx;
+}
+.blind-badge--next .blind-badge-text {
+  color: #FF8C00;
+}
+.blind-badge--unlocked .blind-badge-text {
+  color: #2e7d32;
+  font-size: 20rpx;
+}
+.blind-badge--locked .blind-badge-text {
+  color: #999;
+}
+.blind-badge--skipped .blind-badge-text {
+  color: #999;
+}
+.blind-badge-text--strikethrough {
+  text-decoration: line-through;
+}
+
+// Blind title
+.blind-title {
+  margin-bottom: 8rpx;
+}
+.blind-title-text {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #163422;
+}
+
+// Hints
+.blind-hints {
+  margin-bottom: 16rpx;
+}
+.blind-hint-text {
+  font-size: 22rpx;
+  color: #666;
+}
+
+// Placeholder with lock
+.blind-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120rpx;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 16rpx;
+  margin: 16rpx 0;
+}
+.blind-lock-icon {
+  width: 48rpx;
+  height: 48rpx;
+  opacity: 0.4;
+}
+
+// Actions for next state
+.blind-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 20rpx;
+}
+.blind-action {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 0;
+  border-radius: 9999rpx;
+}
+.blind-action--navigate {
+  background: #f5f6f0;
+}
+.blind-action--unlock {
+  background: #FF8C00;
+}
+.blind-action--disabled {
+  opacity: 0.6;
+}
+.blind-action--navigate .blind-action-text {
+  color: #163422;
+  font-size: 26rpx;
+  font-weight: 500;
+}
+.blind-action--unlock .blind-action-text {
+  color: #ffffff;
+  font-size: 26rpx;
+  font-weight: 600;
+}
+
+// Skip
+.blind-skip {
+  margin-top: 16rpx;
+  text-align: center;
+}
+.blind-skip-text {
+  font-size: 22rpx;
+  color: #999;
+  text-decoration: underline;
+}
+
+// Force unlock
+.blind-force-unlock {
+  margin-top: 12rpx;
+  text-align: center;
+}
+.blind-force-text {
+  font-size: 22rpx;
+  color: #FF8C00;
+  font-weight: 500;
+}
+
+// Skipped label
+.blind-skipped-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx 0;
+}
+.blind-skipped-text {
+  font-size: 26rpx;
+  color: #999;
+  font-weight: 500;
+}

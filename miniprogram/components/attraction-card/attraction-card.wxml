@@ -1,56 +1,131 @@
 <!--attraction-card.wxml-->
 <wxs src="./swipe.wxs" module="swipe" />
 <view class="card-wrapper">
-  <view class="timeline-dot" />
-  <view class="card-swipe-container">
-    <view class="card-body card-body--animated"
-      bindtouchstart="{{swipe.onSwipeStart}}"
-      bindtouchmove="{{swipe.onSwipeMove}}"
-      bindtouchend="{{swipe.onSwipeEnd}}"
-    >
-      <view class="card-header">
-        <view class="card-info">
-          <view class="card-name-row">
-            <text class="card-name">{{item.attractionName}}</text>
-            <view class="card-ratings" wx:if="{{item.leisureRating || item.classicRating}}">
-              <text class="card-rating-tag card-rating-tag--leisure" wx:if="{{item.leisureRating}}">休闲{{item.leisureRating}}</text>
-              <text class="card-rating-tag card-rating-tag--classic" wx:if="{{item.classicRating}}">经典{{item.classicRating}}</text>
+  <view class="timeline-dot {{item.blindDisplayMode === 'next' ? 'timeline-dot--next' : ''}} {{item.blindDisplayMode === 'locked' ? 'timeline-dot--locked' : ''}} {{item.blindDisplayMode === 'skipped' ? 'timeline-dot--skipped' : ''}}" />
+
+  <!-- VISIBLE / UNLOCKED: full info card (existing template) -->
+  <block wx:if="{{!item.blindDisplayMode || item.blindDisplayMode === 'visible' || item.blindDisplayMode === 'unlocked'}}">
+    <view class="card-swipe-container">
+      <view class="card-body card-body--animated"
+        bindtouchstart="{{swipe.onSwipeStart}}"
+        bindtouchmove="{{swipe.onSwipeMove}}"
+        bindtouchend="{{swipe.onSwipeEnd}}"
+      >
+        <!-- Unlocked badge -->
+        <view wx:if="{{item.blindDisplayMode === 'unlocked'}}" class="blind-badge blind-badge--unlocked">
+          <text class="blind-badge-text">已解锁</text>
+        </view>
+        <view class="card-header">
+          <view class="card-info">
+            <view class="card-name-row">
+              <text class="card-name">{{item.attractionName}}</text>
+              <view class="card-ratings" wx:if="{{item.leisureRating || item.classicRating}}">
+                <text class="card-rating-tag card-rating-tag--leisure" wx:if="{{item.leisureRating}}">休闲{{item.leisureRating}}</text>
+                <text class="card-rating-tag card-rating-tag--classic" wx:if="{{item.classicRating}}">经典{{item.classicRating}}</text>
+              </view>
+            </view>
+            <text class="card-sub" wx:if="{{item.attractionBlurb}}">{{item.attractionBlurb}}</text>
+            <view class="card-meta" wx:if="{{item.visitDuration || item.ticketPriceA || item.openTime || item.perCost}}">
+              <view class="card-meta-item" wx:if="{{item.visitDuration}}">
+                <text class="card-meta-label">游玩时间</text>
+                <text class="card-meta-value">{{item.visitDuration}}</text>
+              </view>
+              <view class="card-meta-item" wx:if="{{item.ticketPriceA}}">
+                <text class="card-meta-label">门票</text>
+                <text class="card-meta-value">¥{{item.ticketPriceA}}/成人{{item.ticketPriceC ? ' · ¥' + item.ticketPriceC + '/儿童' : ''}}</text>
+              </view>
+              <view class="card-meta-item" wx:if="{{item.perCost}}">
+                <text class="card-meta-label">人均</text>
+                <text class="card-meta-value">¥{{item.perCost}}/人</text>
+              </view>
+              <view class="card-meta-item" wx:if="{{item.openTime}}">
+                <text class="card-meta-label">开放时间</text>
+                <text class="card-meta-value">{{item.openTime}}</text>
+              </view>
             </view>
           </view>
-          <text class="card-sub" wx:if="{{item.attractionBlurb}}">{{item.attractionBlurb}}</text>
-          <view class="card-meta" wx:if="{{item.visitDuration || item.ticketPriceA || item.openTime || item.perCost}}">
-            <view class="card-meta-item" wx:if="{{item.visitDuration}}">
-              <text class="card-meta-label">游玩时间</text>
-              <text class="card-meta-value">{{item.visitDuration}}</text>
-            </view>
-            <view class="card-meta-item" wx:if="{{item.ticketPriceA}}">
-              <text class="card-meta-label">门票</text>
-              <text class="card-meta-value">¥{{item.ticketPriceA}}/成人{{item.ticketPriceC ? ' · ¥' + item.ticketPriceC + '/儿童' : ''}}</text>
-            </view>
-            <view class="card-meta-item" wx:if="{{item.perCost}}">
-              <text class="card-meta-label">人均</text>
-              <text class="card-meta-value">¥{{item.perCost}}/人</text>
-            </view>
-            <view class="card-meta-item" wx:if="{{item.openTime}}">
-              <text class="card-meta-label">开放时间</text>
-              <text class="card-meta-value">{{item.openTime}}</text>
+          <view class="card-actions">
+            <view class="card-action" catchtap="onDetailTap">
+              <text class="action-text">详情</text>
             </view>
           </view>
         </view>
-        <view class="card-actions">
-          <view class="card-action" catchtap="onDetailTap">
-            <text class="action-text">详情</text>
+        <swiper wx:if="{{item.attachments && item.attachments.length}}" class="card-swiper" indicator-dots="{{item.attachments.length > 1}}" indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#ffffff" autoplay circular>
+          <swiper-item wx:for="{{item.attachments}}" wx:for-item="img" wx:key="url">
+            <image class="card-swiper-img" src="{{img.url || img.fileUrl}}" mode="aspectFill" lazy-load />
+          </swiper-item>
+        </swiper>
+      </view>
+      <view class="card-delete-zone" bindtap="onDeleteTap">
+        <text class="card-delete-text">删除</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- NEXT: sealed card with unlock action -->
+  <block wx:elif="{{item.blindDisplayMode === 'next'}}">
+    <view class="card-swipe-container">
+      <view class="card-body card-body--blind card-body--next">
+        <view class="blind-badge blind-badge--next">
+          <text class="blind-badge-text">下一站</text>
+        </view>
+        <view class="blind-title">
+          <text class="blind-title-text">神秘体验</text>
+        </view>
+        <view class="blind-hints" wx:if="{{item.categoryHint || item.durationHint || item.prepHint}}">
+          <text class="blind-hint-text">{{item.categoryHint}}{{item.durationHint ? ' · ' + item.durationHint : ''}}{{item.prepHint ? ' · ' + item.prepHint : ''}}</text>
+        </view>
+        <view class="blind-placeholder">
+          <image class="blind-lock-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-lock.svg" mode="aspectFit" />
+        </view>
+        <view class="blind-actions">
+          <view class="blind-action blind-action--navigate" catchtap="onNavigateTap">
+            <text class="blind-action-text">导航前往</text>
           </view>
+          <view class="blind-action blind-action--unlock {{unlocking ? 'blind-action--disabled' : ''}}" catchtap="{{unlocking ? '' : 'onUnlockTap'}}">
+            <text class="blind-action-text">{{unlocking ? '验证中...' : '我已到达'}}</text>
+          </view>
+        </view>
+        <!-- Skip link -->
+        <view class="blind-skip" catchtap="onSkipTap">
+          <text class="blind-skip-text">跳过此景点</text>
+        </view>
+        <!-- Force unlock countdown (shown when forceUnlockAvailableAt exists) -->
+        <view wx:if="{{item.forceUnlockAvailableAt}}" class="blind-force-unlock" catchtap="onForceUnlockTap">
+          <text class="blind-force-text">强制解锁</text>
         </view>
       </view>
-      <swiper wx:if="{{item.attachments && item.attachments.length}}" class="card-swiper" indicator-dots="{{item.attachments.length > 1}}" indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#ffffff" autoplay circular>
-        <swiper-item wx:for="{{item.attachments}}" wx:key="url">
-          <image class="card-swiper-img" src="{{item.url}}" mode="aspectFill" lazy-load />
-        </swiper-item>
-      </swiper>
     </view>
-    <view class="card-delete-zone" bindtap="onDeleteTap">
-      <text class="card-delete-text">删除</text>
+  </block>
+
+  <!-- LOCKED: sealed card, no actions -->
+  <block wx:elif="{{item.blindDisplayMode === 'locked'}}">
+    <view class="card-swipe-container">
+      <view class="card-body card-body--blind card-body--locked">
+        <view class="blind-badge blind-badge--locked">
+          <text class="blind-badge-text">第 {{index + 1}} 站</text>
+        </view>
+        <view class="blind-hints" wx:if="{{item.categoryHint || item.durationHint}}">
+          <text class="blind-hint-text">{{item.categoryHint}}{{item.durationHint ? ' · ' + item.durationHint : ''}}</text>
+        </view>
+        <view class="blind-placeholder">
+          <image class="blind-lock-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-lock.svg" mode="aspectFit" />
+        </view>
+      </view>
     </view>
-  </view>
+  </block>
+
+  <!-- SKIPPED: grey card -->
+  <block wx:elif="{{item.blindDisplayMode === 'skipped'}}">
+    <view class="card-swipe-container">
+      <view class="card-body card-body--blind card-body--skipped">
+        <view class="blind-badge blind-badge--skipped">
+          <text class="blind-badge-text blind-badge-text--strikethrough">第 {{index + 1}} 站</text>
+        </view>
+        <view class="blind-skipped-label">
+          <text class="blind-skipped-text">已跳过</text>
+        </view>
+      </view>
+    </view>
+  </block>
 </view>

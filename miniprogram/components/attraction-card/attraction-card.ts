@@ -4,6 +4,14 @@ Component({
       type: Object,
       value: {},
     },
+    index: {
+      type: Number,
+      value: 0,
+    },
+    unlocking: {
+      type: Boolean,
+      value: false,
+    },
   },
   methods: {
     onDetailTap() {
@@ -11,6 +19,22 @@ Component({
     },
     onDeleteTap() {
       this.triggerEvent('carddelete', { type: 'attraction', data: this.data.item })
+    },
+    onUnlockTap() {
+      this.triggerEvent('unlock', { attractionId: this.data.item.attractionId })
+    },
+    onSkipTap() {
+      this.triggerEvent('skip', { attractionId: this.data.item.attractionId })
+    },
+    onNavigateTap() {
+      this.triggerEvent('navigate', {
+        latitude: this.data.item.fuzzyLatitude,
+        longitude: this.data.item.fuzzyLongitude,
+        name: '神秘地点',
+      })
+    },
+    onForceUnlockTap() {
+      this.triggerEvent('forceunlock', { attractionId: this.data.item.attractionId })
     },
     updateSwipeState() {},
   },
