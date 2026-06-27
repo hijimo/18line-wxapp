@@ -19,6 +19,7 @@
         scale="{{mapScale}}"
         markers="{{mapMarkers}}"
         polyline="{{mapPolyline}}"
+        circles="{{mapCircles}}"
         show-location="{{false}}"
         enable-scroll="{{true}}"
         enable-zoom="{{true}}"
@@ -94,8 +95,28 @@
         show-scrollbar="{{drawerHeightLevel !== 20}}"
       >
         <view class="timeline" wx:if="{{currentDayData}}">
-          <!-- 景点列表 -->
-          <block wx:if="{{currentDayData.attractionList && currentDayData.attractionList.length > 0}}">
+          <!-- 景点列表（支持盲游模式） -->
+          <block wx:if="{{blindAttractions.length > 0}}">
+            <view class="timeline-section">
+              <text class="timeline-section-title">景点</text>
+              <view class="timeline-cards">
+                <attraction-card
+                  wx:for="{{blindAttractions}}"
+                  wx:key="attractionId"
+                  item="{{item}}"
+                  index="{{index}}"
+                  unlocking="{{unlockingAttractionId === item.attractionId}}"
+                  bind:carddetail="onCardDetail"
+                  bind:carddelete="onCardDelete"
+                  bind:unlock="onAttractionUnlock"
+                  bind:skip="onAttractionSkip"
+                  bind:navigate="onAttractionNavigate"
+                  bind:forceunlock="onAttractionForceUnlock"
+                />
+              </view>
+            </view>
+          </block>
+          <block wx:elif="{{currentDayData.attractionList && currentDayData.attractionList.length > 0}}">
             <view class="timeline-section">
               <text class="timeline-section-title">景点</text>
               <view class="timeline-cards">
@@ -103,6 +124,7 @@
                   wx:for="{{currentDayData.attractionList}}"
                   wx:key="attractionId"
                   item="{{item}}"
+                  index="{{index}}"
                   bind:carddetail="onCardDetail"
                   bind:carddelete="onCardDelete"
                 />

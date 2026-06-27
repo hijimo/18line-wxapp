@@ -1,0 +1,102 @@
+/**
+ * drag-sort.wxs - 拖拽排序渲染线程模块
+ * 在渲染线程直接更新 transform，避免 JS→Native bridge 延迟
+ */
+
+var CARD_HEIGHT = 80;
+var DRAG_OPACITY = 0.7;
+
+function onDragMove(event, ownerInstance) {
+  var state = ownerInstance.getState();
+  if (!state.isDragging) return;
+
+  var touch = event.touches[0];
+  var deltaY = touch.clientY - state.startY;
+
+  // 更新被拖拽卡片位置
+  var dragItem = ownerInstance.selectComponent('#drag-item-' + state.dragIndex);
+  if (dragItem) {
+    dragItem.setStyle({
+      transform: 'translateY(' + deltaY + 'px)',
+      opacity: DRAG_OPACITY,
+      zIndex: '100',
+      transition: 'none',
+    });
+  }
+
+  // 计算当前悬停位置对应的目标索引
+  var newIndex = Math.round(deltaY / CARD_HEIGHT) + state.dragIndex;
+  newIndex = Math.max(0, Math.min(newIndex, state.itemCount - 1));
+
+  if (newIndex !== state.currentHoverIndex) {
+    state.currentHoverIndex = newIndex;
+    // 更新其他卡片的位移
+    for (var i = 0; i < state.itemCount; i++) {
+      if (i === state.dragIndex) continue;
+      var item = ownerInstance.selectComponent('#drag-item-' + i);
+      if (!item) continue;
+
+      var offset = 0;
+      if (state.dragIndex < newIndex) {
+        // 向下拖：dragIndex 和 newIndex 之间的卡片上移
+        if (i > state.dragIndex && i <= newIndex) {
+          offset = -CARD_HEIGHT;
+        }
+      } else if (state.dragIndex > newIndex) {
+        // 向上拖：newIndex 和 dragIndex 之间的卡片下移
+        if (i >= newIndex && i < state.dragIndex) {
+          offset = CARD_HEIGHT;
+        }
+      }
+
+      item.setStyle({
+        transform: 'translateY(' + offset + 'px)',
+        transition: 'transform 200ms ease',
+      });
+    }
+  }
+
+  return false; // 阻止事件传播（替代 catchtouchmove）
+}
+
+function onDragEnd(event, ownerInstance) {
+  var state = ownerInstance.getState();
+  if (!state.isDragging) return;
+
+  // 重置所有卡片样式
+  for (var i = 0; i < state.itemCount; i++) {
+    var item = ownerInstance.selectComponent('#drag-item-' + i);
+    if (item) {
+      item.setStyle({
+        transform: '',
+        opacity: '',
+        zIndex: '',
+        transition: '',
+      });
+    }
+  }
+
+  state.isDragging = false;
+
+  // 通知 JS 层完成拖拽
+  ownerInstance.callMethod('onDragComplete', {
+    fromIndex: state.dragIndex,
+    toIndex: state.currentHoverIndex,
+  });
+}
+
+function initDrag(newVal, oldVal, ownerInstance) {
+  if (!newVal) return;
+  var state = ownerInstance.getState();
+  state.isDragging = true;
+  state.dragIndex = newVal.dragIndex;
+  state.startY = newVal.startY;
+  state.itemCount = newVal.itemCount;
+  state.currentHoverIndex = newVal.dragIndex;
+}
+
+module.exports = {
+  onDragMove: onDragMove,
+  onDragEnd: onDragEnd,
+  initDrag: initDrag,
+};

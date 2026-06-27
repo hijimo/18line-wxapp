@@ -4,14 +4,19 @@ import {
   autoGenerateItinerary,
   editItinerary,
   updateDayAttractions,
+  reorderDayAttractions,
+  resetDayAttractions,
   removeDayAccommodation,
   removeDayDining,
   removeDayCar,
   removeDayPhotography,
+  unlockAttraction,
+  skipAttraction,
+  forceUnlockAttraction,
 } from '../../services/itinerary';
+import { pushPendingUnlock, startNetworkWatcher } from '../../utils/blind-unlock-queue';
 import { getTemplateDetail } from '../../services/template';
 import { getLocalSpecialtyList } from '../../services/local-specialty';
-import { getMultiStopRoute } from '../../services/map';
 import { getWeatherForecast } from '../../services/weather';
 import type { WeatherDay } from '../../services/weather';
 import type { Itinerary, TravelItineraryDay } from '../../types/itinerary';
@@ -31,6 +36,13 @@ let drawerTouchStartHeight = DEFAULT_DRAWER_HEIGHT;
 let drawerLastTouchY = 0;
 let drawerLastTouchTime = 0;
 let drawerVelocityY = 0;
+
+// 拖拽排序状态
+let dragLongPressTimer: ReturnType<typeof setTimeout> | null = null;
+let dragTouchStartX = 0;
+let dragTouchStartY = 0;
+let dragSaveRequestTask: WechatMiniprogram.RequestTask | null = null;
+let dragPreReorderList: any[] | null = null;
 
 function clampDrawerHeight(height: number) {
   return Math.min(DRAWER_LEVELS[2], Math.max(DRAWER_LEVELS[0], height));
@@ -227,6 +239,7 @@ Page({
     currentDayWeather: null as WeatherDay | null,
     mapMarkers: [] as any[],
     mapPolyline: [] as any[],
+    mapCircles: [] as any[],
     mapCenter: { latitude: 28.45, longitude: 119.92 },
     mapScale: 12,
     drawerHeight: DEFAULT_DRAWER_HEIGHT,
@@ -234,6 +247,12 @@ Page({
     drawerDragging: false,
     showDatePicker: false,
     datePickerEndDate: '',
+    blindAttractions: [] as any[],
+    unlockingAttractionId: null as number | null,
+    forceUnlockCountdown: '' as string,
+    isDragging: false,
+    dragIndex: -1,
+    dragState: null as any,
   },
 
   onLoad(options: Record<string, string | undefined>) {
@@ -264,6 +283,19 @@ Page({
     const itineraryId = Number(rawId);
     this.setData({ itineraryId });
     this.loadItinerary();
+
+    startNetworkWatcher(async (item) => {
+      try {
+        await unlockAttraction(item.itineraryId, item.dayId, item.attractionId, {
+          latitude: item.latitude,
+          longitude: item.longitude,
+          accuracy: 50,
+        });
+        return true;
+      } catch {
+        return false;
+      }
+    });
   },
 
   async loadTemplateDetail() {
@@ -411,12 +443,14 @@ Page({
       const daysList = normalizedItinerary.daysList || [];
       const currentDayData =
         daysList.find((d) => d.dayNumber === currentDay) || daysList[0] || null;
+      const blindAttractions = (currentDayData as any)?.blindAttractions || [];
 
       this.setData({
         itinerary: normalizedItinerary,
         currentDayData,
         currentDay: currentDayData?.dayNumber || 1,
         loading: false,
+        blindAttractions,
       });
 
       this.updateMapData(currentDayData);
@@ -502,8 +536,9 @@ Page({
       dayNumber,
       itinerary?.startDate,
     );
+    const blindAttractions = (currentDayData as any)?.blindAttractions || [];
 
-    this.setData({ currentDay: dayNumber, currentDayData, currentDayWeather });
+    this.setData({ currentDay: dayNumber, currentDayData, currentDayWeather, blindAttractions });
     this.updateMapData(currentDayData);
   },
 
@@ -559,11 +594,12 @@ Page({
       if (type === 'attraction') {
         const currentIds = (currentDayData?.attractionList || [])
           .map((a: any) => a.attractionId)
-          .filter((id: number) => String(id) !== String(data.attractionId));
+          .filter((id: number) => id != null && String(id) !== String(data.attractionId));
         await updateDayAttractions({
           itineraryId,
           dayNumber: currentDay,
           attractionIds: currentIds.join(','),
+          replace: true,
         });
       } else if (type === 'hotel') {
         await removeDayAccommodation(itineraryId, currentDay);
@@ -797,35 +833,370 @@ Page({
 
     this.setData({ mapMarkers: markers, mapPolyline: [], mapCenter, mapScale });
 
-    if (attractions.length >= 2) {
+    // Build circles and markers for blind attractions
+    const blindAttractions = this.data.blindAttractions || [];
+    const mapCircles: any[] = [];
+    const blindMarkers: any[] = [];
+    let blindIndex = 1;
+
+    blindAttractions.forEach((ba: any) => {
+      if ((ba.blindDisplayMode === 'next' || ba.blindDisplayMode === 'locked') && ba.fuzzyLatitude && ba.fuzzyLongitude) {
+        blindIndex++;
+        mapCircles.push({
+          latitude: ba.fuzzyLatitude,
+          longitude: ba.fuzzyLongitude,
+          radius: ba.fuzzyRadius || 500,
+          fillColor: 'rgba(0, 0, 0, 0.06)',
+          strokeColor: 'rgba(0, 0, 0, 0.15)',
+          strokeWidth: 1,
+        });
+        const distanceKm = ba.fuzzyRadius ? (ba.fuzzyRadius / 1000).toFixed(1) : '?';
+        blindMarkers.push({
+          id: 9000 + ba.attractionId,
+          latitude: ba.fuzzyLatitude,
+          longitude: ba.fuzzyLongitude,
+          iconPath: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/marker-pin.png?x-oss-process=image/resize,m_lfit,w_56,h_56',
+          width: 28,
+          height: 28,
+          anchor: { x: 0.5, y: 1 },
+          callout: {
+            content: '神秘地点 0' + blindIndex + '\n到达后揭晓 · 约' + distanceKm + 'km',
+            display: 'ALWAYS',
+            fontSize: 11,
+            borderRadius: 6,
+            padding: 6,
+            bgColor: '#ffffff',
+            color: '#163422',
+            borderWidth: 1,
+            borderColor: '#e0e0e0',
+          },
+        });
+      }
+    });
+
+    // If we have blind attractions, replace the standard markers with a filtered set
+    if (blindAttractions.length > 0) {
+      const visibleMarkers = markers.filter((_: any, idx: number) => {
+        const attraction = attractions[idx];
+        const ba = blindAttractions.find((b: any) => b.attractionId === attraction?.attractionId);
+        return !ba || ba.blindDisplayMode === 'visible' || ba.blindDisplayMode === 'unlocked';
+      });
+      this.setData({ mapMarkers: visibleMarkers.concat(blindMarkers), mapCircles });
+    } else {
+      this.setData({ mapCircles: [] });
+    }
+
+    // Build polyline: use fuzzy coords for blind attractions, dashed style
+    if (blindAttractions.length > 0) {
+      const polylinePoints: any[] = [];
+      blindAttractions.forEach((ba: any) => {
+        if (ba.blindDisplayMode === 'visible' || ba.blindDisplayMode === 'unlocked') {
+          if (ba.longitude && ba.latitude) {
+            polylinePoints.push({ latitude: ba.latitude, longitude: ba.longitude });
+          }
+        } else if (ba.blindDisplayMode === 'next' || ba.blindDisplayMode === 'locked') {
+          if (ba.fuzzyLatitude && ba.fuzzyLongitude) {
+            polylinePoints.push({ latitude: ba.fuzzyLatitude, longitude: ba.fuzzyLongitude });
+          }
+        }
+      });
+      if (polylinePoints.length >= 2) {
+        this.setData({
+          mapPolyline: [{
+            points: polylinePoints,
+            color: '#163422',
+            width: 5,
+            arrowLine: true,
+            dottedLine: true,
+          }],
+        });
+      } else {
+        this.setData({ mapPolyline: [] });
+      }
+    } else if (attractions.length >= 2) {
       const stops = attractions.map((a) => ({
         latitude: a.latitude!,
         longitude: a.longitude!,
       }));
-      try {
-        const routePoints = await getMultiStopRoute(stops);
-        this.setData({
-          mapPolyline: [{
-            points: routePoints,
-            color: '#163422',
-            width: 6,
-            arrowLine: true,
-          }],
-        });
-      } catch (err) {
-        console.error('[Map] getMultiStopRoute error:', err);
-        this.setData({
-          mapPolyline: [{
-            points: stops,
-            color: '#163422',
-            width: 6,
-            arrowLine: true,
-          }],
-        });
-      }
+      this.setData({
+        mapPolyline: [{
+          points: stops,
+          color: '#163422',
+          width: 6,
+          arrowLine: true,
+        }],
+      });
     } else {
       this.setData({ mapPolyline: [] });
     }
+  },
+
+  // ======================== 拖拽排序 ========================
+
+  onAttractionTouchStart(e: any) {
+    const { isTemplate, isDragging } = this.data;
+    if (isTemplate || isDragging) return;
+
+    const { index } = e.currentTarget.dataset;
+    const attractions = this.data.currentDayData?.attractionList || [];
+    if (attractions.length <= 1) return;
+
+    // blind attractions cannot be reordered
+    const blindAttractions = this.data.blindAttractions;
+    if (blindAttractions.length > 0) {
+      const ba = blindAttractions[index];
+      if (ba && ba.blindDisplayMode !== 'visible' && ba.blindDisplayMode !== 'unlocked') {
+        return;
+      }
+    }
+
+    dragTouchStartX = e.touches[0].clientX;
+    dragTouchStartY = e.touches[0].clientY;
+
+    dragLongPressTimer = setTimeout(() => {
+      wx.vibrateShort({ type: 'medium' });
+      drawerTouchActive = false;
+      dragPreReorderList = [...attractions];
+      this.setData({
+        isDragging: true,
+        dragIndex: index,
+        dragState: {
+          dragIndex: index,
+          startY: dragTouchStartY,
+          itemCount: attractions.length,
+        },
+      });
+    }, 500);
+  },
+
+  onAttractionTouchMove(e: any) {
+    if (!dragLongPressTimer && !this.data.isDragging) return;
+
+    const touch = e.touches[0];
+    const dx = Math.abs(touch.clientX - dragTouchStartX);
+    const dy = Math.abs(touch.clientY - dragTouchStartY);
+
+    if (dragLongPressTimer && (dx > 10 || dy > 10)) {
+      clearTimeout(dragLongPressTimer);
+      dragLongPressTimer = null;
+    }
+  },
+
+  onAttractionTouchEnd(_e: any) {
+    if (dragLongPressTimer) {
+      clearTimeout(dragLongPressTimer);
+      dragLongPressTimer = null;
+    }
+  },
+
+  onDragComplete(e: any) {
+    const { fromIndex, toIndex } = e;
+    this.setData({ isDragging: false, dragState: null });
+
+    if (fromIndex === toIndex || fromIndex == null || toIndex == null) {
+      dragPreReorderList = null;
+      return;
+    }
+
+    const attractions = [...(this.data.currentDayData?.attractionList || [])];
+    const [moved] = attractions.splice(fromIndex, 1);
+    attractions.splice(toIndex, 0, moved);
+
+    // Optimistic UI update
+    const currentDayData = { ...this.data.currentDayData, attractionList: attractions };
+    this.setData({ currentDayData });
+    this.updateMapPolyline(attractions);
+
+    // Save to backend
+    const { itineraryId, currentDay } = this.data;
+    const newOrder = attractions.map((a: any) => a.attractionId).join(',');
+
+    if (dragSaveRequestTask) {
+      dragSaveRequestTask.abort();
+    }
+
+    dragSaveRequestTask = null;
+    reorderDayAttractions(itineraryId, currentDay, newOrder)
+      .then(() => {
+        dragPreReorderList = null;
+        dragSaveRequestTask = null;
+      })
+      .catch(() => {
+        // Rollback on failure
+        if (dragPreReorderList) {
+          const rollbackData = { ...this.data.currentDayData, attractionList: dragPreReorderList };
+          this.setData({ currentDayData: rollbackData });
+          this.updateMapPolyline(dragPreReorderList);
+          dragPreReorderList = null;
+        }
+        dragSaveRequestTask = null;
+        wx.showToast({ title: '保存失败，已恢复', icon: 'none' });
+      });
+  },
+
+  async onResetOrder() {
+    const { itineraryId, currentDay, isTemplate } = this.data;
+    if (isTemplate) return;
+
+    try {
+      await resetDayAttractions(itineraryId, currentDay);
+      wx.showToast({ title: '已恢复推荐顺序', icon: 'success' });
+      this.loadItinerary();
+    } catch {
+      wx.showToast({ title: '恢复失败', icon: 'none' });
+    }
+  },
+
+  updateMapPolyline(attractions: any[]) {
+    const validAttractions = (attractions || []).filter(
+      (a: any) => a.latitude != null && a.longitude != null,
+    );
+
+    const markers = validAttractions.map((a: any, idx: number) => ({
+      id: a.attractionId,
+      latitude: a.latitude,
+      longitude: a.longitude,
+      width: 28,
+      height: 28,
+      callout: {
+        content: a.attractionShortName || a.attractionName || '',
+        display: 'ALWAYS',
+        fontSize: 12,
+        padding: 6,
+        bgColor: '#ffffff',
+        color: '#163422',
+        borderWidth: 1,
+        borderColor: '#e0e0e0',
+      },
+      label: {
+        content: String(idx + 1),
+        color: '#ffffff',
+        fontSize: 10,
+        anchorX: 0,
+        anchorY: -24,
+        textAlign: 'center',
+      },
+    }));
+
+    const polyline = validAttractions.length >= 2
+      ? [{
+          points: validAttractions.map((a: any) => ({
+            latitude: a.latitude,
+            longitude: a.longitude,
+          })),
+          color: '#163422',
+          width: 6,
+          arrowLine: true,
+        }]
+      : [];
+
+    this.setData({ mapMarkers: markers, mapPolyline: polyline });
+  },
+
+  // ======================== 盲游模式 ========================
+
+  async onAttractionUnlock(e: any) {
+    const { attractionId } = e.detail;
+    const { itineraryId, currentDayData } = this.data;
+    const dayId = (currentDayData as any)?.itineraryDayId;
+    if (!dayId || !attractionId) return;
+
+    this.setData({ unlockingAttractionId: attractionId });
+
+    try {
+      const locationRes: any = await new Promise((resolve, reject) => {
+        wx.getLocation({
+          type: 'gcj02',
+          success: resolve,
+          fail: reject,
+        });
+      });
+
+      const { latitude, longitude, accuracy } = locationRes;
+
+      try {
+        await unlockAttraction(itineraryId, dayId, attractionId, { latitude, longitude, accuracy });
+        wx.showToast({ title: '解锁成功！', icon: 'success' });
+        this.loadItinerary();
+      } catch (err: any) {
+        if (err.message && err.message.includes('距离目的地')) {
+          wx.showToast({ title: err.message, icon: 'none', duration: 3000 });
+        } else if (err.message && err.message.includes('定位精度不足')) {
+          wx.showToast({ title: '定位精度不足，请到开阔地带重试', icon: 'none' });
+        } else if (err.message && err.message.includes('操作过于频繁')) {
+          wx.showToast({ title: err.message, icon: 'none' });
+        } else {
+          // Offline: save to queue
+          pushPendingUnlock({ itineraryId, dayId, attractionId, latitude, longitude, accuracy, timestamp: Date.now() });
+          wx.showToast({ title: '解锁待确认，恢复网络后自动完成', icon: 'none' });
+        }
+        this.loadItinerary();
+      }
+    } catch (locErr: any) {
+      if (locErr.errMsg && locErr.errMsg.includes('deny')) {
+        wx.showModal({
+          title: '需要定位权限',
+          content: '请授权定位以验证您已到达景点',
+          confirmText: '去设置',
+          success: (res) => { if (res.confirm) wx.openSetting(); },
+        });
+      } else {
+        wx.showToast({ title: '定位失败，请开启定位服务', icon: 'none' });
+      }
+    } finally {
+      this.setData({ unlockingAttractionId: null });
+    }
+  },
+
+  async onAttractionSkip(e: any) {
+    const { attractionId } = e.detail;
+    const { itineraryId, currentDayData } = this.data;
+    const dayId = (currentDayData as any)?.itineraryDayId;
+    if (!dayId || !attractionId) return;
+
+    wx.showModal({
+      title: '确认跳过',
+      content: '跳过后无法再解锁此景点，确认？',
+      success: async (res) => {
+        if (!res.confirm) return;
+        try {
+          await skipAttraction(itineraryId, dayId, attractionId);
+          wx.showToast({ title: '已跳过', icon: 'success' });
+          this.loadItinerary();
+        } catch (err: any) {
+          wx.showToast({ title: err.message || '操作失败', icon: 'none' });
+        }
+      },
+    });
+  },
+
+  async onAttractionForceUnlock(e: any) {
+    const { attractionId } = e.detail;
+    const { itineraryId, currentDayData } = this.data;
+    const dayId = (currentDayData as any)?.itineraryDayId;
+    if (!dayId || !attractionId) return;
+
+    try {
+      await forceUnlockAttraction(itineraryId, dayId, attractionId);
+      wx.showToast({ title: '强制解锁成功', icon: 'success' });
+      this.loadItinerary();
+    } catch (err: any) {
+      wx.showToast({ title: err.message || '操作失败', icon: 'none' });
+    }
+  },
+
+  onAttractionNavigate(e: any) {
+    const { latitude, longitude, name } = e.detail;
+    if (!latitude || !longitude) {
+      wx.showToast({ title: '坐标不可用', icon: 'none' });
+      return;
+    }
+    wx.openLocation({
+      latitude,
+      longitude,
+      name: name || '神秘地点',
+      scale: 15,
+    });
   },
 
   onShareAppMessage() {
