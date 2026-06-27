@@ -140,6 +140,7 @@ Component({
     attached() {
       const instance = this as any
       instance._debounceTimer = null
+      instance._searchTimer = null
       instance._pendingAttractionIds = [] as number[]
     },
   },
@@ -156,38 +157,99 @@ Component({
         currentKeyword: keyword,
         currentSearchPlaceholder: getSearchPlaceholder(tab),
         searchEmptyText: getSearchEmptyText(tab, keyword),
-        [filteredListKey]: filterDrawerList(list, tab, keyword),
+        [filteredListKey]: keyword.trim() ? ((this.data as any)[filteredListKey] || []) : list,
       })
-      if (listKey && (this.data as any)[listKey].length === 0) {
+      if (list.length === 0) {
         this.loadTabData()
+      } else if (keyword.trim()) {
+        this.searchTabData(keyword)
       }
     },
 
     onKeywordInput(e: any) {
       const keyword = e.detail.value || ''
-      this.updateKeywordSearch(keyword)
-    },
-
-    onKeywordClear() {
-      this.updateKeywordSearch('')
-    },
-
-    updateKeywordSearch(keyword: string) {
       const activeTab = this.data.activeTab as ScheduleTabId
-      const listKey = LIST_KEY_MAP[activeTab]
-      const filteredListKey = FILTERED_LIST_KEY_MAP[activeTab]
-      const list = ((this.data as any)[listKey] || []) as any[]
       const tabKeywords = {
         ...((this.data as any).tabKeywords as TabKeywordMap),
         [activeTab]: keyword,
       }
-
       this.setData({
         tabKeywords,
         currentKeyword: keyword,
-        searchEmptyText: getSearchEmptyText(activeTab, keyword),
-        [filteredListKey]: filterDrawerList(list, activeTab, keyword),
+        currentSearchPlaceholder: getSearchPlaceholder(activeTab),
       })
+
+      // Debounce API search
+      const instance = this as any
+      if (instance._searchTimer) {
+        clearTimeout(instance._searchTimer)
+      }
+      instance._searchTimer = setTimeout(() => {
+        this.searchTabData(keyword)
+      }, 400)
+    },
+
+    onKeywordClear() {
+      const activeTab = this.data.activeTab as ScheduleTabId
+      const tabKeywords = {
+        ...((this.data as any).tabKeywords as TabKeywordMap),
+        [activeTab]: '',
+      }
+      this.setData({
+        tabKeywords,
+        currentKeyword: '',
+        searchEmptyText: '',
+      })
+      this.searchTabData('')
+    },
+
+    async searchTabData(keyword: string) {
+      const activeTab = this.data.activeTab as ScheduleTabId
+      const filteredListKey = FILTERED_LIST_KEY_MAP[activeTab]
+      const listKey = LIST_KEY_MAP[activeTab]
+      const trimmed = keyword.trim()
+
+      if (!trimmed) {
+        // No keyword: show full cached list
+        const list = ((this.data as any)[listKey] || []) as any[]
+        this.setData({
+          [filteredListKey]: list,
+          searchEmptyText: '',
+        })
+        return
+      }
+
+      this.setData({ listLoading: true })
+      try {
+        let res: any
+        const params = { keyword: trimmed, pageNum: 1, pageSize: 50 }
+        switch (activeTab) {
+          case 'attraction':
+            res = await getAttractionList(params)
+            break
+          case 'hotel':
+            res = await getAccommodationList(params)
+            break
+          case 'dining':
+            res = await getDiningList(params)
+            break
+          case 'car':
+            res = await getCarList(params)
+            break
+          case 'photography':
+            res = await getPhotographyList(params)
+            break
+        }
+        const rows = res?.rows || []
+        this.setData({
+          [filteredListKey]: rows,
+          searchEmptyText: getSearchEmptyText(activeTab, keyword),
+        })
+      } catch (err) {
+        wx.showToast({ title: '搜索失败', icon: 'none' })
+      } finally {
+        this.setData({ listLoading: false })
+      }
     },
 
     resetKeywordSearch() {
