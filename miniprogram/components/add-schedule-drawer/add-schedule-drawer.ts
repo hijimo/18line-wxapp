@@ -1,4 +1,5 @@
 import { getAttractionList } from '../../services/attraction'
+import type { AttractionListParams } from '../../types/attraction'
 import { getAccommodationList } from '../../services/accommodation'
 import { getDiningList } from '../../services/dining'
 import { getCarList } from '../../services/car'
@@ -96,6 +97,10 @@ Component({
     dayNumber: {
       type: Number,
       value: 0,
+    },
+    blindMode: {
+      type: String,
+      value: '',
     },
   },
 
@@ -222,10 +227,13 @@ Component({
       this.setData({ listLoading: true })
       try {
         let res: any
-        const params = { keyword: trimmed, pageNum: 1, pageSize: 50 }
+        const params: Record<string, any> = { keyword: trimmed, pageNum: 1, pageSize: 50 }
         switch (activeTab) {
           case 'attraction':
-            res = await getAttractionList(params)
+            if (this.data.blindMode === '1') {
+              params.blindStatus = '0'
+            }
+            res = await getAttractionList(params as AttractionListParams)
             break
           case 'hotel':
             res = await getAccommodationList(params)
@@ -272,9 +280,10 @@ Component({
       this.setData({ listLoading: true })
       try {
         let res: any
+        const attractionParams: AttractionListParams = this.data.blindMode === '1' ? { blindStatus: '0' } : {}
         switch (activeTab) {
           case 'attraction':
-            res = await getAttractionList()
+            res = await getAttractionList(attractionParams)
             this.setData({
               attractionList: res.rows || [],
               filteredAttractionList: filterDrawerList(res.rows || [], activeTab, keyword),
