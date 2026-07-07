@@ -10,6 +10,9 @@
         <view class="inspiration-card" bindtap="onCardTap" data-id="{{item.id}}">
           <view class="card-image-wrap">
             <image class="card-image" src="{{oss.ossResize(item.image, 560, 640)}}" mode="aspectFill" />
+            <view wx:if="{{item.blurred}}" class="card-blur-veil">
+              <text class="card-blur-text">到达后揭晓</text>
+            </view>
             <view class="card-rating">
               <image class="icon-star" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-star.svg" />
               <text class="card-rating-text">{{item.rating}}</text>

@@ -3,6 +3,7 @@
 <view class="gem-item" bindtap="onItemTap" data-id="{{item.id}}">
   <view class="gem-thumb-wrap">
     <image class="gem-thumb" src="{{oss.ossResize(item.image, 160, 160)}}" mode="aspectFill" />
+    <view wx:if="{{item.blurred}}" class="gem-blur-veil" />
   </view>
   <view class="gem-info">
     <view class="gem-title-row">

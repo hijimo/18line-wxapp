@@ -9,7 +9,7 @@
     </view>
     <text class="top-bar-brand">寻秘</text>
   </view>
-  <view class="top-bar-search">
+  <view class="top-bar-search" bindtap="onSearchOpen">
     <image class="top-bar-search-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-search.svg" mode="aspectFit" />
     <text class="top-bar-search-placeholder">寻找神秘之旅...</text>
   </view>
@@ -36,7 +36,7 @@
       </view>
 
       <block wx:if="{{hasJourneys}}">
-        <journey-card journeys="{{journeys}}" bind:viewall="onViewAll" />
+        <journey-card journeys="{{journeys}}" bind:viewall="onViewAll" bind:change="onJourneyChange" />
       </block>
 
       <block wx:else>
@@ -52,13 +52,19 @@
       </block>
     </view>
 
+    <!-- 当地 indicator -->
+    <view class="local-bar">
+      <image class="local-bar-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-distance.svg" mode="aspectFit" />
+      <text class="local-bar-text">当地 · {{currentDistrictName}}</text>
+    </view>
+
     <!-- Section 3: Local Highlights (Inspiration Cards Swiper) -->
     <inspiration-card title="{{inspirationTitle}}" cards="{{inspirationCards}}" bind:cardtap="onInspirationTap" />
 
     <!-- Section 4: Easter Eggs -->
     <view class="section-eggs">
       <view class="section-heading">
-        <text class="section-heading-text">寻找隐匿之物 (Easter Eggs)</text>
+        <text class="section-heading-text">寻找隐匿之藏</text>
       </view>
       <view class="eggs-list">
         <gem-item wx:for="{{eggs}}" wx:key="id" item="{{item}}" bind:itemtap="onEggTap" />
@@ -68,7 +74,7 @@
     <!-- Section 5: Food & Marketplace -->
     <view class="section-food">
       <view class="section-heading">
-        <text class="section-heading-text">地道风物 (Delicacies)</text>
+        <text class="section-heading-text">地道风物</text>
       </view>
       <view class="food-grid">
         <food-card wx:for="{{foods}}" wx:key="id" item="{{item}}" bind:cardtap="onFoodTap" />
@@ -76,3 +82,91 @@
     </view>
   </view>
 </scroll-view>
+
+<!-- 搜索面板 -->
+<view wx:if="{{searchActive}}" class="search-panel">
+  <view class="search-header">
+    <view class="search-box">
+      <image class="search-box-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-search.svg" mode="aspectFit" />
+      <input class="search-input" value="{{searchKeyword}}" placeholder="搜索已上线的行程模板" confirm-type="search" focus bindinput="onSearchInput" />
+    </view>
+    <text class="search-cancel" bindtap="onSearchClose">取消</text>
+  </view>
+  <view class="search-hint">{{searchHint}}</view>
+  <scroll-view class="search-results" scroll-y>
+    <view
+      wx:for="{{searchResults}}"
+      wx:key="id"
+      class="search-result-item"
+      data-id="{{item.templateId}}"
+      bindtap="onSearchResultTap"
+    >
+      <image class="search-result-img" src="{{oss.ossResize(item.image, 120, 120)}}" mode="aspectFill" />
+      <view class="search-result-info">
+        <text class="search-result-title">{{item.title}}</text>
+        <text wx:if="{{item.districtName}}" class="search-result-sub">{{item.districtName}}</text>
+      </view>
+    </view>
+    <view wx:if="{{searchResults.length === 0}}" class="search-empty">暂无匹配的行程</view>
+  </scroll-view>
+</view>
+
+<!-- 介绍抽屉 -->
+<attraction-intro-drawer
+  wx:if="{{showIntroDrawer === 'attraction'}}"
+  show="{{showIntroDrawer === 'attraction'}}"
+  data="{{introData}}"
+  bind:close="onIntroClose"
+  bind:primarytap="onAddToItinerary"
+/>
+<dining-intro-drawer
+  wx:if="{{showIntroDrawer === 'dining'}}"
+  show="{{showIntroDrawer === 'dining'}}"
+  data="{{introData}}"
+  bind:close="onIntroClose"
+  bind:primarytap="onAddToItinerary"
+/>
+
+<!-- 添加到行程 选择面板 -->
+<view wx:if="{{addFlow.visible}}" class="addflow-mask" bindtap="onAddFlowClose">
+  <view class="addflow-sheet" catchtap="noop">
+    <view class="addflow-header">
+      <text class="addflow-title">{{addFlow.title}}</text>
+      <text class="addflow-close" bindtap="onAddFlowClose">✕</text>
+    </view>
+
+    <!-- 选择行程 -->
+    <view wx:if="{{addFlow.step === 'itinerary'}}" class="addflow-list">
+      <view
+        wx:for="{{addFlow.itineraries}}"
+        wx:key="id"
+        class="addflow-item"
+        data-id="{{item.id}}"
+        bindtap="onPickItinerary"
+      >
+        <text class="addflow-item-title">{{item.title}}</text>
+        <text class="addflow-item-sub">共 {{item.days}} 天</text>
+      </view>
+    </view>
+
+    <!-- 选择第几天 -->
+    <view wx:elif="{{addFlow.step === 'day'}}" class="addflow-list">
+      <view
+        wx:for="{{addFlow.days}}"
+        wx:key="dayNumber"
+        class="addflow-item"
+        data-day="{{item.dayNumber}}"
+        bindtap="onPickDay"
+      >
+        <text class="addflow-item-title">{{item.label}}</text>
+      </view>
+    </view>
+
+    <!-- 选择餐次（地道风物） -->
+    <view wx:elif="{{addFlow.step === 'meal'}}" class="addflow-list">
+      <view class="addflow-item" data-meal="breakfast" bindtap="onPickMeal"><text class="addflow-item-title">早餐</text></view>
+      <view class="addflow-item" data-meal="lunch" bindtap="onPickMeal"><text class="addflow-item-title">午餐</text></view>
+      <view class="addflow-item" data-meal="dinner" bindtap="onPickMeal"><text class="addflow-item-title">晚餐</text></view>
+    </view>
+  </view>
+</view>

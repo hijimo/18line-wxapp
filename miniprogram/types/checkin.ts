@@ -1,30 +1,25 @@
-export interface TravelAttraction {
+export interface TravelCheckin {
+  checkinId?: number;
   attractionId?: number;
-  attractionName?: string;
-  attractionShortName?: string;
-  attractionDescription?: string;
-  attractionBlurb?: string;
+  checkinName?: string;
+  checkinShortName?: string;
+  checkinDescription?: string;
+  checkinBlurb?: string;
   province?: string;
   city?: string;
   district?: string;
   longitude?: number;
   latitude?: number;
-  attractionNotes?: string;
+  checkinNotes?: string;
   blindStatus?: string;
   classicRating?: string;
   leisureRating?: string;
   visitDuration?: string;
   openTime?: string;
-  familyFriendly?: string;
   ticketPriceA?: number;
   ticketPriceC?: number;
-  reservationRequired?: string;
   perCost?: string;
-  indoorOutdoor?: string;
-  closedDay?: string;
-  specialPeriod?: string;
-  badFactors?: string;
-  attractionType?: string;
+  sortOrder?: number;
   status?: string;
   delFlag?: string;
   attachments?: Record<string, any>[];
@@ -35,12 +30,12 @@ export interface TravelAttraction {
   remark?: string;
 }
 
-export interface AttractionListParams {
+export interface CheckinListParams {
   keyword?: string;
-  blindStatus?: string;
   province?: string;
   city?: string;
   district?: string;
+  blindStatus?: string;
   minClassicRating?: number;
   pageNum?: number;
   pageSize?: number;

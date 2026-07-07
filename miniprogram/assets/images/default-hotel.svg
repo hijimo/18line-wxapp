@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="360" viewBox="0 0 420 360">
+  <defs>
+    <linearGradient id="hg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#20452e"/>
+      <stop offset="1" stop-color="#163422"/>
+    </linearGradient>
+  </defs>
+  <rect width="420" height="360" fill="url(#hg)"/>
+  <g fill="none" stroke="#f3f4ee" stroke-opacity="0.85" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M120 250 V150 L210 108 L300 150 V250"/>
+    <path d="M104 250 H316"/>
+    <rect x="150" y="176" width="30" height="30"/>
+    <rect x="240" y="176" width="30" height="30"/>
+    <path d="M190 250 V214 H230 V250"/>
+  </g>
+  <text x="210" y="308" text-anchor="middle" font-family="PingFang SC, sans-serif" font-size="26" fill="#f9faf4" letter-spacing="3">待入住 · 精选住宿</text>
+</svg>

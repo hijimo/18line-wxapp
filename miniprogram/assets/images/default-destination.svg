@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="768" viewBox="0 0 700 768">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2d4b37"/>
+      <stop offset="1" stop-color="#163422"/>
+    </linearGradient>
+  </defs>
+  <rect width="700" height="768" fill="url(#sky)"/>
+  <circle cx="350" cy="250" r="86" fill="#944a00" fill-opacity="0.85"/>
+  <path d="M0 560 L180 430 L320 540 L470 400 L620 520 L700 470 V768 H0 Z" fill="#0f2618" fill-opacity="0.9"/>
+  <path d="M0 620 L150 520 L300 610 L450 500 L600 600 L700 550 V768 H0 Z" fill="#0b1c12"/>
+  <text x="350" y="708" text-anchor="middle" font-family="PingFang SC, sans-serif" font-size="34" fill="#f9faf4" letter-spacing="6">目的地影像待补充</text>
+</svg>

@@ -301,6 +301,85 @@
   height: 100%;
 }
 
+.destination-swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.destination-slide {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* 盲游景点模糊遮罩 */
+.blur-veil {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(22, 52, 34, 0.55);
+  backdrop-filter: blur(12rpx);
+}
+
+.blur-veil-text {
+  font-size: 26rpx;
+  color: #ffffff;
+  letter-spacing: 4rpx;
+  font-weight: 600;
+}
+
+/* 酒店 / 餐厅角标 */
+.corner-hotel,
+.corner-dining {
+  position: relative;
+}
+
+.corner-mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0));
+}
+
+.corner-info {
+  position: absolute;
+  left: 16rpx;
+  right: 16rpx;
+  bottom: 16rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.corner-label {
+  flex-shrink: 0;
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 8rpx;
+  background: rgba(255, 255, 255, 0.9);
+  color: #163422;
+  font-size: 20rpx;
+  line-height: 32rpx;
+  text-align: center;
+  font-weight: 600;
+}
+
+.corner-name {
+  font-size: 22rpx;
+  color: #ffffff;
+  line-height: 30rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .location-overlay {
   position: absolute;
   top: 0;

@@ -20,7 +20,7 @@
 
   <!-- Journey Cards -->
   <block wx:else>
-    <swiper class="journey-swiper" next-margin="48rpx" previous-margin="0">
+    <swiper class="journey-swiper" next-margin="48rpx" previous-margin="0" bindchange="onSwiperChange">
       <swiper-item wx:for="{{journeys}}" wx:key="id">
         <view class="journey-card" bindtap="onCardTap" data-id="{{item.id}}">
           <view class="journey-card-inner">
@@ -62,12 +62,12 @@
               </view>
             </view>
 
-            <!-- Current Goal -->
-            <view wx:if="{{item.currentGoal}}" class="current-goal">
+            <!-- Current Goal：当天景点数 + 总游玩时间 -->
+            <view wx:if="{{item.goalTitle}}" class="current-goal">
               <image class="icon-target" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-target.svg" />
               <view class="goal-text">
-                <text class="goal-label">当前目标</text>
-                <text class="goal-title">{{item.currentGoal}}</text>
+                <text class="goal-label">当天目标</text>
+                <text class="goal-title">{{item.goalTitle}}</text>
               </view>
             </view>
             <view wx:else class="current-goal current-goal--placeholder">
@@ -81,18 +81,37 @@
               </view>
             </view>
 
-            <!-- Location Images -->
-            <view wx:if="{{item.locations && item.locations.length >= 3}}" class="location-images">
+            <!-- 目的地影像(左，当天景点首图轮换) + 酒店(右上) + 餐厅(右下) -->
+            <view wx:if="{{item.destinationImages && item.destinationImages.length > 0}}" class="location-images">
               <view class="location-main">
-                <image class="location-main-img" src="{{oss.ossResize(item.locations[0].image, 350, 384)}}" mode="aspectFill" />
-                <view class="location-overlay" />
+                <swiper class="destination-swiper" autoplay="{{item.destinationImages.length > 1}}" circular interval="3500" duration="600" indicator-dots="{{item.destinationImages.length > 1}}" indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#ffffff">
+                  <swiper-item wx:for="{{item.destinationImages}}" wx:key="index" wx:for-item="dest">
+                    <view class="destination-slide">
+                      <image class="location-main-img" src="{{oss.ossResize(dest.image, 350, 384)}}" mode="aspectFill" />
+                      <view wx:if="{{dest.blurred}}" class="blur-veil">
+                        <text class="blur-veil-text">神秘景点</text>
+                      </view>
+                      <view wx:else class="location-overlay" />
+                    </view>
+                  </swiper-item>
+                </swiper>
               </view>
               <view class="location-side">
-                <view class="location-side-item">
-                  <image class="location-side-img" src="{{oss.ossResize(item.locations[1].image, 210, 180)}}" mode="aspectFill" />
+                <view class="location-side-item corner-hotel">
+                  <image class="location-side-img" src="{{oss.ossResize(item.hotel.image, 210, 180)}}" mode="aspectFill" />
+                  <view class="corner-mask" />
+                  <view class="corner-info">
+                    <text class="corner-label">住</text>
+                    <text class="corner-name">{{item.hotel.name}}</text>
+                  </view>
                 </view>
-                <view class="location-side-item">
-                  <image class="location-side-img" src="{{oss.ossResize(item.locations[2].image, 210, 180)}}" mode="aspectFill" />
+                <view class="location-side-item corner-dining">
+                  <image class="location-side-img" src="{{oss.ossResize(item.restaurant.image, 210, 180)}}" mode="aspectFill" />
+                  <view class="corner-mask" />
+                  <view class="corner-info">
+                    <text class="corner-label">食</text>
+                    <text class="corner-name">{{item.restaurant.name}}</text>
+                  </view>
                 </view>
               </view>
             </view>

@@ -4,6 +4,8 @@
     "journey-card": "/components/journey-card/journey-card",
     "inspiration-card": "/components/inspiration-card/inspiration-card",
     "gem-item": "/components/gem-item/gem-item",
-    "food-card": "/components/food-card/food-card"
+    "food-card": "/components/food-card/food-card",
+    "attraction-intro-drawer": "/components/attraction-intro-drawer/attraction-intro-drawer",
+    "dining-intro-drawer": "/components/dining-intro-drawer/dining-intro-drawer"
   }
 }

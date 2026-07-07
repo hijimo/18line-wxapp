@@ -86,3 +86,17 @@
   color: #727972;
   font-weight: 600;
 }
+.gem-thumb-wrap {
+  position: relative;
+}
+
+.gem-blur-veil {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: rgba(22, 52, 34, 0.5);
+  backdrop-filter: blur(10rpx);
+}

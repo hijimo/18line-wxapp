@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="360" viewBox="0 0 420 360">
+  <defs>
+    <linearGradient id="dg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a85406"/>
+      <stop offset="1" stop-color="#944a00"/>
+    </linearGradient>
+  </defs>
+  <rect width="420" height="360" fill="url(#dg)"/>
+  <g fill="none" stroke="#f9faf4" stroke-opacity="0.9" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M158 118 V196 M182 118 V196 M170 196 V250"/>
+    <path d="M258 118 C238 118 230 150 234 176 C236 192 250 196 258 196 V250"/>
+    <circle cx="210" cy="182" r="70" stroke-opacity="0.5"/>
+  </g>
+  <text x="210" y="308" text-anchor="middle" font-family="PingFang SC, sans-serif" font-size="26" fill="#f9faf4" letter-spacing="3">待选 · 地道风味</text>
+</svg>
