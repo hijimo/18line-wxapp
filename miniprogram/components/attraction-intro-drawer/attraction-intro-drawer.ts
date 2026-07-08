@@ -137,15 +137,15 @@ function normalizeAttractionIntroText(value?: string | number) {
 function formatLeisureRating(value?: string | number) {
   const text = normalizeAttractionIntroText(value);
   if (!text) return '';
+  const normalized = Number(text);
   const map: Record<string, string> = {
-    '0': '休闲',
-    '1': '较休闲',
-    '2': '适中',
-    '3': '中等',
-    '4': '较累',
-    '5': '困难',
+    '0.6': '轻松',
+    '0.8': '休闲',
+    '1': '中等强度',
+    '1.5': '高等强度',
+    '2': '暴虐强度',
   };
-  return map[text] || text;
+  return Number.isFinite(normalized) ? map[String(normalized)] || text : text;
 }
 
 const BAD_FACTORS_LABEL: Record<string, string> = {

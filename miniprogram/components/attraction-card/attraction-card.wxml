@@ -19,9 +19,9 @@
           <view class="card-info">
             <view class="card-name-row">
               <text class="card-name">{{item.attractionName}}</text>
-              <view class="card-ratings" wx:if="{{item.leisureRating || item.classicRating}}">
-                <text class="card-rating-tag card-rating-tag--leisure" wx:if="{{item.leisureRating}}">休闲{{item.leisureRating}}</text>
-                <text class="card-rating-tag card-rating-tag--classic" wx:if="{{item.classicRating}}">经典{{item.classicRating}}</text>
+              <view class="card-ratings" wx:if="{{item.leisureRatingText || item.leisureRating || item.classicRatingText || item.classicRating}}">
+                <text class="card-rating-tag card-rating-tag--leisure" wx:if="{{item.leisureRatingText || item.leisureRating}}">{{item.leisureRatingText || item.leisureRating}}</text>
+                <text class="card-rating-tag card-rating-tag--classic" wx:if="{{item.classicRatingText || item.classicRating}}">经典{{item.classicRatingText || item.classicRating}}</text>
               </view>
             </view>
             <text class="card-sub" wx:if="{{item.attractionBlurb || item.attractionDescription}}">{{item.attractionBlurb || item.attractionDescription}}</text>

@@ -157,6 +157,27 @@ function formatVisitDuration(value: unknown) {
   return text;
 }
 
+function formatClassicRating(value: unknown) {
+  if (!hasMeaningfulValue(value)) return '';
+  const text = String(value).trim();
+  if (!text) return '';
+  return /星$/.test(text) ? text : `${text}星`;
+}
+
+function formatLeisureRating(value: unknown) {
+  if (!hasMeaningfulValue(value)) return '';
+  const text = String(value).trim();
+  const normalized = Number(text);
+  const map: Record<string, string> = {
+    '0.6': '轻松',
+    '0.8': '休闲',
+    '1': '中等强度',
+    '1.5': '高等强度',
+    '2': '暴虐强度',
+  };
+  return Number.isFinite(normalized) ? map[String(normalized)] || text : text;
+}
+
 function mergeMissingAttractionDetails<T extends Record<string, any>>(
   target: T,
   source?: TravelAttraction,
@@ -174,6 +195,12 @@ function mergeMissingAttractionDetails<T extends Record<string, any>>(
   }
   if (hasMeaningfulValue(merged.durationHint)) {
     merged.durationHint = formatVisitDuration(merged.durationHint);
+  }
+  if (hasMeaningfulValue(merged.classicRating)) {
+    merged.classicRatingText = formatClassicRating(merged.classicRating);
+  }
+  if (hasMeaningfulValue(merged.leisureRating)) {
+    merged.leisureRatingText = formatLeisureRating(merged.leisureRating);
   }
   return merged as T;
 }
@@ -198,6 +225,8 @@ function normalizeItineraryDay(day: FlexibleItineraryDay): TravelItineraryDay {
   const attractionList = normalizeAttractionList(day).map((item) => ({
     ...item,
     visitDuration: formatVisitDuration(item.visitDuration),
+    classicRatingText: formatClassicRating(item.classicRating),
+    leisureRatingText: formatLeisureRating(item.leisureRating),
   }));
   const attractionMap = buildAttractionMap(attractionList);
   const blindAttractions = ((day.blindAttractions || []) as any[]).map((item) =>

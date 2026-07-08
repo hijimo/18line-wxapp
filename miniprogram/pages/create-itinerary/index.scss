@@ -18,7 +18,7 @@ page {
 
 .main-content {
   padding: 48rpx;
-  padding-bottom: 420rpx;
+  padding-bottom: 300rpx;
   display: flex;
   flex-direction: column;
   gap: 80rpx;
@@ -343,16 +343,18 @@ page {
 
 .footer-inner {
   display: flex;
-  flex-direction: column;
-  gap: 24rpx;
+  align-items: stretch;
+  gap: 20rpx;
 }
 
 .btn-primary {
+  flex: 1.45;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24rpx;
-  padding: 32rpx;
+  gap: 16rpx;
+  padding: 30rpx 24rpx;
   border-radius: 24rpx;
   background: linear-gradient(to right, #163422, #2d4b37);
   box-shadow: 0 16rpx 30rpx rgba(22, 52, 34, 0.15);
@@ -364,34 +366,40 @@ page {
 }
 
 .btn-icon {
-  width: 40rpx;
-  height: 40rpx;
+  width: 36rpx;
+  height: 36rpx;
+  flex-shrink: 0;
 }
 
 .btn-primary-text {
-  font-size: 36rpx;
+  font-size: 32rpx;
   font-weight: 500;
   color: #ffffff;
   text-align: center;
-  line-height: 56rpx;
+  line-height: 48rpx;
+  white-space: nowrap;
 }
 
 .btn-secondary {
+  flex: 0.9;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16rpx;
-  padding: 36rpx 4rpx;
+  gap: 12rpx;
+  padding: 30rpx 16rpx;
   border-radius: 24rpx;
   border: 4rpx solid rgba(194, 200, 192, 0.3);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .btn-secondary-text {
-  font-size: 32rpx;
+  font-size: 28rpx;
   font-weight: 500;
   color: #163422;
   text-align: center;
   line-height: 48rpx;
+  white-space: nowrap;
 }
 
 .btn-secondary-arrow {

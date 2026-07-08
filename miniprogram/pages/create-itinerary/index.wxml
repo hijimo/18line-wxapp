@@ -42,25 +42,6 @@
         </view>
       </view>
 
-      <!-- Preferences -->
-      <view class="section">
-        <view class="section-header-with-icon">
-          <image class="section-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-travel-trait.svg" mode="aspectFit" />
-          <text class="section-title">旅行偏好</text>
-        </view>
-        <view class="preference-grid">
-          <view
-            wx:for="{{preferenceOptions}}"
-            wx:key="dictValue"
-            class="preference-tag {{arr.includes(preferences, item.dictValue) ? 'preference-tag--active' : ''}}"
-            bindtap="onPreferenceToggle"
-            data-value="{{item.dictValue}}"
-          >
-            <text class="preference-tag-text">{{item.dictLabel}}</text>
-          </view>
-        </view>
-      </view>
-
       <!-- Blind Mode -->
       <view class="blind-mode-card">
         <view class="blind-mode-decoration" />
@@ -99,6 +80,25 @@
               <image class="toggle-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-blind-full.svg" mode="aspectFit" />
               <text class="toggle-text {{blindMode === '2' ? 'toggle-text--active' : ''}}">全盲惊喜</text>
             </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- Preferences -->
+      <view class="section">
+        <view class="section-header-with-icon">
+          <image class="section-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-travel-trait.svg" mode="aspectFit" />
+          <text class="section-title">旅行偏好</text>
+        </view>
+        <view class="preference-grid">
+          <view
+            wx:for="{{preferenceOptions}}"
+            wx:key="dictValue"
+            class="preference-tag {{arr.includes(preferences, item.dictValue) ? 'preference-tag--active' : ''}}"
+            bindtap="onPreferenceToggle"
+            data-value="{{item.dictValue}}"
+          >
+            <text class="preference-tag-text">{{item.dictLabel}}</text>
           </view>
         </view>
       </view>

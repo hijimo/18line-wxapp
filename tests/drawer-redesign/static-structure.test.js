@@ -107,13 +107,21 @@ test('itinerary detail preserves attraction detail fields for schedule cards', (
   assert.match(pageTs, /function normalizeItineraryDay/);
   assert.match(pageTs, /mergeMissingAttractionDetails/);
   assert.match(pageTs, /classicRating/);
+  assert.match(pageTs, /classicRatingText/);
+  assert.match(pageTs, /formatClassicRating/);
   assert.match(pageTs, /leisureRating/);
+  assert.match(pageTs, /leisureRatingText/);
+  assert.match(pageTs, /formatLeisureRating/);
+  assert.match(pageTs, /轻松/);
+  assert.match(pageTs, /暴虐强度/);
   assert.match(pageTs, /visitDuration/);
   assert.match(pageTs, /function formatVisitDuration/);
   assert.match(pageTs, /`\$\{text\}小时`/);
   assert.match(pageTs, /[-~～—–至到]/);
   assert.match(pageTs, /attractionDescription/);
   assert.match(cardWxml, /item\.attractionBlurb \|\| item\.attractionDescription/);
+  assert.match(cardWxml, /item\.classicRatingText \|\| item\.classicRating/);
+  assert.match(cardWxml, /item\.leisureRatingText \|\| item\.leisureRating/);
 });
 
 for (const drawer of scheduleEntryDrawers) {
