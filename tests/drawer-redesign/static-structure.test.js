@@ -94,6 +94,28 @@ test('itinerary detail maps schedule drawer data to attractionName', () => {
   assert.match(pageTs, /normalizeIntroDataWithAttractionName\(data, currentDayData\)/);
 });
 
+test('itinerary detail preserves attraction detail fields for schedule cards', () => {
+  const pageTs = fs.readFileSync(
+    path.resolve(__dirname, '../../miniprogram/pages/itinerary-detail/index.ts'),
+    'utf8',
+  );
+  const cardWxml = fs.readFileSync(
+    path.resolve(__dirname, '../../miniprogram/components/attraction-card/attraction-card.wxml'),
+    'utf8',
+  );
+
+  assert.match(pageTs, /function normalizeItineraryDay/);
+  assert.match(pageTs, /mergeMissingAttractionDetails/);
+  assert.match(pageTs, /classicRating/);
+  assert.match(pageTs, /leisureRating/);
+  assert.match(pageTs, /visitDuration/);
+  assert.match(pageTs, /function formatVisitDuration/);
+  assert.match(pageTs, /`\$\{text\}小时`/);
+  assert.match(pageTs, /[-~～—–至到]/);
+  assert.match(pageTs, /attractionDescription/);
+  assert.match(cardWxml, /item\.attractionBlurb \|\| item\.attractionDescription/);
+});
+
 for (const drawer of scheduleEntryDrawers) {
   test(`${drawer} renders location text from attractionName`, () => {
     const wxml = readDrawer(drawer, 'wxml');

@@ -11,7 +11,6 @@ import { getFeaturedDishes, getDishesByDining } from '../../services/dish';
 import { getDiningDetail } from '../../services/dining';
 import { getDistrictCache, setDistrictCache } from '../../utils/district-cache';
 import {
-  mapBanners,
   mapJourneys,
   mapSecretAttractions,
   mapHiddenCheckins,
@@ -35,7 +34,6 @@ Component({
       nickName: '',
     },
     hasJourneys: true,
-    banners: [] as any[],
     journeys: [] as JourneyCardVM[],
     activeJourneyIndex: 0,
     currentDistrict: '',
@@ -67,23 +65,10 @@ Component({
   },
   pageLifetimes: {
     show() {
-      (this as any).loadBanners();
       (this as any).loadJourneys();
     },
   },
   methods: {
-    async loadBanners() {
-      try {
-        const res = await getTemplateList();
-        const banners = mapBanners(res.data || [], 5);
-        if (banners.length > 0) {
-          this.setData({ banners });
-        }
-      } catch (err) {
-        console.error('Failed to load banners:', err);
-      }
-    },
-
     async loadJourneys() {
       try {
         const res = await getItineraryList();
@@ -495,12 +480,6 @@ Component({
     },
 
     /* -------------------- 其它 -------------------- */
-    onBannerTap(e: any) {
-      const { id } = e.detail;
-      if (id) {
-        wx.navigateTo({ url: `/pages/itinerary-detail/index?templateId=${id}` });
-      }
-    },
     onViewAll() {
       wx.navigateTo({ url: '/pages/journeys/index' });
     },

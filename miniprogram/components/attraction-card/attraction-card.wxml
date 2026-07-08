@@ -24,7 +24,7 @@
                 <text class="card-rating-tag card-rating-tag--classic" wx:if="{{item.classicRating}}">经典{{item.classicRating}}</text>
               </view>
             </view>
-            <text class="card-sub" wx:if="{{item.attractionBlurb}}">{{item.attractionBlurb}}</text>
+            <text class="card-sub" wx:if="{{item.attractionBlurb || item.attractionDescription}}">{{item.attractionBlurb || item.attractionDescription}}</text>
             <view class="card-meta" wx:if="{{item.visitDuration || item.ticketPriceA || item.openTime || item.perCost}}">
               <view class="card-meta-item" wx:if="{{item.visitDuration}}">
                 <text class="card-meta-label">游玩时间</text>

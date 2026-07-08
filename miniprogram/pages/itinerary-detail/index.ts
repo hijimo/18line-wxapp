@@ -20,6 +20,7 @@ import { getLocalSpecialtyList } from '../../services/local-specialty';
 import { getWeatherForecast } from '../../services/weather';
 import type { WeatherDay } from '../../services/weather';
 import type { Itinerary, TravelItineraryDay } from '../../types/itinerary';
+import type { TravelAttraction } from '../../types/attraction';
 import type { TravelLocalSpecialtyDish } from '../../types/local-specialty';
 
 const DRAWER_LEVELS = [20, 60, 80] as const;
@@ -112,10 +113,113 @@ function getEndDate(startDate?: string, days?: number) {
   return formatInputDate(end);
 }
 
+type FlexibleItineraryDay = TravelItineraryDay & {
+  attractions?: TravelAttraction[];
+};
+
+const ATTRACTION_DETAIL_FIELDS: Array<keyof TravelAttraction> = [
+  'attractionName',
+  'attractionShortName',
+  'attractionDescription',
+  'attractionBlurb',
+  'classicRating',
+  'leisureRating',
+  'visitDuration',
+  'openTime',
+  'familyFriendly',
+  'ticketPriceA',
+  'ticketPriceC',
+  'reservationRequired',
+  'perCost',
+  'indoorOutdoor',
+  'closedDay',
+  'specialPeriod',
+  'badFactors',
+  'attractionType',
+  'latitude',
+  'longitude',
+  'attachments',
+];
+
+function hasMeaningfulValue(value: unknown) {
+  return value !== undefined && value !== null && value !== '';
+}
+
+function formatVisitDuration(value: unknown) {
+  if (!hasMeaningfulValue(value)) return '';
+  const text = String(value).trim();
+  if (!text) return '';
+  if (/[时分天]/.test(text)) return text;
+  if (/^\d+(\.\d+)?$/.test(text)) return `${text}小时`;
+  if (/^\d+(\.\d+)?\s*[-~～—–至到]\s*\d+(\.\d+)?$/.test(text)) {
+    return `${text.replace(/\s*([-~～—–至到])\s*/g, '$1')}小时`;
+  }
+  return text;
+}
+
+function mergeMissingAttractionDetails<T extends Record<string, any>>(
+  target: T,
+  source?: TravelAttraction,
+) {
+  if (!source) return target;
+
+  const merged: Record<string, any> = { ...target };
+  ATTRACTION_DETAIL_FIELDS.forEach((field) => {
+    if (!hasMeaningfulValue(merged[field]) && hasMeaningfulValue(source[field])) {
+      merged[field] = source[field];
+    }
+  });
+  if (hasMeaningfulValue(merged.visitDuration)) {
+    merged.visitDuration = formatVisitDuration(merged.visitDuration);
+  }
+  if (hasMeaningfulValue(merged.durationHint)) {
+    merged.durationHint = formatVisitDuration(merged.durationHint);
+  }
+  return merged as T;
+}
+
+function buildAttractionMap(attractions: TravelAttraction[]) {
+  return attractions.reduce<Record<string, TravelAttraction>>((map, item) => {
+    if (item.attractionId !== undefined && item.attractionId !== null) {
+      map[String(item.attractionId)] = item;
+    }
+    return map;
+  }, {});
+}
+
+function normalizeAttractionList(day: FlexibleItineraryDay) {
+  if (Array.isArray(day.attractionList)) return day.attractionList;
+  if (Array.isArray(day.touristAttractionList)) return day.touristAttractionList;
+  if (Array.isArray(day.attractions)) return day.attractions;
+  return [];
+}
+
+function normalizeItineraryDay(day: FlexibleItineraryDay): TravelItineraryDay {
+  const attractionList = normalizeAttractionList(day).map((item) => ({
+    ...item,
+    visitDuration: formatVisitDuration(item.visitDuration),
+  }));
+  const attractionMap = buildAttractionMap(attractionList);
+  const blindAttractions = ((day.blindAttractions || []) as any[]).map((item) =>
+    mergeMissingAttractionDetails(item, attractionMap[String(item.attractionId)]),
+  );
+
+  return {
+    ...day,
+    attractionList,
+    blindAttractions,
+  };
+}
+
+function normalizeItineraryDays(days?: FlexibleItineraryDay[]) {
+  return (days || []).map(normalizeItineraryDay);
+}
+
 function normalizeItineraryDisplay(itinerary: Itinerary): Itinerary {
   return {
     ...itinerary,
     dateRangeText: formatDateRange(itinerary.startDate, itinerary.days),
+    daysList: normalizeItineraryDays(itinerary.daysList as FlexibleItineraryDay[] | undefined),
   };
 }
 
@@ -317,7 +421,7 @@ Page({
           itineraryDayId: d.templateDayId,
           dayNumber: d.dayNumber,
           dayTheme: d.dayTheme,
-          attractionList: d.attractionList || d.attractions || [],
+          attractionList: normalizeAttractionList(d),
           breakfast: d.breakfast || null,
           lunch: d.lunch || null,
           dinner: d.dinner || null,
@@ -325,7 +429,7 @@ Page({
           photography: d.photography || null,
           car: d.car || null,
         }),
-      );
+      ).map(normalizeItineraryDay);
 
       const itinerary: Itinerary = normalizeItineraryDisplay({
         itineraryId: 0,

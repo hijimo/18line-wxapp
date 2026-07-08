@@ -20,10 +20,7 @@
 
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="page-main">
-    <!-- Section 1: Hero Banner Swiper -->
-    <hero-banner banners="{{banners}}" bind:bannertap="onBannerTap" />
-
-    <!-- Section 2: My Journey -->
+    <!-- Section 1: My Journey -->
     <view class="journey-section">
       <view class="journey-section-header">
         <view>
@@ -58,10 +55,10 @@
       <text class="local-bar-text">当地 · {{currentDistrictName}}</text>
     </view>
 
-    <!-- Section 3: Local Highlights (Inspiration Cards Swiper) -->
+    <!-- Section 2: Local Highlights (Inspiration Cards Swiper) -->
     <inspiration-card title="{{inspirationTitle}}" cards="{{inspirationCards}}" bind:cardtap="onInspirationTap" />
 
-    <!-- Section 4: Easter Eggs -->
+    <!-- Section 3: Easter Eggs -->
     <view class="section-eggs">
       <view class="section-heading">
         <text class="section-heading-text">寻找隐匿之藏</text>
@@ -71,7 +68,7 @@
       </view>
     </view>
 
-    <!-- Section 5: Food & Marketplace -->
+    <!-- Section 4: Food & Marketplace -->
     <view class="section-food">
       <view class="section-heading">
         <text class="section-heading-text">地道风物</text>

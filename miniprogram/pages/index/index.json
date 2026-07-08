@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "hero-banner": "/components/hero-banner/hero-banner",
     "journey-card": "/components/journey-card/journey-card",
     "inspiration-card": "/components/inspiration-card/inspiration-card",
     "gem-item": "/components/gem-item/gem-item",
