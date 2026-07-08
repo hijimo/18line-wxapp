@@ -1,17 +1,15 @@
 {
   "name": "18line-wxapp-e2e-tests",
   "version": "1.0.0",
-  "description": "微信小程序自动化测试 - 双Agent对抗验证方案",
+  "description": "微信小程序 e2e 自动化测试",
   "scripts": {
-    "test:build": "node agent-builder/run.js",
-    "test:review": "node agent-reviewer/run.js",
-    "test:adversarial": "node run-adversarial.js",
-    "test:dining-intro-drawer": "jest --config jest.config.js --testMatch \"**/dining-intro-drawer/**/*.test.js\" --runInBand",
-    "test:home": "jest --config jest.config.js --testMatch \"**/home/home.test.js\" --runInBand --forceExit",
+    "test:e2e:auth": "jest --config jest.e2e.auth.config.js --runInBand --forceExit",
+    "test:e2e:smoke": "jest --config jest.e2e.smoke.config.js --runInBand --forceExit",
+    "test:e2e:core": "jest --config jest.e2e.core.config.js --runInBand --forceExit",
+    "test:e2e:regression": "jest --config jest.e2e.regression.config.js --runInBand --forceExit",
+    "test:e2e": "jest --config jest.e2e.config.js --runInBand --forceExit",
     "test:home-unit": "jest --config jest.config.js --testMatch \"**/home/**/*.unit.test.js\" --runInBand --forceExit",
-    "test:hotel-intro-drawer": "jest --config jest.config.js --runTestsByPath agent-builder/hotel-intro-drawer.test.js --runInBand --forceExit",
-    "test:all": "jest --config jest.config.js",
-    "report": "node shared/report-generator.js"
+    "test:all": "npm run test:e2e"
   },
   "devDependencies": {
     "miniprogram-automator": "^0.12.1",

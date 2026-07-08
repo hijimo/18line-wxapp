@@ -77,8 +77,16 @@
 - 上传静态图片到 OSS：`pnpm upload:assets`
 - 生成 OSS 2x 图片地址：`pnpm oss:image-url -- <图片文件名> --width <元素宽度> --height <元素高度>`
 - 安装测试依赖：`cd tests && pnpm install`
-- 运行全部自动化测试：`cd tests && pnpm test:all`
-- 运行对抗验证：`cd tests && pnpm test:adversarial`
+- 运行全部 e2e 自动化测试：`cd tests && npm run test:e2e`
+- 分层运行 e2e：`cd tests && npm run test:e2e:auth`、`npm run test:e2e:smoke`、`npm run test:e2e:core`、`npm run test:e2e:regression`
+
+## e2e 测试流程
+
+- 当前 e2e 测试以 `tests/e2e/` 为准，详细说明见 `tests/e2e/README.md`，同步矩阵见 `tests/e2e/TEST_SYNC_MATRIX.md`。
+- 旧的 `agent-builder` / `agent-reviewer` 对抗式自动化测试已废弃并删除，后续不要继续新增或恢复该结构。
+- 业务 e2e 默认先通过 `auth/setup` 建立登录态，再由 `smoke`、`core business`、`regression` 复用登录态。
+- 如果登录态缺失或失效，应通过测试 helper 自动回退执行登录 setup；不要让每条业务测试重复登录。
+- 新增、删除、重写 e2e 用例时，必须同步维护 `tests/e2e/TEST_SYNC_MATRIX.md`，说明业务流程、问题分类、决策、改动和验证结果。
 
 ## 验证要求
 

@@ -5,4 +5,9 @@ node_modules/
 .env.*.local
 miniprogram/assets/oss-images.json
 .idea
-tests/
+tests/*
+!tests/e2e/
+!tests/e2e/**
+!tests/jest.e2e*.config.js
+!tests/package.json
+tests/.auth/

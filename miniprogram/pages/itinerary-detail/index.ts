@@ -1022,7 +1022,7 @@ Page({
     }
   },
 
-  onAttractionTouchEnd(e: any) {
+  onAttractionTouchEnd() {
     if (dragLongPressTimer) {
       clearTimeout(dragLongPressTimer);
       dragLongPressTimer = null;

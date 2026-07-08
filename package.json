@@ -5,10 +5,14 @@
   "scripts": {
     "lint": "npm run build && node --test tests/drawer-redesign/*.test.js",
     "build:mp-weixin": "npm run build",
-    "test:dining-intro-drawer": "npm --prefix tests install --cache ../.npm-cache --legacy-peer-deps && npm --prefix tests run test:dining-intro-drawer",
+    "test:e2e": "npm --prefix tests run test:e2e",
+    "test:e2e:auth": "npm --prefix tests run test:e2e:auth",
+    "test:e2e:smoke": "npm --prefix tests run test:e2e:smoke",
+    "test:e2e:core": "npm --prefix tests run test:e2e:core",
+    "test:e2e:regression": "npm --prefix tests run test:e2e:regression",
     "upload:assets": "node tools/oss/assets.mjs upload",
     "oss:image-url": "node tools/oss/assets.mjs url",
-    "test:automator": "npm --prefix tests run test:hotel-intro-drawer",
+    "test:automator": "npm --prefix tests run test:e2e",
     "build": "tsc --noEmit --skipLibCheck"
   },
   "keywords": [],
