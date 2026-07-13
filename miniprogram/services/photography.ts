@@ -4,6 +4,9 @@ import type { AjaxResult, TableDataInfo } from '../types/common';
 
 export interface PhotographyListParams {
   keyword?: string;
+  province?: string;
+  city?: string;
+  district?: string;
   pageNum?: number;
   pageSize?: number;
 }

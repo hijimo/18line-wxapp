@@ -12,6 +12,9 @@ export interface TravelPhotography {
   price?: number;
   recommendRating?: number;
   equipment?: string;
+  province?: string;
+  city?: string;
+  district?: string;
   status?: string;
   delFlag?: string;
   attachments?: Record<string, any>[];
@@ -31,11 +34,17 @@ export interface BlindAttractionInfo {
   fuzzyLongitude?: number;
   fuzzyLatitude?: number;
   fuzzyRadius?: number;
+  fuzzyDescription?: string;
   categoryHint?: string;
   durationHint?: string;
   prepHint?: string;
   budgetTier?: string;
   forceUnlockAvailableAt?: string;
+  attractionBlurb?: string;
+  classicRating?: string;
+  classicRatingText?: string;
+  leisureRating?: string;
+  leisureRatingText?: string;
   attractionName?: string;
   attractionDescription?: string;
   longitude?: number;

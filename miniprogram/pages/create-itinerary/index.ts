@@ -24,7 +24,7 @@ Page({
     endDateDisplay: '',
     preferences: [] as string[],
     preferenceOptions: [] as DictData[],
-    blindMode: '0' as string,
+    blindMode: '1' as string,
     loading: false,
     progressText: '',
     showDatePicker: false,
@@ -203,7 +203,10 @@ Page({
     this.setData({ loading: true });
 
     try {
-      const params = this.buildParams();
+      const params = {
+        ...this.buildParams(),
+        blindMode: '1',
+      };
       const res = await addItinerary(params);
       const itineraryId = res.data?.itineraryId;
 

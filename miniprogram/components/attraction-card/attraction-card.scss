@@ -273,6 +273,44 @@
   color: #163422;
 }
 
+.blind-fuzzy-desc {
+  display: block;
+  font-size: 24rpx;
+  color: #424843;
+  line-height: 36rpx;
+  margin-bottom: 16rpx;
+  word-break: break-all;
+}
+
+.blind-params {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-bottom: 16rpx;
+}
+
+.blind-param {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 8rpx 12rpx;
+  border-radius: 12rpx;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.blind-param-label {
+  font-size: 20rpx;
+  color: rgba(22, 52, 34, 0.56);
+  white-space: nowrap;
+}
+
+.blind-param-value {
+  font-size: 20rpx;
+  color: #163422;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 // Hints
 .blind-hints {
   margin-bottom: 16rpx;

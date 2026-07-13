@@ -8,6 +8,9 @@ export interface TravelCar {
   carModel?: string;
   seatCount?: number;
   drivingYears?: number;
+  province?: string;
+  city?: string;
+  district?: string;
   status?: string;
   delFlag?: string;
   attachments?: Record<string, any>[];
@@ -20,6 +23,9 @@ export interface TravelCar {
 
 export interface CarListParams {
   keyword?: string;
+  province?: string;
+  city?: string;
+  district?: string;
   pageNum?: number;
   pageSize?: number;
 }

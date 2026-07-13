@@ -1,9 +1,13 @@
 import { getAttractionList } from '../../services/attraction'
 import type { AttractionListParams } from '../../types/attraction'
 import { getAccommodationList } from '../../services/accommodation'
+import type { AccommodationListParams } from '../../types/accommodation'
 import { getDiningList } from '../../services/dining'
+import type { DiningListParams } from '../../types/dining'
 import { getCarList } from '../../services/car'
+import type { CarListParams } from '../../types/car'
 import { getPhotographyList } from '../../services/photography'
+import type { PhotographyListParams } from '../../services/photography'
 import {
   updateDayAttractions,
   updateDayAccommodation,
@@ -84,6 +88,14 @@ function getSearchEmptyText(tab: ScheduleTabId, keyword: string) {
   return keyword.trim() ? `未找到与“${keyword.trim()}”相关的${TAB_LABEL_MAP[tab]}` : ''
 }
 
+function buildLocationParams(province?: string, city?: string, district?: string) {
+  const params: Record<string, string> = {}
+  if (province) params.province = province
+  if (city) params.city = city
+  if (district) params.district = district
+  return params
+}
+
 Component({
   properties: {
     show: {
@@ -99,6 +111,18 @@ Component({
       value: 0,
     },
     blindMode: {
+      type: String,
+      value: '',
+    },
+    province: {
+      type: String,
+      value: '',
+    },
+    city: {
+      type: String,
+      value: '',
+    },
+    district: {
       type: String,
       value: '',
     },
@@ -227,7 +251,12 @@ Component({
       this.setData({ listLoading: true })
       try {
         let res: any
-        const params: Record<string, any> = { keyword: trimmed, pageNum: 1, pageSize: 50 }
+        const params: Record<string, any> = {
+          ...buildLocationParams(this.data.province, this.data.city, this.data.district),
+          keyword: trimmed,
+          pageNum: 1,
+          pageSize: 50,
+        }
         switch (activeTab) {
           case 'attraction':
             if (this.data.blindMode === '1') {
@@ -236,16 +265,16 @@ Component({
             res = await getAttractionList(params as AttractionListParams)
             break
           case 'hotel':
-            res = await getAccommodationList(params)
+            res = await getAccommodationList(params as AccommodationListParams)
             break
           case 'dining':
-            res = await getDiningList(params)
+            res = await getDiningList(params as DiningListParams)
             break
           case 'car':
-            res = await getCarList(params)
+            res = await getCarList(params as CarListParams)
             break
           case 'photography':
-            res = await getPhotographyList(params)
+            res = await getPhotographyList(params as PhotographyListParams)
             break
         }
         const rows = res?.rows || []
@@ -280,7 +309,12 @@ Component({
       this.setData({ listLoading: true })
       try {
         let res: any
-        const attractionParams: AttractionListParams = this.data.blindMode === '1' ? { blindStatus: '0' } : {}
+        const locationParams = buildLocationParams(this.data.province, this.data.city, this.data.district)
+        const listParams = { ...locationParams, pageNum: 1, pageSize: 50 }
+        const attractionParams: AttractionListParams = {
+          ...listParams,
+          ...(this.data.blindMode === '1' ? { blindStatus: '0' } : {}),
+        }
         switch (activeTab) {
           case 'attraction':
             res = await getAttractionList(attractionParams)
@@ -291,7 +325,7 @@ Component({
             })
             break
           case 'hotel':
-            res = await getAccommodationList()
+            res = await getAccommodationList(listParams as AccommodationListParams)
             this.setData({
               accommodationList: res.rows || [],
               filteredAccommodationList: filterDrawerList(res.rows || [], activeTab, keyword),
@@ -299,7 +333,7 @@ Component({
             })
             break
           case 'dining':
-            res = await getDiningList()
+            res = await getDiningList(listParams as DiningListParams)
             this.setData({
               diningList: res.rows || [],
               filteredDiningList: filterDrawerList(res.rows || [], activeTab, keyword),
@@ -307,7 +341,7 @@ Component({
             })
             break
           case 'car':
-            res = await getCarList()
+            res = await getCarList(listParams as CarListParams)
             this.setData({
               carList: res.rows || [],
               filteredCarList: filterDrawerList(res.rows || [], activeTab, keyword),
@@ -315,7 +349,7 @@ Component({
             })
             break
           case 'photography':
-            res = await getPhotographyList()
+            res = await getPhotographyList(listParams as PhotographyListParams)
             this.setData({
               photographyList: res.rows || [],
               filteredPhotographyList: filterDrawerList(res.rows || [], activeTab, keyword),

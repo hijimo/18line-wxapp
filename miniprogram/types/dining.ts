@@ -26,6 +26,9 @@ export interface TravelDining {
 
 export interface DiningListParams {
   keyword?: string;
+  province?: string;
+  city?: string;
+  district?: string;
   pageNum?: number;
   pageSize?: number;
 }

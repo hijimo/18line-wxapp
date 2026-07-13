@@ -72,8 +72,23 @@
         <view class="blind-title">
           <text class="blind-title-text">神秘体验</text>
         </view>
-        <view class="blind-hints" wx:if="{{item.categoryHint || item.durationHint || item.prepHint}}">
-          <text class="blind-hint-text">{{item.categoryHint}}{{item.durationHint ? ' · ' + item.durationHint : ''}}{{item.prepHint ? ' · ' + item.prepHint : ''}}</text>
+        <text class="blind-fuzzy-desc" wx:if="{{item.fuzzyDescription || item.attractionBlurb}}">{{item.fuzzyDescription || item.attractionBlurb}}</text>
+        <view class="blind-params" wx:if="{{item.classicRatingText || item.classicRating || item.leisureRatingText || item.leisureRating || item.visitDuration || item.durationHint}}">
+          <view class="blind-param" wx:if="{{item.classicRatingText || item.classicRating}}">
+            <text class="blind-param-label">经典指数</text>
+            <text class="blind-param-value">{{item.classicRatingText || item.classicRating}}</text>
+          </view>
+          <view class="blind-param" wx:if="{{item.leisureRatingText || item.leisureRating}}">
+            <text class="blind-param-label">休闲指数</text>
+            <text class="blind-param-value">{{item.leisureRatingText || item.leisureRating}}</text>
+          </view>
+          <view class="blind-param" wx:if="{{item.visitDuration || item.durationHint}}">
+            <text class="blind-param-label">游玩时间</text>
+            <text class="blind-param-value">{{item.visitDuration || item.durationHint}}</text>
+          </view>
+        </view>
+        <view class="blind-hints" wx:if="{{item.categoryHint || item.prepHint}}">
+          <text class="blind-hint-text">{{item.categoryHint}}{{item.prepHint ? ' · ' + item.prepHint : ''}}</text>
         </view>
         <view class="blind-placeholder">
           <image class="blind-lock-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-lock.svg" mode="aspectFit" />
@@ -105,8 +120,23 @@
         <view class="blind-badge blind-badge--locked">
           <text class="blind-badge-text">第 {{index + 1}} 站</text>
         </view>
-        <view class="blind-hints" wx:if="{{item.categoryHint || item.durationHint}}">
-          <text class="blind-hint-text">{{item.categoryHint}}{{item.durationHint ? ' · ' + item.durationHint : ''}}</text>
+        <text class="blind-fuzzy-desc" wx:if="{{item.fuzzyDescription || item.attractionBlurb}}">{{item.fuzzyDescription || item.attractionBlurb}}</text>
+        <view class="blind-params" wx:if="{{item.classicRatingText || item.classicRating || item.leisureRatingText || item.leisureRating || item.visitDuration || item.durationHint}}">
+          <view class="blind-param" wx:if="{{item.classicRatingText || item.classicRating}}">
+            <text class="blind-param-label">经典指数</text>
+            <text class="blind-param-value">{{item.classicRatingText || item.classicRating}}</text>
+          </view>
+          <view class="blind-param" wx:if="{{item.leisureRatingText || item.leisureRating}}">
+            <text class="blind-param-label">休闲指数</text>
+            <text class="blind-param-value">{{item.leisureRatingText || item.leisureRating}}</text>
+          </view>
+          <view class="blind-param" wx:if="{{item.visitDuration || item.durationHint}}">
+            <text class="blind-param-label">游玩时间</text>
+            <text class="blind-param-value">{{item.visitDuration || item.durationHint}}</text>
+          </view>
+        </view>
+        <view class="blind-hints" wx:if="{{item.categoryHint || item.prepHint}}">
+          <text class="blind-hint-text">{{item.categoryHint}}{{item.prepHint ? ' · ' + item.prepHint : ''}}</text>
         </view>
         <view class="blind-placeholder">
           <image class="blind-lock-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-lock.svg" mode="aspectFit" />

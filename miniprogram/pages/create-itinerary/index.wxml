@@ -112,7 +112,7 @@
         <image class="btn-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-target.svg" mode="aspectFit" />
         <text class="btn-primary-text">AI 智能规划</text>
       </view>
-      <view class="btn-secondary" bindtap="onManualPlan">
+      <view wx:if="{{blindMode === '1'}}" class="btn-secondary" bindtap="onManualPlan">
         <text class="btn-secondary-text">自主规划</text>
         <image class="btn-secondary-arrow" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-arrow-right.svg" mode="aspectFit" />
       </view>
