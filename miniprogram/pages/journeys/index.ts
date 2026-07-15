@@ -7,6 +7,7 @@ interface JourneyItem {
   image: string;
   status: string;
   statusType: string;
+  phase: string;
   date: string;
   location: string;
   tags: string[];
@@ -52,18 +53,25 @@ function formatJourneyDateRange(startDate?: string, endDate?: string, days?: num
   return `${formatMonthDay(start)} - ${formatMonthDay(end)}`;
 }
 
-const STATUS_MAP: Record<string, { label: string; type: string }> = {
-  '0': { label: '草稿', type: 'draft' },
-  '1': { label: '已确认', type: 'confirmed' },
-  '2': { label: '已完成', type: 'completed' },
-  '3': { label: '已取消', type: 'cancelled' },
+// 按日期判断行程相位。ponytail: 暂不判断"已完成"，结束的行程归为 ended，仅在"全部"里出现
+const PHASE_LABEL: Record<string, { label: string; type: string }> = {
+  pending: { label: '待开始', type: 'draft' },
+  active: { label: '进行中', type: 'confirmed' },
+  ended: { label: '已结束', type: 'completed' },
 };
 
-const FILTER_STATUS_MAP: Record<string, string> = {
-  active: '1',
-  pending: '0',
-  completed: '2',
-};
+const VALID_FILTERS = ['all', 'pending', 'active'];
+
+function computePhase(startDate?: string, endDate?: string, days?: number) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const start = parseLocalDate(startDate);
+  if (!start) return 'pending';
+  if (start.getTime() > today.getTime()) return 'pending';
+  const end = getEndDate(startDate, endDate, days);
+  if (end && end.getTime() < today.getTime()) return 'ended';
+  return 'active';
+}
 
 Page({
   data: {
@@ -72,10 +80,11 @@ Page({
       { id: 'all', label: '全部', active: true },
       { id: 'pending', label: '待开始', active: false },
       { id: 'active', label: '进行中', active: false },
-      { id: 'completed', label: '已完成', active: false },
     ],
     journeys: [] as JourneyItem[],
   },
+
+  _allJourneys: [] as JourneyItem[],
 
   onLoad(options: any) {
     if (options?.filter) {
@@ -86,45 +95,51 @@ Page({
 
   async loadJourneys() {
     try {
-      const { currentFilter } = this.data;
-      const params = currentFilter !== 'all'
-        ? { status: FILTER_STATUS_MAP[currentFilter] }
-        : undefined;
-      const res = await getItineraryList(params);
+      const res = await getItineraryList();
       const list: Itinerary[] = res.data || [];
-      const journeys: JourneyItem[] = list.map((item) => {
-        const statusInfo = STATUS_MAP[item.status || '0'] || STATUS_MAP['0'];
+      this._allJourneys = list.map((item) => {
+        const phase = computePhase(item.startDate, item.endDate, item.days);
+        const phaseInfo = PHASE_LABEL[phase];
         return {
           id: item.itineraryId || 0,
           title: item.itineraryName || '未命名旅途',
           image: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/lingyin-temple.png',
-          status: statusInfo.label,
-          statusType: statusInfo.type,
+          status: phaseInfo.label,
+          statusType: phaseInfo.type,
+          phase,
           date: formatJourneyDateRange(item.startDate, item.endDate, item.days),
           location: item.districtName || '',
           tags: item.createFromLabel ? [item.createFromLabel] : [],
           rating: '',
         };
       });
-
-      this.setData({ journeys });
+      this.applyFilter();
     } catch (err) {
       console.error('Failed to load journeys:', err);
     }
   },
 
+  applyFilter() {
+    const { currentFilter } = this.data;
+    const journeys = currentFilter === 'all'
+      ? this._allJourneys
+      : this._allJourneys.filter((j) => j.phase === currentFilter);
+    this.setData({ journeys });
+  },
+
   setFilter(filterId: string) {
+    const id = VALID_FILTERS.includes(filterId) ? filterId : 'all';
     const filters = this.data.filters.map((f) => ({
       ...f,
-      active: f.id === filterId,
+      active: f.id === id,
     }));
-    this.setData({ currentFilter: filterId, filters });
+    this.setData({ currentFilter: id, filters });
   },
 
   onFilterTap(e: any) {
     const id = e.currentTarget.dataset.id;
     this.setFilter(id);
-    this.loadJourneys();
+    this.applyFilter();
   },
 
   onJourneyTap(e: any) {

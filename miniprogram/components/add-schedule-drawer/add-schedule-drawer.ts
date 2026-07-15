@@ -22,6 +22,19 @@ type TabKeywordMap = Record<ScheduleTabId, string>
 
 const TAB_IDS: ScheduleTabId[] = ['attraction', 'hotel', 'dining', 'car', 'photography']
 
+const ALL_TABS = [
+  { id: 'attraction', label: '景点' },
+  { id: 'hotel', label: '住宿' },
+  { id: 'dining', label: '餐饮' },
+  { id: 'car', label: '包车' },
+  { id: 'photography', label: '跟拍' },
+]
+
+// ponytail: 盲盒模式（半盲'0'/全盲'2'）景点由系统盲盒安排，用户只能加住宿/餐饮/包车/跟拍
+function isBlindMode(mode: string) {
+  return mode === '0' || mode === '2'
+}
+
 const LIST_KEY_MAP: Record<ScheduleTabId, string> = {
   attraction: 'attractionList',
   hotel: 'accommodationList',
@@ -130,13 +143,7 @@ Component({
 
   data: {
     activeTab: 'attraction',
-    tabs: [
-      { id: 'attraction', label: '景点' },
-      { id: 'hotel', label: '住宿' },
-      { id: 'dining', label: '餐饮' },
-      { id: 'car', label: '包车' },
-      { id: 'photography', label: '跟拍' },
-    ],
+    tabs: ALL_TABS,
     attractionList: [] as any[],
     accommodationList: [] as any[],
     diningList: [] as any[],
@@ -158,10 +165,14 @@ Component({
   observers: {
     show(val: boolean) {
       if (val) {
+        this.applyBlindTabs()
         this.loadTabData()
       } else {
         this.resetKeywordSearch()
       }
+    },
+    blindMode() {
+      this.applyBlindTabs()
     },
   },
 
@@ -175,6 +186,17 @@ Component({
   },
 
   methods: {
+    applyBlindTabs() {
+      const blind = isBlindMode(this.data.blindMode)
+      const tabs = blind ? ALL_TABS.filter((t) => t.id !== 'attraction') : ALL_TABS
+      const patch: Record<string, any> = { tabs }
+      if (blind && this.data.activeTab === 'attraction') {
+        patch.activeTab = 'hotel'
+        patch.currentSearchPlaceholder = getSearchPlaceholder('hotel')
+      }
+      this.setData(patch)
+    },
+
     onTabChange(e: any) {
       const tab = e.currentTarget.dataset.tab as ScheduleTabId
       const keyword = (this.data as any).tabKeywords[tab] || ''

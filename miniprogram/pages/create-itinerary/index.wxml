@@ -48,12 +48,12 @@
         <view class="blind-mode-content">
           <view class="blind-mode-info">
             <view class="blind-mode-title-row">
-              <text class="blind-mode-title">盲游模式</text>
+              <text class="blind-mode-title">旅行模式</text>
               <view class="blind-mode-badge">
                 <text class="blind-mode-badge-text">NEW</text>
               </view>
             </view>
-            <text class="blind-mode-desc">让AI在途中为您揭晓意想不到的惊喜点</text>
+            <text class="blind-mode-desc">{{blindModeDesc}}</text>
           </view>
           <view class="blind-mode-toggle">
             <view

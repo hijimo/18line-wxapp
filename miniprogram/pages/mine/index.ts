@@ -1,5 +1,24 @@
 import { getUserInfo } from '../../services/auth';
+import { getItineraryList } from '../../services/itinerary';
 import { TOKEN_KEY } from '../../utils/request';
+
+// 与 journeys 页保持一致：按日期判断待开始/进行中
+function computePhase(startDate?: string, endDate?: string, days?: number) {
+  const matched = (startDate || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!matched) return 'pending';
+  const start = new Date(Number(matched[1]), Number(matched[2]) - 1, Number(matched[3]));
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (start.getTime() > today.getTime()) return 'pending';
+  const endMatched = (endDate || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+  const end = endMatched
+    ? new Date(Number(endMatched[1]), Number(endMatched[2]) - 1, Number(endMatched[3]))
+    : days && days > 0
+      ? new Date(start.getTime() + (days - 1) * 86400000)
+      : null;
+  if (end && end.getTime() < today.getTime()) return 'ended';
+  return 'active';
+}
 
 Page({
   data: {
@@ -9,9 +28,8 @@ Page({
       role: '首席探索官',
     },
     journeyCount: {
-      pending: 3,
-      cancelled: 0,
-      completed: 0,
+      pending: 0,
+      active: 0,
     },
     treasureCount: {
       pending: 2,
@@ -26,6 +44,24 @@ Page({
 
   onShow() {
     this.loadUserInfo();
+    this.loadJourneyCount();
+  },
+
+  async loadJourneyCount() {
+    try {
+      const res = await getItineraryList();
+      const list = res.data || [];
+      let pending = 0;
+      let active = 0;
+      list.forEach((item) => {
+        const phase = computePhase(item.startDate, item.endDate, item.days);
+        if (phase === 'pending') pending += 1;
+        else if (phase === 'active') active += 1;
+      });
+      this.setData({ 'journeyCount.pending': pending, 'journeyCount.active': active });
+    } catch (err) {
+      console.error('Failed to load journey count:', err);
+    }
   },
 
   async loadUserInfo() {

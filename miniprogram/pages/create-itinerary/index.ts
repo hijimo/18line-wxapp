@@ -9,6 +9,12 @@ const AI_PROGRESS_TEXTS = [
   '正在生成专属行程...',
 ];
 
+const BLIND_MODE_DESC: Record<string, string> = {
+  '0': '行程中除第一个景点外，其他都是盲盒，希望能给您带来小惊喜哦',
+  '1': '行程中的每个景点安排都是明确的，支持自主规划哦',
+  '2': '所有的行程安排都是盲盒哦，主打随遇而喜哦',
+};
+
 Page({
   data: {
     provinceCode: '',
@@ -25,6 +31,7 @@ Page({
     preferences: [] as string[],
     preferenceOptions: [] as DictData[],
     blindMode: '1' as string,
+    blindModeDesc: BLIND_MODE_DESC['1'],
     loading: false,
     progressText: '',
     showDatePicker: false,
@@ -99,7 +106,7 @@ Page({
 
   onBlindModeSelect(e: any) {
     const value = e.currentTarget.dataset.value;
-    this.setData({ blindMode: value });
+    this.setData({ blindMode: value, blindModeDesc: BLIND_MODE_DESC[value] || '' });
   },
 
   calculateDays(): number {

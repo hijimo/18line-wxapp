@@ -39,19 +39,22 @@
                 <text class="badge-text">{{journeyCount.pending}}</text>
               </view>
             </view>
-            <text class="grid-label">待完成</text>
+            <text class="grid-label">待开始</text>
           </view>
-          <view class="grid-item" bindtap="goJourneys" data-filter="cancelled">
+          <view class="grid-item" bindtap="goJourneys" data-filter="active">
+            <view class="grid-icon-wrap">
+              <image class="grid-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-trip-completed.svg" mode="aspectFit" />
+              <view wx:if="{{journeyCount.active > 0}}" class="badge">
+                <text class="badge-text">{{journeyCount.active}}</text>
+              </view>
+            </view>
+            <text class="grid-label">进行中</text>
+          </view>
+          <view class="grid-item" bindtap="goJourneys" data-filter="all">
             <view class="grid-icon-wrap">
               <image class="grid-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-trip-cancelled.svg" mode="aspectFit" />
             </view>
-            <text class="grid-label">已取消</text>
-          </view>
-          <view class="grid-item" bindtap="goJourneys" data-filter="completed">
-            <view class="grid-icon-wrap">
-              <image class="grid-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-trip-completed.svg" mode="aspectFit" />
-            </view>
-            <text class="grid-label">已完成</text>
+            <text class="grid-label">全部</text>
           </view>
         </view>
       </view>

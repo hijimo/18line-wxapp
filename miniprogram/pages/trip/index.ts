@@ -10,23 +10,40 @@ interface TripItem {
   distance: string;
   image: string;
   days_detail: { day: number; status: string }[];
+  phase: string;
+  statusLabel: string;
+  statusClass: string;
 }
 
-const STATUS_MAP: Record<string, string> = {
-  '0': 'planning',
-  '1': 'upcoming',
-  '2': 'pending',
-  '3': 'completed',
-  '4': 'cancelled',
+// 与 journeys 页保持一致：按日期判断待开始/进行中
+const PHASE_LABEL: Record<string, { label: string; cls: string }> = {
+  pending: { label: '待开始', cls: 'pending' },
+  active: { label: '进行中', cls: 'active' },
+  ended: { label: '已结束', cls: 'completed' },
 };
+
+function computePhase(startDate?: string, endDate?: string, days?: number) {
+  const matched = (startDate || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!matched) return 'pending';
+  const start = new Date(Number(matched[1]), Number(matched[2]) - 1, Number(matched[3]));
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (start.getTime() > today.getTime()) return 'pending';
+  const endMatched = (endDate || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+  const end = endMatched
+    ? new Date(Number(endMatched[1]), Number(endMatched[2]) - 1, Number(endMatched[3]))
+    : days && days > 0
+      ? new Date(start.getTime() + (days - 1) * 86400000)
+      : null;
+  if (end && end.getTime() < today.getTime()) return 'ended';
+  return 'active';
+}
 
 Page({
   data: {
-    currentTab: 'upcoming',
-    upcomingTrips: [] as TripItem[],
-    pendingTrips: [] as TripItem[],
-    completedTrips: [] as TripItem[],
-    allTrips: [] as (TripItem & { statusType: string })[],
+    currentTab: 'all',
+    trips: [] as TripItem[],
+    allTrips: [] as TripItem[],
   },
 
   onLoad() {
@@ -42,7 +59,8 @@ Page({
       const res = await getItineraryList();
       const list: Itinerary[] = res.data || [];
       const allTrips = list.map((item) => {
-        const statusType = STATUS_MAP[item.status || '0'] || 'planning';
+        const phase = computePhase(item.startDate, item.endDate, item.days);
+        const phaseInfo = PHASE_LABEL[phase];
         return {
           id: item.itineraryId || 0,
           title: item.itineraryName || '未命名旅途',
@@ -55,7 +73,9 @@ Page({
             day: i + 1,
             status: 'upcoming',
           })),
-          statusType,
+          phase,
+          statusLabel: phaseInfo.label,
+          statusClass: phaseInfo.cls,
         };
       });
 
@@ -67,17 +87,17 @@ Page({
   },
 
   applyFilter() {
-    const { allTrips } = this.data;
-    this.setData({
-      upcomingTrips: allTrips.filter((t) => t.statusType === 'upcoming' || t.statusType === 'planning'),
-      pendingTrips: allTrips.filter((t) => t.statusType === 'pending'),
-      completedTrips: allTrips.filter((t) => t.statusType === 'completed'),
-    });
+    const { allTrips, currentTab } = this.data;
+    const trips = currentTab === 'all'
+      ? allTrips
+      : allTrips.filter((t) => t.phase === currentTab);
+    this.setData({ trips });
   },
 
   switchTab(e: any) {
     const tab = e.currentTarget.dataset.tab;
     this.setData({ currentTab: tab });
+    this.applyFilter();
   },
 
   onTripTap(e: any) {

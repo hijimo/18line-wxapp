@@ -1399,11 +1399,20 @@ Page({
       wx.showToast({ title: '坐标不可用', icon: 'none' });
       return;
     }
-    wx.openLocation({
-      latitude,
-      longitude,
-      name: name || '神秘地点',
-      scale: 15,
+    wx.showModal({
+      title: '前往神秘地点',
+      content: '导航仅带你到达大致区域。到达后请返回小程序点击「我已到达」解锁真实坐标。',
+      confirmText: '开始导航',
+      cancelText: '取消',
+      success: (res) => {
+        if (!res.confirm) return;
+        wx.openLocation({
+          latitude,
+          longitude,
+          name: name || '神秘地点',
+          scale: 15,
+        });
+      },
     });
   },
 

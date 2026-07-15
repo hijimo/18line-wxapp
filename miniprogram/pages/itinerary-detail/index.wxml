@@ -180,7 +180,7 @@
           </block>
 
           <!-- 添加按钮 -->
-          <view wx:if="{{!isTemplate && itinerary.blindMode === '1'}}" class="add-spot-btn" bindtap="onAddSpot">
+          <view wx:if="{{!isTemplate}}" class="add-spot-btn" bindtap="onAddSpot">
             <text class="add-spot-icon">+</text>
             <text class="add-spot-text">添加日程项</text>
           </view>
@@ -189,7 +189,7 @@
         <!-- 空状态 -->
         <view wx:elif="{{!loading}}" class="empty-day">
           <text class="empty-day-text">当天暂无安排</text>
-          <view wx:if="{{!isTemplate && itinerary.blindMode === '1'}}" class="add-spot-btn" bindtap="onAddSpot">
+          <view wx:if="{{!isTemplate}}" class="add-spot-btn" bindtap="onAddSpot">
             <text class="add-spot-icon">+</text>
             <text class="add-spot-text">添加日程项</text>
           </view>
