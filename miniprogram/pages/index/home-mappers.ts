@@ -17,7 +17,7 @@ export const DEFAULT_DESTINATION_IMAGE =
   'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/default-destination.svg';
 
 /** 盲游脱敏名 */
-export const MYSTERY_NAME = '神秘景点';
+export const MYSTERY_NAME = '小秘境';
 
 export interface JourneyDayDot {
   day: number;

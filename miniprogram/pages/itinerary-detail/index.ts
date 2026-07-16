@@ -1035,7 +1035,7 @@ Page({
           height: 28,
           anchor: { x: 0.5, y: 1 },
           callout: {
-            content: '神秘地点 0' + blindIndex + '\n到达后揭晓 · 约' + distanceKm + 'km',
+            content: '小秘境 0' + blindIndex + '\n到达后揭晓 · 约' + distanceKm + 'km',
             display: 'ALWAYS',
             fontSize: 11,
             borderRadius: 6,
@@ -1400,7 +1400,7 @@ Page({
       return;
     }
     wx.showModal({
-      title: '前往神秘地点',
+      title: '前往小秘境',
       content: '到达目的地之后，记得回来点击「我已到达」解锁景点。',
       confirmText: '确定',
       cancelText: '取消',
@@ -1409,7 +1409,7 @@ Page({
         wx.openLocation({
           latitude,
           longitude,
-          name: name || '神秘地点',
+          name: name || '小秘境',
           scale: 15,
         });
       },

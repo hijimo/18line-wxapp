@@ -89,7 +89,7 @@
                     <view class="destination-slide">
                       <image class="location-main-img" src="{{oss.ossResize(dest.image, 350, 384)}}" mode="aspectFill" />
                       <view wx:if="{{dest.blurred}}" class="blur-veil">
-                        <text class="blur-veil-text">神秘景点</text>
+                        <text class="blur-veil-text">小秘境</text>
                       </view>
                       <view wx:else class="location-overlay" />
                     </view>

@@ -70,7 +70,7 @@
           <text class="blind-badge-text">下一站</text>
         </view>
         <view class="blind-title">
-          <text class="blind-title-text">神秘体验</text>
+          <text class="blind-title-text">小秘境</text>
         </view>
         <text class="blind-fuzzy-desc" wx:if="{{item.fuzzyDescription || item.attractionBlurb}}">{{item.fuzzyDescription || item.attractionBlurb}}</text>
         <view class="blind-params" wx:if="{{item.classicRatingText || item.classicRating || item.leisureRatingText || item.leisureRating || item.visitDuration || item.durationHint}}">

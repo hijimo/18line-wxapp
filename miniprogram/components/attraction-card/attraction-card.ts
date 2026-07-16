@@ -30,7 +30,7 @@ Component({
       this.triggerEvent('navigate', {
         latitude: this.data.item.latitude,
         longitude: this.data.item.longitude,
-        name: '神秘地点',
+        name: '小秘境',
       })
     },
     onForceUnlockTap() {

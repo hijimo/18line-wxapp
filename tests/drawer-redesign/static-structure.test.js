@@ -220,4 +220,8 @@ test('blind attraction navigation uses real coordinates and reminds users to ret
   assert.doesNotMatch(cardTs, /latitude:\s*this\.data\.item\.fuzzyLatitude/);
   assert.doesNotMatch(cardTs, /longitude:\s*this\.data\.item\.fuzzyLongitude/);
   assert.match(detailTs, /到达目的地之后，记得回来点击「我已到达」解锁景点/);
+  assert.doesNotMatch(cardTs, /神秘地点|神秘体验/);
+  assert.doesNotMatch(detailTs, /神秘地点|神秘体验/);
+  assert.match(cardTs, /name:\s*'小秘境'/);
+  assert.match(detailTs, /前往小秘境/);
 });
