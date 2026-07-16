@@ -204,3 +204,20 @@ test('add schedule drawer has per-tab keyword search and filtered rendering', ()
   assert.match(scss, /\.keyword-search/);
   assert.match(scss, /keyword-search__field/);
 });
+
+test('blind attraction navigation uses real coordinates and reminds users to return for unlock', () => {
+  const cardTs = fs.readFileSync(
+    path.resolve(__dirname, '../../miniprogram/components/attraction-card/attraction-card.ts'),
+    'utf8',
+  );
+  const detailTs = fs.readFileSync(
+    path.resolve(__dirname, '../../miniprogram/pages/itinerary-detail/index.ts'),
+    'utf8',
+  );
+
+  assert.match(cardTs, /latitude:\s*this\.data\.item\.latitude/);
+  assert.match(cardTs, /longitude:\s*this\.data\.item\.longitude/);
+  assert.doesNotMatch(cardTs, /latitude:\s*this\.data\.item\.fuzzyLatitude/);
+  assert.doesNotMatch(cardTs, /longitude:\s*this\.data\.item\.fuzzyLongitude/);
+  assert.match(detailTs, /到达目的地之后，记得回来点击「我已到达」解锁景点/);
+});

@@ -1401,8 +1401,8 @@ Page({
     }
     wx.showModal({
       title: '前往神秘地点',
-      content: '导航仅带你到达大致区域。到达后请返回小程序点击「我已到达」解锁真实坐标。',
-      confirmText: '开始导航',
+      content: '到达目的地之后，记得回来点击「我已到达」解锁景点。',
+      confirmText: '确定',
       cancelText: '取消',
       success: (res) => {
         if (!res.confirm) return;

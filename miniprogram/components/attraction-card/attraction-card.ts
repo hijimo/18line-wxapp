@@ -28,8 +28,8 @@ Component({
     },
     onNavigateTap() {
       this.triggerEvent('navigate', {
-        latitude: this.data.item.fuzzyLatitude,
-        longitude: this.data.item.fuzzyLongitude,
+        latitude: this.data.item.latitude,
+        longitude: this.data.item.longitude,
         name: '神秘地点',
       })
     },
