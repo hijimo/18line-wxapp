@@ -1,84 +1,84 @@
+import { getAccommodationList } from '../../services/accommodation'
+import { getDiningList } from '../../services/dining'
+import { getCarList } from '../../services/car'
+import { getPhotographyList } from '../../services/photography'
+import type { AccommodationListParams } from '../../types/accommodation'
+import type { DiningListParams } from '../../types/dining'
+import type { CarListParams } from '../../types/car'
+import type { PhotographyListParams } from '../../services/photography'
+
+type ServiceType = 'hotel' | 'dining' | 'car' | 'photography'
+
+const TABS: { id: ServiceType; label: string }[] = [
+  { id: 'hotel', label: '住宿' },
+  { id: 'dining', label: '餐饮' },
+  { id: 'car', label: '包车' },
+  { id: 'photography', label: '跟拍' },
+]
+
+const REGION_PARAMS = {
+  province: '330000',
+  city: '331100',
+  district: '331124',
+}
+
 Page({
   data: {
-    currentTab: 'nearby',
-    currentLocation: '杭州市西湖区',
-    nearbyTreasures: [
-      {
-        id: 'hidden-well',
-        name: '隐泉古井',
-        hint: '在灵隐寺后山的竹林深处，有一口千年古井...',
-        rarity: 'rare',
-        rarityLabel: '稀有',
-        distance: '1.2km',
-      },
-      {
-        id: 'stone-carving',
-        name: '飞来峰石刻',
-        hint: '第三层石窟中隐藏着一处不为人知的宋代石刻',
-        rarity: 'epic',
-        rarityLabel: '史诗',
-        distance: '2.4km',
-      },
-      {
-        id: 'tea-garden',
-        name: '秘境茶园',
-        hint: '龙井村最高处的一片私人茶园，只有本地人知道',
-        rarity: 'common',
-        rarityLabel: '普通',
-        distance: '3.8km',
-      },
-      {
-        id: 'ancient-bridge',
-        name: '断桥残雪秘境',
-        hint: '断桥下方有一条隐秘的石阶通往湖心小岛',
-        rarity: 'rare',
-        rarityLabel: '稀有',
-        distance: '4.1km',
-      },
-      {
-        id: 'bamboo-path',
-        name: '云栖竹径暗道',
-        hint: '竹林尽头的石壁后，藏着一条通往山顶的古道',
-        rarity: 'legendary',
-        rarityLabel: '传说',
-        distance: '5.6km',
-      },
-    ],
-    myTreasures: [
-      {
-        id: 'hidden-well',
-        name: '隐泉古井',
-        hint: '在灵隐寺后山的竹林深处，有一口千年古井...',
-        rarity: 'rare',
-        rarityLabel: '稀有',
-      },
-      {
-        id: 'bamboo-path',
-        name: '云栖竹径暗道',
-        hint: '竹林尽头的石壁后，藏着一条通往山顶的古道',
-        rarity: 'legendary',
-        rarityLabel: '传说',
-      },
-    ],
-    foundTreasures: [] as any[],
+    tabs: TABS,
+    activeType: 'hotel' as ServiceType,
+    list: [] as any[],
+    loading: false,
+    showIntroType: '' as ServiceType | '',
+    introData: {} as any,
   },
 
   onLoad() {
-    // no-op
+    this.loadList('hotel')
   },
 
-  switchTab(e: any) {
-    const tab = e.currentTarget.dataset.tab;
-    this.setData({ currentTab: tab });
+  onTabTap(e: any) {
+    const type = e.currentTarget.dataset.type as ServiceType
+    if (type === this.data.activeType) return
+    this.setData({ activeType: type, list: [] })
+    this.loadList(type)
   },
 
-  onTreasureTap(e: any) {
-    const id = e.currentTarget.dataset.id;
-    wx.showToast({ title: '宝藏详情开发中', icon: 'none' });
-    console.log('Treasure tap:', id);
+  async loadList(type: ServiceType) {
+    this.setData({ loading: true })
+    try {
+      const params = { ...REGION_PARAMS, pageNum: 1, pageSize: 50 }
+      let res: any
+      switch (type) {
+        case 'hotel':
+          res = await getAccommodationList(params as AccommodationListParams)
+          break
+        case 'dining':
+          res = await getDiningList(params as DiningListParams)
+          break
+        case 'car':
+          res = await getCarList(params as CarListParams)
+          break
+        case 'photography':
+          res = await getPhotographyList(params as PhotographyListParams)
+          break
+      }
+      this.setData({ list: res?.rows || [] })
+    } catch (err) {
+      console.error('[market] loadList error:', err)
+    } finally {
+      this.setData({ loading: false })
+    }
   },
 
-  onBellTap() {
-    wx.showToast({ title: '暂无通知', icon: 'none' });
+  onItemTap(e: any) {
+    const item = e.currentTarget.dataset.item
+    this.setData({
+      showIntroType: this.data.activeType,
+      introData: item,
+    })
   },
-});
+
+  onIntroClose() {
+    this.setData({ showIntroType: '', introData: {} })
+  },
+})

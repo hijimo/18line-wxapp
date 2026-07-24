@@ -185,3 +185,33 @@
     </view>
   </view>
 </base-drawer>
+
+<!-- Intro Drawers: detail before adding -->
+<hotel-intro-drawer
+  wx:if="{{introType==='hotel'}}"
+  show="{{introType==='hotel'}}"
+  data="{{introItem}}"
+  bind:primarytap="onIntroAdd"
+  bind:close="onIntroClose"
+/>
+<dining-intro-drawer
+  wx:if="{{introType==='dining'}}"
+  show="{{introType==='dining'}}"
+  data="{{introItem}}"
+  bind:primarytap="onIntroAdd"
+  bind:close="onIntroClose"
+/>
+<car-intro-drawer
+  wx:if="{{introType==='car'}}"
+  show="{{introType==='car'}}"
+  data="{{introItem}}"
+  bind:primarytap="onIntroAdd"
+  bind:close="onIntroClose"
+/>
+<photography-intro-drawer
+  wx:if="{{introType==='photography'}}"
+  show="{{introType==='photography'}}"
+  data="{{introItem}}"
+  bind:primarytap="onIntroAdd"
+  bind:close="onIntroClose"
+/>

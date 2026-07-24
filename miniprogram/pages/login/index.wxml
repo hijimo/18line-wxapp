@@ -36,9 +36,9 @@
         </view>
         <view class="compliance-text">
           <text>我已阅读并同意 </text>
-          <text class="link-text">用户协议</text>
+          <text class="link-text" bindtap="onShowUserAgreement">用户协议</text>
           <text> 和 </text>
-          <text class="link-text">隐私政策</text>
+          <text class="link-text" bindtap="onShowPrivacyPolicy">隐私政策</text>
           <text>，授权 18线使用您的账号公开信息。</text>
         </view>
       </view>

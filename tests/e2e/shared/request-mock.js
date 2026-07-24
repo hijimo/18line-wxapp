@@ -197,6 +197,48 @@ function e2eRequestMock(options) {
     return ajax([{ dishId: 501, dishName: '土窑鸡', attachments: [{ url: IMG }] }]);
   }
 
+  if (url.indexOf('/wx/accommodation/list') >= 0) {
+    return table([
+      { accommodationId: 201, accommodationName: '云端隐庐', accommodationDesc: '松阳古村精品民宿', accommodationType: '精品民宿', priceMin: 380, priceMax: 680, attachments: [{ url: IMG }] },
+      { accommodationId: 202, accommodationName: '松阳茶舍', accommodationDesc: '茶园环绕的静谧住所', accommodationType: '特色民宿', priceMin: 280, priceMax: 480, attachments: [{ url: IMG }] },
+    ]);
+  }
+
+  if (url.indexOf('/wx/accommodation/updateDay') >= 0 || url.indexOf('/wx/itinerary/day/accommodation') >= 0) {
+    return ajax(true);
+  }
+
+  if (url.indexOf('/wx/dining/list') >= 0) {
+    return table([
+      { diningId: 301, diningName: '山野食集', diningDesc: '松阳本地农家菜', avgCost: 68, attachments: [{ url: IMG }] },
+      { diningId: 302, diningName: '云上小馆', diningDesc: '古村落家常菜', avgCost: 55, attachments: [{ url: IMG }] },
+    ]);
+  }
+
+  if (url.indexOf('/wx/dining/updateDay') >= 0 || url.indexOf('/wx/itinerary/day/dining') >= 0) {
+    return ajax(true);
+  }
+
+  if (url.indexOf('/wx/car/list') >= 0) {
+    return table([
+      { carId: 401, nickname: '张师傅', carModel: '别克GL8', seatCount: 7, drivingYears: 8, price: 500, attachments: [{ url: IMG }] },
+    ]);
+  }
+
+  if (url.indexOf('/wx/car/add') >= 0 || url.indexOf('/wx/itinerary/day/car') >= 0) {
+    return ajax(true);
+  }
+
+  if (url.indexOf('/wx/photography/list') >= 0) {
+    return table([
+      { photographyId: 501, nickname: '小林摄影', introduction: '松阳在地旅拍', equipment: 'Canon R5', price: 800, attachments: [{ url: IMG }] },
+    ]);
+  }
+
+  if (url.indexOf('/wx/photography/add') >= 0 || url.indexOf('/wx/itinerary/day/photography') >= 0) {
+    return ajax(true);
+  }
+
   if (url.indexOf('/wx/localSpecialty/list') >= 0 || url.indexOf('/wx/weather/forecast') >= 0) {
     return ajax([]);
   }

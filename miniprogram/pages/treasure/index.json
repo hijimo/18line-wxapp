@@ -1,3 +1,8 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "hotel-intro-drawer": "../../components/hotel-intro-drawer/hotel-intro-drawer",
+    "car-intro-drawer": "../../components/car-intro-drawer/car-intro-drawer",
+    "photography-intro-drawer": "../../components/photography-intro-drawer/photography-intro-drawer",
+    "dining-intro-drawer": "../../components/dining-intro-drawer/dining-intro-drawer"
+  }
 }

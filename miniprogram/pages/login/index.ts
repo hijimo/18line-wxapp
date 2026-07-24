@@ -26,6 +26,24 @@ Page({
     this.setData({ agreed: !this.data.agreed });
   },
 
+  onShowUserAgreement() {
+    wx.showModal({
+      title: '用户协议',
+      content: '欢迎使用18线旅行服务。本协议约定您与18线之间关于使用本平台服务的权利义务。使用本服务即表示您同意遵守本协议条款。我们将为您提供行程规划、本地服务推荐等功能，您应合法合规使用本平台服务。',
+      showCancel: false,
+      confirmText: '我知道了',
+    });
+  },
+
+  onShowPrivacyPolicy() {
+    wx.showModal({
+      title: '隐私政策',
+      content: '18线重视您的隐私保护。我们会收集您的微信授权信息（头像、昵称）、位置信息用于行程规划和本地服务推荐。您的信息将被加密存储，不会未经授权提供给第三方。您可随时在设置中管理授权或申请删除个人数据。',
+      showCancel: false,
+      confirmText: '我知道了',
+    });
+  },
+
   async handleLogin() {
     if (this.data.loading) return;
 

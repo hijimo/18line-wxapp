@@ -195,7 +195,8 @@
           </view>
         </view>
 
-        <!-- 地方特色菜 -->
+        <!-- TODO: 临时下线地方特色菜区块——图片字段 attachments[0].fileUrl 与 add-schedule-drawer 用的 .url 不一致/待核对，修复后恢复 -->
+        <!--
         <view wx:if="{{localSpecialtyList.length > 0}}" class="specialty-section">
           <view class="specialty-header">
             <view class="specialty-heading">
@@ -226,6 +227,7 @@
             </view>
           </view>
         </view>
+        -->
       </scroll-view>
 
       <!-- 模板模式底部按钮 -->

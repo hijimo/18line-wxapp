@@ -133,6 +133,20 @@ page {
   padding: 36rpx 32rpx 32rpx 96rpx;
 }
 
+/* Region Locked (read-only destination) */
+.region-locked {
+  pointer-events: none;
+}
+
+.region-tip {
+  font-size: 24rpx;
+  font-weight: 400;
+  color: rgba(114, 121, 114, 0.8);
+  line-height: 32rpx;
+  margin-top: 12rpx;
+  padding-left: 8rpx;
+}
+
 .search-icon {
   position: absolute;
   left: 32rpx;

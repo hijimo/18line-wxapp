@@ -39,6 +39,14 @@ page {
   height: 40rpx;
 }
 
+.top-bar-arrow {
+  color: #163422;
+  font-size: 40rpx;
+  font-weight: 500;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
 .top-bar-brand {
   font-size: 48rpx;
   color: #163422;
@@ -67,20 +75,6 @@ page {
   font-size: 28rpx;
   color: rgba(66, 72, 67, 0.6);
   margin-left: 16rpx;
-}
-
-.top-bar-bell {
-  width: 80rpx;
-  height: 80rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.top-bar-bell-icon {
-  width: 32rpx;
-  height: 40rpx;
 }
 
 .scrollarea {

@@ -15,20 +15,17 @@
         </view>
       </view>
 
-      <!-- Destination -->
+      <!-- Destination (locked to 松阳县) -->
       <view class="section">
         <view class="section-header">
           <text class="section-title">要去哪里？</text>
           <text class="section-label">DESTINATION</text>
         </view>
-        <picker mode="region" bindchange="onRegionChange" value="{{regionValue}}">
-          <view class="search-input">
-            <image class="search-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-search.svg" mode="aspectFit" />
-            <text class="search-placeholder {{provinceName ? 'search-value' : ''}}">
-              {{provinceName ? provinceName + ' ' + cityName + (districtName ? ' ' + districtName : '') : '搜索目的地、城市或景点'}}
-            </text>
-          </view>
-        </picker>
+        <view class="search-input region-locked">
+          <image class="search-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-search.svg" mode="aspectFit" />
+          <text class="search-placeholder search-value">浙江省 丽水市 松阳县</text>
+        </view>
+        <text class="region-tip">目前只上线松阳县</text>
       </view>
 
       <!-- Date -->

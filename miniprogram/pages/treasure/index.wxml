@@ -1,117 +1,170 @@
 <view class="page-container">
   <!-- Header -->
-  <navigation-bar title="寻宝" back="{{false}}" color="black" background="#F9FAF4"></navigation-bar>
+  <navigation-bar title="集市" back="{{false}}" color="black" background="#F9FAF4"></navigation-bar>
 
-  <!-- Tabs -->
+  <!-- Category Tabs -->
   <view class="tabs">
-    <view class="tab {{currentTab === 'nearby' ? 'tab--active' : ''}}" bindtap="switchTab" data-tab="nearby">
-      <text class="tab-text">附近宝藏</text>
-    </view>
-    <view class="tab {{currentTab === 'my' ? 'tab--active' : ''}}" bindtap="switchTab" data-tab="my">
-      <text class="tab-text">我的收藏</text>
-      <view wx:if="{{myTreasures.length > 0}}" class="tab-badge">
-        <text class="tab-badge-text">{{myTreasures.length}}</text>
-      </view>
-    </view>
-    <view class="tab {{currentTab === 'found' ? 'tab--active' : ''}}" bindtap="switchTab" data-tab="found">
-      <text class="tab-text">已发现</text>
+    <view
+      wx:for="{{tabs}}"
+      wx:key="id"
+      class="tab {{activeType === item.id ? 'tab--active' : ''}}"
+      data-type="{{item.id}}"
+      bindtap="onTabTap"
+    >
+      <text class="tab-text">{{item.label}}</text>
     </view>
   </view>
 
-  <!-- Content -->
+  <!-- List Content -->
   <scroll-view class="scrollarea" scroll-y type="list">
-    <view class="treasure-content">
-      <!-- Nearby Treasures -->
-      <block wx:if="{{currentTab === 'nearby'}}">
-        <!-- Location hint -->
-        <view class="location-hint">
-          <image class="location-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-distance.svg" mode="aspectFit" />
-          <text class="location-text">当前位置：{{currentLocation}}</text>
-        </view>
+    <!-- Loading -->
+    <view wx:if="{{loading}}" class="list-loading">
+      <text class="loading-text">加载中...</text>
+    </view>
 
-        <!-- Treasure Cards -->
-        <view class="treasure-list">
-          <view class="treasure-card" wx:for="{{nearbyTreasures}}" wx:key="id" bindtap="onTreasureTap" data-id="{{item.id}}">
-            <view class="treasure-card-left">
-              <view class="treasure-icon-wrap treasure-icon--{{item.rarity}}">
-                <image class="treasure-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-star.svg" mode="aspectFit" />
-              </view>
-            </view>
-            <view class="treasure-card-center">
-              <text class="treasure-name">{{item.name}}</text>
-              <text class="treasure-hint">{{item.hint}}</text>
-              <view class="treasure-meta">
-                <view class="meta-tag meta-tag--{{item.rarity}}">
-                  <text class="meta-tag-text">{{item.rarityLabel}}</text>
-                </view>
-                <view class="meta-distance">
-                  <image class="meta-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-distance.svg" mode="aspectFit" />
-                  <text class="meta-text">{{item.distance}}</text>
-                </view>
-              </view>
-            </view>
-            <view class="treasure-card-right">
-              <image class="arrow-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+    <!-- Service List -->
+    <view wx:if="{{!loading}}" class="service-list">
+      <!-- Hotel -->
+      <block wx:if="{{activeType === 'hotel'}}">
+        <view
+          wx:for="{{list}}"
+          wx:key="accommodationId"
+          class="service-item"
+          data-item="{{item}}"
+          bindtap="onItemTap"
+        >
+          <image
+            wx:if="{{item.attachments && item.attachments.length > 0}}"
+            class="item-image"
+            src="{{item.attachments[0].url}}"
+            mode="aspectFill"
+            lazy-load
+          />
+          <view class="item-info">
+            <text class="item-name">{{item.accommodationName}}</text>
+            <text class="item-desc">{{item.accommodationDesc}}</text>
+            <view class="item-meta">
+              <text wx:if="{{item.accommodationType}}" class="meta-tag">{{item.accommodationType}}</text>
+              <text wx:if="{{item.priceMin}}" class="meta-price">¥{{item.priceMin}}~{{item.priceMax}}</text>
             </view>
           </view>
         </view>
       </block>
 
-      <!-- My Treasures -->
-      <block wx:if="{{currentTab === 'my'}}">
-        <block wx:if="{{myTreasures.length > 0}}">
-          <view class="treasure-list">
-            <view class="treasure-card" wx:for="{{myTreasures}}" wx:key="id" bindtap="onTreasureTap" data-id="{{item.id}}">
-              <view class="treasure-card-left">
-                <view class="treasure-icon-wrap treasure-icon--{{item.rarity}}">
-                  <image class="treasure-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-star.svg" mode="aspectFit" />
-                </view>
-              </view>
-              <view class="treasure-card-center">
-                <text class="treasure-name">{{item.name}}</text>
-                <text class="treasure-hint">{{item.hint}}</text>
-                <view class="treasure-meta">
-                  <view class="meta-tag meta-tag--{{item.rarity}}">
-                    <text class="meta-tag-text">{{item.rarityLabel}}</text>
-                  </view>
-                </view>
-              </view>
-              <view class="treasure-card-right">
-                <image class="arrow-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-chevron-right.svg" mode="aspectFit" />
-              </view>
+      <!-- Dining -->
+      <block wx:if="{{activeType === 'dining'}}">
+        <view
+          wx:for="{{list}}"
+          wx:key="diningId"
+          class="service-item"
+          data-item="{{item}}"
+          bindtap="onItemTap"
+        >
+          <image
+            wx:if="{{item.attachments && item.attachments.length > 0}}"
+            class="item-image"
+            src="{{item.attachments[0].url}}"
+            mode="aspectFill"
+            lazy-load
+          />
+          <view class="item-info">
+            <text class="item-name">{{item.diningName}}</text>
+            <text class="item-desc">{{item.diningDesc}}</text>
+            <view class="item-meta">
+              <text wx:if="{{item.avgCost}}" class="meta-price">人均 ¥{{item.avgCost}}</text>
             </view>
           </view>
-        </block>
-        <view wx:else class="empty-state">
-          <image class="empty-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-star.svg" mode="aspectFit" />
-          <text class="empty-title">暂无收藏的宝藏</text>
-          <text class="empty-desc">发现感兴趣的宝藏后可以收藏</text>
         </view>
       </block>
 
-      <!-- Found Treasures -->
-      <block wx:if="{{currentTab === 'found'}}">
-        <block wx:if="{{foundTreasures.length > 0}}">
-          <view class="treasure-list">
-            <view class="treasure-card treasure-card--found" wx:for="{{foundTreasures}}" wx:key="id">
-              <view class="treasure-card-left">
-                <view class="treasure-icon-wrap treasure-icon--found">
-                  <image class="treasure-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-check.svg" mode="aspectFit" />
-                </view>
-              </view>
-              <view class="treasure-card-center">
-                <text class="treasure-name">{{item.name}}</text>
-                <text class="treasure-hint">{{item.foundDate}}</text>
-              </view>
+      <!-- Car -->
+      <block wx:if="{{activeType === 'car'}}">
+        <view
+          wx:for="{{list}}"
+          wx:key="carId"
+          class="service-item"
+          data-item="{{item}}"
+          bindtap="onItemTap"
+        >
+          <image
+            wx:if="{{item.attachments && item.attachments.length > 0}}"
+            class="item-image"
+            src="{{item.attachments[0].url}}"
+            mode="aspectFill"
+            lazy-load
+          />
+          <view class="item-info">
+            <text class="item-name">{{item.nickname}}</text>
+            <text class="item-desc">{{item.carModel}} · {{item.seatCount}}座 · {{item.drivingYears}}年驾龄</text>
+            <view class="item-meta">
+              <text wx:if="{{item.price}}" class="meta-price">¥{{item.price}}/天</text>
             </view>
           </view>
-        </block>
-        <view wx:else class="empty-state">
-          <image class="empty-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-check.svg" mode="aspectFit" />
-          <text class="empty-title">暂无已发现的宝藏</text>
-          <text class="empty-desc">去附近探索，发现隐藏的宝藏吧</text>
         </view>
       </block>
+
+      <!-- Photography -->
+      <block wx:if="{{activeType === 'photography'}}">
+        <view
+          wx:for="{{list}}"
+          wx:key="photographyId"
+          class="service-item"
+          data-item="{{item}}"
+          bindtap="onItemTap"
+        >
+          <image
+            wx:if="{{item.attachments && item.attachments.length > 0}}"
+            class="item-image"
+            src="{{item.attachments[0].url}}"
+            mode="aspectFill"
+            lazy-load
+          />
+          <view class="item-info">
+            <text class="item-name">{{item.nickname}}</text>
+            <text class="item-desc">{{item.introduction}}</text>
+            <view class="item-meta">
+              <text wx:if="{{item.equipment}}" class="meta-tag">{{item.equipment}}</text>
+              <text wx:if="{{item.price}}" class="meta-price">¥{{item.price}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <!-- Empty State -->
+      <view wx:if="{{!loading && list.length === 0}}" class="empty-state">
+        <text class="empty-title">暂无数据</text>
+        <text class="empty-desc">该类别暂无服务，请稍后再试</text>
+      </view>
     </view>
   </scroll-view>
+
+  <!-- Intro Drawers -->
+  <hotel-intro-drawer
+    wx:if="{{showIntroType === 'hotel'}}"
+    show="{{true}}"
+    data="{{introData}}"
+    source="schedule"
+    bind:close="onIntroClose"
+  />
+  <car-intro-drawer
+    wx:if="{{showIntroType === 'car'}}"
+    show="{{true}}"
+    data="{{introData}}"
+    source="schedule"
+    bind:close="onIntroClose"
+  />
+  <photography-intro-drawer
+    wx:if="{{showIntroType === 'photography'}}"
+    show="{{true}}"
+    data="{{introData}}"
+    source="schedule"
+    bind:close="onIntroClose"
+  />
+  <dining-intro-drawer
+    wx:if="{{showIntroType === 'dining'}}"
+    show="{{true}}"
+    data="{{introData}}"
+    source="schedule"
+    bind:close="onIntroClose"
+  />
 </view>

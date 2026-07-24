@@ -16,6 +16,10 @@ async function installE2eMocks(miniProgram) {
     try {
       globalThis.__e2eRequests = [];
       globalThis.__e2eToasts = [];
+      globalThis.__e2eModals = [];
+      globalThis.__e2eActionSheets = [];
+      globalThis.__e2eModalConfirm = true;
+      globalThis.__e2eActionSheetIndex = 0;
       wx.clearStorageSync();
     } catch (e) {}
   });
@@ -37,10 +41,32 @@ async function installE2eMocks(miniProgram) {
   await miniProgram.mockWxMethod('setKeepScreenOn', function (options) {
     if (options && typeof options.success === 'function') options.success({});
   });
+  await miniProgram.mockWxMethod('showModal', function (options) {
+    try {
+      globalThis.__e2eModals = globalThis.__e2eModals || [];
+      globalThis.__e2eModals.push(options || {});
+    } catch (e) {}
+    // Default: simulate user confirming (can be overridden per-test)
+    var confirmResult = globalThis.__e2eModalConfirm !== false;
+    if (options && typeof options.success === 'function') {
+      options.success({ confirm: confirmResult, cancel: !confirmResult });
+    }
+  });
+  await miniProgram.mockWxMethod('showActionSheet', function (options) {
+    try {
+      globalThis.__e2eActionSheets = globalThis.__e2eActionSheets || [];
+      globalThis.__e2eActionSheets.push(options || {});
+    } catch (e) {}
+    // Default: select first item (tapIndex: 0)
+    var tapIdx = globalThis.__e2eActionSheetIndex !== undefined ? globalThis.__e2eActionSheetIndex : 0;
+    if (options && typeof options.success === 'function') {
+      options.success({ tapIndex: tapIdx });
+    }
+  });
 }
 
 async function restoreE2eMocks(miniProgram) {
-  for (const method of ['setKeepScreenOn', 'hideLoading', 'showLoading', 'showToast', 'request', 'login']) {
+  for (const method of ['showActionSheet', 'showModal', 'setKeepScreenOn', 'hideLoading', 'showLoading', 'showToast', 'request', 'login']) {
     try {
       await miniProgram.restoreWxMethod(method);
     } catch (e) {}
@@ -119,11 +145,33 @@ async function getRecordedToasts(miniProgram) {
   return miniProgram.evaluate(() => globalThis.__e2eToasts || []);
 }
 
+async function getRecordedModals(miniProgram) {
+  return miniProgram.evaluate(() => globalThis.__e2eModals || []);
+}
+
+async function getRecordedActionSheets(miniProgram) {
+  return miniProgram.evaluate(() => globalThis.__e2eActionSheets || []);
+}
+
 async function resetRecordedEvents(miniProgram) {
   await miniProgram.evaluate(() => {
     globalThis.__e2eRequests = [];
     globalThis.__e2eToasts = [];
+    globalThis.__e2eModals = [];
+    globalThis.__e2eActionSheets = [];
   });
+}
+
+async function setModalConfirm(miniProgram, confirm) {
+  await miniProgram.evaluate((val) => {
+    globalThis.__e2eModalConfirm = val;
+  }, confirm);
+}
+
+async function setActionSheetIndex(miniProgram, index) {
+  await miniProgram.evaluate((val) => {
+    globalThis.__e2eActionSheetIndex = val;
+  }, index);
 }
 
 module.exports = {
@@ -132,6 +180,8 @@ module.exports = {
   TIMEOUTS,
   TEST_TOKEN,
   ensureAuthenticated,
+  getRecordedActionSheets,
+  getRecordedModals,
   getRecordedRequests,
   getRecordedToasts,
   installE2eMocks,
@@ -140,4 +190,6 @@ module.exports = {
   resetRecordedEvents,
   restoreE2eMocks,
   runLoginSetup,
+  setActionSheetIndex,
+  setModalConfirm,
 };

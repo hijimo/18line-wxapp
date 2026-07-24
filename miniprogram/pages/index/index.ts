@@ -5,11 +5,16 @@ import {
   updateDayAttractions,
   updateDayDining,
 } from '../../services/itinerary';
-import { getAttractionList, getAttractionDetail } from '../../services/attraction';
+import {
+  getAttractionList,
+  getAttractionDetail,
+} from '../../services/attraction';
 import { getCheckinList, getCheckinDetail } from '../../services/checkin';
 import { getFeaturedDishes, getDishesByDining } from '../../services/dish';
 import { getDiningDetail } from '../../services/dining';
 import { getDistrictCache, setDistrictCache } from '../../utils/district-cache';
+import { ensureLogin, ensurePrivacyAgreed } from '../../utils/ensure-login';
+import { getToken } from '../../utils/request';
 import {
   mapJourneys,
   mapSecretAttractions,
@@ -30,7 +35,8 @@ let searchTimer: any = null;
 Component({
   data: {
     userInfo: {
-      avatarUrl: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/user-profile.png',
+      avatarUrl:
+        'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/user-profile.png',
       nickName: '',
     },
     hasJourneys: true,
@@ -65,7 +71,20 @@ Component({
   },
   pageLifetimes: {
     show() {
-      (this as any).loadJourneys();
+      // 进入首页先判断本地是否已登录（仅判断 localStorage 是否有 token）。
+      // 已登录才调用「我的行程」接口；未登录则只展示首页当地信息，
+      // 避免一进入程序就触发登录，让用户先浏览首页再决定是否登录使用。
+      if (getToken()) {
+        (this as any).loadJourneys();
+      } else {
+        this.setData({
+          hasJourneys: false,
+          journeys: [],
+          currentDistrict: DEFAULT_DISTRICT,
+          currentDistrictName: DEFAULT_DISTRICT_NAME,
+        });
+        (this as any).loadLocal(DEFAULT_DISTRICT);
+      }
     },
   },
   methods: {
@@ -96,7 +115,10 @@ Component({
         }
       } catch (err) {
         console.error('Failed to load journeys:', err);
-        this.setData({ currentDistrict: DEFAULT_DISTRICT, currentDistrictName: DEFAULT_DISTRICT_NAME });
+        this.setData({
+          currentDistrict: DEFAULT_DISTRICT,
+          currentDistrictName: DEFAULT_DISTRICT_NAME,
+        });
         (this as any).loadLocal(DEFAULT_DISTRICT);
       }
     },
@@ -157,7 +179,12 @@ Component({
       }
       try {
         // 探索秘境只展示非盲游景点（接口层用 blindStatus='0' 过滤）
-        const res = await getAttractionList({ district, minClassicRating: 4, blindStatus: '0', pageSize: 5 });
+        const res = await getAttractionList({
+          district,
+          minClassicRating: 4,
+          blindStatus: '0',
+          pageSize: 5,
+        });
         const cards = mapSecretAttractions(res.rows || []);
         setDistrictCache('secret', district, cards);
         if (this.data.currentDistrict !== district) return; // 已切换当地，丢弃过期响应
@@ -175,7 +202,12 @@ Component({
       }
       try {
         // 隐匿之藏同样过滤盲游打卡点
-        const res = await getCheckinList({ district, minClassicRating: 4, blindStatus: '0', pageSize: 5 });
+        const res = await getCheckinList({
+          district,
+          minClassicRating: 4,
+          blindStatus: '0',
+          pageSize: 5,
+        });
         const items = mapHiddenCheckins(res.rows || []);
         setDistrictCache('hidden', district, items);
         if (this.data.currentDistrict !== district) return; // 已切换当地，丢弃过期响应
@@ -204,7 +236,11 @@ Component({
 
     /* -------------------- 搜索 -------------------- */
     async onSearchOpen() {
-      this.setData({ searchActive: true, searchKeyword: '', searchHint: '最新上线' });
+      this.setData({
+        searchActive: true,
+        searchKeyword: '',
+        searchHint: '最新上线',
+      });
       await (this as any).loadLatestLines();
     },
 
@@ -247,7 +283,11 @@ Component({
         clearTimeout(searchTimer);
         searchTimer = null;
       }
-      this.setData({ searchActive: false, searchKeyword: '', searchResults: [] });
+      this.setData({
+        searchActive: false,
+        searchKeyword: '',
+        searchResults: [],
+      });
     },
 
     onSearchResultTap(e: any) {
@@ -271,7 +311,11 @@ Component({
         this.setData({
           showIntroDrawer: 'attraction',
           introData: res.data,
-          introContext: { type: 'attraction', attractionId: card.attractionId, name: card.title },
+          introContext: {
+            type: 'attraction',
+            attractionId: card.attractionId,
+            name: card.title,
+          },
         });
       } catch (err) {
         console.error('Failed to load attraction detail:', err);
@@ -311,7 +355,11 @@ Component({
           showIntroDrawer: 'attraction',
           introData,
           // 打卡点无独立日程槽位，添加时落到其所属景点
-          introContext: { type: 'checkin', attractionId: c.attractionId, name: item.title },
+          introContext: {
+            type: 'checkin',
+            attractionId: c.attractionId,
+            name: item.title,
+          },
         });
       } catch (err) {
         console.error('Failed to load checkin detail:', err);
@@ -329,7 +377,11 @@ Component({
           showIntroDrawer: 'dining',
           introData: d,
           // 地道风物添加行程 = 把该餐厅加入某天某餐
-          introContext: { type: 'dish', diningId: item.diningId, name: d.diningName || item.name },
+          introContext: {
+            type: 'dish',
+            diningId: item.diningId,
+            name: d.diningName || item.name,
+          },
         });
       } catch (err) {
         console.error('Failed to load dining detail:', err);
@@ -365,8 +417,14 @@ Component({
           content: '您还没有寻觅之旅，先去创建一个吧',
           confirmText: '去创建',
           cancelText: '取消',
-          success: (r) => {
-            if (r.confirm) wx.navigateTo({ url: '/pages/create-itinerary/index' });
+          success: async (r) => {
+            if (r.confirm) {
+              const ok = await ensurePrivacyAgreed();
+              if (!ok) return;
+              const logged = await ensureLogin();
+              if (!logged) return;
+              wx.navigateTo({ url: '/pages/create-itinerary/index' });
+            }
           },
         });
         return;
@@ -398,7 +456,9 @@ Component({
 
     onPickItinerary(e: any) {
       const id = e.currentTarget.dataset.id;
-      const it = (this.data.addFlow.itineraries || []).find((x: any) => String(x.id) === String(id));
+      const it = (this.data.addFlow.itineraries || []).find(
+        (x: any) => String(x.id) === String(id),
+      );
       if (!it) return;
       const days = Array.from({ length: it.days || 0 }, (_, i) => ({
         dayNumber: i + 1,
@@ -416,7 +476,11 @@ Component({
       const dayNumber = Number(e.currentTarget.dataset.day);
       const ctx = this.data.introContext || {};
       if (ctx.type === 'dish') {
-        this.setData({ 'addFlow.chosenDay': dayNumber, 'addFlow.step': 'meal', 'addFlow.title': '选择餐次' });
+        this.setData({
+          'addFlow.chosenDay': dayNumber,
+          'addFlow.step': 'meal',
+          'addFlow.title': '选择餐次',
+        });
         return;
       }
       (this as any).performAdd(dayNumber, null);
@@ -434,7 +498,12 @@ Component({
       wx.showLoading({ title: '添加中', mask: true });
       try {
         if (ctx.type === 'attraction') {
-          await updateDayAttractions({ itineraryId, dayNumber, attractionIds: String(ctx.attractionId), replace: false });
+          await updateDayAttractions({
+            itineraryId,
+            dayNumber,
+            attractionIds: String(ctx.attractionId),
+            replace: false,
+          });
         } else if (ctx.type === 'checkin') {
           if (!ctx.attractionId) {
             wx.hideLoading();
@@ -442,7 +511,12 @@ Component({
             this.setData({ 'addFlow.visible': false });
             return;
           }
-          await updateDayAttractions({ itineraryId, dayNumber, attractionIds: String(ctx.attractionId), replace: false });
+          await updateDayAttractions({
+            itineraryId,
+            dayNumber,
+            attractionIds: String(ctx.attractionId),
+            replace: false,
+          });
         } else if (ctx.type === 'dish') {
           // 保留当天其它两餐的游客选择，仅替换所选餐次
           const detail = await getItinerary(itineraryId);
@@ -483,11 +557,12 @@ Component({
     onViewAll() {
       wx.navigateTo({ url: '/pages/journeys/index' });
     },
-    onAddTrip() {
+    async onAddTrip() {
+      const ok = await ensurePrivacyAgreed();
+      if (!ok) return;
+      const logged = await ensureLogin();
+      if (!logged) return;
       wx.navigateTo({ url: '/pages/create-itinerary/index' });
-    },
-    onBellTap() {
-      console.log('Bell tap');
     },
   },
 });

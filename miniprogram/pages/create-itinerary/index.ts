@@ -17,13 +17,13 @@ const BLIND_MODE_DESC: Record<string, string> = {
 
 Page({
   data: {
-    provinceCode: '',
-    cityCode: '',
-    districtCode: '',
-    provinceName: '',
-    cityName: '',
-    districtName: '',
-    regionValue: [] as string[],
+    provinceCode: '330000',
+    cityCode: '331100',
+    districtCode: '331124',
+    provinceName: '浙江省',
+    cityName: '丽水市',
+    districtName: '松阳县',
+    regionValue: ['浙江省', '丽水市', '松阳县'] as string[],
     startDate: '',
     endDate: '',
     startDateDisplay: '',
@@ -56,6 +56,7 @@ Page({
     }
   },
 
+  // TODO: 地区已锁定松阳县，picker 已移除，本函数暂无调用；地区解锁后由 picker 的 bindchange 恢复触发。
   onRegionChange(e: any) {
     const { value, code } = e.detail;
     this.setData({

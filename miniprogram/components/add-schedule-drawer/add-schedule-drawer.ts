@@ -160,6 +160,8 @@ Component({
     searchEmptyText: '',
     listLoading: false,
     mealType: '',
+    introType: '' as '' | 'hotel' | 'dining' | 'car' | 'photography',
+    introItem: null as any,
   },
 
   observers: {
@@ -391,20 +393,40 @@ Component({
       const { activeTab, itineraryId, dayNumber } = this.data as any
       const instance = this as any
 
+      // attraction: keep debounce batch logic unchanged
+      if (activeTab === 'attraction') {
+        instance._pendingAttractionIds.push(item.attractionId)
+        if (instance._debounceTimer) {
+          clearTimeout(instance._debounceTimer)
+        }
+        instance._debounceTimer = setTimeout(async () => {
+          try {
+            const ids = instance._pendingAttractionIds.join(',')
+            await updateDayAttractions({ itineraryId, dayNumber, attractionIds: ids })
+            instance._pendingAttractionIds = []
+            this.triggerEvent('refresh')
+          } catch (err) {
+            wx.showToast({ title: '操作失败', icon: 'none' })
+          }
+        }, 300)
+        return
+      }
+
+      // hotel/dining/car/photography: open intro-drawer first
+      this.setData({ introType: activeTab, introItem: item })
+    },
+
+    onIntroClose() {
+      this.setData({ introType: '' as '' | 'hotel' | 'dining' | 'car' | 'photography', introItem: null })
+    },
+
+    async onIntroAdd() {
+      const { introType, introItem, itineraryId, dayNumber } = this.data as any
+      const item = introItem
+      if (!item || !introType) return
+
       try {
-        switch (activeTab) {
-          case 'attraction':
-            instance._pendingAttractionIds.push(item.attractionId)
-            if (instance._debounceTimer) {
-              clearTimeout(instance._debounceTimer)
-            }
-            instance._debounceTimer = setTimeout(async () => {
-              const ids = instance._pendingAttractionIds.join(',')
-              await updateDayAttractions({ itineraryId, dayNumber, attractionIds: ids })
-              instance._pendingAttractionIds = []
-              this.triggerEvent('refresh')
-            }, 300)
-            return
+        switch (introType) {
           case 'hotel':
             await updateDayAccommodation({
               itineraryId,
@@ -412,7 +434,7 @@ Component({
               accommodationId: item.accommodationId,
             })
             break
-          case 'dining':
+          case 'dining': {
             const { tapIndex } = await new Promise<any>((resolve, reject) => {
               wx.showActionSheet({
                 itemList: ['设为早餐', '设为午餐', '设为晚餐'],
@@ -432,8 +454,11 @@ Component({
                 dayNumber,
                 [mealKey]: item.diningId,
               } as any)
+            } else {
+              return
             }
             break
+          }
           case 'car':
             await addCar({ itineraryId, dayNumber, carId: item.carId })
             break
@@ -443,6 +468,7 @@ Component({
         }
         wx.showToast({ title: '添加成功', icon: 'success' })
         this.triggerEvent('refresh')
+        this.setData({ introType: '' as '' | 'hotel' | 'dining' | 'car' | 'photography', introItem: null })
       } catch (err) {
         wx.showToast({ title: '操作失败', icon: 'none' })
       }

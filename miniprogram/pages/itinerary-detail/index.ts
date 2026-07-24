@@ -487,11 +487,12 @@ Page({
 
       this.updateMapData(currentDayData);
 
-      this.loadLocalSpecialty(
-        template.province,
-        template.city,
-        template.district,
-      );
+      // TODO: 临时下线地方特色菜——图片字段 attachments[0].fileUrl 与 add-schedule-drawer 用的 .url 不一致，待核对修复后恢复
+      // this.loadLocalSpecialty(
+      //   template.province,
+      //   template.city,
+      //   template.district,
+      // );
 
       this.loadWeather(
         template.cityName || template.city,
@@ -588,11 +589,12 @@ Page({
 
       this.updateMapData(currentDayData);
 
-      this.loadLocalSpecialty(
-        normalizedItinerary.province,
-        normalizedItinerary.city,
-        normalizedItinerary.district,
-      );
+      // TODO: 临时下线地方特色菜——图片字段 attachments[0].fileUrl 与 add-schedule-drawer 用的 .url 不一致，待核对修复后恢复
+      // this.loadLocalSpecialty(
+      //   normalizedItinerary.province,
+      //   normalizedItinerary.city,
+      //   normalizedItinerary.district,
+      // );
 
       this.loadWeather(
         normalizedItinerary.cityName || normalizedItinerary.city,
