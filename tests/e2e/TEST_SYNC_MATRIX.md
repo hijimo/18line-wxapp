@@ -59,6 +59,23 @@
 
 ---
 
+## 2026-07-28 迭代需求 e2e 新增/更新
+
+| 测试文件 / 用例名 | 对应业务流程 | 当前状态 | 问题分类 | 决策 | 改动 | 验证命令 | 结果 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `e2e/core/itinerary-business.e2e.test.js` 行程详情地图按目的地拉取餐饮池，点击餐饮 marker 进详情 | 地图餐饮：按目的地一次性拉取 + 点击进详情 + 缩放隐藏 | 新增 | core business | 新增 | 断言 `/wx/dining/list` 按 `district` 请求且只请求 1 次、`onMapMarkerTap(20000+diningId)` 打开 `showIntroDrawer='dining'`、景点 marker 不误触、`applyVisibleDining([])` 后餐饮 marker 清零而景点 marker 保留 | `npm run test:e2e:core` | 待验证（本机无微信开发者工具自动化端口） |
+| `tests/itinerary-map/dining-markers.test.js` | 餐饮 marker 纯函数：图标分类/callout 拼装/id 命名空间/池内反查/视野裁剪/重绘指纹 | 新增（非 e2e 单测） | 非 e2e | 新增 | 沙箱加载页面 TS，12 条断言：两类图标互异且异于景点 pin、callout 三行且缺字段不出现 undefined、缺坐标跳过、id 命名空间避开盲游、池内反查带出餐次、视野外剔除、超上限按距中心裁剪、指纹与顺序无关 | `npm run lint` | 通过：12/12 |
+| `tests/profile-edit-preference.test.js` 角色/个人简介/出生年份回填 | 用户资料回填 | 更新 | 非 e2e | 新增 3 条用例 | 断言 `tourist.role`/`tourist.remark`→bio、`preference.birthYear` 数字转字符串、保存时回传 role 与 birthYear、mine 页 role 不再硬编码 | `npm run lint` | 通过：7/7 |
+
+## 基础设施更新（2026-07-28）
+
+| 文件 | 改动 | 说明 |
+| --- | --- | --- |
+| `e2e/shared/request-mock.js` | `/wx/dining/list` 两条数据补齐 `diningCategory`/`avgCost`/`openTime`/`closeTime`/经纬度；行程详情 day1 的 `breakfast`/`lunch` 也补齐同样字段 | 地图餐饮池取自 `/wx/dining/list`，无坐标与类别则 marker 恒为空、图标也无法区分 |
+| `package.json` | `lint` 脚本纳入 `tests/itinerary-map/*.test.js` 与 `tests/profile-edit-preference.test.js` | 这两组非 e2e 单测原先不在任何脚本里，改动无法被自动验证 |
+
+---
+
 ## 受限说明
 
 以下用例受限于微信小程序自动化框架能力，已在测试中标注：

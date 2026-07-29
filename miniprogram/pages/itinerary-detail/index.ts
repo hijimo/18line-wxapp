@@ -17,10 +17,12 @@ import {
 import { pushPendingUnlock, startNetworkWatcher } from '../../utils/blind-unlock-queue';
 import { getTemplateDetail } from '../../services/template';
 import { getLocalSpecialtyList } from '../../services/local-specialty';
+import { getDiningList } from '../../services/dining';
 import { getWeatherForecast } from '../../services/weather';
 import type { WeatherDay } from '../../services/weather';
 import type { Itinerary, TravelItineraryDay } from '../../types/itinerary';
 import type { TravelAttraction } from '../../types/attraction';
+import type { TravelDining } from '../../types/dining';
 import type { TravelLocalSpecialtyDish } from '../../types/local-specialty';
 
 const DRAWER_LEVELS = [20, 60, 80] as const;
@@ -29,8 +31,51 @@ const DRAWER_FLING_THRESHOLD = 0.35;
 const MAP_SCALE_BOOST = 2;
 const MAX_MAP_SCALE = 20;
 const MAP_FOCUS_SCREEN_OFFSET_RATIO = 0.28;
+const MAP_ID = 'routeMap';
+// includePoints 的留白（px）：底部要让开覆盖在地图上的行程抽屉
+const MAP_FIT_PADDING_TOP = 96;
+const MAP_FIT_PADDING_SIDE = 48;
+const MAP_FIT_PADDING_BOTTOM_EXTRA = 24;
+const MAP_SINGLE_POINT_SCALE = 15;
+
+const OSS_IMAGE_BASE = 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images';
+const MARKER_RESIZE = '?x-oss-process=image/resize,m_lfit,w_56,h_56';
+const MARKER_ICON_ATTRACTION = `${OSS_IMAGE_BASE}/marker-pin.png${MARKER_RESIZE}`;
+// 餐饮 marker 用刀叉图标，与景点 pin 区分；地方特色带星标且描边为日落橙
+const MARKER_ICON_DINING_REGULAR = `${OSS_IMAGE_BASE}/marker-dining-regular.png${MARKER_RESIZE}`;
+const MARKER_ICON_DINING_LOCAL = `${OSS_IMAGE_BASE}/marker-dining-local.png${MARKER_RESIZE}`;
+/** dining_category: 0 大众常规 / 1 地方特色 */
+const DINING_CATEGORY_LOCAL = '1';
+/** 餐饮 marker id 命名空间，避开景点(idx)与盲游景点(9000+) */
+const DINING_MARKER_ID_BASE = 20000;
+const DINING_MEALS = ['breakfast', 'lunch', 'dinner'] as const;
+/** 目的地餐饮一次性拉取的条数上限 */
+const DINING_POOL_PAGE_SIZE = 200;
+/** 低于该缩放级别不显示餐饮：全县铺开会非常密集且无意义 */
+const DINING_MIN_VISIBLE_SCALE = 13;
+/** 单屏最多渲染的餐饮 marker 数 */
+const DINING_MAX_VISIBLE = 20;
+/** regionchange 防抖窗口，避免拖动/缩放过程中反复重绘 */
+const DINING_REGION_DEBOUNCE_MS = 220;
+/**
+ * 餐饮卡片相对 marker 的偏移：图标 28x28、锚点在底部中心。
+ * 卡片要落在图标右侧并与图标垂直居中，真机上若位置不对只调这两个数。
+ */
+const DINING_CALLOUT_ANCHOR_X = 20;
+const DINING_CALLOUT_ANCHOR_Y = -14;
+// 卡片小尾巴（朝左的白色三角）。cover-view 对 CSS border 三角支持不可靠，故用图片。
+// 本身就是 2x 尺寸的小图，不需要 resize 参数。
+const DINING_CALLOUT_TAIL_ICON = `${OSS_IMAGE_BASE}/callout-tail-left.png`;
 
 let drawerWindowHeight = 1;
+
+// 目的地餐饮池刻意不放进 data：几百条对象走 setData 会白白序列化一大坨，
+// 视图只需要裁剪后的 marker。baseMapMarkers 缓存景点/盲游 marker，
+// 便于餐饮集合变化时只重算餐饮那一段再拼接。
+let regionDiningPool: TravelDining[] = [];
+let baseMapMarkers: any[] = [];
+let visibleDiningSignature = '';
+let diningRegionTimer: ReturnType<typeof setTimeout> | null = null;
 let drawerTouchActive = false;
 let drawerTouchStartY = 0;
 let drawerTouchStartHeight = DEFAULT_DRAWER_HEIGHT;
@@ -336,6 +381,110 @@ function buildDiningIntroData(
   };
 }
 
+/** 地图餐饮文案：`{名称} ￥{人均}/人`，单行；没有人均就只显示名称 */
+function buildDiningLabelContent(dining: TravelDining) {
+  const name = dining.diningName?.trim() || '餐饮';
+  const hasCost =
+    dining.avgCost !== undefined &&
+    dining.avgCost !== null &&
+    `${dining.avgCost}`.trim() !== '';
+
+  return hasCost ? `${name} ￥${dining.avgCost}/人` : name;
+}
+
+/** 把餐饮列表转成地图 marker（传入的已是筛过坐标、裁剪过数量的可见集合） */
+function buildDiningMarkers(list: TravelDining[]) {
+  const markers: any[] = [];
+  (list || []).forEach((dining) => {
+    if (!dining || !dining.diningId || !dining.latitude || !dining.longitude) return;
+
+    const isLocal = String(dining.diningCategory ?? '') === DINING_CATEGORY_LOCAL;
+    markers.push({
+      id: DINING_MARKER_ID_BASE + dining.diningId,
+      latitude: dining.latitude,
+      longitude: dining.longitude,
+      iconPath: isLocal ? MARKER_ICON_DINING_LOCAL : MARKER_ICON_DINING_REGULAR,
+      width: 28,
+      height: 28,
+      anchor: { x: 0.5, y: 1 },
+      // 用 label 而不是 callout：callout 必然是图标上方的气泡，
+      // 这里要的是图标右侧的裸文字，无背景无边框。
+      // 原生 callout 只能是图标上方、尾巴朝下的气泡，无法改成"卡片在右、尾巴朝左"，
+      // 所以用 customCallout，由 WXML 的 cover-view 自己画卡片和小尾巴。
+      customCallout: {
+        display: 'ALWAYS',
+        anchorX: DINING_CALLOUT_ANCHOR_X,
+        anchorY: DINING_CALLOUT_ANCHOR_Y,
+      },
+    });
+  });
+
+  return markers;
+}
+
+/**
+ * 反查 marker id 对应的餐饮。
+ * 优先在目的地餐饮池里找；若该店正好是当天某一餐，顺带带出餐次用于抽屉展示路径。
+ */
+function findDiningByMarkerId(
+  pool: TravelDining[],
+  dayData: TravelItineraryDay | null,
+  markerId: number,
+) {
+  if (markerId < DINING_MARKER_ID_BASE) return null;
+
+  const diningId = markerId - DINING_MARKER_ID_BASE;
+  const dining = (pool || []).find((item) => item.diningId === diningId);
+  if (!dining) return null;
+
+  const meal = DINING_MEALS.find(
+    (m) => ((dayData as any)?.[m] as TravelDining | undefined)?.diningId === diningId,
+  );
+
+  return { dining, meal };
+}
+
+/** 只保留当前可视范围内的餐饮，并按距屏幕中心的远近裁剪数量 */
+function cullDiningForViewport(
+  pool: TravelDining[],
+  bounds: { southwest: { latitude: number; longitude: number }; northeast: { latitude: number; longitude: number } },
+  center: { latitude: number; longitude: number },
+  limit: number,
+) {
+  const { southwest, northeast } = bounds;
+  const inView = (pool || []).filter((d) => {
+    const lat = d.latitude as number;
+    const lng = d.longitude as number;
+    return (
+      lat >= southwest.latitude &&
+      lat <= northeast.latitude &&
+      lng >= southwest.longitude &&
+      lng <= northeast.longitude
+    );
+  });
+
+  if (inView.length <= limit) return inView;
+
+  // 超出上限时保留离中心最近的，避免边缘一堆点把屏幕糊死
+  return inView
+    .map((d) => {
+      const dLat = (d.latitude as number) - center.latitude;
+      const dLng = (d.longitude as number) - center.longitude;
+      return { d, dist: dLat * dLat + dLng * dLng };
+    })
+    .sort((a, b) => a.dist - b.dist)
+    .slice(0, limit)
+    .map((item) => item.d);
+}
+
+/** 可见集合的指纹：内容没变就不 setData，这是避免高频重绘的关键 */
+function diningSignature(list: TravelDining[]) {
+  return list
+    .map((d) => d.diningId)
+    .sort((a, b) => (a as number) - (b as number))
+    .join(',');
+}
+
 function getDiningShareTitle(data: unknown) {
   const dining = data as { diningName?: string; avgCost?: number | string } | null;
   const name = typeof dining?.diningName === 'string' ? dining.diningName.trim() : '';
@@ -373,6 +522,9 @@ Page({
     mapMarkers: [] as any[],
     mapPolyline: [] as any[],
     mapCircles: [] as any[],
+    // 餐饮卡片（customCallout 由 WXML 渲染，需要放在 data 里）
+    visibleDiningCards: [] as Array<{ markerId: number; text: string }>,
+    diningCalloutTailIcon: DINING_CALLOUT_TAIL_ICON,
     mapCenter: { latitude: 28.45, longitude: 119.92 },
     mapScale: 12,
     drawerHeight: DEFAULT_DRAWER_HEIGHT,
@@ -388,9 +540,29 @@ Page({
     dragOffsetY: 0,
   },
 
+  // 当前屏幕上正在显示的餐饮（模块级状态是跨页面实例的，这里挂实例上）
+  visibleDining: [] as TravelDining[],
+
+  onUnload() {
+    if (diningRegionTimer) {
+      clearTimeout(diningRegionTimer);
+      diningRegionTimer = null;
+    }
+  },
+
   onLoad(options: Record<string, string | undefined>) {
     const systemInfo = wx.getSystemInfoSync();
     drawerWindowHeight = systemInfo.windowHeight || 1;
+
+    // 模块级状态在同一页面重复打开时会残留，进页面先清空
+    regionDiningPool = [];
+    baseMapMarkers = [];
+    visibleDiningSignature = '';
+    this.visibleDining = [];
+    if (diningRegionTimer) {
+      clearTimeout(diningRegionTimer);
+      diningRegionTimer = null;
+    }
 
     const rawId = options.id;
     const rawTemplateId = options.templateId;
@@ -588,6 +760,9 @@ Page({
       });
 
       this.updateMapData(currentDayData);
+
+      // 目的地餐饮池一次性异步拉取，之后地图上只做本地裁剪，不再请求网络
+      this.loadRegionDining();
 
       // TODO: 临时下线地方特色菜——图片字段 attachments[0].fileUrl 与 add-schedule-drawer 用的 .url 不一致，待核对修复后恢复
       // this.loadLocalSpecialty(
@@ -889,9 +1064,154 @@ Page({
     });
   },
 
+  /**
+   * 用 includePoints 精确框住给定点位。
+   * 抽屉覆盖地图下半部分，所以底部留白按抽屉当前高度算，避免景点被压在抽屉下面。
+   */
+  fitMapToPoints(points: Array<{ latitude: number; longitude: number }>) {
+    if (!points || points.length === 0) return;
+
+    // 单点时 includePoints 会把地图放到最大级别，改为居中 + 固定级别
+    if (points.length === 1) {
+      const scale = MAP_SINGLE_POINT_SCALE;
+      this.setData({
+        mapScale: scale,
+        mapCenter: {
+          latitude: points[0].latitude - getLatitudeOffsetForMapFocus(points[0].latitude, scale),
+          longitude: points[0].longitude,
+        },
+      });
+      return;
+    }
+
+    const drawerRatio = (this.data.drawerHeight || DEFAULT_DRAWER_HEIGHT) / 100;
+    const paddingBottom =
+      Math.round(drawerWindowHeight * drawerRatio) + MAP_FIT_PADDING_BOTTOM_EXTRA;
+
+    wx.createMapContext(MAP_ID, this).includePoints({
+      points,
+      padding: [MAP_FIT_PADDING_TOP, MAP_FIT_PADDING_SIDE, paddingBottom, MAP_FIT_PADDING_SIDE],
+    });
+  },
+
+  /** 景点/盲游 marker + 当前可见餐饮 marker 拼成最终 markers */
+  composeMapMarkers(visibleDining?: TravelDining[]) {
+    const dining = visibleDining ?? this.visibleDining ?? [];
+    return baseMapMarkers.concat(buildDiningMarkers(dining));
+  },
+
+  /** 目的地餐饮一次性拉取，之后只做本地裁剪，不再请求网络 */
+  async loadRegionDining() {
+    const itinerary = this.data.itinerary;
+    if (!itinerary) return;
+
+    try {
+      const res = await getDiningList({
+        province: itinerary.province,
+        city: itinerary.city,
+        district: itinerary.district,
+        pageNum: 1,
+        pageSize: DINING_POOL_PAGE_SIZE,
+      });
+      regionDiningPool = (res.rows || []).filter(
+        (d) => d.diningId && d.latitude && d.longitude,
+      );
+      this.refreshVisibleDining();
+    } catch (err) {
+      console.error('Failed to load region dining:', err);
+      regionDiningPool = [];
+    }
+  },
+
+  /** regionchange 只在结束时处理并防抖，拖动过程中不做任何计算 */
+  onMapRegionChange(e: any) {
+    if (e?.type !== 'end' && e?.detail?.type !== 'end') return;
+    if (regionDiningPool.length === 0) return;
+
+    if (diningRegionTimer) clearTimeout(diningRegionTimer);
+    diningRegionTimer = setTimeout(() => {
+      diningRegionTimer = null;
+      this.refreshVisibleDining();
+    }, DINING_REGION_DEBOUNCE_MS);
+  },
+
+  /**
+   * 按当前缩放级别与可视范围决定显示哪些餐饮。
+   * 只有当可见集合真的发生变化时才 setData —— 否则每次地图停止都重绘会很卡。
+   */
+  refreshVisibleDining() {
+    if (regionDiningPool.length === 0) return;
+
+    const ctx = wx.createMapContext(MAP_ID, this);
+    ctx.getScale({
+      success: (scaleRes: any) => {
+        const scale = scaleRes?.scale ?? 0;
+
+        // 缩得太远就整体隐藏，避免全县上百个点糊在一起
+        if (scale < DINING_MIN_VISIBLE_SCALE) {
+          this.applyVisibleDining([]);
+          return;
+        }
+
+        ctx.getRegion({
+          success: (region: any) => {
+            const sw = region?.southwest;
+            const ne = region?.northeast;
+            if (!sw || !ne) return;
+
+            // 中心点直接由边界取中位，省掉一次 getCenterLocation 调用
+            const center = {
+              latitude: (sw.latitude + ne.latitude) / 2,
+              longitude: (sw.longitude + ne.longitude) / 2,
+            };
+            this.applyVisibleDining(
+              cullDiningForViewport(regionDiningPool, region, center, DINING_MAX_VISIBLE),
+            );
+          },
+        });
+      },
+    });
+  },
+
+  /** 指纹相同则直接返回，不触发任何 setData */
+  applyVisibleDining(visible: TravelDining[]) {
+    const signature = diningSignature(visible);
+    if (signature === visibleDiningSignature) return;
+
+    visibleDiningSignature = signature;
+    this.visibleDining = visible;
+    this.setData({
+      mapMarkers: this.composeMapMarkers(visible),
+      // customCallout 的内容由 WXML 渲染，所以卡片文案必须进 data。
+      // 只放 markerId + 一行文案，不要把整个餐饮对象塞进来。
+      visibleDiningCards: visible.map((d) => ({
+        markerId: DINING_MARKER_ID_BASE + (d.diningId as number),
+        text: buildDiningLabelContent(d),
+      })),
+    });
+  },
+
+  /** 点击餐饮 marker -> 复用行程详情已有的餐饮详情抽屉 */
+  onMapMarkerTap(e: any) {
+    const markerId = Number(e?.detail?.markerId);
+    if (!Number.isFinite(markerId)) return;
+
+    const { currentDayData, showAddDrawer } = this.data;
+    if (showAddDrawer) return; // 抽屉互斥
+
+    const matched = findDiningByMarkerId(regionDiningPool, currentDayData, markerId);
+    if (!matched) return;
+
+    this.setData({
+      showIntroDrawer: 'dining',
+      introData: buildDiningIntroData(matched.dining, matched.meal, currentDayData),
+    });
+  },
+
   async updateMapData(dayData: TravelItineraryDay | null) {
     if (!dayData || !dayData.attractionList || dayData.attractionList.length === 0) {
-      this.setData({ mapMarkers: [], mapPolyline: [], mapCircles: [] });
+      baseMapMarkers = [];
+      this.setData({ mapMarkers: this.composeMapMarkers(), mapPolyline: [], mapCircles: [] });
       return;
     }
 
@@ -902,7 +1222,8 @@ Page({
     );
 
     if (attractions.length === 0 && blindAttractions.length === 0) {
-      this.setData({ mapMarkers: [], mapPolyline: [], mapCircles: [] });
+      baseMapMarkers = [];
+      this.setData({ mapMarkers: this.composeMapMarkers(), mapPolyline: [], mapCircles: [] });
       return;
     }
 
@@ -915,7 +1236,7 @@ Page({
         id: idx,
         latitude: a.latitude!,
         longitude: a.longitude!,
-        iconPath: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/marker-pin.png?x-oss-process=image/resize,m_lfit,w_56,h_56',
+        iconPath: MARKER_ICON_ATTRACTION,
         width: 28,
         height: 28,
         anchor: { x: 0.5, y: 1 },
@@ -1009,7 +1330,13 @@ Page({
       }
     }
 
-    this.setData({ mapMarkers: markers, mapPolyline: [], mapCenter, mapScale });
+    baseMapMarkers = markers;
+    this.setData({
+      mapMarkers: this.composeMapMarkers(),
+      mapPolyline: [],
+      mapCenter,
+      mapScale,
+    });
 
     // Build circles and markers for blind attractions
     const mapCircles: any[] = [];
@@ -1032,7 +1359,7 @@ Page({
           id: 9000 + ba.attractionId,
           latitude: ba.fuzzyLatitude,
           longitude: ba.fuzzyLongitude,
-          iconPath: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/marker-pin.png?x-oss-process=image/resize,m_lfit,w_56,h_56',
+          iconPath: MARKER_ICON_ATTRACTION,
           width: 28,
           height: 28,
           anchor: { x: 0.5, y: 1 },
@@ -1052,16 +1379,30 @@ Page({
     });
 
     // If we have blind attractions, replace the standard markers with a filtered set
+    const focusPoints: Array<{ latitude: number; longitude: number }> = [];
     if (blindAttractions.length > 0) {
       const visibleMarkers = markers.filter((_: any, idx: number) => {
         const attraction = attractions[idx];
         const ba = blindAttractions.find((b: any) => b.attractionId === attraction?.attractionId);
         return !ba || ba.blindDisplayMode === 'visible' || ba.blindDisplayMode === 'unlocked';
       });
-      this.setData({ mapMarkers: visibleMarkers.concat(blindMarkers), mapCircles });
+      baseMapMarkers = visibleMarkers.concat(blindMarkers);
+      this.setData({
+        mapMarkers: this.composeMapMarkers(),
+        mapCircles,
+      });
+      visibleMarkers.concat(blindMarkers).forEach((m: any) => {
+        focusPoints.push({ latitude: m.latitude, longitude: m.longitude });
+      });
     } else {
       this.setData({ mapCircles: [] });
+      attractions.forEach((a) => {
+        focusPoints.push({ latitude: a.latitude!, longitude: a.longitude! });
+      });
     }
+
+    // 焦点只取当天景点(含盲游点)，保证"进入行程详情就能看到当天景点"
+    wx.nextTick(() => this.fitMapToPoints(focusPoints));
 
     // Build polyline: use fuzzy coords for blind attractions, dashed style
     if (blindAttractions.length > 0) {
@@ -1263,7 +1604,7 @@ Page({
       id: a.attractionId,
       latitude: a.latitude,
       longitude: a.longitude,
-      iconPath: 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/marker-pin.png?x-oss-process=image/resize,m_lfit,w_56,h_56',
+      iconPath: MARKER_ICON_ATTRACTION,
       width: 28,
       height: 28,
       anchor: { x: 0.5, y: 1 },
@@ -1300,7 +1641,10 @@ Page({
         }]
       : [];
 
-    this.setData({ mapMarkers: markers, mapPolyline: polyline });
+    // 拖拽重排只重建景点 marker，当前可见的餐饮 marker 要一起带上，否则会消失
+    baseMapMarkers = markers;
+
+    this.setData({ mapMarkers: this.composeMapMarkers(), mapPolyline: polyline });
   },
 
   // ======================== 盲游模式 ========================

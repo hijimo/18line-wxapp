@@ -13,6 +13,7 @@
     <!-- 地图区域 -->
     <view class="map-section">
       <map
+        id="routeMap"
         class="route-map"
         latitude="{{mapCenter.latitude}}"
         longitude="{{mapCenter.longitude}}"
@@ -23,7 +24,23 @@
         show-location="{{false}}"
         enable-scroll="{{true}}"
         enable-zoom="{{true}}"
-      />
+        bindmarkertap="onMapMarkerTap"
+        bindcallouttap="onMapMarkerTap"
+        bindregionchange="onMapRegionChange"
+      >
+        <!-- 餐饮卡片：卡片在图标右侧，小尾巴朝左指回图标 -->
+        <cover-view slot="callout">
+          <cover-view
+            wx:for="{{visibleDiningCards}}"
+            wx:key="markerId"
+            marker-id="{{item.markerId}}"
+            class="dining-callout"
+          >
+            <cover-image class="dining-callout-tail" src="{{diningCalloutTailIcon}}" />
+            <cover-view class="dining-callout-body">{{item.text}}</cover-view>
+          </cover-view>
+        </cover-view>
+      </map>
       <view class="map-gradient-overlay" />
     </view>
 

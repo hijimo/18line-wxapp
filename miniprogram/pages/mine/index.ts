@@ -72,6 +72,7 @@ Page({
         this.setData({
           'userInfo.nickname': tourist.nickname || '林舒逸',
           'userInfo.avatarUrl': tourist.avatarUrl || 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/user-profile.png',
+          'userInfo.role': tourist.role || '首席探索官',
         });
       }
     } catch (err) {

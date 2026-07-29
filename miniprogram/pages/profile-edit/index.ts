@@ -63,6 +63,9 @@ Page({
         this.setData({
           avatarUrl: tourist.avatarUrl || 'https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/user-profile.png',
           nickname: tourist.nickname || '',
+          role: tourist.role || '',
+          // 个人简介保存在 Tourist.remark 上，回填要走同一个字段
+          bio: tourist.remark || '',
         });
       }
     } catch (err) {
@@ -98,6 +101,8 @@ Page({
 
       this.setData({
         preferenceId: preference.preferenceId || 0,
+        // 出生年份存在 Preference 上而非 Tourist；picker 需要字符串，0/null 都回落到占位符
+        birthYear: preference.birthYear ? String(preference.birthYear) : '',
         selectedPreferenceValues,
         preferences: buildPreferenceOptions(
           this.data.preferences.map((item) => ({
@@ -179,7 +184,7 @@ Page({
   },
 
   async handleSave() {
-    const { nickname, avatarUrl, bio } = this.data;
+    const { nickname, avatarUrl, role, bio } = this.data;
 
     if (!nickname.trim()) {
       wx.showToast({ title: '请输入昵称', icon: 'none' });
@@ -193,6 +198,7 @@ Page({
         updateProfile({
           nickname: nickname.trim(),
           avatarUrl,
+          role: role.trim(),
           remark: bio,
         }),
         this.saveTravelPreference(),
@@ -209,19 +215,25 @@ Page({
   },
 
   async saveTravelPreference() {
-    const { preferenceId, selectedPreferenceValues } = this.data;
+    const { preferenceId, selectedPreferenceValues, birthYear } = this.data;
     const travelLikes = selectedPreferenceValues.join(',');
+    // picker 给的是字符串，后端 birthYear 是整型。
+    // 取前 4 位再转数字：某些基础库/机型可能回传 'YYYY-MM-DD'，
+    // 直接 Number() 会得到 NaN → JSON 序列化成 null → mapper 跳过该列 → 静默不保存。
+    const parsedYear = Number.parseInt(String(birthYear).slice(0, 4), 10);
+    const birthYearValue = Number.isFinite(parsedYear) ? parsedYear : undefined;
 
     if (preferenceId) {
       await updatePreference({
         preferenceId,
         travelLikes,
+        birthYear: birthYearValue,
       });
       return;
     }
 
-    if (travelLikes) {
-      await addPreference({ travelLikes });
+    if (travelLikes || birthYearValue) {
+      await addPreference({ travelLikes, birthYear: birthYearValue });
     }
   },
 

@@ -132,7 +132,28 @@ function e2eRequestMock(options) {
               blindStatus: '0',
             },
           ],
-          breakfast: { diningId: 22, diningName: '山野食集' },
+          // 大众常规餐饮：带坐标/人均/营业时间，用于地图餐饮 marker
+          breakfast: {
+            diningId: 22,
+            diningName: '山野食集',
+            diningCategory: '0',
+            avgCost: 68,
+            openTime: '07:00',
+            closeTime: '20:30',
+            latitude: 30.23,
+            longitude: 120.09,
+          },
+          // 地方特色餐饮：应使用与大众常规不同的图标
+          lunch: {
+            diningId: 23,
+            diningName: '西湖醋鱼馆',
+            diningCategory: '1',
+            avgCost: 138,
+            openTime: '11:00',
+            closeTime: '21:00',
+            latitude: 30.22,
+            longitude: 120.12,
+          },
           accommodation: { accommodationId: 11, accommodationName: '云端隐庐' },
         },
         { itineraryDayId: 2, dayNumber: 2, attractionList: [] },
@@ -209,9 +230,32 @@ function e2eRequestMock(options) {
   }
 
   if (url.indexOf('/wx/dining/list') >= 0) {
+    // 带坐标/类别/人均/营业时间：行程详情地图的目的地餐饮池取自这个接口
     return table([
-      { diningId: 301, diningName: '山野食集', diningDesc: '松阳本地农家菜', avgCost: 68, attachments: [{ url: IMG }] },
-      { diningId: 302, diningName: '云上小馆', diningDesc: '古村落家常菜', avgCost: 55, attachments: [{ url: IMG }] },
+      {
+        diningId: 301,
+        diningName: '山野食集',
+        diningDesc: '松阳本地农家菜',
+        diningCategory: '0',
+        avgCost: 68,
+        openTime: '07:00',
+        closeTime: '20:30',
+        latitude: 30.23,
+        longitude: 120.09,
+        attachments: [{ url: IMG }],
+      },
+      {
+        diningId: 302,
+        diningName: '云上小馆',
+        diningDesc: '古村落家常菜',
+        diningCategory: '1',
+        avgCost: 55,
+        openTime: '11:00',
+        closeTime: '21:00',
+        latitude: 30.22,
+        longitude: 120.12,
+        attachments: [{ url: IMG }],
+      },
     ]);
   }
 

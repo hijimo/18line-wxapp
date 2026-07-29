@@ -94,6 +94,40 @@ describe('core business 行程主流程', () => {
     expect(requests.some((req) => req.url.indexOf('/wx/itinerary/edit') >= 0)).toBe(true);
   });
 
+  test('行程详情地图按目的地拉取餐饮池，点击餐饮 marker 进详情', async () => {
+    await resetRecordedEvents(miniProgram);
+    const page = await miniProgram.redirectTo(PAGES.ITINERARY_DETAIL + '?id=8801');
+    await page.waitFor(TIMEOUTS.NETWORK);
+
+    // 餐饮来源是"目的地"而非"已添加的三餐"：应按行程地区请求一次列表
+    const requests = await getRecordedRequests(miniProgram);
+    const diningReq = requests.find((req) => req.url.indexOf('/wx/dining/list') >= 0);
+    expect(diningReq).toBeDefined();
+    expect(diningReq.data.district).toBe('330106');
+    expect(diningReq.data.pageSize).toBe(200);
+    // 一次性拉取：不应重复请求
+    expect(requests.filter((r) => r.url.indexOf('/wx/dining/list') >= 0).length).toBe(1);
+
+    // 点击餐饮池中的店 -> 打开餐饮详情抽屉（marker id = 20000 + diningId）
+    await page.callMethod('onMapMarkerTap', { detail: { markerId: 20302 } });
+    const afterTap = await page.data();
+    expect(afterTap.showIntroDrawer).toBe('dining');
+    expect(afterTap.introData.diningName).toBe('云上小馆');
+
+    // 点击景点 marker 不应打开餐饮抽屉
+    await page.callMethod('onIntroClose');
+    await page.callMethod('onMapMarkerTap', { detail: { markerId: 0 } });
+    const afterAttractionTap = await page.data();
+    expect(afterAttractionTap.showIntroDrawer).toBe('');
+
+    // 缩得太远时整体隐藏餐饮，避免密集与性能问题
+    await page.callMethod('applyVisibleDining', []);
+    const afterHide = await page.data();
+    expect(afterHide.mapMarkers.filter((m) => m.id >= 20000).length).toBe(0);
+    // 景点 marker 不受餐饮显隐影响
+    expect(afterHide.mapMarkers.filter((m) => m.id < 9000).length).toBeGreaterThan(0);
+  });
+
   test('用户可从行程列表进入详情并删除行程', async () => {
     await resetRecordedEvents(miniProgram);
     const page = await miniProgram.navigateTo(PAGES.JOURNEYS);

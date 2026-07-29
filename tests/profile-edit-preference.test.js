@@ -37,7 +37,39 @@ test('profile-edit echoes and saves travelLikes dictionary values', () => {
   assert.match(ts, /preference\.travelLikes/);
   assert.match(ts, /const travelLikes = selectedPreferenceValues\.join\(','\)/);
   assert.match(ts, /updatePreference\(\{[\s\S]*preferenceId,[\s\S]*travelLikes,/);
-  assert.match(ts, /addPreference\(\{ travelLikes \}\)/);
+  assert.match(ts, /addPreference\(\{ travelLikes, birthYear: birthYearValue \}\)/);
+});
+
+test('profile-edit 回填角色与个人简介（来自 Tourist）', () => {
+  const ts = readPage('ts');
+
+  // 角色来自 tourist.role，个人简介存在 tourist.remark 上
+  assert.match(ts, /role: tourist\.role \|\| ''/);
+  assert.match(ts, /bio: tourist\.remark \|\| ''/);
+  // 保存时同样要带上 role，否则回填的值会被清掉
+  assert.match(ts, /role: role\.trim\(\)/);
+  assert.match(ts, /remark: bio/);
+});
+
+test('profile-edit 回填出生年份（来自 Preference，数字转字符串）', () => {
+  const ts = readPage('ts');
+
+  // birthYear 在 Preference 上而非 Tourist，且后端是整型、picker 要字符串
+  assert.match(ts, /birthYear: preference\.birthYear \? String\(preference\.birthYear\) : ''/);
+  assert.match(ts, /Number\.parseInt\(String\(birthYear\)\.slice\(0, 4\), 10\)/);
+  assert.match(ts, /Number\.isFinite\(parsedYear\) \? parsedYear : undefined/);
+  assert.match(ts, /updatePreference\(\{[\s\S]*birthYear: birthYearValue,/);
+  // 仅填年份、未选偏好时也要能新建记录
+  assert.match(ts, /if \(travelLikes \|\| birthYearValue\)/);
+});
+
+test('mine 页角色不再是硬编码常量', () => {
+  const mineTs = fs.readFileSync(
+    path.resolve(__dirname, '../miniprogram/pages/mine/index.ts'),
+    'utf8',
+  );
+
+  assert.match(mineTs, /'userInfo\.role': tourist\.role \|\| '首席探索官'/);
 });
 
 test('profile-edit keeps a stable empty state when preference dict loading fails', () => {

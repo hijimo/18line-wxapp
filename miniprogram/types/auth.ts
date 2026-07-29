@@ -5,6 +5,8 @@ export interface Tourist {
   sessionKey?: string;
   nickname?: string;
   avatarUrl?: string;
+  /** 角色(游客自定义称号) */
+  role?: string;
   gender?: string;
   phone?: string;
   realName?: string;

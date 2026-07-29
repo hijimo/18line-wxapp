@@ -39,6 +39,7 @@
             value="{{role}}"
             placeholder="请输入角色"
             placeholder-class="input-placeholder"
+            maxlength="64"
             bindinput="onRoleInput"
           />
         </view>
