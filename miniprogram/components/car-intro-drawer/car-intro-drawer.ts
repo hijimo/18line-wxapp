@@ -51,6 +51,16 @@ function normalizeCarIntroText(value?: string | number) {
   return String(value).trim();
 }
 
+const CAR_GENDER_LABELS: Record<string, string> = {
+  '0': '男',
+  '1': '女',
+  '2': '未知',
+};
+
+function getCarGenderLabel(value?: string | number) {
+  return CAR_GENDER_LABELS[normalizeCarIntroText(value)] || '';
+}
+
 function getCarIntroAttachmentUrl(attachment?: CarIntroAttachment) {
   return normalizeCarIntroText(attachment?.url || attachment?.fileUrl);
 }
@@ -65,7 +75,8 @@ function createCarIntroViewModel(data: CarIntroData | null | undefined): CarIntr
   const carModel = normalizeCarIntroText(source.carModel);
   const seatCount = normalizeCarIntroText(source.seatCount);
   const drivingYears = normalizeCarIntroText(source.drivingYears);
-  const gender = normalizeCarIntroText(source.gender);
+  const nickname = normalizeCarIntroText(source.nickname);
+  const genderLabel = getCarGenderLabel(source.gender);
   const attractionName = normalizeCarIntroText(source.attractionName);
   const contactInfo = normalizeCarIntroText(source.contactInfo);
   const description = normalizeCarIntroText(source.introduction);
@@ -74,13 +85,10 @@ function createCarIntroViewModel(data: CarIntroData | null | undefined): CarIntr
     seatCount ? `${seatCount}座` : '',
     drivingYears ? `${drivingYears}年驾龄` : '',
   ].filter(Boolean);
-  const profileTags = [
-    gender ? `司机 ${gender}` : '',
-    normalizeCarIntroText(source.status),
-  ].filter(Boolean);
+  const profileTags = [nickname, genderLabel].filter(Boolean);
 
   return {
-    title: normalizeCarIntroText(source.nickname) || '包车详情',
+    title: nickname || '包车详情',
     subtitleText: carModel || (seatCount ? `${seatCount}座用车` : ''),
     costText: price ? `¥${price}/day` : '',
     images,

@@ -50,6 +50,16 @@ function normalizePhotographyIntroText(value?: string | number) {
   return String(value).trim();
 }
 
+const PHOTOGRAPHY_GENDER_LABELS: Record<string, string> = {
+  '0': '男',
+  '1': '女',
+  '2': '未知',
+};
+
+function getPhotographyGenderLabel(value?: string | number) {
+  return PHOTOGRAPHY_GENDER_LABELS[normalizePhotographyIntroText(value)] || '';
+}
+
 function getPhotographyIntroAttachmentUrl(attachment?: PhotographyIntroAttachment) {
   return normalizePhotographyIntroText(attachment?.url || attachment?.fileUrl);
 }
@@ -65,15 +75,16 @@ function createPhotographyIntroViewModel(
   const price = normalizePhotographyIntroText(source.price);
   const ratingText = normalizePhotographyIntroText(source.recommendRating);
   const equipment = normalizePhotographyIntroText(source.equipment);
-  const gender = normalizePhotographyIntroText(source.gender);
+  const nickname = normalizePhotographyIntroText(source.nickname);
+  const genderLabel = getPhotographyGenderLabel(source.gender);
   const attractionName = normalizePhotographyIntroText(source.attractionName);
   const contactInfo = normalizePhotographyIntroText(source.contactInfo);
   const description = normalizePhotographyIntroText(source.introduction);
   const serviceTags = [equipment, ratingText ? `推荐指数 ${ratingText}` : ''].filter(Boolean);
-  const profileTags = [gender ? `摄影师 ${gender}` : '', normalizePhotographyIntroText(source.status)].filter(Boolean);
+  const profileTags = [nickname, genderLabel].filter(Boolean);
 
   return {
-    title: normalizePhotographyIntroText(source.nickname) || '跟拍详情',
+    title: nickname || '跟拍详情',
     ratingText,
     costText: price ? `¥${price}` : '',
     images,
