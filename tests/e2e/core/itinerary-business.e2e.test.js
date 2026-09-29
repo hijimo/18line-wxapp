@@ -30,12 +30,8 @@ describe('core business 行程主流程', () => {
     const page = await miniProgram.navigateTo(PAGES.CREATE_ITINERARY);
     await page.waitFor(TIMEOUTS.NETWORK);
 
-    await page.callMethod('onRegionChange', {
-      detail: {
-        value: ['浙江省', '杭州市', '西湖区'],
-        code: ['330000', '330100', '330106'],
-      },
-    });
+    // 地区改为县域切换（省市固定丽水市），切到缙云县 331122
+    await page.callMethod('onDistrictChange', { detail: { value: 1 } });
     await page.callMethod('onDateConfirm', {
       detail: {
         startDate: '2026-07-20',
@@ -59,11 +55,15 @@ describe('core business 行程主流程', () => {
     const requests = await getRecordedRequests(miniProgram);
     const addRequest = requests.find((req) => req.url.indexOf('/wx/itinerary/add') >= 0);
     expect(addRequest).toBeDefined();
-    expect(addRequest.data.city).toBe('330100');
-    expect(addRequest.data.district).toBe('330106');
+    expect(addRequest.data.province).toBe('330000');
+    expect(addRequest.data.city).toBe('331100');
+    expect(addRequest.data.district).toBe('331122');
     expect(addRequest.data.days).toBe(3);
     expect(addRequest.data.preferences).toContain('nature');
     expect(addRequest.data.blindMode).toBe('1');
+
+    // 还原「当地」默认值，避免污染后续用例/套件
+    await miniProgram.evaluate(() => wx.removeStorageSync('home_district'));
   });
 
   test('用户可查看行程详情、切换天数并修改出行日期', async () => {

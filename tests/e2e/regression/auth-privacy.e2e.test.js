@@ -41,7 +41,7 @@ describe('regression 创建行程触发登录与隐私条款 (需求1)', () => {
     await page.waitFor(TIMEOUTS.NETWORK);
 
     // Tap create button
-    const createButton = await page.$('.top-bar-create-btn');
+    const createButton = await page.$('.create-fab');
     expect(createButton).not.toBeNull();
     await createButton.tap();
     await page.waitFor(TIMEOUTS.NETWORK);
@@ -70,7 +70,7 @@ describe('regression 创建行程触发登录与隐私条款 (需求1)', () => {
     const page = await miniProgram.reLaunch(PAGES.INDEX);
     await page.waitFor(TIMEOUTS.NETWORK);
 
-    const createButton = await page.$('.top-bar-create-btn');
+    const createButton = await page.$('.create-fab');
     await createButton.tap();
     await page.waitFor(TIMEOUTS.NETWORK);
 
@@ -95,7 +95,7 @@ describe('regression 创建行程触发登录与隐私条款 (需求1)', () => {
     const page = await miniProgram.reLaunch(PAGES.INDEX);
     await page.waitFor(TIMEOUTS.NETWORK);
 
-    const createButton = await page.$('.top-bar-create-btn');
+    const createButton = await page.$('.create-fab');
     await createButton.tap();
     await page.waitFor(TIMEOUTS.TAP_DELAY);
 
@@ -123,7 +123,7 @@ describe('regression 创建行程触发登录与隐私条款 (需求1)', () => {
     const page = await miniProgram.reLaunch(PAGES.INDEX);
     await page.waitFor(TIMEOUTS.NETWORK);
 
-    const createButton = await page.$('.top-bar-create-btn');
+    const createButton = await page.$('.create-fab');
     await createButton.tap();
     await page.waitFor(TIMEOUTS.NETWORK);
 

@@ -133,9 +133,23 @@ page {
   padding: 36rpx 32rpx 32rpx 96rpx;
 }
 
-/* Region Locked (read-only destination) */
-.region-locked {
-  pointer-events: none;
+/* Region Picker（县域可切换，省市固定） */
+.region-picker {
+  display: block;
+  width: 100%;
+}
+
+.region-selectable {
+  padding-right: 88rpx;
+}
+
+.region-arrow {
+  position: absolute;
+  right: 32rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28rpx;
+  color: rgba(114, 121, 114, 0.9);
 }
 
 .region-tip {

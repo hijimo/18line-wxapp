@@ -155,21 +155,18 @@ describe('[Unit] create-itinerary 页面逻辑验证', () => {
     expect(pageTs).toContain('addItinerary');
   });
 
-  test('使用微信原生 region picker 选择目的地', () => {
-    expect(pageWxml).toContain('mode="region"');
-    expect(pageWxml).toContain('bindchange="onRegionChange"');
-    expect(pageWxml).toContain('value="{{regionValue}}"');
+  test('目的地使用县域 selector picker（省市固定丽水市）', () => {
+    expect(pageWxml).toContain('mode="selector"');
+    expect(pageWxml).toContain('bindchange="onDistrictChange"');
+    expect(pageWxml).toContain('range="{{districtOptions}}"');
+    expect(pageWxml).toContain('range-key="name"');
   });
 
-  test('onRegionChange 同步地区名称和编码', () => {
-    expect(pageTs).toContain('onRegionChange');
-    expect(pageTs).toContain('const { value, code } = e.detail');
-    expect(pageTs).toContain('provinceName: value[0]');
-    expect(pageTs).toContain('cityName: value[1]');
-    expect(pageTs).toContain('districtName: value[2]');
-    expect(pageTs).toContain('provinceCode: code[0]');
-    expect(pageTs).toContain('cityCode: code[1]');
-    expect(pageTs).toContain('districtCode: code[2]');
+  test('onDistrictChange 同步县域并持久化「当地」选择', () => {
+    expect(pageTs).toContain('onDistrictChange');
+    expect(pageTs).toContain('DISTRICT_OPTIONS');
+    expect(pageTs).toContain('setSelectedDistrict(option.code)');
+    expect(pageTs).toContain('getSelectedDistrict');
   });
 
   test('导入了 getDictByType', () => {

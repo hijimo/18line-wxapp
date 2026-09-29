@@ -17,42 +17,36 @@ page {
   backdrop-filter: blur(12rpx);
 }
 
-.top-bar-left {
-  display: flex;
-  align-items: center;
-  gap: 24rpx;
+/* 「当地」地址切换器 */
+.district-picker {
   flex-shrink: 0;
 }
 
-.top-bar-create-btn {
-  width: 80rpx;
-  height: 80rpx;
-  border-radius: 50%;
-  background: #163422;
+.district-picker-inner {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8rpx;
+  padding: 12rpx 24rpx;
+  background: rgba(22, 52, 34, 0.06);
+  border-radius: 9999rpx;
 }
 
-.top-bar-create-icon {
-  width: 40rpx;
-  height: 40rpx;
+.district-picker-icon {
+  width: 28rpx;
+  height: 28rpx;
 }
 
-.top-bar-arrow {
-  color: #163422;
-  font-size: 40rpx;
-  font-weight: 500;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-.top-bar-brand {
-  font-size: 48rpx;
+.district-picker-name {
+  font-size: 32rpx;
   color: #163422;
   font-weight: 700;
-  letter-spacing: -2.4rpx;
-  line-height: 64rpx;
+  line-height: 44rpx;
+}
+
+.district-picker-arrow {
+  font-size: 24rpx;
+  color: #163422;
+  line-height: 1;
 }
 
 .top-bar-search {
@@ -209,26 +203,31 @@ page {
   gap: 32rpx;
 }
 
-/* 当地 indicator */
-.local-bar {
+/* 创建行程悬浮按钮 */
+.create-fab {
+  position: fixed;
+  right: 40rpx;
+  bottom: calc(48rpx + env(safe-area-inset-bottom));
+  z-index: 90;
   display: flex;
   align-items: center;
   gap: 12rpx;
-  align-self: flex-start;
-  padding: 12rpx 24rpx;
-  background: rgba(148, 74, 0, 0.08);
+  padding: 24rpx 36rpx;
+  background: #163422;
   border-radius: 9999rpx;
+  box-shadow: 0 12rpx 32rpx rgba(22, 52, 34, 0.32);
 }
 
-.local-bar-icon {
-  width: 24rpx;
-  height: 24rpx;
+.create-fab-icon {
+  width: 36rpx;
+  height: 36rpx;
 }
 
-.local-bar-text {
-  font-size: 26rpx;
-  color: #944a00;
+.create-fab-text {
+  font-size: 28rpx;
+  color: #ffffff;
   font-weight: 600;
+  line-height: 40rpx;
 }
 
 /* 搜索面板 */

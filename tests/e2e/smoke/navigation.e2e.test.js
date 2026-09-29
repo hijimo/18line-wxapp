@@ -28,7 +28,8 @@ describe('smoke 应用启动与核心导航', () => {
     await page.waitFor(TIMEOUTS.NETWORK);
 
     expect(page.path).toBe('pages/index/index');
-    expect(await page.$('hero-banner')).not.toBeNull();
+    // 顶栏「当地」地址切换器（原 hero-banner 已随首页改版移除）
+    expect(await page.$('.district-picker')).not.toBeNull();
     expect(await page.$('journey-card')).not.toBeNull();
     expect(await page.$('inspiration-card')).not.toBeNull();
   });
@@ -44,7 +45,7 @@ describe('smoke 应用启动与核心导航', () => {
 
     page = await miniProgram.switchTab(PAGES.INDEX);
     await page.waitFor(TIMEOUTS.NETWORK);
-    const createButton = await page.$('.top-bar-create-btn');
+    const createButton = await page.$('.create-fab');
     expect(createButton).not.toBeNull();
     await createButton.tap();
     await page.waitFor(TIMEOUTS.PAGE_LOAD);

@@ -4,7 +4,11 @@ import type { TravelCheckin } from '../../types/checkin';
 import type { HomeFeaturedDish } from '../../types/dish';
 import type { Template } from '../../types/template';
 
-/** 默认目的地 district：松阳县 */
+/**
+ * 默认目的地 district：松阳县。
+ * 注意：与 utils/district.ts 的 DEFAULT_DISTRICT 保持一致；此处保留本地常量是因为
+ * tests/home 的 ts-loader 不解析 .ts 相对导入，home-mappers 被单测直接加载，不能引运行时依赖。
+ */
 export const DEFAULT_DISTRICT = '331124';
 export const DEFAULT_DISTRICT_NAME = '松阳县';
 

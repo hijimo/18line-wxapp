@@ -1,6 +1,24 @@
 import { getDictByType } from '../../services/dict';
 import { autoGenerateItinerary, addItinerary } from '../../services/itinerary';
 import type { DictData } from '../../types/dict';
+import {
+  DEFAULT_DISTRICT,
+  DEFAULT_DISTRICT_NAME,
+  DISTRICT_OPTIONS,
+  FIXED_CITY_CODE,
+  FIXED_CITY_NAME,
+  FIXED_PROVINCE_CODE,
+  FIXED_PROVINCE_NAME,
+  getOptionCityCode,
+  getOptionCityName,
+  getOptionDistrictCode,
+  getOptionDistrictName,
+  getOptionProvinceCode,
+  getOptionProvinceName,
+  getSelectedDistrict,
+  setSelectedDistrict,
+  type DistrictOption,
+} from '../../utils/district';
 
 const AI_PROGRESS_TEXTS = [
   '正在分析目的地特色...',
@@ -17,13 +35,18 @@ const BLIND_MODE_DESC: Record<string, string> = {
 
 Page({
   data: {
-    provinceCode: '330000',
-    cityCode: '331100',
-    districtCode: '331124',
-    provinceName: '浙江省',
-    cityName: '丽水市',
-    districtName: '松阳县',
-    regionValue: ['浙江省', '丽水市', '松阳县'] as string[],
+    provinceCode: FIXED_PROVINCE_CODE,
+    cityCode: FIXED_CITY_CODE,
+    districtCode: DEFAULT_DISTRICT,
+    provinceName: FIXED_PROVINCE_NAME,
+    cityName: FIXED_CITY_NAME,
+    districtName: DEFAULT_DISTRICT_NAME,
+    /** 当前选中的「当地」选项编码（市级选项与 districtCode 不同，单独记录用于去重判断） */
+    districtOptionCode: DEFAULT_DISTRICT,
+    /** 目的地展示文案：市级选项没有区县，避免出现「浙江省 杭州市 杭州市」或尾部空格 */
+    regionText: `${FIXED_PROVINCE_NAME} ${FIXED_CITY_NAME} ${DEFAULT_DISTRICT_NAME}`,
+    districtOptions: DISTRICT_OPTIONS,
+    districtIndex: 0,
     startDate: '',
     endDate: '',
     startDateDisplay: '',
@@ -40,6 +63,8 @@ Page({
   _progressTimer: null as any,
 
   onLoad() {
+    // 「当地」以模块加载后的最新选择为准（data 字面量只在模块求值时执行一次）
+    this.applyDistrictOption(getSelectedDistrict());
     this.loadPreferenceOptions();
   },
 
@@ -56,18 +81,36 @@ Page({
     }
   },
 
-  // TODO: 地区已锁定松阳县，picker 已移除，本函数暂无调用；地区解锁后由 picker 的 bindchange 恢复触发。
-  onRegionChange(e: any) {
-    const { value, code } = e.detail;
+  /**
+   * 把「当地」选项落到表单地区字段。
+   * 县域选项：省市固定丽水市 + district 编码；
+   * 市级选项（如杭州市）：city 为自身编码，district 留空由后端按市过滤。
+   */
+  applyDistrictOption(option: DistrictOption) {
+    const index = DISTRICT_OPTIONS.findIndex((o) => o.code === option.code);
+    const provinceName = getOptionProvinceName(option);
+    const cityName = getOptionCityName(option);
+    const districtName = getOptionDistrictName(option);
     this.setData({
-      regionValue: value,
-      provinceName: value[0] || '',
-      cityName: value[1] || '',
-      districtName: value[2] || '',
-      provinceCode: code[0] || '',
-      cityCode: code[1] || '',
-      districtCode: code[2] || '',
+      districtIndex: index >= 0 ? index : 0,
+      districtOptionCode: option.code,
+      provinceCode: getOptionProvinceCode(option),
+      cityCode: getOptionCityCode(option),
+      districtCode: getOptionDistrictCode(option),
+      provinceName,
+      cityName,
+      districtName,
+      regionText: [provinceName, cityName, districtName].filter(Boolean).join(' '),
     });
+  },
+
+  // 地区切换；与首页「当地」共享同一份持久化选择
+  onDistrictChange(e: any) {
+    const index = Number(e?.detail?.value);
+    const option = DISTRICT_OPTIONS[index];
+    if (!option || option.code === this.data.districtOptionCode) return;
+    this.applyDistrictOption(option);
+    setSelectedDistrict(option.code);
   },
 
   onDateTap() {

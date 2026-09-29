@@ -1,15 +1,22 @@
 <!--index.wxml-->
 <wxs src="../../utils/oss.wxs" module="oss" />
 
-<!-- TopAppBar -->
+<!-- TopAppBar：左上角为「当地」地址切换器 -->
 <view class="top-app-bar">
-  <view class="top-bar-left">
-    <view class="top-bar-create-btn" bindtap="onAddTrip">
-      <image class="top-bar-create-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-create-itinerary.svg" mode="aspectFit" />
+  <picker
+    class="district-picker"
+    mode="selector"
+    range="{{districtOptions}}"
+    range-key="name"
+    value="{{districtIndex}}"
+    bindchange="onDistrictChange"
+  >
+    <view class="district-picker-inner">
+      <image class="district-picker-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-distance.svg" mode="aspectFit" />
+      <text class="district-picker-name">{{currentDistrictName}}</text>
+      <text class="district-picker-arrow">▾</text>
     </view>
-    <text class="top-bar-arrow">←</text>
-    <text class="top-bar-brand">寻秘</text>
-  </view>
+  </picker>
   <view class="top-bar-search" bindtap="onSearchOpen">
     <image class="top-bar-search-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-search.svg" mode="aspectFit" />
     <text class="top-bar-search-placeholder">寻找神秘之旅...</text>
@@ -47,12 +54,6 @@
       </block>
     </view>
 
-    <!-- 当地 indicator -->
-    <view class="local-bar">
-      <image class="local-bar-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-distance.svg" mode="aspectFit" />
-      <text class="local-bar-text">当地 · {{currentDistrictName}}</text>
-    </view>
-
     <!-- Section 2: Local Highlights (Inspiration Cards Swiper) -->
     <inspiration-card title="{{inspirationTitle}}" cards="{{inspirationCards}}" bind:cardtap="onInspirationTap" />
 
@@ -77,6 +78,12 @@
     </view>
   </view>
 </scroll-view>
+
+<!-- 创建行程悬浮按钮（原顶栏创建入口移位至此） -->
+<view class="create-fab" bindtap="onAddTrip">
+  <image class="create-fab-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-create-itinerary.svg" mode="aspectFit" />
+  <text class="create-fab-text">创建行程</text>
+</view>
 
 <!-- 搜索面板 -->
 <view wx:if="{{searchActive}}" class="search-panel">

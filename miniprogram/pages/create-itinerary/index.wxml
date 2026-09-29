@@ -15,17 +15,27 @@
         </view>
       </view>
 
-      <!-- Destination (locked to 松阳县) -->
+      <!-- Destination（地区跟随「当地」切换：丽水市县域 + 杭州市，与首页联动） -->
       <view class="section">
         <view class="section-header">
           <text class="section-title">要去哪里？</text>
           <text class="section-label">DESTINATION</text>
         </view>
-        <view class="search-input region-locked">
-          <image class="search-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-search.svg" mode="aspectFit" />
-          <text class="search-placeholder search-value">浙江省 丽水市 松阳县</text>
-        </view>
-        <text class="region-tip">目前只上线松阳县</text>
+        <picker
+          class="region-picker"
+          mode="selector"
+          range="{{districtOptions}}"
+          range-key="name"
+          value="{{districtIndex}}"
+          bindchange="onDistrictChange"
+        >
+          <view class="search-input region-selectable">
+            <image class="search-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-search.svg" mode="aspectFit" />
+            <text class="search-placeholder search-value">{{regionText}}</text>
+            <text class="region-arrow">▾</text>
+          </view>
+        </picker>
+        <text class="region-tip">目前支持松阳县、缙云县、杭州市，与首页「当地」保持同步</text>
       </view>
 
       <!-- Date -->

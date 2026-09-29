@@ -6,6 +6,7 @@ import type { AccommodationListParams } from '../../types/accommodation'
 import type { DiningListParams } from '../../types/dining'
 import type { CarListParams } from '../../types/car'
 import type { PhotographyListParams } from '../../services/photography'
+import { buildRegionQuery, getSelectedDistrict } from '../../utils/district'
 
 type ServiceType = 'hotel' | 'dining' | 'car' | 'photography'
 
@@ -15,12 +16,6 @@ const TABS: { id: ServiceType; label: string }[] = [
   { id: 'car', label: '包车' },
   { id: 'photography', label: '跟拍' },
 ]
-
-const REGION_PARAMS = {
-  province: '330000',
-  city: '331100',
-  district: '331124',
-}
 
 Page({
   data: {
@@ -32,8 +27,16 @@ Page({
     introData: {} as any,
   },
 
-  onLoad() {
-    this.loadList('hotel')
+  /** 最近一次加载列表所用的 district，用于 onShow 判断「当地」是否变化 */
+  _loadedDistrict: '',
+
+  onShow() {
+    // 「当地」跟随首页地址切换；首次展示或 district 变化时重新拉取当前 tab
+    const district = getSelectedDistrict().code
+    if (district === this._loadedDistrict) return
+    this._loadedDistrict = district
+    if (this.data.list.length) this.setData({ list: [] })
+    this.loadList(this.data.activeType)
   },
 
   onTabTap(e: any) {
@@ -46,7 +49,12 @@ Page({
   async loadList(type: ServiceType) {
     this.setData({ loading: true })
     try {
-      const params = { ...REGION_PARAMS, pageNum: 1, pageSize: 50 }
+      // 地区参数跟随「当地」：县域传 district，市级（如杭州市）只传 city
+      const params = {
+        ...buildRegionQuery(getSelectedDistrict()),
+        pageNum: 1,
+        pageSize: 50,
+      }
       let res: any
       switch (type) {
         case 'hotel':

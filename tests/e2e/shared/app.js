@@ -41,32 +41,52 @@ async function installE2eMocks(miniProgram) {
   await miniProgram.mockWxMethod('setKeepScreenOn', function (options) {
     if (options && typeof options.success === 'function') options.success({});
   });
-  await miniProgram.mockWxMethod('showModal', function (options) {
-    try {
-      globalThis.__e2eModals = globalThis.__e2eModals || [];
-      globalThis.__e2eModals.push(options || {});
-    } catch (e) {}
-    // Default: simulate user confirming (can be overridden per-test)
-    var confirmResult = globalThis.__e2eModalConfirm !== false;
-    if (options && typeof options.success === 'function') {
-      options.success({ confirm: confirmResult, cancel: !confirmResult });
-    }
-  });
-  await miniProgram.mockWxMethod('showActionSheet', function (options) {
-    try {
-      globalThis.__e2eActionSheets = globalThis.__e2eActionSheets || [];
-      globalThis.__e2eActionSheets.push(options || {});
-    } catch (e) {}
-    // Default: select first item (tapIndex: 0)
-    var tapIdx = globalThis.__e2eActionSheetIndex !== undefined ? globalThis.__e2eActionSheetIndex : 0;
-    if (options && typeof options.success === 'function') {
-      options.success({ tapIndex: tapIdx });
-    }
+  // showModal / showActionSheet 不能用 mockWxMethod：
+  // 它在 bridge 层序列化 options，success/complete 回调会被剥掉，
+  // 导致 ensurePrivacyAgreed 等基于回调的 Promise 永不 resolve。
+  // 改用 evaluate 同上下文直接覆盖 wx 方法，并保存原实现供 restore。
+  await miniProgram.evaluate(() => {
+    globalThis.__origShowModal = wx.showModal;
+    globalThis.__origShowActionSheet = wx.showActionSheet;
+    wx.showModal = function (options) {
+      try {
+        globalThis.__e2eModals = globalThis.__e2eModals || [];
+        globalThis.__e2eModals.push(options || {});
+      } catch (e) {}
+      // Default: simulate user confirming (can be overridden per-test)
+      var confirmResult = globalThis.__e2eModalConfirm !== false;
+      if (options && typeof options.success === 'function') {
+        options.success({ confirm: confirmResult, cancel: !confirmResult });
+      }
+      if (options && typeof options.complete === 'function') {
+        options.complete({ confirm: confirmResult, cancel: !confirmResult });
+      }
+    };
+    wx.showActionSheet = function (options) {
+      try {
+        globalThis.__e2eActionSheets = globalThis.__e2eActionSheets || [];
+        globalThis.__e2eActionSheets.push(options || {});
+      } catch (e) {}
+      // Default: select first item (tapIndex: 0)
+      var tapIdx = globalThis.__e2eActionSheetIndex !== undefined ? globalThis.__e2eActionSheetIndex : 0;
+      if (options && typeof options.success === 'function') {
+        options.success({ tapIndex: tapIdx });
+      }
+      if (options && typeof options.complete === 'function') {
+        options.complete({ tapIndex: tapIdx });
+      }
+    };
   });
 }
 
 async function restoreE2eMocks(miniProgram) {
-  for (const method of ['showActionSheet', 'showModal', 'setKeepScreenOn', 'hideLoading', 'showLoading', 'showToast', 'request', 'login']) {
+  try {
+    await miniProgram.evaluate(() => {
+      if (globalThis.__origShowModal) wx.showModal = globalThis.__origShowModal;
+      if (globalThis.__origShowActionSheet) wx.showActionSheet = globalThis.__origShowActionSheet;
+    });
+  } catch (e) {}
+  for (const method of ['setKeepScreenOn', 'hideLoading', 'showLoading', 'showToast', 'request', 'login']) {
     try {
       await miniProgram.restoreWxMethod(method);
     } catch (e) {}

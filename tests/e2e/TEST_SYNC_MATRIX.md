@@ -76,6 +76,58 @@
 
 ---
 
+## 2026-09-19 首页「当地」地址切换器迭代 e2e 更新
+
+背景：`e2e/smoke/home-arrow.e2e.test.js` 重命名为 `e2e/smoke/home-district.e2e.test.js`；首页左上角「寻秘品牌 + 左箭头 + 创建行程按钮」替换为「当地」地址切换器（写死 松阳县 331124 / 缙云县 331122，默认松阳县，手动选择持久化到 storage `home_district`）；创建行程入口移至右下角悬浮按钮 `.create-fab`；页面中部冗余的 `.local-bar` 当地指示条移除。
+
+| 测试文件 / 用例名 | 对应业务流程 | 当前状态 | 问题分类 | 决策 | 改动 | 验证命令 | 结果 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `e2e/smoke/home-district.e2e.test.js` 2.1 顶栏地址切换器默认松阳县 | 首页顶栏「当地」入口 | 已重写 | 旧断言 .top-bar-arrow/.top-bar-brand 元素已随需求移除 | 重写为地址切换器 contract | 断言 .district-picker 存在、districtOptions=[331124 松阳县, 331122 缙云县]、默认 currentDistrict=331124、旧顶栏元素与 .top-bar-create-btn 不存在、.create-fab 存在 | `npm run test:e2e:smoke` | 待验证（需微信开发者工具自动化端口） |
+| `e2e/smoke/home-district.e2e.test.js` 2.2 切换缙云县 | 地址切换驱动「当地」三列表 | 新增 | smoke | 新增 | callMethod onDistrictChange(1) → currentDistrict=331122、/wx/attraction/list 与 /wx/dish/featured 请求 district=331122、storage home_district=331122；用例结束清除 storage 防止跨用例泄漏 | `npm run test:e2e:smoke` | 待验证（需微信开发者工具自动化端口） |
+| `e2e/smoke/navigation.e2e.test.js` 核心入口 | 创建行程入口 | 调整 | selector 过时 | `.top-bar-create-btn` → `.create-fab` | 点击悬浮按钮仍应落地 create-itinerary | `npm run test:e2e:smoke` | 待验证 |
+| `e2e/regression/auth-privacy.e2e.test.js` 1.1–1.4 | 隐私/登录链路 | 调整 | selector 过时 | `.top-bar-create-btn` → `.create-fab`（4 处） | 链路断言不变 | `npm run test:e2e:regression` | 已通过 9/9（showModal 基础设施修复后 1.1–1.4 首次在本机真实跑通） |
+| `e2e/smoke/navigation.e2e.test.js` 首页核心区块 | 首页渲染 contract | 调整 | `hero-banner` 组件已随早前首页改版移除，断言过时（HEAD 上同样失败，非本次改动引入） | 断言改为 `.district-picker` 存在 | 其余断言不变 | `npm run test:e2e:smoke` | 已通过 4/4 |
+
+## 基础设施更新（2026-09-19）
+
+| 文件 | 改动 | 说明 |
+| --- | --- | --- |
+| `e2e/shared/app.js` | `showModal`/`showActionSheet` 由 `mockWxMethod` 改为 evaluate 同上下文覆盖 `wx.*`，并保存原实现供 `restoreE2eMocks` 还原 | 修复既有缺陷：`mockWxMethod` 在 bridge 层序列化 options 时会剥掉 `success`/`complete` 回调，导致 `ensurePrivacyAgreed` 等回调式 Promise 永不 resolve、点击创建行程无法跳转（HEAD 旧代码上同样复现）。`getRecordedModals`/`setModalConfirm`/`setActionSheetIndex` 等 helper 行为不变 |
+
+## 本次迭代 e2e 运行结果（2026-09-19，本机微信开发者工具自动化）
+
+| 套件 | 命令 | 结果 |
+| --- | --- | --- |
+| smoke | `npm run test:e2e:smoke` | 通过 4/4（home-district 2 条新用例 + navigation 2 条） |
+| regression | `npm run test:e2e:regression` | 通过 9/9 |
+| core | `npm run test:e2e:core` | 14 通过 / 6 失败；失败集中在 `market-services.e2e.test.js` 6.3 与 `detail-first-add.e2e.test.js` 5.1–5.5，均为存量问题：在 HEAD（未含本次改动）上以 `npx jest --config jest.e2e.core.config.js --runInBand --forceExit --testPathPattern "(market-services|detail-first-add)"` 复跑得到完全相同的 6 个失败（引用了已删除的 `hero-banner`、已不存在的 `onAddSchedule` 方法与过时 drawer selector），与本次首页改动无关，留待后续迭代单独修复 |
+
+## 2026-09-19 「当地」县域切换扩展迭代（创建行程页 + 集市页）e2e 更新
+
+背景：新增共享模块 `miniprogram/utils/district.ts`（「当地」唯一数据源：DISTRICT_OPTIONS 松阳县 331124 / 缙云县 331122、固定省市 330000/331100、storage key `home_district`）。首页 `pages/index` 重构为从该模块导入；创建行程页解除「仅松阳」锁定，改为县域 selector 切换（省市固定丽水市），选择结果与首页「当地」双向共享同一 storage；集市页（treasure）district 改为跟随「当地」，`onLoad` 首载改为 `onShow` 按 district 变化重载（同时修复了旧 6.3 因 switchTab 同 tab 不触发加载而无请求的存量失败）。
+
+| 测试文件 / 用例名 | 对应业务流程 | 当前状态 | 问题分类 | 决策 | 改动 | 验证命令 | 结果 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `e2e/core/region-lock.e2e.test.js` 3.1–3.5 | 创建页地区选择 | 已重写 | 旧断言基于「地区锁定松阳」需求，已被「县域可切换」取代 | 重写为县域切换 contract | 3.1 默认松阳 + `.region-picker` selector 存在、`picker[mode="region"]`/`.region-locked` 不存在；3.2 tip 文案含松阳县、缙云县；3.3 onDistrictChange(1) → 331122 且持久化 storage；3.4 提交携带 district=331122；3.5 预置 storage=331122 重进创建页默认缙云；afterAll 清除 storage 防泄漏 | `npm run test:e2e:core` | 已通过 5/5 |
+| `e2e/core/itinerary-business.e2e.test.js` 手动创建行程 | 创建行程主流程 | 调整 | 原用例调用已删除的 `onRegionChange`（杭州/西湖三级联动） | 改为 `onDistrictChange(1)` 切缙云 | 断言 province=330000、city=331100（固定丽水）、district=331122；用例结束清除 storage | `npm run test:e2e:core` | 已通过（套件 4/4） |
+| `e2e/core/market-services.e2e.test.js` 6.3 | 集市区域参数 | 已重写 | 旧用例 switchTab 到当前 tab 不触发加载（存量失败）；且区域已由写死改为跟随「当地」 | 重写为 reLaunch 强制重建页面实例 | 默认无选择 → accommodation/list 携带 district=331124；预置 storage=331122 后 reLaunch → district=331122；结束还原 storage 并 reLaunch | `npm run test:e2e:core` | 已通过（套件 5/5，原 6.3 存量失败一并修复） |
+| `agent-builder/itinerary-unit.test.js` create-itinerary 两个静态用例 | 创建页源码 contract | 已重写 | 旧断言引用早已删除的 `mode="region"`/`onRegionChange`（HEAD 上即失败的存量过时用例） | 更新为 selector picker contract | 断言 wxml 含 `mode="selector"`/`bindchange="onDistrictChange"`/`range="{{districtOptions}}"`；ts 含 DISTRICT_OPTIONS/setSelectedDistrict/getSelectedDistrict | `npx jest --testEnvironment node --reporters default --testMatch "**/agent-builder/itinerary-unit.test.js" --runInBand --forceExit`（tests/ 下） | 已通过（region 相关 2 用例转绿；该文件另有 journey-card 日期存量失败 1 例，HEAD 同样失败） |
+
+### 本次迭代 e2e / 单测运行结果（2026-09-19，本机微信开发者工具自动化）
+
+| 套件 | 命令 | 结果 |
+| --- | --- | --- |
+| home 单测 | tests/ 下 `npx jest --testEnvironment node --reporters default --testMatch "**/home/**/*.unit.test.js" --runInBand --forceExit` | 通过 23/23 |
+| agent-builder 静态单测（itinerary-unit） | tests/ 下 `npx jest --testEnvironment node --reporters default --testMatch "**/agent-builder/itinerary-unit.test.js" --runInBand --forceExit` | region 相关 2 用例由存量失败转绿；余 1 失败（journey-card 日期）为 HEAD 存量 |
+| smoke | `npm run test:e2e:smoke` | 通过 4/4（首轮 navigation 因开发者工具连续启动偶发失败，复跑全绿） |
+| regression | `npm run test:e2e:regression` | 通过 9/9 |
+| core | `npm run test:e2e:core` | 17 通过 / 5 失败；失败仅剩 `detail-first-add.e2e.test.js` 5.1–5.5 存量问题（HEAD 复跑相同失败，引用已删除的 `onAddSchedule`、`hero-banner` 与过时 drawer selector）；原 `market-services` 6.3 存量失败已随本次改造修复 |
+
+
+注：`agent-builder` 套件中 `blind-mode-add-button.test.js`（未跟踪新文件，6 失败）、`itinerary-detail-enhance.test.js` 天气集成（4 失败）、journey-card 日期（1 失败）均为存量失败，与本次改动无关（HEAD worktree 复跑确认）。
+
+---
+
 ## 受限说明
 
 以下用例受限于微信小程序自动化框架能力，已在测试中标注：
@@ -83,3 +135,21 @@
 - **用例 2.1 视觉对齐**：automator 不支持像素级布局验证，测试仅验证 DOM 结构和元素存在；真正的对齐检查需真机截图比对。
 - **用例 1.5 真实 401 模拟**：当前 request mock 为全局替换，无法针对单次请求返回 401；测试验证 login 页可达性和核心元素，interceptor 代码未改动。
 - **用例 5.5 首页完整 addFlow**：首页 intro-drawer 的 primarytap → onAddToItinerary 需要已有行程上下文，测试验证首页渲染正常和 handler 存在。
+
+---
+
+## 2026-09-29 「当地」新增杭州市（市级选项）+ 餐饮详情展示地址 e2e 更新
+
+背景：`miniprogram/utils/district.ts` 的 `DISTRICT_OPTIONS` 新增市级选项 `杭州市 330100`（`level: 'city'`），并新增 `buildRegionQuery/buildRegionQueryByCode` 与 `getOptionCityCode/getOptionDistrictCode/getOptionCityName/getOptionDistrictName` 等派生函数。县域选项仍按 `district` 精确查询；市级选项只下发 `province + city`、不带 `district`（后端 `travel_*` mapper 的 `district` 为精确等值过滤，把市编码当区县传会查空）。首页三列表、集市页、创建行程页统一改用该派生逻辑；创建行程页新增 `districtOptionCode`（选中选项编码，市级时与 `districtCode` 不同）与 `regionText`（目的地展示文案，市级不重复显示市名）。餐饮详情抽屉 `components/dining-intro-drawer` 的「位置」区块在原关联景点行下方新增餐饮地址行（`address`，点击同样唤起 `wx.openLocation`），`hasDetails` 纳入 `address`。
+
+| 测试文件 / 用例名 | 对应业务流程 | 当前状态 | 问题分类 | 决策 | 改动 | 验证命令 | 结果 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `e2e/smoke/home-district.e2e.test.js` 2.1 | 首页「当地」切换器选项 | 已更新 | 旧断言只允许 松阳县/缙云县 两项 | 扩为三项 contract | `districtOptions` code 断言改为 `['331124','331122','330100']`，name 改为 `['松阳县','缙云县','杭州市']` | `npm run test:e2e:smoke` | 待验证（需微信开发者工具自动化端口） |
+| `e2e/smoke/home-district.e2e.test.js` 2.3 | 首页切到杭州市后的地区参数 | 新增 | 市级选项查询语义无覆盖 | 新增用例 | `onDistrictChange(2)` → `currentDistrict=330100`、`districtIndex=2`；`/wx/attraction/list` 与 `/wx/dish/featured` 携带 `province=330000`、`city=330100` 且 `district` 为 undefined；storage `home_district=330100`；结束清除 storage | `npm run test:e2e:smoke` | 待验证（需微信开发者工具自动化端口） |
+| `e2e/core/region-lock.e2e.test.js` 3.1 | 创建页地区选项 | 已更新 | 同上，选项数量变化 | 扩为三项 | `districtOptions` code 断言追加 `330100` | `npm run test:e2e:core` | 待验证 |
+| `e2e/core/region-lock.e2e.test.js` 3.2 | 创建页提示文案 | 已更新 | tip 新增杭州市 | 追加断言 | `.region-tip` 文本需同时含 松阳县、缙云县、杭州市 | `npm run test:e2e:core` | 待验证 |
+| `e2e/core/region-lock.e2e.test.js` 3.6 | 创建页切到杭州市 | 新增 | 市级选项的 city/district 拆分与展示文案无覆盖 | 新增用例 | `onDistrictChange(2)` → `districtOptionCode=330100`、`provinceCode=330000`、`cityCode=330100`、`districtCode=''`、`cityName=杭州市`、`districtName=''`、`regionText='浙江省 杭州市'`；storage 持久化 330100；结束清除 storage | `npm run test:e2e:core` | 待验证 |
+| `drawer-redesign/view-model.test.js` dining drawer view model | 餐饮详情抽屉 view model | 已重写 | 旧用例断言「address 不作为位置文案展示」且 `hasDetails=false`，与本次「展示餐饮地址」需求相反；同一条用例还残留过时期望 `¥88/person`（源码与 attraction drawer 一致输出 `¥88/人`，HEAD 上即失败） | 用例改名为 `dining drawer view model shows attractionName and dining address safely`，按新契约重写 | 断言 `address` 原样透出；仅地址无关联景点时 `hasDetails=true`；两者皆空时 `address=''` 且 `hasDetails=false`；顺带修正 `costText` 期望为 `¥88/人` | `node --test drawer-redesign/view-model.test.js` | 已通过（该用例由 HEAD 存量失败转绿；photography / attraction view model 2 例仍为 HEAD 存量失败） |
+| `drawer-redesign/static-structure.test.js` dining drawer renders the dining address | 餐饮详情抽屉结构 | 新增 | 地址展示无静态结构覆盖 | 新增用例 | 断言 WXML 位置区块条件为 `{{viewModel.attractionName \|\| viewModel.address}}`、含 `{{viewModel.address}}` 与 `dining-intro__address-text`，SCSS 含 `.dining-intro__address-text` | `node --test drawer-redesign/static-structure.test.js` | 已通过 |
+| 餐饮详情地址展示（界面） | `dining-intro-drawer` 位置区块 | 未新增 e2e | 旧 `agent-builder/dining-intro-drawer` 抽屉 e2e 已删除，当前无抽屉级 e2e 承载真机排版 | 以 `npx tsc --noEmit` + 微信开发者工具人工验证为准 | WXML 新增地址行（`wx:if="{{viewModel.address}}"`，无关联景点时补定位图标，点击唤起 `wx.openLocation`），SCSS 新增 `.dining-intro__address-text`，TS `hasDetails` 纳入 `address` | `npx tsc --noEmit` + 开发者工具预览 | tsc 通过（仅 `typings/types/wx/lib.wx.app.d.ts` 既有报错）；界面排版待人工验证 |
+| `agent-builder/itinerary-unit.test.js` create-itinerary 静态用例 | 创建页源码 contract | 未改动 | 本次仅新增 `applyDistrictOption/districtOptionCode/regionText`，旧断言仍成立 | 保持原断言 | 无 | `npx jest --testEnvironment node --reporters default --testMatch "**/agent-builder/itinerary-unit.test.js" --runInBand --forceExit` | 已通过 94/95（唯一失败为 journey-card 日期 HEAD 存量问题） |

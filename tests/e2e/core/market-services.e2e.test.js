@@ -103,20 +103,40 @@ describe('core business 集市本地服务 (需求6)', () => {
     await page.callMethod('onIntroClose');
   });
 
-  test('6.3 区域为松阳', async () => {
+  test('6.3 区域跟随「当地」：默认松阳，切缙云后按 331122 拉取', async () => {
+    // 默认（无手动选择）：松阳 331124
+    await miniProgram.evaluate(() => wx.removeStorageSync('home_district'));
     await resetRecordedEvents(miniProgram);
-    const page = await miniProgram.switchTab(PAGES.TREASURE);
-    await page.waitFor(TIMEOUTS.NETWORK);
+    // 用 reLaunch 重建页面实例，保证触发首屏加载（switchTab 到当前 tab 不会触发）
+    await miniProgram.reLaunch(PAGES.TREASURE);
+    await (await miniProgram.currentPage()).waitFor(TIMEOUTS.NETWORK);
 
-    const requests = await getRecordedRequests(miniProgram);
-    // The accommodation list request should carry songyang region params
-    const hotelListReq = requests.find(
+    let requests = await getRecordedRequests(miniProgram);
+    let hotelListReq = requests.find(
       (req) => req.url.indexOf('/wx/accommodation/list') >= 0,
     );
     expect(hotelListReq).toBeDefined();
     expect(hotelListReq.data.province).toBe('330000');
     expect(hotelListReq.data.city).toBe('331100');
     expect(hotelListReq.data.district).toBe('331124');
+
+    // 「当地」切到缙云后重进集市：按 331122 拉取
+    await miniProgram.evaluate(() => wx.setStorageSync('home_district', '331122'));
+    await resetRecordedEvents(miniProgram);
+    await miniProgram.reLaunch(PAGES.TREASURE);
+    await (await miniProgram.currentPage()).waitFor(TIMEOUTS.NETWORK);
+
+    requests = await getRecordedRequests(miniProgram);
+    hotelListReq = requests.find(
+      (req) => req.url.indexOf('/wx/accommodation/list') >= 0,
+    );
+    expect(hotelListReq).toBeDefined();
+    expect(hotelListReq.data.district).toBe('331122');
+
+    // 还原默认，避免影响后续用例/套件
+    await miniProgram.evaluate(() => wx.removeStorageSync('home_district'));
+    await miniProgram.reLaunch(PAGES.TREASURE);
+    await (await miniProgram.currentPage()).waitFor(TIMEOUTS.NETWORK);
   });
 
   test('6.4 空态占位', async () => {

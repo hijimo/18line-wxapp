@@ -13,6 +13,15 @@ import { getCheckinList, getCheckinDetail } from '../../services/checkin';
 import { getFeaturedDishes, getDishesByDining } from '../../services/dish';
 import { getDiningDetail } from '../../services/dining';
 import { getDistrictCache, setDistrictCache } from '../../utils/district-cache';
+import {
+  DEFAULT_DISTRICT_OPTION,
+  DISTRICT_OPTIONS,
+  buildRegionQueryByCode,
+  findDistrictOption,
+  getStoredDistrictOption,
+  setSelectedDistrict,
+  type DistrictOption,
+} from '../../utils/district';
 import { ensureLogin, ensurePrivacyAgreed } from '../../utils/ensure-login';
 import { getToken } from '../../utils/request';
 import {
@@ -42,8 +51,10 @@ Component({
     hasJourneys: true,
     journeys: [] as JourneyCardVM[],
     activeJourneyIndex: 0,
-    currentDistrict: '',
-    currentDistrictName: '',
+    districtOptions: DISTRICT_OPTIONS,
+    districtIndex: 0,
+    currentDistrict: DEFAULT_DISTRICT,
+    currentDistrictName: DEFAULT_DISTRICT_NAME,
     inspirationTitle: '地道灵感：探索秘境',
     inspirationCards: [] as InspirationCardVM[],
     eggs: [] as GemItemVM[],
@@ -74,16 +85,14 @@ Component({
       // 进入首页先判断本地是否已登录（仅判断 localStorage 是否有 token）。
       // 已登录才调用「我的行程」接口；未登录则只展示首页当地信息，
       // 避免一进入程序就触发登录，让用户先浏览首页再决定是否登录使用。
+      // 「当地」优先取用户上次手动选择的地址，无记录则默认松阳县。
+      const target = getStoredDistrictOption() || DEFAULT_DISTRICT_OPTION;
+      (this as any).applyDistrict(target);
       if (getToken()) {
         (this as any).loadJourneys();
       } else {
-        this.setData({
-          hasJourneys: false,
-          journeys: [],
-          currentDistrict: DEFAULT_DISTRICT,
-          currentDistrictName: DEFAULT_DISTRICT_NAME,
-        });
-        (this as any).loadLocal(DEFAULT_DISTRICT);
+        this.setData({ hasJourneys: false, journeys: [] });
+        (this as any).loadLocal(target.code);
       }
     },
   },
@@ -96,30 +105,25 @@ Component({
         if (journeys.length > 0) {
           await (this as any).enrichRestaurantImages(journeys);
           const first = journeys[0];
+          // 「当地」优先级：用户手动选择 > 首个行程所在县（须在地址切换列表内）> 默认松阳县
+          const target =
+            getStoredDistrictOption() ||
+            findDistrictOption(first.district) ||
+            DEFAULT_DISTRICT_OPTION;
           this.setData({
             journeys,
             hasJourneys: true,
             activeJourneyIndex: 0,
-            currentDistrict: first.district || DEFAULT_DISTRICT,
-            currentDistrictName: first.districtName || DEFAULT_DISTRICT_NAME,
           });
-          (this as any).loadLocal(first.district || DEFAULT_DISTRICT);
+          (this as any).applyDistrict(target);
+          (this as any).loadLocal(target.code);
         } else {
-          this.setData({
-            journeys: [],
-            hasJourneys: false,
-            currentDistrict: DEFAULT_DISTRICT,
-            currentDistrictName: DEFAULT_DISTRICT_NAME,
-          });
-          (this as any).loadLocal(DEFAULT_DISTRICT);
+          this.setData({ journeys: [], hasJourneys: false });
+          (this as any).loadLocal(this.data.currentDistrict || DEFAULT_DISTRICT);
         }
       } catch (err) {
         console.error('Failed to load journeys:', err);
-        this.setData({
-          currentDistrict: DEFAULT_DISTRICT,
-          currentDistrictName: DEFAULT_DISTRICT_NAME,
-        });
-        (this as any).loadLocal(DEFAULT_DISTRICT);
+        (this as any).loadLocal(this.data.currentDistrict || DEFAULT_DISTRICT);
       }
     },
 
@@ -149,15 +153,34 @@ Component({
 
     onJourneyChange(e: any) {
       const { index, district } = e.detail || {};
-      const journeys = this.data.journeys || [];
-      const target = journeys[index] || {};
-      const nextDistrict = district || target.district || DEFAULT_DISTRICT;
+      this.setData({ activeJourneyIndex: index });
+      // 「当地」跟随行程卡片，但仅限地址切换列表内的县；列表外行程不改变当地
+      const option = findDistrictOption(district);
+      if (!option || option.code === this.data.currentDistrict) return;
+      (this as any).applyDistrict(option);
+      (this as any).loadLocal(option.code);
+    },
+
+    /* -------------------- 地址切换（当地） -------------------- */
+    /** 将地址选项应用到「当地」状态（驱动顶部切换器与三列表） */
+    applyDistrict(option: DistrictOption) {
+      const index = DISTRICT_OPTIONS.findIndex((o) => o.code === option.code);
       this.setData({
-        activeJourneyIndex: index,
-        currentDistrict: nextDistrict,
-        currentDistrictName: target.districtName || DEFAULT_DISTRICT_NAME,
+        districtIndex: index >= 0 ? index : 0,
+        currentDistrict: option.code,
+        currentDistrictName: option.name,
       });
-      (this as any).loadLocal(nextDistrict);
+    },
+
+    /** 顶部地址切换器选择 */
+    onDistrictChange(e: any) {
+      const index = Number(e.detail.value);
+      const option = DISTRICT_OPTIONS[index];
+      if (!option || option.code === this.data.currentDistrict) return;
+      (this as any).applyDistrict(option);
+      // 手动选择的「当地」持久化，作为下次进入首页/创建行程/集市的默认地址
+      setSelectedDistrict(option.code);
+      (this as any).loadLocal(option.code);
     },
 
     async loadLocal(district: string) {
@@ -179,8 +202,9 @@ Component({
       }
       try {
         // 探索秘境只展示非盲游景点（接口层用 blindStatus='0' 过滤）
+        // 地区参数按「当地」选项层级下发：县域传 district，市级只传 city
         const res = await getAttractionList({
-          district,
+          ...buildRegionQueryByCode(district),
           minClassicRating: 4,
           blindStatus: '0',
           pageSize: 5,
@@ -203,7 +227,7 @@ Component({
       try {
         // 隐匿之藏同样过滤盲游打卡点
         const res = await getCheckinList({
-          district,
+          ...buildRegionQueryByCode(district),
           minClassicRating: 4,
           blindStatus: '0',
           pageSize: 5,
@@ -224,7 +248,7 @@ Component({
         return;
       }
       try {
-        const res = await getFeaturedDishes({ district });
+        const res = await getFeaturedDishes(buildRegionQueryByCode(district));
         const items = mapLocalDishes(res.data || []);
         setDistrictCache('food', district, items);
         if (this.data.currentDistrict !== district) return; // 已切换当地，丢弃过期响应
