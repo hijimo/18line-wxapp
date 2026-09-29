@@ -176,7 +176,7 @@ test('attraction drawer view model handles empty and multiple check-in points', 
   assert.equal(emptyPoints.hasGallery, false);
 });
 
-test('dining drawer view model uses attractionName for location display safely', () => {
+test('dining drawer view model shows attractionName and dining address safely', () => {
   const createViewModel = loadViewModelFactory(
     'dining-intro-drawer',
     'createDiningIntroViewModel',
@@ -188,12 +188,24 @@ test('dining drawer view model uses attractionName for location display safely',
     avgCost: 88,
     diningDesc: '本地菜',
   });
-  const empty = createViewModel({ attractionName: null, address: '不会作为位置文案展示' });
+  // 没有关联景点时，地址仍需独立撑起「位置」区块
+  const addressOnly = createViewModel({
+    attractionName: null,
+    address: '浙江省丽水市莲都区山谷路 18 号',
+  });
+  const empty = createViewModel({ attractionName: null, address: null });
 
   assert.equal(complete.title, '山谷小馆');
   assert.equal(complete.attractionName, '云溪古街');
   assert.equal(complete.address, '浙江省丽水市莲都区山谷路 18 号');
-  assert.equal(complete.costText, '¥88/person');
+  // 存量断言修正：源码与 attraction drawer 一致输出「¥88/人」，旧期望 '/person' 为过时文案
+  assert.equal(complete.costText, '¥88/人');
+
+  assert.equal(addressOnly.attractionName, '');
+  assert.equal(addressOnly.address, '浙江省丽水市莲都区山谷路 18 号');
+  assert.equal(addressOnly.hasDetails, true);
+
   assert.equal(empty.attractionName, '');
+  assert.equal(empty.address, '');
   assert.equal(empty.hasDetails, false);
 });

@@ -73,9 +73,10 @@
     </view>
 
     <view class="dining-intro__content">
-      <view wx:if="{{viewModel.attractionName}}" class="dining-intro__section">
+      <view wx:if="{{viewModel.attractionName || viewModel.address}}" class="dining-intro__section">
         <text class="dining-intro__section-label">位置</text>
         <view
+          wx:if="{{viewModel.attractionName}}"
           class="dining-intro__location-row"
           hover-class="dining-intro__location-row--active"
           bindtap="onLocationTap"
@@ -86,6 +87,21 @@
             mode="aspectFit"
           />
           <text class="dining-intro__location-text">{{viewModel.attractionName}}</text>
+        </view>
+        <!-- 餐饮地址：同样点击唤起地图；没有关联景点时补上定位图标 -->
+        <view
+          wx:if="{{viewModel.address}}"
+          class="dining-intro__location-row"
+          hover-class="dining-intro__location-row--active"
+          bindtap="onLocationTap"
+        >
+          <image
+            wx:if="{{!viewModel.attractionName}}"
+            class="dining-intro__location-icon"
+            src="{{iconUrls.location}}"
+            mode="aspectFit"
+          />
+          <text class="dining-intro__address-text">{{viewModel.address}}</text>
         </view>
       </view>
 

@@ -165,6 +165,17 @@ for (const drawer of scheduleEntryDrawers) {
   });
 }
 
+test('dining drawer renders the dining address inside the location section', () => {
+  const wxml = readDrawer('dining-intro-drawer', 'wxml');
+  const scss = readDrawer('dining-intro-drawer', 'scss');
+
+  // 「位置」区块在关联景点之外，还要展示餐饮地址
+  assert.ok(wxml.includes('{{viewModel.attractionName || viewModel.address}}'));
+  assert.ok(wxml.includes('{{viewModel.address}}'));
+  assert.ok(wxml.includes('dining-intro__address-text'));
+  assert.ok(scss.includes('.dining-intro__address-text'));
+});
+
 test('hotel and attraction share icons match the dining drawer share icon', () => {
   const diningTs = readDrawer('dining-intro-drawer', 'ts');
   const hotelTs = readDrawer('hotel-intro-drawer', 'ts');

@@ -152,6 +152,7 @@ function createDiningIntroViewModel(data: DiningIntroData | null | undefined): D
       ratingText ||
         costText ||
         attractionName ||
+        address ||
         description ||
         dishes.length ||
         pathItems.length ||
