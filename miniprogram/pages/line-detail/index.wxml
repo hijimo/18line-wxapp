@@ -1,0 +1,90 @@
+<view class="detail">
+  <navigation-bar title="线路详情" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
+  <view wx:if="{{loading}}" class="detail__state">
+    <text class="detail__state-text">正在加载…</text>
+  </view>
+
+  <view wx:elif="{{loadError}}" class="detail__state">
+    <text class="detail__state-text">{{loadError}}</text>
+    <view class="detail__retry" bindtap="onRetry" hover-class="detail__retry--hover">
+      <text class="detail__retry-text">重新加载</text>
+    </view>
+  </view>
+
+  <block wx:elif="{{line}}">
+    <view class="detail__hero">
+      <image
+        wx:if="{{line.coverImage}}"
+        class="detail__cover"
+        src="{{line.coverImage}}"
+        mode="aspectFill"
+      />
+      <view wx:else class="detail__cover detail__cover--fallback">
+        <text class="detail__cover-char">{{coverFallback}}</text>
+      </view>
+    </view>
+
+    <view class="detail__main">
+      <view class="detail__heading">
+        <text class="detail__title">{{lineName}}</text>
+        <text wx:if="{{regionText}}" class="detail__region">{{regionText}}</text>
+      </view>
+
+      <view class="detail__meta">
+        <view class="detail__meta-item">
+          <text class="detail__meta-label">线路作者</text>
+          <text class="detail__meta-value">{{authorName}}</text>
+        </view>
+        <view wx:if="{{line.merchantName}}" class="detail__meta-item">
+          <text class="detail__meta-label">提供方</text>
+          <text class="detail__meta-value">{{line.merchantName}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{line.remark}}" class="detail__section">
+        <text class="detail__section-title">线路简介</text>
+        <text class="detail__remark">{{line.remark}}</text>
+      </view>
+
+      <view wx:if="{{attractions.length > 0}}" class="detail__section">
+        <view class="detail__section-head">
+          <text class="detail__section-title">途经地点</text>
+          <text class="detail__section-count">{{attractions.length}} 处</text>
+        </view>
+        <view class="spot-list">
+          <view wx:for="{{attractions}}" wx:key="attractionId" class="spot">
+            <text class="spot__index">{{item.indexText}}</text>
+            <view class="spot__body">
+              <text class="spot__name">{{item.attractionName}}</text>
+              <view class="spot__tags">
+                <text wx:if="{{item.ratingText}}" class="spot__tag spot__tag--rating">{{item.ratingText}}</text>
+                <text wx:if="{{item.visitDuration}}" class="spot__tag">{{item.visitDuration}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="detail__records" bindtap="onViewMyRewards" hover-class="detail__records--hover">
+        <text class="detail__records-text">我的打赏记录</text>
+        <text class="detail__records-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 底部悬浮操作栏：glass 表面，符合设计系统的 floating action 规范 -->
+    <view wx:if="{{showRewardEntry}}" class="detail__actionbar">
+      <view class="detail__action" bindtap="onOpenReward" hover-class="detail__action--hover">
+        <text class="detail__action-text">鼓励一下 {{authorName}}</text>
+      </view>
+    </view>
+
+    <reward-panel
+      show="{{rewardPanelVisible}}"
+      line-id="{{lineId}}"
+      line-name="{{lineName}}"
+      author-name="{{authorName}}"
+      bind:close="onCloseReward"
+      bind:success="onRewardSuccess"
+    />
+  </block>
+</view>

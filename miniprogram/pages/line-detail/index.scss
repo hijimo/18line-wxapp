@@ -1,0 +1,278 @@
+.detail {
+  min-height: 100vh;
+  background: #f9faf4;
+
+  &__state {
+    padding: 200rpx 48rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32rpx;
+  }
+
+  &__state-text {
+    font-size: 28rpx;
+    color: #6b7568;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  &__retry {
+    padding: 18rpx 48rpx;
+    background: #ffffff;
+    border-radius: 999rpx;
+
+    &--hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__retry-text {
+    font-size: 26rpx;
+    color: #163422;
+    font-weight: 600;
+  }
+
+  // 封面「出血」到屏幕边缘，制造 Field Guide 的开放感
+  &__hero {
+    width: 100%;
+    height: 440rpx;
+    background: #edeee8;
+  }
+
+  &__cover {
+    width: 100%;
+    height: 100%;
+    display: block;
+
+    &--fallback {
+      background: linear-gradient(135deg, #163422 0%, #2d4b37 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &__cover-char {
+    font-size: 160rpx;
+    font-weight: 700;
+    color: rgba(249, 250, 244, 0.24);
+    letter-spacing: -0.02em;
+  }
+
+  &__main {
+    // 顶部上移压住封面底部，形成层叠纸面效果
+    margin-top: -56rpx;
+    position: relative;
+    background: #f9faf4;
+    border-radius: 40rpx 40rpx 0 0;
+    padding: 44rpx 40rpx 48rpx;
+    // 给底部悬浮栏留出空间，避免内容被遮挡
+    padding-bottom: calc(180rpx + env(safe-area-inset-bottom));
+  }
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 16rpx;
+    margin-bottom: 36rpx;
+  }
+
+  &__title {
+    font-size: 46rpx;
+    font-weight: 700;
+    color: #163422;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+
+  &__region {
+    font-size: 25rpx;
+    color: #944a00;
+    font-weight: 500;
+  }
+
+  &__meta {
+    display: flex;
+    gap: 20rpx;
+    margin-bottom: 44rpx;
+  }
+
+  &__meta-item {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 24rpx;
+    padding: 24rpx 26rpx;
+    display: flex;
+    flex-direction: column;
+    gap: 10rpx;
+    min-width: 0;
+  }
+
+  &__meta-label {
+    font-size: 22rpx;
+    color: #8d968b;
+  }
+
+  &__meta-value {
+    font-size: 28rpx;
+    color: #163422;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__section {
+    margin-bottom: 44rpx;
+  }
+
+  &__section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 24rpx;
+  }
+
+  &__section-title {
+    display: block;
+    font-size: 30rpx;
+    font-weight: 700;
+    color: #163422;
+    margin-bottom: 24rpx;
+  }
+
+  &__section-head &__section-title {
+    margin-bottom: 0;
+  }
+
+  &__section-count {
+    font-size: 24rpx;
+    color: #944a00;
+    font-weight: 500;
+  }
+
+  &__remark {
+    font-size: 27rpx;
+    color: #4d564c;
+    line-height: 1.75;
+  }
+
+  &__records {
+    margin-top: 8rpx;
+    background: #f3f4ee;
+    border-radius: 24rpx;
+    padding: 30rpx 28rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &--hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__records-text {
+    font-size: 27rpx;
+    color: #163422;
+    font-weight: 500;
+  }
+
+  &__records-arrow {
+    font-size: 34rpx;
+    color: #a2aaa0;
+    line-height: 1;
+  }
+
+  &__actionbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20rpx 32rpx calc(20rpx + env(safe-area-inset-bottom));
+    // Glassmorphism：设计系统指定悬浮操作用玻璃表面
+    background: rgba(226, 227, 221, 0.7);
+    backdrop-filter: blur(16px);
+    z-index: 100;
+  }
+
+  &__action {
+    height: 96rpx;
+    border-radius: 24rpx;
+    background: linear-gradient(135deg, #163422 0%, #2d4b37 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 160ms ease;
+
+    &--hover {
+      opacity: 0.88;
+    }
+  }
+
+  &__action-text {
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #f9faf4;
+    letter-spacing: 0.02em;
+  }
+}
+
+.spot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.spot {
+  display: flex;
+  align-items: flex-start;
+  gap: 22rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 26rpx 28rpx;
+
+  &__index {
+    flex-shrink: 0;
+    font-size: 26rpx;
+    font-weight: 700;
+    color: #944a00;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10rpx;
+  }
+
+  &__name {
+    font-size: 29rpx;
+    font-weight: 600;
+    color: #163422;
+    line-height: 1.4;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12rpx;
+  }
+
+  &__tag {
+    padding: 4rpx 14rpx;
+    border-radius: 999rpx;
+    background: #f3f4ee;
+    font-size: 21rpx;
+    color: #6b7568;
+
+    &--rating {
+      background: rgba(148, 74, 0, 0.1);
+      color: #944a00;
+      font-weight: 600;
+    }
+  }
+}

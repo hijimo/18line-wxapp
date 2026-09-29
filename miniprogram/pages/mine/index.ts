@@ -89,6 +89,15 @@ Page({
     wx.navigateTo({ url: `/pages/journeys/index?filter=${filter}` });
   },
 
+  goLines() {
+    wx.navigateTo({ url: '/pages/lines/index' });
+  },
+
+  goRewardRecords() {
+    // 不传 lineId 表示查看全部线路的打赏记录
+    wx.navigateTo({ url: '/pages/reward-records/index' });
+  },
+
   goTravelTraits() {
     wx.navigateTo({ url: '/pages/survey/index?mode=edit' });
   },

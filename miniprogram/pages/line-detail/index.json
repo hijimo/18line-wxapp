@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "reward-panel": "/components/reward-panel/reward-panel"
+  }
+}

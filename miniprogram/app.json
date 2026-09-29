@@ -10,6 +10,9 @@
     "pages/journeys/index",
     "pages/create-itinerary/index",
     "pages/itinerary-detail/index",
+    "pages/lines/index",
+    "pages/line-detail/index",
+    "pages/reward-records/index",
     "pages/logs/logs"
   ],
   "window": {

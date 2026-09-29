@@ -1,0 +1,442 @@
+/**
+ * 微信虚拟支付（米大师）封装 — 线路打赏专用
+ *
+ * 官方文档：https://developers.weixin.qq.com/miniprogram/dev/api/payment/wx.requestVirtualPayment.html
+ * 设计文档：docs/architecture/virtual-payment-reward-design.md §6（支付时序）、§11.1（接口契约）、§12.1（错误码）
+ *
+ * ## 三条不可动摇的红线
+ *
+ * 1. **signData 原样透传，禁止二次序列化。**
+ *    后端基于它已序列化好的字符串计算 paySig 与 signature，前端再 JSON.stringify
+ *    会改变字段顺序/空格，直接导致 -15006（支付签名错误）。
+ *
+ * 2. **success 回调不是支付成功的凭证。**
+ *    真实到账以微信服务端发货推送落库为准。前端必须轮询
+ *    GET /wx/reward/order/{outTradeNo} 读服务端状态；且该接口只读本地库，
+ *    支付后短时间内读到「待支付」是正常现象（推送/补偿任务会在几分钟内追平），
+ *    **不能据此判定支付失败**，应展示「处理中」。
+ *
+ * 3. **-2（用户取消）不是错误。**
+ *    用户主动取消支付属于正常操作路径，不弹错误提示、不上报异常。
+ */
+
+import { wxLogin } from './authorize';
+import { login } from '../services/auth';
+import { TOKEN_KEY } from './request';
+import { createRewardOrder, getRewardOrderStatus } from '../services/reward';
+import { REWARD_ERR, VPAY_ERR } from '../types/reward';
+import type { RewardOrderStatusResult } from '../types/reward';
+
+/** wx.requestVirtualPayment 要求的最低基础库版本 */
+const MIN_SDK_VERSION = '2.19.2';
+
+/** 后端档位 allow_platforms 支持的终端；devtools 不在其中（开发者工具内无法真实支付） */
+const SUPPORTED_PLATFORMS = ['android', 'ios', 'harmony', 'windows'];
+
+/** 轮询间隔与次数：8 × 1500ms ≈ 12 秒，覆盖绝大多数推送延迟 */
+const POLL_INTERVAL_MS = 1500;
+const POLL_MAX_ATTEMPTS = 8;
+
+/** 模块级支付锁，防止连点造成重复下单 */
+let paying = false;
+
+export interface VirtualPaymentCapability {
+  supported: boolean;
+  platform: string;
+  sdkVersion: string;
+  /** 不支持时的用户可读原因，supported=true 时为 undefined */
+  reason?: string;
+}
+
+export interface VirtualPaymentError extends Error {
+  /** wx.requestVirtualPayment 的 errCode，或后端业务码 */
+  errCode?: number;
+  /** 用户主动取消 */
+  cancelled?: boolean;
+}
+
+/** 打赏编排的最终结果 */
+export type RewardPayOutcome =
+  | { status: 'success'; order: RewardOrderStatusResult }
+  | { status: 'pending'; message: string; outTradeNo: string }
+  | { status: 'cancelled' }
+  | { status: 'unsupported'; message: string }
+  | { status: 'failed'; message: string; errCode?: number };
+
+export type RewardPayStage =
+  | 'creating-order'
+  | 'invoking-payment'
+  | 'confirming'
+  | 'done';
+
+export interface PayLineRewardOptions {
+  lineId: number;
+  tierCode: string;
+  /** 阶段变更回调，供 UI 展示「正在创建订单/正在拉起支付/正在确认结果」 */
+  onStage?: (stage: RewardPayStage) => void;
+}
+
+/**
+ * 版本号比较（官方推荐实现）。
+ * @returns v1>v2 返回 1，v1<v2 返回 -1，相等返回 0；入参非法返回 0
+ */
+export function compareVersion(v1: string, v2: string): number {
+  if (typeof v1 !== 'string' || typeof v2 !== 'string') return 0;
+  const a1 = v1.split('.');
+  const a2 = v2.split('.');
+  const len = Math.max(a1.length, a2.length);
+  while (a1.length < len) a1.push('0');
+  while (a2.length < len) a2.push('0');
+  for (let i = 0; i < len; i += 1) {
+    const n1 = parseInt(a1[i], 10) || 0;
+    const n2 = parseInt(a2[i], 10) || 0;
+    if (n1 > n2) return 1;
+    if (n1 < n2) return -1;
+  }
+  return 0;
+}
+
+function readSystemInfo(): { platform: string; sdkVersion: string } {
+  try {
+    const info = wx.getSystemInfoSync();
+    return {
+      platform: info.platform || 'unknown',
+      sdkVersion: info.SDKVersion || '',
+    };
+  } catch (err) {
+    console.error('读取系统信息失败:', err);
+    return { platform: 'unknown', sdkVersion: '' };
+  }
+}
+
+export function getPlatform(): string {
+  return readSystemInfo().platform;
+}
+
+export function getSdkVersion(): string {
+  return readSystemInfo().sdkVersion;
+}
+
+/**
+ * 判定当前环境是否支持虚拟支付。
+ *
+ * 官方建议：基础库 >= 2.19.2 可直接用；低于该版本时用 wx.canIUse 兜底判断。
+ * 另外 **devtools（开发者工具）不在后端 allow_platforms 白名单内**，
+ * 工具里下单会被后端拒（4003），所以这里直接判为不支持，
+ * 避免开发者在工具里看到入口却永远支付失败。
+ */
+export function checkVirtualPaymentCapability(): VirtualPaymentCapability {
+  const { platform, sdkVersion } = readSystemInfo();
+
+  if (platform === 'devtools') {
+    return {
+      supported: false,
+      platform,
+      sdkVersion,
+      reason: '开发者工具内不支持虚拟支付，请用真机预览',
+    };
+  }
+
+  if (SUPPORTED_PLATFORMS.indexOf(platform) < 0) {
+    return {
+      supported: false,
+      platform,
+      sdkVersion,
+      reason: '当前设备暂不支持该功能',
+    };
+  }
+
+  const versionOk = compareVersion(sdkVersion, MIN_SDK_VERSION) >= 0;
+  const canIUse = typeof wx.canIUse === 'function' && wx.canIUse('requestVirtualPayment');
+  if (!versionOk && !canIUse) {
+    return {
+      supported: false,
+      platform,
+      sdkVersion,
+      reason: '微信版本过低，请升级后重试',
+    };
+  }
+
+  return { supported: true, platform, sdkVersion };
+}
+
+/** errCode → 用户可读文案。未收录的码给通用提示，不暴露原始码给用户。 */
+export function describeVirtualPaymentError(errCode: number): string {
+  switch (errCode) {
+    case VPAY_ERR.USER_CANCEL:
+      return '已取消';
+    case VPAY_ERR.PAY_FAILED:
+      return '支付失败，请稍后重试';
+    case VPAY_ERR.RISK_CONTROL:
+      return '交易被风控拦截，请稍后再试';
+    case VPAY_ERR.SIGN_UNKNOWN:
+      return '签约结果未知，请稍后在打赏记录中查看';
+    case VPAY_ERR.PARAM_ERROR:
+    case VPAY_ERR.SIGN_DATA_INVALID:
+      return '支付参数异常，请稍后重试';
+    case VPAY_ERR.SIGNATURE_INVALID:
+    case VPAY_ERR.PAY_SIG_INVALID:
+      return '支付校验失败，请重新发起';
+    case VPAY_ERR.SESSION_KEY_EXPIRED:
+      return '登录状态已过期，请重试';
+    case VPAY_ERR.GOODS_NOT_PUBLISHED:
+    case VPAY_ERR.GOODS_NOT_EFFECTIVE:
+      return '该档位正在生效中，请约 10 分钟后再试';
+    case VPAY_ERR.PRICE_MISMATCH:
+      return '档位价格已变更，请刷新后重试';
+    case VPAY_ERR.ENV_INVALID:
+      return '支付环境配置异常，请联系客服';
+    case VPAY_ERR.TOO_FREQUENT:
+      return '操作过快，请稍候再试';
+    default:
+      return '支付未完成，请稍后在打赏记录中查看';
+  }
+}
+
+/** 后端业务码 → 用户可读文案 */
+export function describeRewardBizError(code: number, fallback?: string): string {
+  switch (code) {
+    case REWARD_ERR.REWARD_DISABLED:
+      return '打赏功能暂未开放';
+    case REWARD_ERR.PLATFORM_UNSUPPORTED:
+      return '当前设备暂不支持打赏';
+    case REWARD_ERR.SDK_UNSUPPORTED:
+      return '微信版本过低，请升级后重试';
+    case REWARD_ERR.SESSION_KEY_INVALID:
+      return '登录状态已过期，请重试';
+    default:
+      return fallback || '操作失败，请稍后重试';
+  }
+}
+
+/**
+ * 强制重新登录：清 token → wx.login 取 code → 调后端登录 → 写回 token。
+ *
+ * 与 utils/ensure-login 的区别：ensureLogin 在**已有 token 时直接返回 true**，
+ * 无法处理「token 还在但后端 session_key 已失效（4001 / -15007）」的场景。
+ * 打赏下单依赖后端持有的 session_key 计算用户态签名，session_key 失效时
+ * 必须走一次完整的重新登录，否则重试多少次都是同样的失败。
+ */
+async function relogin(): Promise<boolean> {
+  try {
+    wx.removeStorageSync(TOKEN_KEY);
+    const code = await wxLogin();
+    const result = await login({ code });
+    const newToken = (result as any)?.data?.token;
+    if (newToken) {
+      wx.setStorageSync(TOKEN_KEY, newToken);
+      return true;
+    }
+    return false;
+  } catch (err) {
+    console.error('重新登录失败:', err);
+    return false;
+  }
+}
+
+/**
+ * 拉起虚拟支付（回调转 Promise）。
+ *
+ * ⚠️ wx.requestVirtualPayment **不支持 Promise 风格**，只能手工包装。
+ * ⚠️ 用户取消（-2）以 `{ cancelled: true }` **正常 resolve**，不 reject——
+ *    取消是正常操作路径，不该进错误处理分支。
+ */
+export function requestVirtualPayment(params: {
+  signData: string;
+  paySig: string;
+  signature: string;
+}): Promise<{ cancelled: boolean }> {
+  return new Promise((resolve, reject) => {
+    wx.requestVirtualPayment({
+      // 三个字段原样透传，signData 不做任何加工
+      signData: params.signData,
+      paySig: params.paySig,
+      signature: params.signature,
+      success: () => resolve({ cancelled: false }),
+      fail: (err) => {
+        if (err && err.errCode === VPAY_ERR.USER_CANCEL) {
+          resolve({ cancelled: true });
+          return;
+        }
+        const error: VirtualPaymentError = new Error(
+          describeVirtualPaymentError(err ? err.errCode : 0),
+        );
+        error.errCode = err ? err.errCode : undefined;
+        reject(error);
+      },
+    });
+  });
+}
+
+/** 订单是否已到「已发货已记账」成功终态 */
+function isOrderSettled(status?: string): boolean {
+  return status === '2';
+}
+
+/** 订单是否已到失败/退款类终态（无需继续轮询） */
+function isOrderFinal(status?: string): boolean {
+  return status === '3' || status === '4' || status === '5' || status === '6';
+}
+
+/**
+ * 轮询订单状态直到终态或超出尝试次数。
+ *
+ * 读到 '0'/'1' 不算失败：C 端查单接口只读本地库、不打微信 API
+ * （防止任意用户刷光 query_order 的频率配额，连带吃掉补偿任务的配额）。
+ * 微信发货推送或兜底补偿任务会在几分钟内把状态追平。
+ *
+ * 单次查询异常（网络抖动等）不中断轮询，继续下一次尝试。
+ */
+export async function pollRewardOrderStatus(
+  outTradeNo: string,
+  options?: { intervalMs?: number; maxAttempts?: number },
+): Promise<RewardOrderStatusResult | null> {
+  const intervalMs = options?.intervalMs ?? POLL_INTERVAL_MS;
+  const maxAttempts = options?.maxAttempts ?? POLL_MAX_ATTEMPTS;
+  let last: RewardOrderStatusResult | null = null;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    if (attempt > 0) {
+      await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    }
+    try {
+      const res = await getRewardOrderStatus(outTradeNo);
+      const data = res?.data;
+      if (!data) continue;
+      last = data;
+      if (isOrderSettled(data.orderStatus) || isOrderFinal(data.orderStatus)) {
+        return data;
+      }
+    } catch (err) {
+      // 单次失败不终止轮询：utils/request 已弹过 toast，这里只记录
+      console.warn('轮询打赏订单状态失败，将继续重试:', err);
+    }
+  }
+  return last;
+}
+
+/**
+ * 完整打赏流程：下单 → 拉起支付 → 轮询确认。
+ *
+ * 调用方只需给 lineId + tierCode，其余（终端判定、签名透传、session_key
+ * 失效重登重试、取消识别、结果确认）都在这里收敛。
+ *
+ * **不弹任何 toast**：结果以返回值交给调用方决定如何呈现，
+ * 避免组件与页面重复提示。
+ */
+export async function payLineReward(
+  options: PayLineRewardOptions,
+): Promise<RewardPayOutcome> {
+  if (paying) {
+    return { status: 'failed', message: '上一笔打赏正在处理中，请稍候' };
+  }
+
+  const capability = checkVirtualPaymentCapability();
+  if (!capability.supported) {
+    return { status: 'unsupported', message: capability.reason || '当前设备暂不支持' };
+  }
+
+  paying = true;
+  try {
+    return await invokeRewardPayment(options, capability);
+  } finally {
+    paying = false;
+  }
+}
+
+/**
+ * 实际执行体。单独抽出来是为了让 session_key 失效时的「重登 + 重试一次」
+ * 能用循环表达，同时保证 paying 锁只在 payLineReward 里加减一次。
+ */
+async function invokeRewardPayment(
+  options: PayLineRewardOptions,
+  capability: VirtualPaymentCapability,
+): Promise<RewardPayOutcome> {
+  const { lineId, tierCode, onStage } = options;
+  // 4001 / -15007 只重试一次：再多也只是重复失败，且会放大后端压力
+  const maxOrderAttempts = 2;
+
+  for (let attempt = 1; attempt <= maxOrderAttempts; attempt += 1) {
+    onStage?.('creating-order');
+
+    let order;
+    try {
+      const res = await createRewardOrder({
+        lineId,
+        tierCode,
+        platform: capability.platform,
+        sdkVersion: capability.sdkVersion,
+      });
+      order = res?.data;
+    } catch (err: any) {
+      const code = err?.code;
+      const sessionInvalid =
+        code === REWARD_ERR.SESSION_KEY_INVALID || code === VPAY_ERR.SESSION_KEY_EXPIRED;
+      if (sessionInvalid && attempt < maxOrderAttempts) {
+        const ok = await relogin();
+        if (ok) continue;
+        return { status: 'failed', message: '登录状态已失效，请重新进入小程序' };
+      }
+      return {
+        status: 'failed',
+        message: describeRewardBizError(code, err?.message),
+        errCode: code,
+      };
+    }
+
+    if (!order || !order.signData || !order.paySig || !order.signature) {
+      return { status: 'failed', message: '下单返回数据不完整，请稍后重试' };
+    }
+
+    onStage?.('invoking-payment');
+    let cancelled = false;
+    try {
+      const result = await requestVirtualPayment({
+        signData: order.signData,
+        paySig: order.paySig,
+        signature: order.signature,
+      });
+      cancelled = result.cancelled;
+    } catch (err: any) {
+      const errCode = err?.errCode;
+      // 支付阶段报 session_key 过期：重登后重新下单（签名依赖新的 session_key）
+      if (errCode === VPAY_ERR.SESSION_KEY_EXPIRED && attempt < maxOrderAttempts) {
+        const ok = await relogin();
+        if (ok) continue;
+      }
+      return {
+        status: 'failed',
+        message: describeVirtualPaymentError(errCode),
+        errCode,
+      };
+    }
+
+    if (cancelled) {
+      return { status: 'cancelled' };
+    }
+
+    // 支付已受理，但**最终结果以服务端为准**
+    onStage?.('confirming');
+    const finalOrder = await pollRewardOrderStatus(order.outTradeNo);
+    onStage?.('done');
+
+    if (finalOrder && isOrderSettled(finalOrder.orderStatus)) {
+      return { status: 'success', order: finalOrder };
+    }
+    if (finalOrder && finalOrder.orderStatus === '3') {
+      return { status: 'failed', message: '订单已关闭，请重新发起' };
+    }
+    if (finalOrder && isOrderFinal(finalOrder.orderStatus)) {
+      return { status: 'failed', message: '该笔打赏已进入退款流程，请在打赏记录中查看' };
+    }
+
+    // 仍是 0/1：正常现象。微信发货推送或兜底任务会在几分钟内追平。
+    return {
+      status: 'pending',
+      outTradeNo: order.outTradeNo,
+      message: '支付已受理，正在确认结果，可稍后在「我的打赏」中查看',
+    };
+  }
+
+  return { status: 'failed', message: '打赏未完成，请稍后重试' };
+}

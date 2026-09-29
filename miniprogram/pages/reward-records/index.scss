@@ -1,0 +1,132 @@
+.records {
+  min-height: 100vh;
+  background: #f9faf4;
+  padding: 24rpx 32rpx calc(48rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 20rpx;
+  }
+
+  &__empty {
+    padding: 180rpx 48rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16rpx;
+  }
+
+  &__empty-title {
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #163422;
+  }
+
+  &__empty-desc {
+    font-size: 24rpx;
+    color: #8d968b;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  &__loading {
+    padding: 40rpx 0 16rpx;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__loading-text {
+    font-size: 24rpx;
+    color: #a2aaa0;
+  }
+}
+
+.record {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 28rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16rpx;
+  }
+
+  &__tier {
+    font-size: 29rpx;
+    font-weight: 600;
+    color: #163422;
+  }
+
+  &__status {
+    flex-shrink: 0;
+    padding: 5rpx 16rpx;
+    border-radius: 999rpx;
+    font-size: 21rpx;
+    font-weight: 600;
+    background: #f3f4ee;
+    color: #6b7568;
+
+    &--success {
+      background: rgba(22, 52, 34, 0.1);
+      color: #163422;
+    }
+
+    &--pending {
+      background: rgba(148, 74, 0, 0.1);
+      color: #944a00;
+    }
+
+    &--warning {
+      background: rgba(148, 74, 0, 0.16);
+      color: #944a00;
+    }
+
+    &--muted {
+      background: #f3f4ee;
+      color: #8d968b;
+    }
+  }
+
+  &__body {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16rpx;
+  }
+
+  &__amount {
+    font-size: 38rpx;
+    font-weight: 700;
+    color: #163422;
+    letter-spacing: -0.01em;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6rpx;
+    min-width: 0;
+  }
+
+  &__time {
+    font-size: 22rpx;
+    color: #8d968b;
+  }
+
+  &__no {
+    font-size: 20rpx;
+    color: #a2aaa0;
+    max-width: 320rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

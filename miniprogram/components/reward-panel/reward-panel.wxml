@@ -1,0 +1,60 @@
+<base-drawer
+  show="{{show}}"
+  height="auto"
+  panel-radius="80rpx 80rpx 0 0"
+  panel-background="#f9faf4"
+  handle-background="rgba(194, 200, 192, 0.3)"
+  bind:close="onClose"
+>
+  <view class="reward">
+    <view class="reward__header">
+      <text class="reward__title">鼓励一下 {{authorName}}</text>
+      <text wx:if="{{lineName}}" class="reward__subtitle">{{lineName}}</text>
+    </view>
+
+    <!-- 环境不支持：明确告知原因，不给可点的档位，避免用户点了必然失败 -->
+    <view wx:if="{{unsupportedReason}}" class="reward__state">
+      <text class="reward__state-text">{{unsupportedReason}}</text>
+    </view>
+
+    <view wx:elif="{{loading}}" class="reward__state">
+      <text class="reward__state-text">正在加载档位…</text>
+    </view>
+
+    <!-- 档位为空 = 后端总开关关闭或当前终端无可用档位，按约定不露出任何支付入口 -->
+    <view wx:elif="{{tiers.length === 0}}" class="reward__state">
+      <text class="reward__state-text">打赏暂未开放</text>
+    </view>
+
+    <view wx:else class="reward__body">
+      <view class="reward__grid">
+        <view
+          wx:for="{{tiers}}"
+          wx:key="tierCode"
+          class="reward__tier {{selectedCode === item.tierCode ? 'reward__tier--active' : ''}}"
+          data-code="{{item.tierCode}}"
+          bindtap="onSelectTier"
+          hover-class="reward__tier--hover"
+          hover-stay-time="80"
+        >
+          <text wx:if="{{item.isTestTier}}" class="reward__tier-badge">测试</text>
+          <text class="reward__tier-price">{{item.priceText}}</text>
+          <text class="reward__tier-name">{{item.tierName}}</text>
+        </view>
+      </view>
+
+      <view class="reward__actions">
+        <button
+          class="reward__submit {{(paying || !selectedTier) ? 'reward__submit--disabled' : ''}}"
+          disabled="{{paying || !selectedTier}}"
+          hover-class="reward__submit--hover"
+          bindtap="onConfirm"
+        >
+          <text wx:if="{{paying}}" class="reward__submit-text">{{stageText}}</text>
+          <text wx:else class="reward__submit-text">鼓励一下{{selectedTier ? ' ' + selectedTier.priceText : ''}}</text>
+        </button>
+        <text class="reward__note">打赏为自愿行为，款项将用于支持线路作者持续创作</text>
+      </view>
+    </view>
+  </view>
+</base-drawer>

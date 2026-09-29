@@ -1,0 +1,30 @@
+<view class="records">
+  <navigation-bar title="我的打赏" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
+  <view wx:if="{{records.length > 0}}" class="records__list">
+    <view wx:for="{{records}}" wx:key="key" class="record">
+      <view class="record__head">
+        <text class="record__tier">{{item.tierName}}</text>
+        <text class="record__status record__status--{{item.statusTone}}">{{item.statusLabel}}</text>
+      </view>
+      <view class="record__body">
+        <text class="record__amount">{{item.amountText}}</text>
+        <view class="record__meta">
+          <text wx:if="{{item.timeText}}" class="record__time">{{item.timeText}}</text>
+          <text wx:if="{{item.orderNo}}" class="record__no">{{item.orderNo}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:elif="{{loaded && !loading}}" class="records__empty">
+    <text class="records__empty-title">还没有打赏记录</text>
+    <text class="records__empty-desc">在线路详情页点「鼓励一下」即可支持作者</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="records__loading">
+    <text class="records__loading-text">正在加载…</text>
+  </view>
+  <view wx:elif="{{finished && records.length > 0}}" class="records__loading">
+    <text class="records__loading-text">已经到底了</text>
+  </view>
+</view>

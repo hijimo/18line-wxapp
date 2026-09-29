@@ -95,6 +95,33 @@
 
       <!-- Functional List -->
       <view class="func-card">
+        <!-- 精选线路：商家发布的线路浏览入口，也是打赏的承载页 -->
+        <view class="func-item" bindtap="goLines">
+          <view class="func-item-left">
+            <view class="func-icon-wrap func-icon-wrap--green">
+              <image class="func-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-navigate.svg" mode="aspectFit" />
+            </view>
+            <view class="func-text-wrap">
+              <text class="func-title">精选线路</text>
+              <text class="func-subtitle">浏览线路，鼓励你喜欢的作者</text>
+            </view>
+          </view>
+          <image class="func-arrow" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+        </view>
+        <view class="func-divider" />
+        <view class="func-item" bindtap="goRewardRecords">
+          <view class="func-item-left">
+            <view class="func-icon-wrap func-icon-wrap--grey">
+              <image class="func-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-star.svg" mode="aspectFit" />
+            </view>
+            <view class="func-text-wrap">
+              <text class="func-title">我的打赏</text>
+              <text class="func-subtitle">查看打赏记录与处理进度</text>
+            </view>
+          </view>
+          <image class="func-arrow" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+        </view>
+        <view class="func-divider" />
         <view class="func-item" bindtap="goTravelTraits">
           <view class="func-item-left">
             <view class="func-icon-wrap func-icon-wrap--green">

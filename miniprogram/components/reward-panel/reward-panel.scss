@@ -1,0 +1,156 @@
+.reward {
+  padding: 8rpx 40rpx calc(48rpx + env(safe-area-inset-bottom));
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 12rpx;
+    margin-bottom: 36rpx;
+  }
+
+  &__title {
+    font-size: 40rpx;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #163422;
+    line-height: 1.25;
+  }
+
+  &__subtitle {
+    font-size: 26rpx;
+    color: #6b7568;
+    line-height: 1.5;
+    // 长线路名截断，避免撑高头部把档位挤出首屏
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  &__state {
+    padding: 72rpx 0 88rpx;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__state-text {
+    font-size: 28rpx;
+    color: #6b7568;
+  }
+
+  // 用背景层级区分卡片与面板，不使用 1px 分割线（No-Line Rule）
+  &__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20rpx;
+  }
+
+  &__tier {
+    position: relative;
+    width: calc((100% - 40rpx) / 3);
+    box-sizing: border-box;
+    padding: 32rpx 12rpx 26rpx;
+    background: #ffffff;
+    border-radius: 24rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10rpx;
+    transition: background 160ms ease, transform 160ms ease;
+
+    &--hover {
+      transform: scale(0.97);
+    }
+
+    &--active {
+      // hero CTA 的缎面渐变，选中态沿用同一语言
+      background: linear-gradient(135deg, #163422 0%, #2d4b37 100%);
+
+      .reward__tier-price,
+      .reward__tier-name {
+        color: #f9faf4;
+      }
+
+      .reward__tier-name {
+        opacity: 0.82;
+      }
+    }
+  }
+
+  &__tier-badge {
+    position: absolute;
+    top: 10rpx;
+    right: 12rpx;
+    padding: 2rpx 10rpx;
+    border-radius: 999rpx;
+    background: #f3f4ee;
+    color: #944a00;
+    font-size: 20rpx;
+    line-height: 1.6;
+  }
+
+  &__tier-price {
+    font-size: 36rpx;
+    font-weight: 700;
+    color: #163422;
+    letter-spacing: -0.01em;
+  }
+
+  &__tier-name {
+    font-size: 22rpx;
+    color: #6b7568;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  &__actions {
+    margin-top: 44rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20rpx;
+  }
+
+  &__submit {
+    width: 100%;
+    height: 96rpx;
+    line-height: 96rpx;
+    padding: 0;
+    border-radius: 24rpx;
+    background: linear-gradient(135deg, #163422 0%, #2d4b37 100%);
+    // 覆盖 button 默认边框，避免与 No-Line Rule 冲突
+    border: none;
+
+    &::after {
+      border: none;
+    }
+
+    &--hover {
+      opacity: 0.88;
+    }
+
+    &--disabled {
+      background: #edeee8;
+
+      .reward__submit-text {
+        color: #a2aaa0;
+      }
+    }
+  }
+
+  &__submit-text {
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #f9faf4;
+    letter-spacing: 0.02em;
+  }
+
+  &__note {
+    font-size: 22rpx;
+    color: #8d968b;
+    line-height: 1.6;
+    text-align: center;
+    padding: 0 16rpx;
+  }
+}

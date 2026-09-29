@@ -1,0 +1,68 @@
+<view class="lines">
+  <navigation-bar title="精选线路" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
+  <view class="lines__search">
+    <view class="lines__search-box">
+      <text class="lines__search-icon">⌕</text>
+      <input
+        class="lines__search-input"
+        type="text"
+        value="{{keyword}}"
+        placeholder="搜索线路名称"
+        placeholder-class="lines__search-placeholder"
+        confirm-type="search"
+        bindinput="onKeywordInput"
+        bindconfirm="onSearch"
+      />
+      <text wx:if="{{keyword}}" class="lines__search-clear" bindtap="onClearKeyword">✕</text>
+    </view>
+  </view>
+
+  <view wx:if="{{lines.length > 0}}" class="lines__list">
+    <view
+      wx:for="{{lines}}"
+      wx:key="lineId"
+      class="line-card"
+      data-id="{{item.lineId}}"
+      bindtap="onLineTap"
+      hover-class="line-card--hover"
+      hover-stay-time="80"
+    >
+      <view class="line-card__media">
+        <image
+          wx:if="{{item.coverImage}}"
+          class="line-card__cover"
+          src="{{item.coverImage}}"
+          mode="aspectFill"
+          lazy-load
+        />
+        <view wx:else class="line-card__cover line-card__cover--fallback">
+          <text class="line-card__cover-char">{{item.coverFallback}}</text>
+        </view>
+        <text wx:if="{{item.rewardEnabled}}" class="line-card__flag">可鼓励</text>
+      </view>
+
+      <view class="line-card__body">
+        <text class="line-card__title">{{item.lineName}}</text>
+        <text wx:if="{{item.regionText}}" class="line-card__region">{{item.regionText}}</text>
+        <text wx:if="{{item.remark}}" class="line-card__remark">{{item.remark}}</text>
+        <view class="line-card__foot">
+          <text class="line-card__author">by {{item.authorName}}</text>
+          <text wx:if="{{item.merchantName}}" class="line-card__merchant">{{item.merchantName}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空态：区分「没搜到」与「一条线路都没有」 -->
+  <view wx:elif="{{loaded && !loading}}" class="lines__empty">
+    <text class="lines__empty-title">{{keyword ? '没有找到相关线路' : '还没有线路'}}</text>
+    <text class="lines__empty-desc">{{keyword ? '换个关键词试试' : '线路正在筹备中，稍后再来看看吧'}}</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="lines__loading">
+    <text class="lines__loading-text">正在加载…</text>
+  </view>
+  <view wx:elif="{{finished && lines.length > 0}}" class="lines__loading">
+    <text class="lines__loading-text">已经到底了</text>
+  </view>
+</view>

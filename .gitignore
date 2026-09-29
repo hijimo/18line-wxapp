@@ -10,4 +10,6 @@ tests/*
 !tests/e2e/**
 !tests/jest.e2e*.config.js
 !tests/package.json
+!tests/virtual-payment/
+!tests/virtual-payment/**
 tests/.auth/
