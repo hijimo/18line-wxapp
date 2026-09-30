@@ -51,6 +51,11 @@ export interface VirtualPaymentCapability {
 export interface VirtualPaymentError extends Error {
   /** wx.requestVirtualPayment 的 errCode，或后端业务码 */
   errCode?: number;
+  /**
+   * 微信返回的原始 errMsg。
+   * -15001（参数错误）的具体原因**只在 errMsg 里**，丢掉它就等于丢掉唯一的定位线索。
+   */
+  errMsg?: string;
   /** 用户主动取消 */
   cancelled?: boolean;
 }
@@ -61,7 +66,7 @@ export type RewardPayOutcome =
   | { status: 'pending'; message: string; outTradeNo: string }
   | { status: 'cancelled' }
   | { status: 'unsupported'; message: string }
-  | { status: 'failed'; message: string; errCode?: number };
+  | { status: 'failed'; message: string; errCode?: number; errMsg?: string };
 
 export type RewardPayStage =
   | 'creating-order'
@@ -160,7 +165,19 @@ export function checkVirtualPaymentCapability(): VirtualPaymentCapability {
   return { supported: true, platform, sdkVersion };
 }
 
-/** errCode → 用户可读文案。未收录的码给通用提示，不暴露原始码给用户。 */
+/**
+ * errCode 是否已被 describeVirtualPaymentError 收录。
+ *
+ * 未收录时才把原始 errCode/errMsg 暴露到界面上：已收录的码有准确文案，
+ * 给用户看原始码只是噪声；未收录的码则相反——不给出来就彻底无法定位。
+ */
+export function isKnownVirtualPaymentError(errCode?: number): boolean {
+  if (errCode === undefined || errCode === null) return false;
+  const known = VPAY_ERR as unknown as Record<string, number>;
+  return Object.keys(known).some((key) => known[key] === errCode);
+}
+
+/** errCode → 用户可读文案。未收录的码带上原始 errCode，避免联调时毫无线索。 */
 export function describeVirtualPaymentError(errCode: number): string {
   switch (errCode) {
     case VPAY_ERR.USER_CANCEL:
@@ -173,6 +190,8 @@ export function describeVirtualPaymentError(errCode: number): string {
       return '签约结果未知，请稍后在打赏记录中查看';
     case VPAY_ERR.PARAM_ERROR:
     case VPAY_ERR.SIGN_DATA_INVALID:
+    case VPAY_ERR.PARAM_DETAIL:
+    case VPAY_ERR.CURRENCY_INVALID:
       return '支付参数异常，请稍后重试';
     case VPAY_ERR.SIGNATURE_INVALID:
     case VPAY_ERR.PAY_SIG_INVALID:
@@ -187,9 +206,25 @@ export function describeVirtualPaymentError(errCode: number): string {
     case VPAY_ERR.ENV_INVALID:
       return '支付环境配置异常，请联系客服';
     case VPAY_ERR.TOO_FREQUENT:
+    case VPAY_ERR.APP_RATE_LIMITED:
       return '操作过快，请稍候再试';
+    case VPAY_ERR.DUPLICATE_OUT_TRADE_NO:
+    case VPAY_ERR.MIDAS_CLOSED_ORDER:
+      return '订单号已失效，请重新发起';
+    case VPAY_ERR.MERCHANT_NOT_ENTERED:
+      return '收款资质尚未生效，请稍后再试';
+    case VPAY_ERR.MERCHANT_VIOLATION:
+    case VPAY_ERR.MERCHANT_RESTRICTED:
+      return '收款功能暂不可用，请联系客服';
+    case VPAY_ERR.GOODS_AUDIT_REJECTED:
+      return '该档位未通过审核，暂不可用';
+    case VPAY_ERR.COIN_NOT_PUBLISHED:
+      return '该档位尚未发布，请稍后再试';
+    case VPAY_ERR.SYSTEM_ERROR:
+      return '系统繁忙，请稍后重试';
     default:
-      return '支付未完成，请稍后在打赏记录中查看';
+      // 未收录的码：把原始 errCode 一并给出，否则真机联调毫无线索
+      return `支付未完成（错误码 ${errCode}），请稍后在打赏记录中查看`;
   }
 }
 
@@ -240,31 +275,44 @@ async function relogin(): Promise<boolean> {
  * ⚠️ wx.requestVirtualPayment **不支持 Promise 风格**，只能手工包装。
  * ⚠️ 用户取消（-2）以 `{ cancelled: true }` **正常 resolve**，不 reject——
  *    取消是正常操作路径，不该进错误处理分支。
+ *
+ * ⚠️ **mode 是顶层必填参数**（官方示例：
+ *    `wx.requestVirtualPayment({ signData, paySig, signature, mode: 'short_series_goods' })`），
+ *    它**不在 signData 内部**。漏传不会报签名错，而是报参数类错误，
+ *    且 errCode 容易落在未收录区间，排查成本极高——2026-09-30 真机联调踩过。
  */
 export function requestVirtualPayment(params: {
   signData: string;
   paySig: string;
   signature: string;
+  mode: string;
 }): Promise<{ cancelled: boolean }> {
   return new Promise((resolve, reject) => {
     wx.requestVirtualPayment({
-      // 三个字段原样透传，signData 不做任何加工
+      // signData/paySig/signature 原样透传，signData 不做任何加工
       signData: params.signData,
       paySig: params.paySig,
       signature: params.signature,
+      mode: params.mode,
       success: () => resolve({ cancelled: false }),
-      fail: (err) => {
+      // 整个入参对象做了 as any（部分基础库 typings 未收录 mode），
+      // err 因此失去上下文类型，必须显式标注，否则 noImplicitAny 报 TS7006
+      fail: (err: { errCode?: number; errMsg?: string }) => {
         if (err && err.errCode === VPAY_ERR.USER_CANCEL) {
           resolve({ cancelled: true });
           return;
         }
+        // 原始 errCode/errMsg 必须落日志：errMsg 是 -15001 一类错误的唯一线索
+        console.error('wx.requestVirtualPayment 失败:', err);
+        const rawCode = err && err.errCode !== undefined ? err.errCode : 0;
         const error: VirtualPaymentError = new Error(
-          describeVirtualPaymentError(err ? err.errCode : 0),
+          describeVirtualPaymentError(rawCode),
         );
         error.errCode = err ? err.errCode : undefined;
+        error.errMsg = err ? err.errMsg : undefined;
         reject(error);
       },
-    });
+    } as any);
   });
 }
 
@@ -384,7 +432,9 @@ async function invokeRewardPayment(
       };
     }
 
-    if (!order || !order.signData || !order.paySig || !order.signature) {
+    if (!order || !order.signData || !order.paySig || !order.signature || !order.mode) {
+      // mode 缺失时绝不能静默降级：少了它微信必然报参数错误，且错误信息无法定位
+      console.error('下单返回数据不完整:', order);
       return { status: 'failed', message: '下单返回数据不完整，请稍后重试' };
     }
 
@@ -395,6 +445,7 @@ async function invokeRewardPayment(
         signData: order.signData,
         paySig: order.paySig,
         signature: order.signature,
+        mode: order.mode,
       });
       cancelled = result.cancelled;
     } catch (err: any) {
@@ -408,6 +459,7 @@ async function invokeRewardPayment(
         status: 'failed',
         message: describeVirtualPaymentError(errCode),
         errCode,
+        errMsg: err?.errMsg,
       };
     }
 

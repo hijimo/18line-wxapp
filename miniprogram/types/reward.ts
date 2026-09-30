@@ -47,8 +47,12 @@ export interface RewardOrderCreateResult {
   signature: string;
   /**
    * 支付模式（short_series_goods）。
-   * 注意：官方 API 的 mode 在 **signData 内部**，顶层不需要传，
-   * 本字段仅供前端展示/日志排查使用。
+   *
+   * ⚠️ mode 是 wx.requestVirtualPayment 的**顶层必填参数**，不在 signData 内部。
+   * 官方文档的参数表把 mode 列在 signData 结构里、顶层参数表又漏列，两处自相矛盾；
+   * 但同页**示例代码**明确是 `wx.requestVirtualPayment({ signData, paySig, signature, mode })`，
+   * 且示例的 signData 里并不含 mode —— 以可执行的示例代码为准。
+   * 漏传 mode 会被微信判为参数错误（-15001 一类），且不会报签名错，极易误判。
    */
   mode: string;
   tierName: string;
@@ -109,6 +113,13 @@ export const REWARD_ERR = {
 } as const;
 
 /** wx.requestVirtualPayment 的关键 errCode */
+/**
+ * wx.requestVirtualPayment 错误码 —— 与官方文档错误表**逐条对齐**（2026-09-30 核对）。
+ *
+ * 收录必须完整：describeVirtualPaymentError 的 default 分支只会给一句
+ * 「支付未完成，请稍后在打赏记录中查看」，漏收的码会让真机联调彻底失去线索
+ * （本次 mode 漏传就是因为 errCode 落在 default 分支才难定位）。
+ */
 export const VPAY_ERR = {
   PARAM_ERROR: 1001,
   PAY_FAILED: -1,
@@ -116,15 +127,34 @@ export const VPAY_ERR = {
   USER_CANCEL: -2,
   RISK_CONTROL: -4,
   SIGN_UNKNOWN: -5,
+  /** 参数错误，具体原因只在 errMsg 里，必须把 errMsg 一起透出 */
+  PARAM_DETAIL: -15001,
+  /** outTradeNo 重复使用，必须换新单号 */
+  DUPLICATE_OUT_TRADE_NO: -15002,
+  SYSTEM_ERROR: -15003,
+  CURRENCY_INVALID: -15004,
   SIGNATURE_INVALID: -15005,
   PAY_SIG_INVALID: -15006,
   /** session_key 过期，需重新 wx.login */
   SESSION_KEY_EXPIRED: -15007,
+  /** 二级商户进件未完成 */
+  MERCHANT_NOT_ENTERED: -15008,
+  COIN_NOT_PUBLISHED: -15009,
   GOODS_NOT_PUBLISHED: -15010,
   ENV_INVALID: -15011,
+  /** 调米大师失败导致关单，需换新单号 */
+  MIDAS_CLOSED_ORDER: -15012,
   PRICE_MISMATCH: -15013,
   /** 道具发布未生效，约 10 分钟后可用 */
   GOODS_NOT_EFFECTIVE: -15014,
   SIGN_DATA_INVALID: -15016,
+  /** 商家涉嫌违规，收款被限制 */
+  MERCHANT_VIOLATION: -15017,
+  /** 道具/代币审核不通过 */
+  GOODS_AUDIT_REJECTED: -15018,
+  /** 微信报商户受限 */
+  MERCHANT_RESTRICTED: -15019,
   TOO_FREQUENT: -15020,
+  /** 小程序被限频交易 */
+  APP_RATE_LIMITED: -15021,
 } as const;

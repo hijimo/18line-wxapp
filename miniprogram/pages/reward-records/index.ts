@@ -90,12 +90,15 @@ Page({
     this.setData({ loading: true });
 
     try {
-      const res = await getMyRewardOrders({
-        // lineId 为 0 时不传，表示查全部线路的打赏记录
-        lineId: this.data.lineId || undefined,
+      const params: { lineId?: number; pageNum?: number; pageSize?: number } = {
         pageNum: nextPage,
         pageSize: PAGE_SIZE,
-      });
+      };
+      // lineId 为 0 时不传，表示查全部线路的打赏记录。
+      // 不能写成 lineId: this.data.lineId || undefined —— wx.request 会拼成字面量
+      // "undefined"，后端 Long 类型转换失败直接返回 400，整页拉不到数据
+      if (this.data.lineId) params.lineId = this.data.lineId;
+      const res = await getMyRewardOrders(params);
       const rows: RewardOrderRecord[] = (res as any)?.rows || [];
       const total = Number((res as any)?.total || 0);
       const baseIndex = reset ? 0 : this.data.records.length;

@@ -3,6 +3,7 @@ import { ensureLogin } from '../../utils/ensure-login';
 import {
   checkVirtualPaymentCapability,
   getPlatform,
+  isKnownVirtualPaymentError,
   payLineReward,
 } from '../../utils/virtual-payment';
 import type { RewardPayStage } from '../../utils/virtual-payment';
@@ -192,13 +193,37 @@ Component({
           });
           break;
 
-        default:
-          wx.showToast({
-            title: outcome.message || '打赏未完成',
-            icon: 'none',
-            duration: 3000,
-          });
+        default: {
+          // 失败原因必须可追溯：toast 只停 3 秒且会截断，errMsg 更是从来没被记录下来过
+          console.error('打赏失败:', outcome);
+          const hasRawDetail =
+            outcome.errCode !== undefined && outcome.errCode !== null
+              ? !isKnownVirtualPaymentError(outcome.errCode)
+              : false;
+          if (hasRawDetail) {
+            // 只有**未收录**的错误码才把原始信息摊给用户：已收录的码有准确文案，
+            // 显示原始码只是噪声；未收录的码不显示就等于现场线索全丢
+            const detail = [
+              `errCode=${outcome.errCode}`,
+              outcome.errMsg ? `errMsg=${outcome.errMsg}` : '',
+            ]
+              .filter(Boolean)
+              .join('\n');
+            wx.showModal({
+              title: '打赏未完成',
+              content: `${outcome.message || '打赏未完成'}\n${detail}`,
+              showCancel: false,
+              confirmText: '知道了',
+            });
+          } else {
+            wx.showToast({
+              title: outcome.message || '打赏未完成',
+              icon: 'none',
+              duration: 3000,
+            });
+          }
           break;
+        }
       }
     },
 

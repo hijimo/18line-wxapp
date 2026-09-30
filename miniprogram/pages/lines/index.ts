@@ -1,5 +1,5 @@
 import { getLineList } from '../../services/line';
-import type { TravelLineVO } from '../../types/line';
+import type { TravelLineVO, LineListParams } from '../../types/line';
 
 const PAGE_SIZE = 10;
 
@@ -97,11 +97,11 @@ Page({
 
     try {
       const keyword = this.data.keyword.trim();
-      const res = await getLineList({
-        pageNum: nextPage,
-        pageSize: PAGE_SIZE,
-        keyword: keyword || undefined,
-      });
+      const params: LineListParams = { pageNum: nextPage, pageSize: PAGE_SIZE };
+      // 空关键词不能写成 keyword: keyword || undefined —— wx.request 会把 undefined
+      // 拼成字面量 "undefined"，后端按 line_name like '%undefined%' 查询，列表恒为空
+      if (keyword) params.keyword = keyword;
+      const res = await getLineList(params);
       const rows: TravelLineVO[] = (res as any)?.rows || [];
       const total = Number((res as any)?.total || 0);
       const cards = rows.map(toCard);

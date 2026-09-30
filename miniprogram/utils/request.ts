@@ -41,6 +41,27 @@ const defaultOption: RequestOption = {
   timeout: 60000,
 };
 
+/**
+ * 剔除 data 中值为 undefined 的键。
+ *
+ * wx.request 对 GET 的 data 并不走 JSON.stringify，而是自行拼接 query string，
+ * undefined 会被 String() 成字面量 "undefined" 真的发给后端：
+ *   - 字符串参数会变成一次真实的模糊查询（例如 keyword=undefined 搜出 0 条，列表恒为空）
+ *   - 数值参数会让 Spring 类型转换失败，直接返回 400
+ * 因此在请求出口统一兜底，避免每个调用点都要记得手写条件拼装。
+ *
+ * 只剔除 undefined，**不动 null**：null 在部分编辑类接口里是「显式清空该字段」的语义，
+ * 与「不传该字段」并不等价。仅做浅层处理，GET 的 query 只有顶层键会被序列化。
+ */
+const pruneUndefined = (data: any): any => {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return data;
+  const result: Record<string, any> = {};
+  Object.keys(data).forEach((key) => {
+    if (data[key] !== undefined) result[key] = data[key];
+  });
+  return result;
+};
+
 const interceptorResponse = (
   response: WechatMiniprogram.RequestSuccessCallbackResult,
 ) => {
@@ -90,7 +111,7 @@ const request = async <T>(path: string, option?: RequestOption): Promise<T> => {
             wx.request({
               url: path.startsWith('http') ? path : `${API_ORIGIN}${path}`,
               method: finalOption.method,
-              data: finalOption.data,
+              data: pruneUndefined(finalOption.data),
               header,
               timeout: finalOption.timeout,
               success: resolve,
@@ -128,7 +149,7 @@ export const requestChunked = (path: string, option?: RequestOption) => {
   return wx.request({
     url: path.startsWith('http') ? path : `${API_ORIGIN}${path}`,
     method: finalOption.method,
-    data: finalOption.data,
+    data: pruneUndefined(finalOption.data),
     header,
     timeout: 1000 * 60 * 5,
     enableChunked: true,
