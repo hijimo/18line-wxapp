@@ -1,0 +1,109 @@
+/* pages/expert-favorites/index.scss — 视觉规范见 .kiro/steering/design.md */
+page {
+  background: #f9faf4;
+}
+
+.fav {
+  min-height: 100vh;
+  background: #f9faf4;
+  box-sizing: border-box;
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 24rpx;
+    padding: 16rpx 24rpx 0;
+  }
+
+  &__cell {
+    width: 100%;
+  }
+
+  &__state {
+    padding: 200rpx 64rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16rpx;
+  }
+
+  &__state-title {
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #163422;
+    text-align: center;
+  }
+
+  &__state-desc {
+    font-size: 24rpx;
+    color: #8d968b;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  &__retry,
+  &__go {
+    margin-top: 24rpx;
+    padding: 18rpx 56rpx;
+    background: #ffffff;
+    border-radius: 999rpx;
+
+    &--hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__go {
+    background: #163422;
+  }
+
+  &__go-text {
+    font-size: 26rpx;
+    font-weight: 600;
+    color: #f9faf4;
+  }
+
+  &__retry-text {
+    font-size: 26rpx;
+    font-weight: 600;
+    color: #163422;
+  }
+
+  &__footer {
+    padding: 32rpx 0 8rpx;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__footer-text {
+    font-size: 22rpx;
+    color: #8d968b;
+  }
+}
+
+/* 首屏骨架：纸面层级 + 微光扫过，不引入额外图片 */
+.skeleton-card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  overflow: hidden;
+  padding-bottom: 24rpx;
+
+  &__media {
+    width: 100%;
+    height: 320rpx;
+    background: #eef1e8;
+  }
+
+  &__line {
+    margin: 24rpx 24rpx 0;
+    height: 28rpx;
+    border-radius: 12rpx;
+    background: #eef1e8;
+
+    &--short {
+      width: 40%;
+      height: 22rpx;
+    }
+  }
+}

@@ -20,16 +20,52 @@ export interface RewardTier {
   isTest?: string;
 }
 
-/** 创建打赏订单入参 */
-export interface RewardOrderCreateParams {
-  /** 线路ID — 打赏的业务关联锚点 */
-  lineId: number;
+/**
+ * 创建打赏订单入参的公共部分（档位 + 终端信息）。
+ * 抽出来是为了让下面两个锚点分支共享同一份字段定义，避免「加字段只加了一边」的漂移。
+ */
+interface RewardOrderCreateBase {
   tierCode: string;
   /** wx.getSystemInfoSync().platform：android/ios/windows/harmony/devtools */
   platform: string;
   /** 基础库版本，后端用于校验是否 >= 2.19.2 */
   sdkVersion?: string;
 }
+
+/**
+ * 线路打赏：锚点是商家线路 `lineId`。
+ *
+ * `expertRouteId?: never` 是**刻意**的：它让「两个锚点都带」在编译期就是错误，
+ * 而不是等到后端拒单才发现。
+ */
+export interface LineRewardOrderCreateParams extends RewardOrderCreateBase {
+  /** 线路ID — 线路打赏的业务关联锚点 */
+  lineId: number;
+  expertRouteId?: never;
+}
+
+/**
+ * 达人路线鼓励：锚点是达人路线 `expertRouteId`，此时达人单 `line_id` 落库为 NULL。
+ */
+export interface ExpertRewardOrderCreateParams extends RewardOrderCreateBase {
+  /** 达人路线ID — 达人鼓励的业务关联锚点 */
+  expertRouteId: number;
+  lineId?: never;
+}
+
+/**
+ * 创建打赏订单入参（契约 §1 W7~W9）。
+ *
+ * ⚠️ **lineId 与 expertRouteId 互斥且必填其一**，这里用**判别联合**表达：
+ *    - 线路打赏：只带 lineId
+ *    - 达人路线鼓励：只带 expertRouteId
+ *    两个都带或都不带在类型层面就构造不出来；运行时还有
+ *    `utils/virtual-payment.ts` 的 `resolveRewardAnchor` 兜第二道（入参可能来自
+ *    页面 query 字符串，类型系统管不到），后端拒单是第三道。
+ */
+export type RewardOrderCreateParams =
+  | LineRewardOrderCreateParams
+  | ExpertRewardOrderCreateParams;
 
 /**
  * 创建打赏订单返回体。
@@ -82,7 +118,10 @@ export interface RewardOrderStatusResult {
   orderStatus: RewardOrderStatus;
   tierId?: number;
   actualPriceFen?: number;
-  lineId?: number;
+  /** 线路单有值；达人单为 null */
+  lineId?: number | null;
+  /** 达人鼓励单有值；线路单为 null（前端据此决定跳哪个详情页） */
+  expertRouteId?: number | null;
   paidTime?: string | null;
 }
 
@@ -91,7 +130,10 @@ export interface RewardOrderRecord {
   orderId?: number;
   orderNo?: string;
   outTradeNo?: string;
-  lineId?: number;
+  /** 线路单有值；达人鼓励单为 null */
+  lineId?: number | null;
+  /** 达人鼓励单有值；线路单为 null。⚠️ 两者都为空时前端**不得**跳任何详情页 */
+  expertRouteId?: number | null;
   orderStatus?: RewardOrderStatus;
   tierName?: string;
   actualPriceFen?: number;

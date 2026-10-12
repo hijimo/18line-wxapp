@@ -66,3 +66,17 @@
 .date-placeholder {
   color: rgba(114, 121, 114, 0.6);
 }
+
+/* 单日期模式的「暂不选择日期」：tertiary 按钮（无底色，只留文字重量） */
+.date-picker-skip {
+  display: flex;
+  justify-content: center;
+  padding: 8rpx 0 0;
+}
+
+.date-picker-skip-text {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #6b7568;
+  text-decoration: underline;
+}

@@ -44,6 +44,11 @@
 }
 
 .record {
+  /* 点击跳详情（达人单→达人路线，线路单→线路）；hover 给可点反馈 */
+  &--hover {
+    opacity: 0.85;
+  }
+
   background: #ffffff;
   border-radius: 24rpx;
   padding: 28rpx 30rpx;

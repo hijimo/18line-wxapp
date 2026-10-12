@@ -7,6 +7,7 @@
   <block wx:if="{{!item.blindDisplayMode || item.blindDisplayMode === 'visible' || item.blindDisplayMode === 'unlocked'}}">
     <view class="card-swipe-container">
       <view class="card-body card-body--animated"
+        data-readonly="{{readonly}}"
         bindtouchstart="{{swipe.onSwipeStart}}"
         bindtouchmove="{{swipe.onSwipeMove}}"
         bindtouchend="{{swipe.onSwipeEnd}}"
@@ -25,6 +26,11 @@
               </view>
             </view>
             <text class="card-sub" wx:if="{{item.attractionBlurb || item.attractionDescription}}">{{item.attractionBlurb || item.attractionDescription}}</text>
+            <!-- 达人点评：仅只读浏览态（达人路线详情）渲染，行程页的 item 没有 expertIntro -->
+            <view class="expert-intro" wx:if="{{readonly && item.expertIntro}}">
+              <text class="expert-intro-label">达人点评</text>
+              <text class="expert-intro-text">{{item.expertIntro}}</text>
+            </view>
             <view class="card-meta" wx:if="{{item.visitDuration || item.ticketPriceA || item.openTime || item.perCost}}">
               <view class="card-meta-item" wx:if="{{item.visitDuration}}">
                 <text class="card-meta-label">游玩时间</text>
@@ -56,7 +62,8 @@
           </swiper-item>
         </swiper>
       </view>
-      <view class="card-delete-zone" bindtap="onDeleteTap">
+      <!-- 只读态不渲染删除区：浏览达人路线时没有「从行程里删掉」这个语义 -->
+      <view wx:if="{{!readonly}}" class="card-delete-zone" bindtap="onDeleteTap">
         <text class="card-delete-text">删除</text>
       </view>
     </view>
@@ -93,7 +100,7 @@
         <view class="blind-placeholder">
           <image class="blind-lock-icon" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-lock.svg" mode="aspectFit" />
         </view>
-        <view class="blind-actions">
+        <view class="blind-actions" wx:if="{{!readonly}}">
           <view class="blind-action blind-action--navigate" catchtap="onNavigateTap">
             <text class="blind-action-text">导航前往</text>
           </view>
@@ -102,11 +109,11 @@
           </view>
         </view>
         <!-- Skip link -->
-        <view class="blind-skip" catchtap="onSkipTap">
+        <view class="blind-skip" wx:if="{{!readonly}}" catchtap="onSkipTap">
           <text class="blind-skip-text">跳过此景点</text>
         </view>
         <!-- Force unlock countdown (shown when forceUnlockAvailableAt exists) -->
-        <view wx:if="{{item.forceUnlockAvailableAt}}" class="blind-force-unlock" catchtap="onForceUnlockTap">
+        <view wx:if="{{!readonly && item.forceUnlockAvailableAt}}" class="blind-force-unlock" catchtap="onForceUnlockTap">
           <text class="blind-force-text">强制解锁</text>
         </view>
       </view>
@@ -118,9 +125,15 @@
     <view class="card-swipe-container">
       <view class="card-body card-body--blind card-body--locked">
         <view class="blind-badge blind-badge--locked">
-          <text class="blind-badge-text">第 {{index + 1}} 站</text>
+          <!-- stationLabel 由服务端按天内 sort_order 生成；缺省才回落到本地下标 -->
+          <text class="blind-badge-text">{{item.stationLabel || ('第 ' + (index + 1) + ' 站')}}</text>
         </view>
         <text class="blind-fuzzy-desc" wx:if="{{item.fuzzyDescription || item.attractionBlurb}}">{{item.fuzzyDescription || item.attractionBlurb}}</text>
+        <!-- 达人点评：遮挡态唯一由达人撰写的正文，字段缺失时整行不渲染 -->
+        <view class="expert-intro expert-intro--blind" wx:if="{{item.expertIntro}}">
+          <text class="expert-intro-label">达人点评</text>
+          <text class="expert-intro-text">{{item.expertIntro}}</text>
+        </view>
         <view class="blind-params" wx:if="{{item.classicRatingText || item.classicRating || item.leisureRatingText || item.leisureRating || item.visitDuration || item.durationHint}}">
           <view class="blind-param" wx:if="{{item.classicRatingText || item.classicRating}}">
             <text class="blind-param-label">经典指数</text>

@@ -30,8 +30,19 @@ Component({
       type: Boolean,
       value: false,
     },
-    /** 打赏的业务关联锚点，缺失时禁止下单 */
+    /** 线路打赏的业务关联锚点，缺失时禁止下单 */
     lineId: {
+      type: Number,
+      value: 0,
+    },
+    /**
+     * 达人路线鼓励的业务关联锚点（可选，缺省 0 = 不启用）。
+     *
+     * 非 0 时下单 body 只带 expertRouteId、**不带 lineId**（契约 §1 W7~W9：二者互斥）。
+     * 其余（档位、能力检测、签名透传、轮询、错误文案）与线路打赏完全共用，
+     * 这是设计文档 §15.5 F1「复用既有资金链路」的前端侧落点。
+     */
+    expertRouteId: {
       type: Number,
       value: 0,
     },
@@ -39,7 +50,10 @@ Component({
       type: String,
       value: '',
     },
-    /** 作者昵称，用于「鼓励一下 XX」文案 */
+    /**
+     * 作者昵称，用于「鼓励一下 XX」文案。
+     * 默认值保持「线路作者」不变；达人路线侧显式传达人昵称（§15.5）。
+     */
     authorName: {
       type: String,
       value: '线路作者',
@@ -123,12 +137,24 @@ Component({
 
       const tier = this.data.selectedTier;
       const lineId = this.data.lineId;
+      const expertRouteId = this.data.expertRouteId;
       if (!tier) {
         wx.showToast({ title: '请先选择档位', icon: 'none' });
         return;
       }
-      if (!lineId) {
-        // 没有 lineId 就没有业务关联锚点，后端必然拒单，这里直接拦住
+      if (lineId && expertRouteId) {
+        // 两个锚点同时存在 = 调用方拼装错误（后端也一定拒单）。
+        // 前端就拦住，不发出这笔必然失败的请求；按约定达人锚点优先，但这里直接判失败，
+        // 因为静默选一个会把「参数写错」变成「钱打给了另一个业务对象」。
+        console.error('reward-panel: lineId 与 expertRouteId 互斥，不能同时传', {
+          lineId,
+          expertRouteId,
+        });
+        wx.showToast({ title: '打赏参数异常，请稍后重试', icon: 'none' });
+        return;
+      }
+      if (!lineId && !expertRouteId) {
+        // 没有任何业务关联锚点，后端必然拒单，这里直接拦住（文案与改造前一致）
         wx.showToast({ title: '线路信息缺失，无法打赏', icon: 'none' });
         return;
       }
@@ -138,13 +164,29 @@ Component({
       if (!loggedIn) return;
 
       this.setData({ paying: true, stageText: STAGE_TEXT['creating-order'] });
-      const outcome = await payLineReward({
-        lineId,
-        tierCode: tier.tierCode,
-        onStage: (stage) => {
-          this.setData({ stageText: STAGE_TEXT[stage] });
-        },
-      });
+      // 锚点二选一：达人鼓励只带 expertRouteId，线路打赏只带 lineId（body 形状不能多键）
+      const anchor = expertRouteId ? { expertRouteId } : { lineId };
+      let outcome;
+      try {
+        outcome = await payLineReward({
+          ...anchor,
+          tierCode: tier.tierCode,
+          onStage: (stage) => {
+            this.setData({ stageText: STAGE_TEXT[stage] });
+          },
+        });
+      } catch (err: any) {
+        // payLineReward 对锚点非法一类的编程错误会**抛错**（不是返回 failed）。
+        // 这里必须复位 paying 锁，否则面板永久停在「正在创建订单…」且再也点不动。
+        console.error('打赏流程异常终止:', err);
+        this.setData({ paying: false, stageText: '' });
+        wx.showToast({
+          title: err?.message || '打赏未完成',
+          icon: 'none',
+          duration: 3000,
+        });
+        return;
+      }
       this.setData({ paying: false, stageText: '' });
 
       this.handleOutcome(outcome, tier);

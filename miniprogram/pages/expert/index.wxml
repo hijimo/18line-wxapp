@@ -1,0 +1,68 @@
+<!--pages/expert/index.wxml-->
+<view class="expert">
+  <navigation-bar title="达人" back="{{false}}" color="black" background="#F9FAF4"></navigation-bar>
+
+  <!-- 首屏骨架：与瀑布流同构，避免加载完成后布局跳动 -->
+  <view wx:if="{{loading && !loaded}}" class="expert__waterfall">
+    <view class="expert__col">
+      <view wx:for="{{[0, 1]}}" wx:key="*this" class="skeleton-card">
+        <view class="skeleton-card__media" />
+        <view class="skeleton-card__line" />
+        <view class="skeleton-card__line skeleton-card__line--short" />
+      </view>
+    </view>
+    <view class="expert__col">
+      <view wx:for="{{[0, 1]}}" wx:key="*this" class="skeleton-card">
+        <view class="skeleton-card__media" />
+        <view class="skeleton-card__line" />
+        <view class="skeleton-card__line skeleton-card__line--short" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 首屏失败：给重试入口，不白屏（toast 由 utils/request 统一弹，这里不重复弹） -->
+  <view wx:elif="{{loadError && leftCol.length === 0 && rightCol.length === 0}}" class="expert__state">
+    <text class="expert__state-title">加载失败</text>
+    <text class="expert__state-desc">网络有点忙，稍后再试试吧</text>
+    <view class="expert__retry" bindtap="onRetry" hover-class="expert__retry--hover">
+      <text class="expert__retry-text">点击重试</text>
+    </view>
+  </view>
+
+  <!-- 空态：接口成功但没有数据 -->
+  <view wx:elif="{{loaded && leftCol.length === 0 && rightCol.length === 0}}" class="expert__state">
+    <text class="expert__state-title">达人正在路上，敬请期待</text>
+    <text class="expert__state-desc">先去探索页逛逛，好内容马上就来</text>
+  </view>
+
+  <!-- 双列瀑布流：左右两列各自渲染，分列算法在 index.ts -->
+  <view wx:else class="expert__waterfall">
+    <view class="expert__col">
+      <view wx:for="{{leftCol}}" wx:key="routeId" class="expert__cell">
+        <expert-route-card
+          item="{{item}}"
+          layout="grid"
+          bind:cardtap="onCardTap"
+          bind:favoritetap="onFavoriteTap"
+        />
+      </view>
+    </view>
+    <view class="expert__col">
+      <view wx:for="{{rightCol}}" wx:key="routeId" class="expert__cell">
+        <expert-route-card
+          item="{{item}}"
+          layout="grid"
+          bind:cardtap="onCardTap"
+          bind:favoritetap="onFavoriteTap"
+        />
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{loadingMore}}" class="expert__footer">
+    <text class="expert__footer-text">正在加载…</text>
+  </view>
+  <view wx:elif="{{finished && (leftCol.length > 0 || rightCol.length > 0)}}" class="expert__footer">
+    <text class="expert__footer-text">没有更多了</text>
+  </view>
+</view>

@@ -1,0 +1,391 @@
+page {
+  background: #f9faf4;
+}
+
+.erd {
+  min-height: 100vh;
+  background: #f9faf4;
+  // 底部固定操作栏 + 安全区，避免最后一天的内容被压住
+  padding-bottom: calc(180rpx + env(safe-area-inset-bottom));
+
+  &__state {
+    padding: 200rpx 48rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32rpx;
+  }
+
+  &__state-text {
+    font-size: 28rpx;
+    color: #6b7568;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  &__retry {
+    padding: 18rpx 48rpx;
+    background: #ffffff;
+    border-radius: 999rpx;
+
+    &--hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__retry-text {
+    font-size: 26rpx;
+    color: #163422;
+    font-weight: 600;
+  }
+
+  &__hero {
+    width: 100%;
+    height: 440rpx;
+    background: #edeee8;
+  }
+
+  &__cover {
+    width: 100%;
+    height: 100%;
+    display: block;
+
+    &--fallback {
+      background: linear-gradient(135deg, #163422 0%, #2d4b37 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &__cover-char {
+    font-size: 160rpx;
+    font-weight: 700;
+    color: rgba(249, 250, 244, 0.24);
+    letter-spacing: -0.02em;
+  }
+
+  &__main {
+    padding: 32rpx 32rpx 0;
+    display: flex;
+    flex-direction: column;
+    gap: 28rpx;
+  }
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 16rpx;
+  }
+
+  &__title {
+    font-size: 44rpx;
+    font-weight: 700;
+    color: #163422;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12rpx;
+  }
+
+  &__tag {
+    padding: 6rpx 18rpx;
+    border-radius: 999rpx;
+    background: #f3f4ee;
+    font-size: 22rpx;
+    color: #6b7568;
+    line-height: 1.5;
+
+    // 地区用 secondary 做标签色（design.md 的 tagging 系统）
+    &--region {
+      background: rgba(148, 74, 0, 0.1);
+      color: #944a00;
+      font-weight: 600;
+    }
+  }
+
+  // 达人名片：白纸卡压在页面底色上，不用分割线
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: 20rpx;
+    padding: 24rpx;
+    background: #ffffff;
+    border-radius: 24rpx;
+  }
+
+  &__avatar {
+    width: 88rpx;
+    height: 88rpx;
+    border-radius: 50%;
+    background: #edeee8;
+    flex-shrink: 0;
+
+    &--fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #c8ebd0;
+    }
+  }
+
+  &__avatar-char {
+    font-size: 34rpx;
+    font-weight: 700;
+    color: #163422;
+  }
+
+  &__author-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6rpx;
+  }
+
+  &__author-label {
+    font-size: 20rpx;
+    color: #944a00;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  &__author-name {
+    font-size: 30rpx;
+    font-weight: 700;
+    color: #163422;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__fav {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+    padding: 14rpx 22rpx;
+    border-radius: 999rpx;
+    background: #f3f4ee;
+
+    &--hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__fav-icon {
+    width: 32rpx;
+    height: 32rpx;
+    display: block;
+  }
+
+  &__fav-text {
+    font-size: 24rpx;
+    font-weight: 600;
+    color: #424843;
+  }
+
+  &__fav-count {
+    font-size: 22rpx;
+    color: #8d968b;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 14rpx;
+  }
+
+  &__section-title {
+    font-size: 24rpx;
+    font-weight: 600;
+    color: #944a00;
+    letter-spacing: 0.04em;
+  }
+
+  &__intro {
+    font-size: 28rpx;
+    color: #424843;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+
+    &--clamped {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 4;
+      overflow: hidden;
+    }
+  }
+
+  &__more {
+    align-self: flex-start;
+    padding: 6rpx 0;
+  }
+
+  &__more-text {
+    font-size: 24rpx;
+    font-weight: 600;
+    color: #163422;
+  }
+
+  // 分天：用 surface-container-low 做「一叠纸」的层级，而不是画线
+  &__day {
+    background: #f3f4ee;
+    border-radius: 24rpx;
+    padding: 28rpx 24rpx;
+    display: flex;
+    flex-direction: column;
+    gap: 16rpx;
+  }
+
+  &__day-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16rpx;
+    flex-wrap: wrap;
+  }
+
+  &__day-index {
+    font-size: 24rpx;
+    font-weight: 700;
+    color: #944a00;
+    letter-spacing: 0.04em;
+  }
+
+  &__day-theme {
+    font-size: 32rpx;
+    font-weight: 700;
+    color: #163422;
+    letter-spacing: -0.01em;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__day-intro {
+    font-size: 26rpx;
+    color: #424843;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  &__resources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12rpx;
+  }
+
+  &__resource {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+    padding: 10rpx 18rpx;
+    background: #ffffff;
+    border-radius: 999rpx;
+  }
+
+  &__resource-label {
+    font-size: 20rpx;
+    color: #8d968b;
+  }
+
+  &__resource-value {
+    font-size: 22rpx;
+    color: #163422;
+    font-weight: 600;
+    max-width: 260rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__spots {
+    display: flex;
+    flex-direction: column;
+    gap: 4rpx;
+  }
+
+  &__spots-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16rpx;
+    flex-wrap: wrap;
+    padding: 0 4rpx;
+  }
+
+  &__spots-count {
+    font-size: 22rpx;
+    font-weight: 600;
+    color: #6b7568;
+  }
+
+  &__spots-hint {
+    font-size: 20rpx;
+    color: #944a00;
+  }
+
+  &__day-empty {
+    padding: 24rpx;
+    background: #ffffff;
+    border-radius: 24rpx;
+  }
+
+  &__day-empty-text {
+    font-size: 24rpx;
+    color: #8d968b;
+  }
+
+  // 底部固定操作栏
+  &__actionbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+    padding: 20rpx 32rpx calc(20rpx + env(safe-area-inset-bottom));
+    background: rgba(226, 227, 221, 0.7);
+    backdrop-filter: blur(16px);
+  }
+
+  &__action {
+    height: 92rpx;
+    border-radius: 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--primary {
+      flex: 1;
+      // hero CTA 的缎面渐变
+      background: linear-gradient(135deg, #163422 0%, #2d4b37 100%);
+    }
+
+    &--hover {
+      opacity: 0.88;
+    }
+
+    &--disabled {
+      background: #edeee8;
+
+      .erd__action-text {
+        color: #a2aaa0;
+      }
+    }
+  }
+
+  &__action-text {
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #f9faf4;
+    letter-spacing: 0.02em;
+  }
+}

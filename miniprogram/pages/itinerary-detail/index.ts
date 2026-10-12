@@ -15,6 +15,14 @@ import {
   forceUnlockAttraction,
 } from '../../services/itinerary';
 import { pushPendingUnlock, startNetworkWatcher } from '../../utils/blind-unlock-queue';
+// 只借 getPlatform 这一个纯函数（读 wx.getSystemInfoSync().platform 并兜 'unknown'），
+// 不引入任何支付逻辑：鼓励下单仍然只走 components/reward-panel
+import { getPlatform } from '../../utils/virtual-payment';
+import {
+  getExpertRewardEntry,
+  EXPERT_REWARD_ENTRY_PROBE_ENABLED,
+} from '../../services/expert-route';
+import type { ExpertRewardEntryVO } from '../../types/expert-route';
 import { getTemplateDetail } from '../../services/template';
 import { getLocalSpecialtyList } from '../../services/local-specialty';
 import { getDiningList } from '../../services/dining';
@@ -538,6 +546,13 @@ Page({
     isDragging: false,
     dragIndex: -1,
     dragOffsetY: 0,
+    /**
+     * 达人路线鼓励入口（W6 探测结果）。
+     * **只有 available===true 才非 null**；非达人行程 / 越权 / 闸门未过 / 探测失败
+     * 一律保持 null —— wxml 里整块 wx:if，渲染空，不留空壳不占位。
+     */
+    expertReward: null as ExpertRewardEntryVO | null,
+    expertRewardShow: false,
   },
 
   // 当前屏幕上正在显示的餐饮（模块级状态是跨页面实例的，这里挂实例上）
@@ -588,6 +603,8 @@ Page({
     const itineraryId = Number(rawId);
     this.setData({ itineraryId });
     this.loadItinerary();
+    // 达人鼓励入口探测：与主流程并行，失败/不可用都静默渲染空，不打断行程加载
+    this.loadExpertRewardEntry(itineraryId);
 
     startNetworkWatcher(async (item) => {
       try {
@@ -601,6 +618,40 @@ Page({
         return false;
       }
     });
+  },
+
+  /**
+   * W6 `GET /wx/expert-route/reward-entry?itineraryId=` 探测。
+   *
+   * 契约（docs/contracts/expert-route-api-v1.md §1 W6）：
+   * - available=false（非达人创建的行程 / 越权 / 闸门未过）→ **渲染空**，不报错不占位；
+   * - available=true → 渲染入口块，点击打开 reward-panel（传 expertRouteId，不传 lineId）。
+   * 探测开关 EXPERT_REWARD_ENTRY_PROBE_ENABLED=false 时（后端未部署期可关）完全不发请求。
+   */
+  async loadExpertRewardEntry(itineraryId: number) {
+    if (!EXPERT_REWARD_ENTRY_PROBE_ENABLED || !itineraryId) return;
+    try {
+      // 传 platform：服务端 loadTiers(platform) 在 platform 为空时返回**空档位**，
+      // 虽然当前面板自己取档位，但不传就是给未来的调用方埋一个静默空结果
+      const res = await getExpertRewardEntry(itineraryId, getPlatform());
+      const entry = res?.data;
+      this.setData({
+        expertReward: entry && entry.available === true ? entry : null,
+      });
+    } catch (err) {
+      // 探测失败不打扰行程主流程；utils/request 已统一 toast，这里只收敛状态
+      console.warn('达人鼓励入口探测失败，按不可用渲染:', err);
+      this.setData({ expertReward: null });
+    }
+  },
+
+  onOpenExpertReward() {
+    if (!this.data.expertReward) return;
+    this.setData({ expertRewardShow: true });
+  },
+
+  onCloseExpertReward() {
+    this.setData({ expertRewardShow: false });
   },
 
   async loadTemplateDetail() {

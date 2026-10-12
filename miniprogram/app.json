@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/expert/index",
     "pages/trip/index",
     "pages/treasure/index",
     "pages/mine/index",
@@ -13,6 +14,8 @@
     "pages/lines/index",
     "pages/line-detail/index",
     "pages/reward-records/index",
+    "pages/expert-detail/index",
+    "pages/expert-favorites/index",
     "pages/logs/logs"
   ],
   "window": {
@@ -30,6 +33,12 @@
         "text": "探索",
         "iconPath": "assets/tabbar/tab-explore.png",
         "selectedIconPath": "assets/tabbar/tab-explore-active.png"
+      },
+      {
+        "pagePath": "pages/expert/index",
+        "text": "达人",
+        "iconPath": "assets/tabbar/tab-expert.png",
+        "selectedIconPath": "assets/tabbar/tab-expert-active.png"
       },
       {
         "pagePath": "pages/treasure/index",

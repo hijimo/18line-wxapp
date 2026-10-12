@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "expert-route-card": "/components/expert-route-card/expert-route-card"
+  },
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

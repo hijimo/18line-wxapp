@@ -245,6 +245,26 @@
           </view>
         </view>
         -->
+        <!--
+          达人路线鼓励入口：W6 探测 available===true 才渲染整块；
+          available=false / 探测失败时 expertReward 为 null，wx:if 直接不存在（不留空壳）。
+        -->
+        <view
+          wx:if="{{expertReward}}"
+          class="expert-reward-entry"
+          bindtap="onOpenExpertReward"
+          hover-class="expert-reward-entry--hover"
+          hover-stay-time="80"
+        >
+          <image class="expert-reward-entry__heart" src="/assets/images/icon-heart-filled.svg" mode="aspectFit" />
+          <view class="expert-reward-entry__text">
+            <text class="expert-reward-entry__title">这条行程来自达人路线「{{expertReward.routeTitle}}」</text>
+            <text class="expert-reward-entry__desc">走得开心的话，鼓励一下 {{expertReward.authorNickname || '达人'}}</text>
+          </view>
+          <view class="expert-reward-entry__action">
+            <text class="expert-reward-entry__action-text">鼓励一下</text>
+          </view>
+        </view>
       </scroll-view>
 
       <!-- 模板模式底部按钮 -->
@@ -312,5 +332,19 @@
     endDate="{{datePickerEndDate}}"
     bind:close="onDatePickerClose"
     bind:confirm="onDateConfirm"
+  />
+
+  <!--
+    达人鼓励面板：复用既有 reward-panel，只传 expert-route-id（**不传 line-id**，
+    两锚点互斥，reward-panel/virtual-payment 会在出网前拦截）。
+    wx:if 兜住 expertReward 为 null 的情形，避免把 undefined 绑进 Number prop。
+  -->
+  <reward-panel
+    wx:if="{{expertReward}}"
+    show="{{expertRewardShow}}"
+    expert-route-id="{{expertReward.routeId}}"
+    line-name="{{expertReward.routeTitle}}"
+    author-name="{{expertReward.authorNickname || '达人'}}"
+    bind:close="onCloseExpertReward"
   />
 </view>

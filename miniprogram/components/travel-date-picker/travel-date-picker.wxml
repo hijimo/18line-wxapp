@@ -6,16 +6,21 @@
     </view>
     <view class="date-picker-body">
       <view class="date-picker-row">
-        <text class="date-picker-label">开始日期</text>
+        <!-- mode 缺省（range）时表达式恒为「开始日期」，渲染结果与改造前一致 -->
+        <text class="date-picker-label">{{mode === 'single' ? '出行日期' : '开始日期'}}</text>
         <picker mode="date" bindchange="onStartDateChange" value="{{draftStartDate}}">
           <text class="date-picker-value {{draftStartDate ? '' : 'date-placeholder'}}">{{draftStartDateDisplay || '请选择'}}</text>
         </picker>
       </view>
-      <view class="date-picker-row">
+      <view class="date-picker-row" wx:if="{{mode !== 'single'}}">
         <text class="date-picker-label">结束日期</text>
         <picker mode="date" bindchange="onEndDateChange" value="{{draftEndDate}}" start="{{draftStartDate}}">
           <text class="date-picker-value {{draftEndDate ? '' : 'date-placeholder'}}">{{draftEndDateDisplay || '请选择'}}</text>
         </picker>
+      </view>
+      <!-- 单日期模式：日期非必填，给一个显式的跳过出口（tertiary 按钮，弱化视觉重量） -->
+      <view class="date-picker-skip" wx:if="{{mode === 'single'}}" bindtap="onSkipDate">
+        <text class="date-picker-skip-text">暂不选择日期</text>
       </view>
     </view>
   </view>

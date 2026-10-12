@@ -404,3 +404,35 @@
   color: #999;
   font-weight: 500;
 }
+
+/* 达人点评：达人路线详情页（readonly）专用，纸张层级 + secondary 标签色 */
+.expert-intro {
+  margin-top: 14rpx;
+  padding: 16rpx 18rpx;
+  background: #f3f4ee;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.expert-intro-label {
+  font-size: 20rpx;
+  font-weight: 600;
+  color: #944a00;
+  letter-spacing: 0.04em;
+}
+
+.expert-intro-text {
+  font-size: 24rpx;
+  color: #424843;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* 遮挡卡底是 surface-container（.card-body--locked = #edeee8），
+   点评块用白纸（surface-container-lowest）提亮一层，文字沿用深色，保证 7:1 可读性 */
+.expert-intro--blind {
+  background: #ffffff;
+}

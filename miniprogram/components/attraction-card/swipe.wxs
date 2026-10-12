@@ -1,6 +1,14 @@
 var ZONE_WIDTH = 80;
 
+// 只读模式（达人路线详情一类的浏览态）不开左滑删除。
+// 用 data-readonly 传进来而不是改 wxml 的事件绑定表达式：
+// 既有调用方不传该 dataset → undefined → 三个函数的行为逐字节不变。
+function isReadonly(e) {
+  return !!(e && e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.readonly);
+}
+
 function onSwipeStart(e, ins) {
+  if (isReadonly(e)) return true;
   var state = ins.getState();
   state.startX = e.touches[0].clientX;
   state.startY = e.touches[0].clientY;
@@ -13,6 +21,7 @@ function onSwipeStart(e, ins) {
 }
 
 function onSwipeMove(e, ins) {
+  if (isReadonly(e)) return true;
   var state = ins.getState();
   var touch = e.touches[0];
   var dx = touch.clientX - state.startX;
@@ -40,6 +49,7 @@ function onSwipeMove(e, ins) {
 }
 
 function onSwipeEnd(e, ins) {
+  if (isReadonly(e)) return true;
   var state = ins.getState();
   if (!state.moved) {
     ins.selectComponent('.card-body').addClass('card-body--animated');

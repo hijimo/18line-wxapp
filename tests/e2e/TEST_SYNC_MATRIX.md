@@ -153,3 +153,18 @@
 | `drawer-redesign/static-structure.test.js` dining drawer renders the dining address | 餐饮详情抽屉结构 | 新增 | 地址展示无静态结构覆盖 | 新增用例 | 断言 WXML 位置区块条件为 `{{viewModel.attractionName \|\| viewModel.address}}`、含 `{{viewModel.address}}` 与 `dining-intro__address-text`，SCSS 含 `.dining-intro__address-text` | `node --test drawer-redesign/static-structure.test.js` | 已通过 |
 | 餐饮详情地址展示（界面） | `dining-intro-drawer` 位置区块 | 未新增 e2e | 旧 `agent-builder/dining-intro-drawer` 抽屉 e2e 已删除，当前无抽屉级 e2e 承载真机排版 | 以 `npx tsc --noEmit` + 微信开发者工具人工验证为准 | WXML 新增地址行（`wx:if="{{viewModel.address}}"`，无关联景点时补定位图标，点击唤起 `wx.openLocation`），SCSS 新增 `.dining-intro__address-text`，TS `hasDetails` 纳入 `address` | `npx tsc --noEmit` + 开发者工具预览 | tsc 通过（仅 `typings/types/wx/lib.wx.app.d.ts` 既有报错）；界面排版待人工验证 |
 | `agent-builder/itinerary-unit.test.js` create-itinerary 静态用例 | 创建页源码 contract | 未改动 | 本次仅新增 `applyDistrictOption/districtOptionCode/regionText`，旧断言仍成立 | 保持原断言 | 无 | `npx jest --testEnvironment node --reporters default --testMatch "**/agent-builder/itinerary-unit.test.js" --runInBand --forceExit` | 已通过 94/95（唯一失败为 journey-card 日期 HEAD 存量问题） |
+
+## 2026-10-12 达人推荐路线（E2+E3 前端）e2e 新增
+
+背景：新增达人 tab（`pages/expert`，W1 双列瀑布流）、达人路线详情（`pages/expert-detail`，W2/W3/W5）、我喜欢的路线（`pages/expert-favorites`，W4）、行程详情页达人鼓励入口（W6 → `reward-panel` 传 `expertRouteId`）、打赏记录按锚点跳转（`reward-records`）。契约：`docs/contracts/expert-route-api-v1.md`；**后端未部署，本批用例全部基于 request mock，未真跑**。
+
+| 测试文件 / 用例名 | 对应业务流程 | 当前状态 | 问题分类 | 决策 | 改动 | 验证命令 | 结果 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `e2e/core/expert-flow.e2e.test.js` 1. 达人 tab 双列瀑布流渲染 | W1 列表 → 瀑布流分列、metaText、regionName 名称（非编码，契约 B6） | 新增 | core business | 新增 | mock `/wx/expert-route/list` 两条路线；断言分列、`3 天 · 8 个景点`、regionName 非 6 位编码、pageNum=1 | `npm run test:e2e:core` | 未运行（后端未部署，需本机微信开发者工具） |
+| `e2e/core/expert-flow.e2e.test.js` 2. 爱心收藏切换 | W3 收藏/取消，乐观更新 + 服务端回值覆盖 | 新增 | core business | 新增 | 断言 POST `/601/favorite` body `favorited:true/false`，视图 favoriteCount 以服务端回值（13/11）为准 | `npm run test:e2e:core` | 未运行（同上） |
+| `e2e/core/expert-flow.e2e.test.js` 3. 详情页遮挡态不泄漏 | W2 locked 脱敏红线（B8 同类） | 新增 | core business / 安全红线 | 新增，断言加严为 **8 字段**：`attractionName/attractionDescription/attachments/longitude/latitude/fuzzyLongitude/fuzzyLatitude/fuzzyRadius` 均无有效值（null/undefined/缺失/空串/空数组算通过）；mock day2 为**对抗样本**（故意误下发敏感字段），断言视图模型 + 整页 data（含 sanitize 后 detail）+ DOM `.card-name` 三层均不出现泄漏值；同时断言 locked 文字 hint（stationLabel/attractionBlurb/expertIntro/两指数/时长）正常渲染、visible 分支不受影响 | `npm run test:e2e:core` | 未运行（同上） |
+| `e2e/core/expert-flow.e2e.test.js` 4a. 创建行程（填日期） | W5 + travel-date-picker(single) | 新增 | core business | 新增 | 断言 POST `/601/create-itinerary` body `travelDate='2026-11-01'`，成功后 currentPage 为 `pages/itinerary-detail/index`（redirect 防重复创建） | `npm run test:e2e:core` | 未运行（同上） |
+| `e2e/core/expert-flow.e2e.test.js` 4b. 创建行程（跳过日期） | W5 日期非必填 | 新增 | core business | 新增 | picker「暂不选择日期」回传空 startDate → 断言 body `travelDate === null`（不得为 "undefined"/""） | `npm run test:e2e:core` | 未运行（同上） |
+| `e2e/core/expert-flow.e2e.test.js` 5. 鼓励入口条件渲染 | W6 available 门控 + reward-panel(expertRouteId) | 新增 | core business | 新增 | 非达人行程 8801：断言发出 reward-entry 探测（itineraryId=8801）、`expertReward=null`、`.expert-reward-entry` DOM 不存在（渲染空，不留空壳）；达人行程 9901：入口渲染、routeId=601、`onOpenExpertReward/onCloseExpertReward` 开关面板 | `npm run test:e2e:core` | 未运行（同上） |
+| `e2e/shared/request-mock.js` | mock 基建 | 更新 | 基建 | 新增 W1~W6 mock 分支（具体路径先于 `/wx/expert-route/{id}` 详情兜底）；`/wx/itinerary/9901` 复用 8801 详情载荷 | - | - | - |
+| `tests/shared/config.js` | 路由常量 | 更新 | 基建 | PAGES 增 `EXPERT/EXPERT_DETAIL/EXPERT_FAVORITES/REWARD_RECORDS`；`TAB_PAGES` 按 app.json tabBar 顺序改为 4 项（探索/达人/集市/我的） | - | - | - |

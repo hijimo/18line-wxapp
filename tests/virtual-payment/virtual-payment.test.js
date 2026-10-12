@@ -376,6 +376,124 @@ test('编排: onStage 按序回调四个阶段', async () => {
   assert.deepEqual(stages, ['creating-order', 'invoking-payment', 'confirming', 'done']);
 });
 
+// ==================== 业务锚点（lineId / expertRouteId 互斥）====================
+// 线路打赏与达人鼓励**共用这一条支付编排**，唯一差异就是下单 body 里的锚点键。
+// 锚点错了不会 500、不会报错给用户，而是「钱收进了错误的业务归属」——
+// 达人单挂到商家线路上（或反过来），对账时两边都对不平，所以这里是资金红线。
+test('锚点: 只传 lineId → 归一成 { lineId }，不含 expertRouteId 键', () => {
+  reset();
+  const anchor = vp.resolveRewardAnchor({ lineId: 7 });
+  assert.deepEqual(anchor, { lineId: 7 });
+  assert.ok(!('expertRouteId' in anchor), '线路锚点里不能出现 expertRouteId 键');
+});
+
+test('锚点: 🔴 只传 expertRouteId → 归一成 { expertRouteId }，不含 lineId 键', () => {
+  reset();
+  const anchor = vp.resolveRewardAnchor({ expertRouteId: 9 });
+  assert.deepEqual(anchor, { expertRouteId: 9 });
+  // 达人单落库 line_id IS NULL：body 里出现 lineId 键（哪怕是 undefined）都会让
+  // 后端把它当线路单处理，钱就归错人了
+  assert.ok(!('lineId' in anchor), '达人锚点里不能出现 lineId 键');
+});
+
+test('锚点: 🔴 两个都传 → 抛「参数冲突」，不猜哪一个', () => {
+  reset();
+  assert.throws(
+    () => vp.resolveRewardAnchor({ lineId: 7, expertRouteId: 9 }),
+    /只能二选一/,
+  );
+});
+
+test('锚点: 🔴 两个都不传 → 抛「参数缺失」', () => {
+  reset();
+  assert.throws(() => vp.resolveRewardAnchor({}), /缺少业务关联锚点/);
+  assert.throws(() => vp.resolveRewardAnchor(undefined), /缺少业务关联锚点/);
+});
+
+test('锚点: 0 / 负数 / NaN / 非整数一律按「没传」处理', () => {
+  reset();
+  // 0 与 undefined 等价：页面 query 里没拿到 id 时常见形态
+  assert.throws(() => vp.resolveRewardAnchor({ lineId: 0 }), /缺少业务关联锚点/);
+  // 🔴 负数曾被 Number(v || 0) 当成合法 id 送出网，后端报「线路不存在」把排查方向带偏
+  assert.throws(() => vp.resolveRewardAnchor({ lineId: -1 }), /缺少业务关联锚点/);
+  assert.throws(() => vp.resolveRewardAnchor({ expertRouteId: -9 }), /缺少业务关联锚点/);
+  assert.throws(() => vp.resolveRewardAnchor({ lineId: NaN }), /缺少业务关联锚点/);
+  assert.throws(() => vp.resolveRewardAnchor({ lineId: 7.5 }), /缺少业务关联锚点/);
+  assert.throws(() => vp.resolveRewardAnchor({ lineId: 'abc' }), /缺少业务关联锚点/);
+});
+
+test('锚点: 🔴 无效锚点 + 有效锚点 → 用有效的那个，不误报「参数冲突」', () => {
+  reset();
+  // 若把 -1 当成合法值，这里会抛「只能二选一」，把「lineId 其实没传」这个真问题盖住
+  assert.deepEqual(vp.resolveRewardAnchor({ lineId: -1, expertRouteId: 9 }), {
+    expertRouteId: 9,
+  });
+  assert.deepEqual(vp.resolveRewardAnchor({ lineId: 7, expertRouteId: 0 }), { lineId: 7 });
+});
+
+test('锚点: 字符串数字被接受（小程序页面参数来自 URL query，天然是字符串）', () => {
+  reset();
+  assert.deepEqual(vp.resolveRewardAnchor({ expertRouteId: '9' }), { expertRouteId: 9 });
+  assert.deepEqual(vp.resolveRewardAnchor({ lineId: ' 7 ' }), { lineId: 7 });
+});
+
+test('锚点: 🔴 达人路线下单 body 只带 expertRouteId，形状与线路单严格互斥', async () => {
+  reset();
+  let seen = null;
+  sysInfo = { platform: 'ios', SDKVersion: '2.21.0' };
+  mock.createRewardOrder = async (p) => { seen = p; return { data: GOOD_ORDER }; };
+  mock.getRewardOrderStatus = async () => ({ data: { orderStatus: '2', outTradeNo: 'X' } });
+
+  const r = await vp.payLineReward({ expertRouteId: 9, tierCode: 'T010' });
+
+  assert.equal(r.status, 'success');
+  // deepStrictEqual：键集合也要一致，多一个 lineId: undefined 都算失败
+  assert.deepEqual(seen, {
+    expertRouteId: 9,
+    tierCode: 'T010',
+    platform: 'ios',
+    sdkVersion: '2.21.0',
+  });
+  assert.ok(!('lineId' in seen), '达人单 body 不能出现 lineId 键');
+});
+
+test('锚点: 线路单下单 body 只带 lineId（与上一条互为镜像）', async () => {
+  reset();
+  let seen = null;
+  mock.createRewardOrder = async (p) => { seen = p; return { data: GOOD_ORDER }; };
+  mock.getRewardOrderStatus = async () => ({ data: { orderStatus: '2', outTradeNo: 'X' } });
+
+  await vp.payLineReward({ lineId: 7, tierCode: 'T010' });
+
+  assert.deepEqual(seen, {
+    lineId: 7,
+    tierCode: 'T010',
+    platform: 'android',
+    sdkVersion: '2.20.0',
+  });
+  assert.ok(!('expertRouteId' in seen), '线路单 body 不能出现 expertRouteId 键');
+});
+
+test('锚点: 🔴 锚点非法时抛错、完全不出网、且不占用支付锁', async () => {
+  reset();
+  mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+  mock.getRewardOrderStatus = async () => ({ data: { orderStatus: '2', outTradeNo: 'X' } });
+
+  // 抛错而不是返回 failed：这是编程错误，需要调用方 catch 复位 UI 并留下堆栈
+  await assert.rejects(
+    () => vp.payLineReward({ lineId: 7, expertRouteId: 9, tierCode: 'T001' }),
+    /只能二选一/,
+  );
+  assert.equal(counter.create, 0, '参数非法时一笔订单都不能创建');
+  assert.equal(calls.vpay.length, 0, '参数非法时绝不能调起支付');
+
+  // 关键：校验发生在加锁之前，否则一次参数错误会把 paying 锁死，
+  // 用户之后所有打赏都提示「上一笔正在处理中」，只能杀进程重进
+  const after = await vp.payLineReward({ expertRouteId: 9, tierCode: 'T001' });
+  assert.equal(after.status, 'success', '抛错不能留下脏锁');
+  assert.equal(counter.create, 1);
+});
+
 // ==================== 文案 ====================
 test('文案: -2 取消用中性措辞而非报错语气', () => {
   assert.equal(vp.describeVirtualPaymentError(-2), '已取消');

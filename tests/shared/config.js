@@ -25,10 +25,14 @@ const PAGES = {
   JOURNEYS: '/pages/journeys/index',
   CREATE_ITINERARY: '/pages/create-itinerary/index',
   ITINERARY_DETAIL: '/pages/itinerary-detail/index',
+  EXPERT: '/pages/expert/index',
+  EXPERT_DETAIL: '/pages/expert-detail/index',
+  EXPERT_FAVORITES: '/pages/expert-favorites/index',
+  REWARD_RECORDS: '/pages/reward-records/index',
 };
 
-// TabBar 页面
-const TAB_PAGES = [PAGES.INDEX, PAGES.TREASURE, PAGES.MINE];
+// TabBar 页面（与 app.json tabBar.list 顺序一致：探索 / 达人 / 集市 / 我的）
+const TAB_PAGES = [PAGES.INDEX, PAGES.EXPERT, PAGES.TREASURE, PAGES.MINE];
 
 // 测试超时配置
 const TIMEOUTS = {

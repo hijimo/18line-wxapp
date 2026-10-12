@@ -1,0 +1,163 @@
+// 达人路线卡片：白纸卡（surface-container-lowest）压在 #f9faf4 页面底色上，
+// 用背景层级而不是 1px 分割线表达结构（design.md「No-Line Rule」）。
+.erc {
+  width: 100%;
+  box-sizing: border-box;
+  background: #ffffff;
+  border-radius: 24rpx;
+  overflow: hidden;
+  transition: transform 160ms ease;
+
+  &--hover {
+    transform: scale(0.985);
+  }
+
+  &__media {
+    position: relative;
+    width: 100%;
+    height: 340rpx;
+    background: #edeee8;
+  }
+
+  &__cover {
+    width: 100%;
+    height: 100%;
+    display: block;
+
+    &--fallback {
+      background: linear-gradient(135deg, #163422 0%, #2d4b37 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &__cover-char {
+    font-size: 96rpx;
+    font-weight: 700;
+    color: rgba(249, 250, 244, 0.24);
+    letter-spacing: -0.02em;
+  }
+
+  // 爱心浮在封面右上角：半透明纸面 + 轻微模糊，属于 design.md 的 Glass 规则
+  &__fav {
+    position: absolute;
+    top: 16rpx;
+    right: 16rpx;
+    display: flex;
+    align-items: center;
+    gap: 6rpx;
+    padding: 8rpx 16rpx;
+    border-radius: 999rpx;
+    background: rgba(249, 250, 244, 0.86);
+    backdrop-filter: blur(8px);
+  }
+
+  &__fav-icon {
+    width: 32rpx;
+    height: 32rpx;
+    display: block;
+  }
+
+  &__fav-count {
+    font-size: 20rpx;
+    font-weight: 600;
+    color: #424843;
+    line-height: 1.4;
+  }
+
+  &__body {
+    padding: 20rpx 22rpx 24rpx;
+    display: flex;
+    flex-direction: column;
+    gap: 10rpx;
+  }
+
+  &__title {
+    font-size: 28rpx;
+    font-weight: 700;
+    color: #163422;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  // 地区用 secondary 做「标签」色，与 design.md 的 tagging 系统一致
+  &__region {
+    font-size: 21rpx;
+    font-weight: 600;
+    color: #944a00;
+    line-height: 1.4;
+  }
+
+  &__intro {
+    font-size: 22rpx;
+    color: #6b7568;
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  &__meta {
+    font-size: 21rpx;
+    color: #8d968b;
+    line-height: 1.4;
+  }
+
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    margin-top: 6rpx;
+    min-width: 0;
+  }
+
+  &__avatar {
+    width: 40rpx;
+    height: 40rpx;
+    border-radius: 50%;
+    background: #edeee8;
+    flex-shrink: 0;
+
+    &--fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #c8ebd0;
+    }
+  }
+
+  &__avatar-char {
+    font-size: 20rpx;
+    font-weight: 700;
+    color: #163422;
+  }
+
+  &__author-name {
+    font-size: 22rpx;
+    color: #424843;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  // 单列大卡（「我喜欢的路线」）：封面更矮、文字更宽，信息密度更高
+  &--list &__media {
+    height: 300rpx;
+  }
+
+  &--list &__body {
+    padding: 24rpx 28rpx 28rpx;
+    gap: 12rpx;
+  }
+
+  &--list &__title {
+    font-size: 32rpx;
+  }
+}

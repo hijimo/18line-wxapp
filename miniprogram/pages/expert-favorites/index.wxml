@@ -1,0 +1,50 @@
+<!--pages/expert-favorites/index.wxml-->
+<view class="fav">
+  <navigation-bar title="我喜欢的路线" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
+
+  <!-- 首屏加载：单列骨架，与列表卡同构，避免加载完成后布局跳动 -->
+  <view wx:if="{{loading && !loaded}}" class="fav__list">
+    <view wx:for="{{[0, 1]}}" wx:key="*this" class="skeleton-card">
+      <view class="skeleton-card__media" />
+      <view class="skeleton-card__line" />
+      <view class="skeleton-card__line skeleton-card__line--short" />
+    </view>
+  </view>
+
+  <!-- 首屏失败：给重试入口，不白屏（toast 由 utils/request 统一弹，这里不重复弹） -->
+  <view wx:elif="{{loadError && records.length === 0}}" class="fav__state">
+    <text class="fav__state-title">加载失败</text>
+    <text class="fav__state-desc">网络有点忙，稍后再试试吧</text>
+    <view class="fav__retry" bindtap="onRetry" hover-class="fav__retry--hover">
+      <text class="fav__retry-text">点击重试</text>
+    </view>
+  </view>
+
+  <!-- 空态：接口成功但没有收藏（契约 W4：空列表返回 total:0，不报错） -->
+  <view wx:elif="{{loaded && records.length === 0}}" class="fav__state">
+    <text class="fav__state-title">还没有喜欢的路线</text>
+    <text class="fav__state-desc">在达人页点路线卡片右上角的爱心，就会收进这里</text>
+    <view class="fav__go" bindtap="goExpertTab" hover-class="fav__go--hover">
+      <text class="fav__go-text">去达人页看看</text>
+    </view>
+  </view>
+
+  <!-- 单列大卡列表：复用 expert-route-card（layout="list"） -->
+  <view wx:else class="fav__list">
+    <view wx:for="{{records}}" wx:key="routeId" class="fav__cell">
+      <expert-route-card
+        item="{{item}}"
+        layout="list"
+        bind:cardtap="onCardTap"
+        bind:favoritetap="onFavoriteTap"
+      />
+    </view>
+  </view>
+
+  <view wx:if="{{loadingMore}}" class="fav__footer">
+    <text class="fav__footer-text">正在加载…</text>
+  </view>
+  <view wx:elif="{{finished && records.length > 0}}" class="fav__footer">
+    <text class="fav__footer-text">没有更多了</text>
+  </view>
+</view>

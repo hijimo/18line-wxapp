@@ -25,7 +25,7 @@ import { login } from '../services/auth';
 import { TOKEN_KEY } from './request';
 import { createRewardOrder, getRewardOrderStatus } from '../services/reward';
 import { REWARD_ERR, VPAY_ERR } from '../types/reward';
-import type { RewardOrderStatusResult } from '../types/reward';
+import type { RewardOrderCreateParams, RewardOrderStatusResult } from '../types/reward';
 
 /** wx.requestVirtualPayment 要求的最低基础库版本 */
 const MIN_SDK_VERSION = '2.19.2';
@@ -75,10 +75,71 @@ export type RewardPayStage =
   | 'done';
 
 export interface PayLineRewardOptions {
-  lineId: number;
+  /**
+   * 线路打赏的业务关联锚点。
+   * 与 expertRouteId **互斥且必填其一**：两个都传或都不传都会在出网前抛错。
+   */
+  lineId?: number;
+  /**
+   * 达人路线鼓励的业务关联锚点（契约 §1 W7~W9）。
+   * 传它时下单 body **不会**带 lineId（达人单落库 line_id IS NULL）。
+   */
+  expertRouteId?: number;
   tierCode: string;
   /** 阶段变更回调，供 UI 展示「正在创建订单/正在拉起支付/正在确认结果」 */
   onStage?: (stage: RewardPayStage) => void;
+}
+
+/** 归一化后的业务锚点：**只会含 lineId / expertRouteId 中的一个键** */
+export type RewardAnchor = { lineId: number } | { expertRouteId: number };
+
+/**
+ * 把入参里的锚点值归一成「正整数 id」，其余一律按**没传**处理（返回 0）。
+ *
+ * <p>为什么不能只写 {@code Number(v || 0)}：那样 {@code -1} 是真值，会被当成合法锚点
+ * 送进下单 body，后端按主键查不到归属 → 报「线路不存在」，排查方向直接被带偏；
+ * 更糟的是 {@code { lineId: -1, expertRouteId: 9 }} 会被判成「两个都传」而抛参数冲突，
+ * 掩盖了真实问题（其实是 lineId 没传）。
+ *
+ * <p>非整数（如 {@code 7.5}）同样按没传处理：后端主键是 BIGINT 自增正整数，
+ * 任何别的形态都必然查不到，让它走「锚点缺失」的抛错分支比带假 id 出网更好定位。
+ *
+ * <p>⚠️ 字符串数字（{@code '9'}）**要接受**：小程序页面参数来自 URL query，
+ * 拿到的天然是字符串，拒掉会让正常入口直接报「缺少业务关联锚点」。
+ */
+function toAnchorId(value: unknown): number {
+  const n = Number(value);
+  return Number.isInteger(n) && n > 0 ? n : 0;
+}
+
+/**
+ * 校验并归一化业务锚点。
+ *
+ * 「都传」和「都不传」都是**调用方的编程错误**，后端也一定拒单，所以在出网前就抛：
+ * - 省掉一次必然失败的请求；
+ * - 避免把参数拼装错误误当成支付渠道故障去排查（这类误判在真机联调时成本极高）；
+ * - console.error 留现场，抛错让调用方的 catch 兜住 UI 状态（例如复位 paying 锁）。
+ *
+ * 0 / 负数 / 非整数 / 非数字一律等价于「没传」，见 {@link toAnchorId}。
+ */
+export function resolveRewardAnchor(
+  options: Pick<PayLineRewardOptions, 'lineId' | 'expertRouteId'>,
+): RewardAnchor {
+  const lineId = toAnchorId(options?.lineId);
+  const expertRouteId = toAnchorId(options?.expertRouteId);
+
+  if (lineId && expertRouteId) {
+    console.error('打赏锚点互斥：lineId 与 expertRouteId 不能同时传', {
+      lineId,
+      expertRouteId,
+    });
+    throw new Error('打赏参数冲突：线路与达人路线只能二选一');
+  }
+  if (!lineId && !expertRouteId) {
+    console.error('打赏锚点缺失：lineId 与 expertRouteId 必须传其中一个', options);
+    throw new Error('打赏参数缺失：缺少业务关联锚点');
+  }
+  return lineId ? { lineId } : { expertRouteId };
 }
 
 /**
@@ -366,15 +427,22 @@ export async function pollRewardOrderStatus(
 /**
  * 完整打赏流程：下单 → 拉起支付 → 轮询确认。
  *
- * 调用方只需给 lineId + tierCode，其余（终端判定、签名透传、session_key
- * 失效重登重试、取消识别、结果确认）都在这里收敛。
+ * 调用方给「lineId **或** expertRouteId」+ tierCode，其余（锚点互斥校验、终端判定、
+ * 签名透传、session_key 失效重登重试、取消识别、结果确认）都在这里收敛。
+ * 线路打赏与达人路线鼓励**共用这一条编排**（设计文档 §15.5 F1），差异只在下单 body 的锚点键。
  *
  * **不弹任何 toast**：结果以返回值交给调用方决定如何呈现，
  * 避免组件与页面重复提示。
+ *
+ * ⚠️ 锚点非法（都传 / 都不传）时**抛错**而不是返回 failed：那是编程错误，
+ *    需要调用方的 catch 复位 UI 锁并留下堆栈，不能混进「支付失败」的用户文案里。
  */
 export async function payLineReward(
   options: PayLineRewardOptions,
 ): Promise<RewardPayOutcome> {
+  // 先校验锚点再加支付锁：参数非法时直接抛，不占锁、不出网
+  resolveRewardAnchor(options);
+
   if (paying) {
     return { status: 'failed', message: '上一笔打赏正在处理中，请稍候' };
   }
@@ -400,7 +468,8 @@ async function invokeRewardPayment(
   options: PayLineRewardOptions,
   capability: VirtualPaymentCapability,
 ): Promise<RewardPayOutcome> {
-  const { lineId, tierCode, onStage } = options;
+  const { tierCode, onStage } = options;
+  const anchor = resolveRewardAnchor(options);
   // 4001 / -15007 只重试一次：再多也只是重复失败，且会放大后端压力
   const maxOrderAttempts = 2;
 
@@ -409,12 +478,20 @@ async function invokeRewardPayment(
 
     let order;
     try {
-      const res = await createRewardOrder({
-        lineId,
+      const base = {
         tierCode,
         platform: capability.platform,
         sdkVersion: capability.sdkVersion,
-      });
+      };
+      // 只带一个锚点键：达人单不带 lineId，线路单不带 expertRouteId。
+      // 不要图省事写成 { ...base, lineId, expertRouteId } —— 多出来的 undefined 键会改变
+      // 下单 body 的形状（既有单测对 body 做了 deepStrictEqual 断言，后端也按互斥校验），
+      // 而且 RewardOrderCreateParams 是判别联合，两个锚点同时出现在类型上就构造不出来。
+      const orderParams: RewardOrderCreateParams =
+        'expertRouteId' in anchor
+          ? { ...base, expertRouteId: anchor.expertRouteId }
+          : { ...base, lineId: anchor.lineId };
+      const res = await createRewardOrder(orderParams);
       order = res?.data;
     } catch (err: any) {
       const code = err?.code;

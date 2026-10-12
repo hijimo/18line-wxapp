@@ -544,3 +544,61 @@ page {
   line-height: 30rpx;
   padding-top: 4rpx;
 }
+
+/* ============ 达人路线鼓励入口（W6 available===true 才渲染） ============ */
+/* 视觉规范见 .kiro/steering/design.md：纸面卡片、No-Line Rule、强调色日落橙 #944a00 */
+.expert-reward-entry {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin: 24rpx 32rpx calc(16rpx + env(safe-area-inset-bottom));
+  padding: 28rpx 28rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(22, 52, 34, 0.06);
+
+  &--hover {
+    opacity: 0.85;
+  }
+
+  &__heart {
+    width: 44rpx;
+    height: 44rpx;
+    flex-shrink: 0;
+  }
+
+  &__text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6rpx;
+  }
+
+  &__title {
+    font-size: 26rpx;
+    font-weight: 600;
+    color: #163422;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__desc {
+    font-size: 22rpx;
+    color: rgba(22, 52, 34, 0.55);
+  }
+
+  &__action {
+    flex-shrink: 0;
+    padding: 14rpx 28rpx;
+    background: rgba(148, 74, 0, 0.08);
+    border-radius: 999rpx;
+  }
+
+  &__action-text {
+    font-size: 24rpx;
+    font-weight: 600;
+    color: #944a00;
+  }
+}

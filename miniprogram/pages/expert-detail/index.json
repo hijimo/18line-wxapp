@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "attraction-card": "/components/attraction-card/attraction-card",
+    "attraction-intro-drawer": "/components/attraction-intro-drawer/attraction-intro-drawer",
+    "travel-date-picker": "/components/travel-date-picker/travel-date-picker"
+  }
+}

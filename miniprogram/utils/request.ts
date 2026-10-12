@@ -34,6 +34,15 @@ interface RequestOption {
   header?: Record<string, string>;
   timeout?: number;
   NO_TOKEN?: boolean;
+  /**
+   * 静默模式：请求失败时**不弹** toast，只抛错交给调用方自行处理。
+   *
+   * 用于「探测类」可选接口——例如行程详情页的达人鼓励入口探测（W6）。
+   * 这类接口失败时页面有合理的降级形态（渲染空），弹 toast 反而是打扰用户；
+   * 且后端未部署时会稳定 404，会污染**既有**页面的体验。
+   * 默认 false，保持既有行为不变。
+   */
+  silent?: boolean;
 }
 
 const defaultOption: RequestOption = {
@@ -124,11 +133,13 @@ const request = async <T>(path: string, option?: RequestOption): Promise<T> => {
     } catch (err: any) {
       // 只对 401 重试（token 过期可能需要重新获取），其他错误直接抛出
       if (err.code !== 401 || loginTimes === LOGIN_TIME_LIMIT - 1) {
-        wx.showToast({
-          title: err.message || '接口异常',
-          icon: 'none',
-          duration: 3500,
-        });
+        if (!finalOption.silent) {
+          wx.showToast({
+            title: err.message || '接口异常',
+            icon: 'none',
+            duration: 3500,
+          });
+        }
         throw err;
       }
     }

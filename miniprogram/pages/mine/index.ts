@@ -93,6 +93,10 @@ Page({
     wx.navigateTo({ url: '/pages/lines/index' });
   },
 
+  goExpertFavorites() {
+    wx.navigateTo({ url: '/pages/expert-favorites/index' });
+  },
+
   goRewardRecords() {
     // 不传 lineId 表示查看全部线路的打赏记录
     wx.navigateTo({ url: '/pages/reward-records/index' });

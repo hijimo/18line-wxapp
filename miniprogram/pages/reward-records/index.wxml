@@ -1,7 +1,15 @@
 <view class="records">
   <navigation-bar title="我的打赏" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
   <view wx:if="{{records.length > 0}}" class="records__list">
-    <view wx:for="{{records}}" wx:key="key" class="record">
+    <view
+      wx:for="{{records}}"
+      wx:key="key"
+      class="record"
+      hover-class="record--hover"
+      hover-stay-time="80"
+      data-index="{{index}}"
+      bindtap="onRecordTap"
+    >
       <view class="record__head">
         <text class="record__tier">{{item.tierName}}</text>
         <text class="record__status record__status--{{item.statusTone}}">{{item.statusLabel}}</text>

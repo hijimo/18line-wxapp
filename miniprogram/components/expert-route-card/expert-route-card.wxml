@@ -1,0 +1,51 @@
+<!--expert-route-card.wxml-->
+<view
+  class="erc erc--{{layout}}"
+  bindtap="onCardTap"
+  hover-class="erc--hover"
+  hover-stay-time="80"
+>
+  <view class="erc__media">
+    <image
+      wx:if="{{item.coverUrl}}"
+      class="erc__cover"
+      src="{{item.coverUrl}}"
+      mode="aspectFill"
+      lazy-load
+    />
+    <view wx:else class="erc__cover erc__cover--fallback">
+      <text class="erc__cover-char">{{item.coverFallback}}</text>
+    </view>
+
+    <view wx:if="{{showFavorite}}" class="erc__fav" catchtap="onFavoriteTap">
+      <image
+        class="erc__fav-icon"
+        src="{{item.favorited ? heartFilledIcon : heartOutlineIcon}}"
+        mode="aspectFit"
+        binderror="onHeartIconError"
+      />
+      <text wx:if="{{item.favoriteCount > 0}}" class="erc__fav-count">{{item.favoriteCount}}</text>
+    </view>
+  </view>
+
+  <view class="erc__body">
+    <text class="erc__title">{{item.routeTitle}}</text>
+    <text wx:if="{{item.regionName}}" class="erc__region">{{item.regionName}}</text>
+    <text wx:if="{{layout === 'list' && item.intro}}" class="erc__intro">{{item.intro}}</text>
+    <text wx:if="{{item.metaText}}" class="erc__meta">{{item.metaText}}</text>
+
+    <view class="erc__author">
+      <image
+        wx:if="{{item.authorAvatar}}"
+        class="erc__avatar"
+        src="{{item.authorAvatar}}"
+        mode="aspectFill"
+        lazy-load
+      />
+      <view wx:else class="erc__avatar erc__avatar--fallback">
+        <text class="erc__avatar-char">{{item.authorFallback}}</text>
+      </view>
+      <text class="erc__author-name">{{item.authorText}}</text>
+    </view>
+  </view>
+</view>

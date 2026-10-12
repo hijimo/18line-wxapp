@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "lint": "npm run build && node --test tests/drawer-redesign/*.test.js tests/itinerary-map/*.test.js tests/profile-edit-preference.test.js tests/virtual-payment/*.test.js",
+    "lint": "npm run build && node --test tests/drawer-redesign/*.test.js tests/expert-detail/*.test.js tests/itinerary-map/*.test.js tests/profile-edit-preference.test.js tests/virtual-payment/*.test.js",
     "build:mp-weixin": "npm run build",
     "test:e2e": "npm --prefix tests run test:e2e",
     "test:e2e:auth": "npm --prefix tests run test:e2e:auth",

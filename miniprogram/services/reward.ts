@@ -22,6 +22,8 @@ export const getRewardTiers = (platform: string) =>
  * 创建打赏订单，返回拉起 wx.requestVirtualPayment 所需的签名参数。
  *
  * ⚠️ 返回的 signData 是后端序列化好的字符串，**禁止**二次 JSON.stringify。
+ * ⚠️ params.lineId 与 params.expertRouteId **互斥且必填其一**；调用方不要自己拼，
+ *    统一走 utils/virtual-payment.ts 的 payLineReward（它会在出网前校验）。
  */
 export const createRewardOrder = (params: RewardOrderCreateParams) =>
   request<AjaxResult<RewardOrderCreateResult>>('/wx/reward/order', {
@@ -31,9 +33,19 @@ export const createRewardOrder = (params: RewardOrderCreateParams) =>
 
 /**
  * 我的打赏记录（分页）。
- * @param lineId 可选，按线路过滤
+ *
+ * @param lineId 可选，按线路过滤；为 0 / 缺省时**不传该字段**，表示查全部
+ * @param expertRouteId 可选，按达人路线过滤；同上，为 0 / 缺省时不传
+ *
+ * ⚠️ 两个过滤参数都不要写成 `x || undefined` 之外的形态：wx.request 会把 undefined
+ *    拼成字面量 "undefined"，后端 Long 转换失败直接 400（utils/request 已统一剔除 undefined）。
  */
-export const getMyRewardOrders = (params?: { lineId?: number; pageNum?: number; pageSize?: number }) =>
+export const getMyRewardOrders = (params?: {
+  lineId?: number;
+  expertRouteId?: number;
+  pageNum?: number;
+  pageSize?: number;
+}) =>
   request<TableDataInfo<RewardOrderRecord>>('/wx/reward/orders', { data: params });
 
 /**

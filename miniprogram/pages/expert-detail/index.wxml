@@ -1,0 +1,151 @@
+<!--pages/expert-detail/index.wxml-->
+<view class="erd">
+  <navigation-bar title="达人路线" back="{{true}}" color="black" background="#F9FAF4"></navigation-bar>
+
+  <view wx:if="{{loading}}" class="erd__state">
+    <text class="erd__state-text">正在加载…</text>
+  </view>
+
+  <view wx:elif="{{loadError}}" class="erd__state">
+    <text class="erd__state-text">{{loadError}}</text>
+    <view class="erd__retry" bindtap="onRetry" hover-class="erd__retry--hover">
+      <text class="erd__retry-text">重新加载</text>
+    </view>
+  </view>
+
+  <block wx:elif="{{detail}}">
+    <!-- 封面「出血」到屏幕边缘，制造 Field Guide 的开放感 -->
+    <view class="erd__hero">
+      <image
+        wx:if="{{coverUrl}}"
+        class="erd__cover"
+        src="{{coverUrl}}"
+        mode="aspectFill"
+      />
+      <view wx:else class="erd__cover erd__cover--fallback">
+        <text class="erd__cover-char">{{coverFallback}}</text>
+      </view>
+    </view>
+
+    <view class="erd__main">
+      <view class="erd__heading">
+        <text class="erd__title">{{routeTitle}}</text>
+        <view class="erd__tags">
+          <text wx:if="{{regionName}}" class="erd__tag erd__tag--region">{{regionName}}</text>
+          <text wx:if="{{metaText}}" class="erd__tag">{{metaText}}</text>
+        </view>
+      </view>
+
+      <!-- 达人名片：头像 + 昵称 + 收藏 + 鼓励入口（顶部） -->
+      <view class="erd__author">
+        <image
+          wx:if="{{authorAvatar}}"
+          class="erd__avatar"
+          src="{{authorAvatar}}"
+          mode="aspectFill"
+        />
+        <view wx:else class="erd__avatar erd__avatar--fallback">
+          <text class="erd__avatar-char">{{authorFallback}}</text>
+        </view>
+        <view class="erd__author-info">
+          <text class="erd__author-label">达人</text>
+          <text class="erd__author-name">{{authorNickname}}</text>
+        </view>
+        <view class="erd__fav" bindtap="onFavoriteTap" hover-class="erd__fav--hover">
+          <image
+            class="erd__fav-icon"
+            src="{{favorited ? heartFilledIcon : heartOutlineIcon}}"
+            mode="aspectFit"
+            binderror="onHeartIconError"
+          />
+          <text class="erd__fav-text">{{favorited ? '已收藏' : '收藏'}}</text>
+          <text wx:if="{{favoriteCount > 0}}" class="erd__fav-count">{{favoriteCount}}</text>
+        </view>
+      </view>
+
+      <!--
+        ⚠️ 本页**不放**鼓励（打赏）入口：设计文档 §14.15 N6 / §13.13 第 10 项是用户的既有决策
+        「打赏入口只在行程详情页」。用户先创建行程、再在行程详情页鼓励，转化质量更高，
+        也少一个支付入口需要沙箱验证。要改这条决策请先改设计文档，不要在这里顺手加按钮。
+      -->
+
+      <!-- 达人整体介绍：长文可折叠 -->
+      <view wx:if="{{intro}}" class="erd__section">
+        <text class="erd__section-title">达人怎么说</text>
+        <text class="erd__intro {{introExpanded ? '' : 'erd__intro--clamped'}}">{{intro}}</text>
+        <view class="erd__more" bindtap="onToggleIntro">
+          <text class="erd__more-text">{{introExpanded ? '收起' : '展开更多'}}</text>
+        </view>
+      </view>
+
+      <!-- 分天：主题 + 方案 + 资源展示名 + 景点列表 -->
+      <view wx:for="{{days}}" wx:key="routeDayId" wx:for-item="day" class="erd__day">
+        <view class="erd__day-head">
+          <text class="erd__day-index">{{day.dayLabel}}</text>
+          <text wx:if="{{day.dayTheme}}" class="erd__day-theme">{{day.dayTheme}}</text>
+        </view>
+        <text wx:if="{{day.dayIntro}}" class="erd__day-intro">{{day.dayIntro}}</text>
+
+        <view wx:if="{{day.resources.length > 0}}" class="erd__resources">
+          <view wx:for="{{day.resources}}" wx:key="label" wx:for-item="res" class="erd__resource">
+            <text class="erd__resource-label">{{res.label}}</text>
+            <text class="erd__resource-value">{{res.value}}</text>
+          </view>
+        </view>
+
+        <view wx:if="{{day.attractionCount > 0}}" class="erd__spots">
+          <view class="erd__spots-head">
+            <text class="erd__spots-count">{{day.attractionCount}} 个景点</text>
+            <text wx:if="{{day.lockedCount > 0}}" class="erd__spots-hint">
+              其中 {{day.lockedCount}} 个是盲盒，创建行程后到店解锁
+            </text>
+          </view>
+          <!--
+            复用 attraction-card + readonly：不渲染左滑删除区与盲态操作按钮。
+            locked 态由服务端脱敏 + 本页白名单构造双重保证，不渲染 name/description/attachments。
+          -->
+          <attraction-card
+            wx:for="{{day.attractions}}"
+            wx:key="attractionId"
+            item="{{item}}"
+            index="{{index}}"
+            readonly="{{true}}"
+            bind:carddetail="onAttractionDetail"
+          />
+        </view>
+
+        <view wx:else class="erd__day-empty">
+          <text class="erd__day-empty-text">这一天还没有安排景点</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部固定操作栏：glass 表面，符合设计系统的 floating action 规范 -->
+    <view class="erd__actionbar">
+      <view
+        class="erd__action erd__action--primary {{creating ? 'erd__action--disabled' : ''}}"
+        bindtap="onCreateTap"
+        hover-class="{{creating ? '' : 'erd__action--hover'}}"
+      >
+        <text class="erd__action-text">{{creating ? '正在创建…' : '用这条路线创建行程'}}</text>
+      </view>
+    </view>
+
+    <!-- 出行日期非必填：picker 内提供「暂不选择日期」 -->
+    <travel-date-picker
+      show="{{datePickerShow}}"
+      mode="single"
+      title="选择出行日期"
+      bind:close="onDatePickerClose"
+      bind:confirm="onDateConfirm"
+    />
+
+    <attraction-intro-drawer
+      wx:if="{{showAttractionIntro}}"
+      show="{{showAttractionIntro}}"
+      data="{{attractionIntroData}}"
+      source="schedule"
+      bind:close="onAttractionIntroClose"
+    />
+  </block>
+</view>

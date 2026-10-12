@@ -95,7 +95,11 @@ function e2eRequestMock(options) {
     return ajax(true);
   }
 
-  if (url.indexOf('/wx/itinerary/8801') >= 0 || url.indexOf('/wx/itinerary/5001') >= 0) {
+  if (
+    url.indexOf('/wx/itinerary/8801') >= 0 ||
+    url.indexOf('/wx/itinerary/5001') >= 0 ||
+    url.indexOf('/wx/itinerary/9901') >= 0
+  ) {
     return ajax({
       itineraryId: 8801,
       itineraryName: 'E2E杭州3日游',
@@ -289,6 +293,226 @@ function e2eRequestMock(options) {
 
   if (url.indexOf('/wx/preference') >= 0) {
     return ajax({ preferenceId: 7001 });
+  }
+
+  // ==================== 达人推荐路线（W1~W6） ====================
+  // 匹配顺序：具体路径在前，`/wx/expert-route/{id}` 详情兜底在后
+  // （/favorite、/create-itinerary 的 URL 同样包含 /wx/expert-route/601 前缀）
+
+  if (url.indexOf('/wx/expert-route/list') >= 0) {
+    return table([
+      {
+        routeId: 601,
+        routeTitle: '松阳古村三日慢走',
+        coverUrl: IMG,
+        authorNickname: '阿岳',
+        authorAvatar: IMG,
+        regionName: '丽水市松阳县',
+        dayCount: 3,
+        attractionCount: 8,
+        favoriteCount: 12,
+        favorited: false,
+        intro: '住在古村，走在茶山',
+        rewardAvailable: true,
+        createTime: '2026-10-01 10:00:00',
+      },
+      {
+        routeId: 602,
+        routeTitle: '缙云仙都两日摄影线',
+        coverUrl: IMG,
+        authorNickname: '老周',
+        authorAvatar: '',
+        regionName: '丽水市缙云县',
+        dayCount: 2,
+        attractionCount: 5,
+        favoriteCount: 3,
+        favorited: true,
+        intro: '',
+        rewardAvailable: false,
+        createTime: '2026-10-02 10:00:00',
+      },
+    ]);
+  }
+
+  if (url.indexOf('/wx/expert-route/favorites') >= 0) {
+    return table([
+      {
+        routeId: 602,
+        routeTitle: '缙云仙都两日摄影线',
+        coverUrl: IMG,
+        authorNickname: '老周',
+        authorAvatar: '',
+        regionName: '丽水市缙云县',
+        dayCount: 2,
+        attractionCount: 5,
+        favoriteCount: 3,
+        favorited: true,
+        intro: '',
+        rewardAvailable: false,
+        createTime: '2026-10-02 10:00:00',
+      },
+    ]);
+  }
+
+  if (url.indexOf('/wx/expert-route/reward-entry') >= 0) {
+    // 9901 = 达人路线创建的行程（旁路映射存在）→ available:true
+    if (Number(data.itineraryId) === 9901) {
+      return ajax({
+        available: true,
+        blockReason: null,
+        routeId: 601,
+        routeTitle: '松阳古村三日慢走',
+        authorNickname: '阿岳',
+        authorAvatar: IMG,
+        itineraryId: 9901,
+        tiers: [
+          { tierCode: 'T1', tierName: '鼓励', priceFen: 100, isTest: '0', sortOrder: 1 },
+        ],
+      });
+    }
+    // 其它行程（含 8801 手动创建）→ available:false，不报错
+    return ajax({ available: false, blockReason: '非达人路线创建的行程' });
+  }
+
+  if (url.indexOf('/create-itinerary') >= 0 && url.indexOf('/wx/expert-route/') >= 0) {
+    return ajax({ itineraryId: 8801, itineraryTitle: '松阳古村三日慢走' });
+  }
+
+  if (url.indexOf('/favorite') >= 0 && url.indexOf('/wx/expert-route/') >= 0) {
+    return ajax({
+      favorited: data.favorited === true,
+      favoriteCount: data.favorited === true ? 13 : 11,
+    });
+  }
+
+  if (url.indexOf('/wx/expert-route/') >= 0) {
+    // W2 详情。day1.locked 为契约合规样本（敏感字段全 null）；
+    // day2.locked 为**对抗样本**：故意带上契约规定 locked 态不下发的敏感字段，
+    // 用于验证前端白名单兜底——即使后端误下发，也不得进入渲染视图模型。
+    return ajax({
+      routeId: 601,
+      routeTitle: '松阳古村三日慢走',
+      coverUrl: IMG,
+      authorNickname: '阿岳',
+      authorAvatar: IMG,
+      intro: '住在古村，走在茶山',
+      regionName: '丽水市松阳县',
+      dayCount: 2,
+      attractionCount: 3,
+      favoriteCount: 12,
+      favorited: false,
+      rewardEnabled: true,
+      rewardAvailable: true,
+      createTime: '2026-10-01 10:00:00',
+      days: [
+        {
+          routeDayId: 1,
+          dayIndex: 1,
+          dayTheme: '古村入门',
+          dayIntro: '先在村里走一走',
+          accommodationName: null,
+          breakfastName: null,
+          lunchName: null,
+          dinnerName: null,
+          carNickname: null,
+          photographyNickname: null,
+          attractions: [
+            {
+              attractionId: 301,
+              sortOrder: 1,
+              displayMode: 'visible',
+              stationLabel: '第 1 站',
+              attractionName: '杨家堂',
+              attractionShortName: '杨家堂',
+              attractionDescription: '金色布达拉宫',
+              attractionBlurb: '活着的古村落',
+              expertIntro: '这里的晨雾最好看',
+              indoorOutdoor: '室外',
+              visitDuration: '2小时',
+              attractionNotes: '建议穿防滑鞋',
+              classicRating: '4.8',
+              leisureRating: '4.5',
+              longitude: 119.4,
+              latitude: 28.4,
+              fuzzyLongitude: null,
+              fuzzyLatitude: null,
+              fuzzyRadius: null,
+              attachments: [{ url: IMG }],
+              openTime: '08:00-18:00',
+              bestViewingTime: null,
+              ticketPriceA: 0,
+              ticketPriceC: 0,
+            },
+            {
+              attractionId: 302,
+              sortOrder: 2,
+              displayMode: 'locked',
+              stationLabel: '第 2 站',
+              attractionName: null,
+              attractionShortName: null,
+              attractionDescription: null,
+              attractionBlurb: '一座藏在林子里的古桥，到了才知道',
+              expertIntro: '我在这里藏了一座小众古桥',
+              indoorOutdoor: '室外',
+              visitDuration: '1小时',
+              attractionNotes: null,
+              classicRating: '4.6',
+              leisureRating: '4.9',
+              longitude: null,
+              latitude: null,
+              fuzzyLongitude: null,
+              fuzzyLatitude: null,
+              fuzzyRadius: null,
+              attachments: null,
+              openTime: null,
+              bestViewingTime: null,
+              ticketPriceA: null,
+              ticketPriceC: null,
+            },
+          ],
+        },
+        {
+          routeDayId: 2,
+          dayIndex: 2,
+          dayTheme: '茶山秘境',
+          dayIntro: null,
+          accommodationName: null,
+          breakfastName: null,
+          lunchName: null,
+          dinnerName: null,
+          carNickname: null,
+          photographyNickname: null,
+          attractions: [
+            {
+              attractionId: 303,
+              sortOrder: 1,
+              displayMode: 'locked',
+              stationLabel: '第 1 站',
+              attractionName: '泄漏测试_秘密山顶',
+              attractionShortName: '秘密山顶',
+              attractionDescription: '泄漏测试_描述',
+              attractionBlurb: '云海观景台',
+              expertIntro: '山顶看日出',
+              indoorOutdoor: '室外',
+              visitDuration: '1.5小时',
+              attractionNotes: '带件外套',
+              classicRating: '4.7',
+              leisureRating: '4.4',
+              longitude: 119.5,
+              latitude: 28.5,
+              fuzzyLongitude: 119.51,
+              fuzzyLatitude: 28.51,
+              fuzzyRadius: 800,
+              attachments: [{ url: IMG }],
+              openTime: '全天',
+              bestViewingTime: null,
+              ticketPriceA: null,
+              ticketPriceC: null,
+            },
+          ],
+        },
+      ],
+    });
   }
 
   return ajax(null);

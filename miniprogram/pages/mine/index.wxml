@@ -109,6 +109,20 @@
           <image class="func-arrow" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-chevron-right.svg" mode="aspectFit" />
         </view>
         <view class="func-divider" />
+        <!-- 我喜欢的路线：达人路线收藏列表（E3），图标用包内本地 svg，不依赖 OSS 上传 -->
+        <view class="func-item" bindtap="goExpertFavorites">
+          <view class="func-item-left">
+            <view class="func-icon-wrap func-icon-wrap--green">
+              <image class="func-icon" src="/assets/images/icon-heart.svg" mode="aspectFit" />
+            </view>
+            <view class="func-text-wrap">
+              <text class="func-title">我喜欢的路线</text>
+              <text class="func-subtitle">收藏的达人路线，随时接着看</text>
+            </view>
+          </view>
+          <image class="func-arrow" src="https://travel18.oss-cn-hangzhou.aliyuncs.com/assets/images/icon-chevron-right.svg" mode="aspectFit" />
+        </view>
+        <view class="func-divider" />
         <view class="func-item" bindtap="goRewardRecords">
           <view class="func-item-left">
             <view class="func-icon-wrap func-icon-wrap--grey">
