@@ -157,6 +157,48 @@ test('capability: android + 2.20.0 支持', () => {
   assert.equal(c.supported, true);
   assert.equal(c.platform, 'android');
 });
+// 微信官方 platform 合法值：ios / android / ohos / ohos_pc / windows / mac / devtools。
+// 鸿蒙是 ohos，微信从不返回 harmony —— 曾经写错成 harmony，鸿蒙真机被静默判为「不支持」，
+// 前端连档位接口都不请求，服务端零日志。以下用例锁死这个坑。
+test('capability: 鸿蒙手机端 ohos 支持', () => {
+  reset();
+  sysInfo = { platform: 'ohos', SDKVersion: '3.0.0' };
+  const c = vp.checkVirtualPaymentCapability();
+  assert.equal(c.supported, true, 'ohos 必须放行：官方虚拟支付适用于鸿蒙，路由到微信支付');
+  assert.equal(c.platform, 'ohos');
+});
+test('capability: 鸿蒙 PC 端 ohos_pc 支持', () => {
+  reset();
+  sysInfo = { platform: 'ohos_pc', SDKVersion: '3.0.0' };
+  assert.equal(vp.checkVirtualPaymentCapability().supported, true);
+});
+test('capability: harmony 不再是合法终端（微信从不返回该值）', () => {
+  reset();
+  sysInfo = { platform: 'harmony', SDKVersion: '3.0.0' };
+  const c = vp.checkVirtualPaymentCapability();
+  assert.equal(c.supported, false, '若有人把 harmony 加回白名单，本用例应当失败');
+  assert.match(c.reason, /不支持/);
+});
+test('capability: mac 不支持（官方设备路由表未列 macOS 微信）', () => {
+  reset();
+  sysInfo = { platform: 'mac', SDKVersion: '3.0.0' };
+  assert.equal(vp.checkVirtualPaymentCapability().supported, false);
+});
+test('capability: windows 支持（回归，别把老终端改坏）', () => {
+  reset();
+  sysInfo = { platform: 'windows', SDKVersion: '3.0.0' };
+  assert.equal(vp.checkVirtualPaymentCapability().supported, true);
+});
+test('capability: 鸿蒙下单入参原样透传 platform=ohos', async () => {
+  reset();
+  let seen = null;
+  sysInfo = { platform: 'ohos', SDKVersion: '3.0.0' };
+  mock.createRewardOrder = async (p) => { seen = p; return { data: GOOD_ORDER }; };
+  mock.getRewardOrderStatus = async () => ({ data: { orderStatus: '2', outTradeNo: 'X' } });
+  await vp.payLineReward({ lineId: 7, tierCode: 'T010' });
+  assert.deepEqual(seen, { lineId: 7, tierCode: 'T010', platform: 'ohos', sdkVersion: '3.0.0' },
+    '鸿蒙必须把 ohos 原样送到后端；后端白名单与档位 allow_platforms 都按 ohos 匹配');
+});
 test('capability: devtools 不支持且提示用真机', () => {
   reset();
   sysInfo = { platform: 'devtools', SDKVersion: '3.0.0' };

@@ -26,7 +26,12 @@ export interface RewardTier {
  */
 interface RewardOrderCreateBase {
   tierCode: string;
-  /** wx.getSystemInfoSync().platform：android/ios/windows/harmony/devtools */
+  /**
+   * wx.getSystemInfoSync().platform 原值透传。
+   *
+   * 微信官方合法值：android / ios / ohos（鸿蒙手机）/ ohos_pc（鸿蒙 PC）/ windows / mac / devtools。
+   * **鸿蒙是 ohos，不存在 harmony。** 后端只放行 android/ios/ohos/ohos_pc/windows，其余回 4003。
+   */
   platform: string;
   /** 基础库版本，后端用于校验是否 >= 2.19.2 */
   sdkVersion?: string;

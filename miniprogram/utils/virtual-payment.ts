@@ -30,8 +30,20 @@ import type { RewardOrderCreateParams, RewardOrderStatusResult } from '../types/
 /** wx.requestVirtualPayment 要求的最低基础库版本 */
 const MIN_SDK_VERSION = '2.19.2';
 
-/** 后端档位 allow_platforms 支持的终端；devtools 不在其中（开发者工具内无法真实支付） */
-const SUPPORTED_PLATFORMS = ['android', 'ios', 'harmony', 'windows'];
+/**
+ * 支持虚拟支付的终端，取值必须与 wx.getSystemInfoSync().platform 的**官方合法值**逐字对齐：
+ * ios / android / ohos / ohos_pc / windows / mac / devtools。
+ *
+ * ⚠️ 鸿蒙是 `ohos`（手机）与 `ohos_pc`（PC），**微信从不返回 `harmony`**。
+ * 这里曾误写成 'harmony'，鸿蒙真机因此被判定为「当前设备暂不支持该功能」，
+ * 且前端直接短路、连档位接口都不请求，服务端零日志 —— 静默失败，极难发现。
+ * 官方口径：虚拟支付「适用于 Android、iOS、鸿蒙、Windows 等所有终端」，
+ * 设备路由把 Android / 鸿蒙 / Windows 一并路由到微信支付。
+ *
+ * 不含 devtools（工具内无法真实支付）与 mac（官方设备路由表未列 macOS 微信）。
+ * 后端 RewardOrderServiceImpl.SUPPORTED_PLATFORMS 与本数组必须同步修改。
+ */
+const SUPPORTED_PLATFORMS = ['android', 'ios', 'ohos', 'ohos_pc', 'windows'];
 
 /** 轮询间隔与次数：8 × 1500ms ≈ 12 秒，覆盖绝大多数推送延迟 */
 const POLL_INTERVAL_MS = 1500;
