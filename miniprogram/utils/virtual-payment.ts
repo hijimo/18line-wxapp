@@ -23,7 +23,11 @@
 import { wxLogin } from './authorize';
 import { login } from '../services/auth';
 import { TOKEN_KEY } from './request';
-import { createRewardOrder, getRewardOrderStatus } from '../services/reward';
+import {
+  createRewardOrder,
+  getRewardOrderStatus,
+  reportRewardPayError,
+} from '../services/reward';
 import { REWARD_ERR, VPAY_ERR } from '../types/reward';
 import type { RewardOrderCreateParams, RewardOrderStatusResult } from '../types/reward';
 
@@ -325,6 +329,35 @@ export function describeRewardBizError(code: number, fallback?: string): string 
  * 打赏下单依赖后端持有的 session_key 计算用户态签名，session_key 失效时
  * 必须走一次完整的重新登录，否则重试多少次都是同样的失败。
  */
+/**
+ * 安全上报支付失败 —— **任何情况下都不得抛异常**。
+ *
+ * 上报是旁路观测通道，它挂掉（断网、后端 500、模块被替换、service 层实现有 bug）
+ * 都绝不能影响用户看到的失败提示。调用点全部位于 catch 块内部，
+ * 若这里再抛一次，异常会**从 catch 块里冒泡出去**，把原本的返回值一起吃掉，
+ * 最终变成页面侧的 unhandled rejection：用户既看不到失败原因，我们也拿不到日志。
+ *
+ * 因此这里做双层兜底：service 层自己已 try/catch + `.catch()`，
+ * 本函数再包一层，保证「上报永不抛」这条约束由调用方自己守住，
+ * 不依赖被调用方的实现质量。
+ */
+function safeReportPayError(payload: {
+  outTradeNo?: string;
+  errCode?: number;
+  errMsg?: string;
+  platform?: string;
+  tierCode?: string;
+  sdkVersion?: string;
+  stage?: string;
+}): void {
+  try {
+    reportRewardPayError(payload);
+  } catch (err) {
+    // 只 warn 不抛：上报失败本身不值得打断用户，也不值得再上报一次（会递归）
+    console.warn('支付失败上报异常，已忽略（不影响主流程）:', err);
+  }
+}
+
 async function relogin(): Promise<boolean> {
   try {
     wx.removeStorageSync(TOKEN_KEY);
@@ -514,6 +547,16 @@ async function invokeRewardPayment(
         if (ok) continue;
         return { status: 'failed', message: '登录状态已失效，请重新进入小程序' };
       }
+      // 下单阶段失败同样上报：这一段的错误码是后端业务码（4001/4003/4042…），
+      // 与微信侧 errCode 混在同一张日志表里才好还原完整时序
+      safeReportPayError({
+        errCode: code,
+        errMsg: err?.message,
+        platform: capability.platform,
+        tierCode,
+        sdkVersion: capability.sdkVersion,
+        stage: 'creating-order',
+      });
       return {
         status: 'failed',
         message: describeRewardBizError(code, err?.message),
@@ -524,6 +567,14 @@ async function invokeRewardPayment(
     if (!order || !order.signData || !order.paySig || !order.signature || !order.mode) {
       // mode 缺失时绝不能静默降级：少了它微信必然报参数错误，且错误信息无法定位
       console.error('下单返回数据不完整:', order);
+      safeReportPayError({
+        outTradeNo: order?.outTradeNo,
+        errMsg: '下单返回缺少 signData/paySig/signature/mode 之一',
+        platform: capability.platform,
+        tierCode,
+        sdkVersion: capability.sdkVersion,
+        stage: 'creating-order',
+      });
       return { status: 'failed', message: '下单返回数据不完整，请稍后重试' };
     }
 
@@ -544,6 +595,18 @@ async function invokeRewardPayment(
         const ok = await relogin();
         if (ok) continue;
       }
+      // 这是整条链路里唯一能拿到微信原始 errCode/errMsg 的地方。
+      // 不上报就等于把 -15001 的真实原因（只在 errMsg 里）永久丢弃，
+      // 服务端只能看到一笔永远停在「待支付」的订单。
+      safeReportPayError({
+        outTradeNo: order.outTradeNo,
+        errCode,
+        errMsg: err?.errMsg,
+        platform: capability.platform,
+        tierCode,
+        sdkVersion: capability.sdkVersion,
+        stage: 'invoking-payment',
+      });
       return {
         status: 'failed',
         message: describeVirtualPaymentError(errCode),

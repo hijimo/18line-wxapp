@@ -49,6 +49,39 @@ export const getMyRewardOrders = (params?: {
   request<TableDataInfo<RewardOrderRecord>>('/wx/reward/orders', { data: params });
 
 /**
+ * 上报虚拟支付失败 — **纯观测通道，只写服务端日志**。
+ *
+ * ⚠️ 为什么必须有这个接口：`wx.requestVirtualPayment` 的失败由微信客户端直接回调给
+ * 小程序，**完全不经过我们的服务器**。真机支付失败时服务端日志一片空白，运维只能看到
+ * 「订单创建了却一直待支付」，无从判断是用户取消、道具未发布、签名错误还是价格不符；
+ * 而 `-15001`（参数错误）的**具体原因只存在于 errMsg 里**，丢掉它就等于丢掉唯一定位线索。
+ *
+ * ⚠️ 调用方必须 fire-and-forget：本接口失败绝不能影响支付主流程，
+ * 所以内部吞掉所有异常、不 await 结果、不抛出。
+ */
+export const reportRewardPayError = (payload: {
+  outTradeNo?: string;
+  errCode?: number;
+  errMsg?: string;
+  platform?: string;
+  tierCode?: string;
+  sdkVersion?: string;
+  stage?: string;
+}) => {
+  try {
+    // 不 await：上报是旁路，不能拖慢或阻塞用户看到的失败提示
+    void request<AjaxResult<null>>('/wx/reward/pay-error', {
+      method: 'POST',
+      data: payload,
+    }).catch((err: unknown) => {
+      console.warn('支付失败上报未送达（不影响主流程）:', err);
+    });
+  } catch (err) {
+    console.warn('支付失败上报异常（不影响主流程）:', err);
+  }
+};
+
+/**
  * 查询单笔订单状态 — **支付后轮询用**。
  *
  * ⚠️ 该接口只读本地库、不调微信 query_order（避免 C 端把微信的频率配额刷光，

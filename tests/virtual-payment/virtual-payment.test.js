@@ -68,6 +68,7 @@ let sysInfo = { platform: 'android', SDKVersion: '2.20.0' };
 let canIUseResult = true;
 let vpayBehavior = 'success';
 let vpayFailCode = -1;
+let vpayFailMsg = 'fail';
 let loginCount = 0;
 
 global.wx = {
@@ -77,7 +78,7 @@ global.wx = {
     calls.vpay.push(opt);
     if (vpayBehavior === 'success') return opt.success && opt.success({ errMsg: 'ok' });
     if (vpayBehavior === 'cancel') return opt.fail && opt.fail({ errCode: -2, errMsg: 'cancel' });
-    return opt.fail && opt.fail({ errCode: vpayFailCode, errMsg: 'fail' });
+    return opt.fail && opt.fail({ errCode: vpayFailCode, errMsg: vpayFailMsg });
   },
   login: (opt) => { loginCount += 1; opt.success && opt.success({ code: 'stub-code' }); },
   getStorageSync: (k) => calls.storage[k],
@@ -93,14 +94,23 @@ const mock = {
   createRewardOrder: async () => ({ data: null }),
   getRewardOrderStatus: async () => ({ data: null }),
   login: async () => ({ data: { token: 'new-token' } }),
+  // 支付失败上报：默认成功，可被单个用例替换成抛异常以验证 fire-and-forget
+  reportRewardPayError: () => {},
 };
-const counter = { create: 0, status: 0, login: 0 };
+const counter = { create: 0, status: 0, login: 0, report: 0 };
+/** 收集每次上报的 payload，供断言 errCode/errMsg/stage 等字段 */
+const reportPayloads = [];
 const origLoad = Module._load;
 Module._load = function (request) {
   if (request.endsWith('services/reward')) {
     return {
       createRewardOrder: async (p) => { counter.create += 1; return mock.createRewardOrder(p); },
       getRewardOrderStatus: async (o) => { counter.status += 1; return mock.getRewardOrderStatus(o); },
+      reportRewardPayError: (payload) => {
+        counter.report += 1;
+        reportPayloads.push(payload);
+        return mock.reportRewardPayError(payload);
+      },
     };
   }
   if (request.endsWith('services/auth')) {
@@ -113,9 +123,11 @@ const vp = require(path.join(outDir, 'utils/virtual-payment.js'));
 
 function reset() {
   calls.vpay = []; calls.storage = {}; loginCount = 0;
-  counter.create = 0; counter.status = 0; counter.login = 0;
+  counter.create = 0; counter.status = 0; counter.login = 0; counter.report = 0;
+  reportPayloads.length = 0;
+  mock.reportRewardPayError = () => {};
   sysInfo = { platform: 'android', SDKVersion: '2.20.0' };
-  canIUseResult = true; vpayBehavior = 'success'; vpayFailCode = -1;
+  canIUseResult = true; vpayBehavior = 'success'; vpayFailCode = -1; vpayFailMsg = 'fail';
   mock.login = async () => ({ data: { token: 'new-token' } });
 }
 
@@ -552,4 +564,104 @@ test('文案: 业务码 4002/4003/4004 各有专属文案', () => {
   assert.match(vp.describeRewardBizError(4002), /暂未开放/);
   assert.match(vp.describeRewardBizError(4003), /不支持/);
   assert.match(vp.describeRewardBizError(4004), /版本过低/);
+});
+
+// ==================== 支付失败上报（可观测性红线） ====================
+// 背景：wx.requestVirtualPayment 的失败由微信客户端直接回调给小程序，**不经过我们的服务器**。
+// 真机支付失败时服务端日志原本一片空白，运维只能看到「订单创建了却一直待支付」，
+// 无法区分用户取消 / 道具未发布 / 签名错误 / 价格不符；而 -15001 的具体原因**只在 errMsg 里**。
+// 2026-10-16 鸿蒙真机联调时正是因此无法定位（实为道具 rw_test_1yuan 未发布）。
+test('上报: 支付失败时把 errCode/errMsg/outTradeNo/终端/档位 一并回传', async () => {
+  reset();
+  vpayBehavior = 'fail'; vpayFailCode = -15010; vpayFailMsg = 'goods not published';
+  sysInfo = { platform: 'ohos', SDKVersion: '3.7.10' };
+  mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+  const r = await vp.payLineReward({ expertRouteId: 9, tierCode: 'T902' });
+  assert.equal(r.status, 'failed');
+  assert.equal(counter.report, 1, '支付失败必须上报一次');
+  const p = reportPayloads[0];
+  assert.equal(p.errCode, -15010);
+  assert.equal(p.errMsg, 'goods not published');
+  assert.equal(p.outTradeNo, GOOD_ORDER.outTradeNo, '必须带订单号才能与本地订单关联');
+  assert.equal(p.platform, 'ohos');
+  assert.equal(p.tierCode, 'T902');
+  assert.equal(p.sdkVersion, '3.7.10');
+  assert.equal(p.stage, 'invoking-payment');
+});
+
+test('上报: -15001 的原始 errMsg 必须原样回传（它是唯一的定位线索）', async () => {
+  reset();
+  vpayBehavior = 'fail'; vpayFailCode = -15001;
+  vpayFailMsg = 'invalid productId rw_test_1yuan: not published';
+  mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+  await vp.payLineReward({ lineId: 1, tierCode: 'T902' });
+  assert.equal(counter.report, 1);
+  assert.equal(reportPayloads[0].errMsg, vpayFailMsg,
+    'errMsg 不得被截断或改写：-15001 的真实原因只在这里');
+  assert.equal(reportPayloads[0].errCode, -15001);
+});
+
+test('上报: 用户取消(-2)绝不上报 —— 取消是正常路径，上报只会污染日志', async () => {
+  reset();
+  vpayBehavior = 'cancel';
+  mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+  const r = await vp.payLineReward({ lineId: 1, tierCode: 'T900' });
+  assert.equal(r.status, 'cancelled');
+  assert.equal(counter.report, 0, '取消不是失败，不得上报');
+});
+
+test('上报: 支付成功不上报', async () => {
+  reset();
+  mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+  mock.getRewardOrderStatus = async () => ({
+    data: { orderStatus: '2', outTradeNo: GOOD_ORDER.outTradeNo, actualPriceFen: 1 },
+  });
+  const r = await vp.payLineReward({ lineId: 1, tierCode: 'T900' });
+  assert.equal(r.status, 'success');
+  assert.equal(counter.report, 0);
+});
+
+test('上报: 下单阶段失败也上报，stage=creating-order 且无订单号', async () => {
+  reset();
+  mock.createRewardOrder = async () => {
+    const e = new Error('打赏功能暂未开放'); e.code = 4002; throw e;
+  };
+  const r = await vp.payLineReward({ lineId: 1, tierCode: 'T001' });
+  assert.equal(r.status, 'failed');
+  assert.equal(counter.report, 1);
+  assert.equal(reportPayloads[0].stage, 'creating-order');
+  assert.equal(reportPayloads[0].errCode, 4002, '下单阶段回传的是后端业务码');
+  assert.equal(reportPayloads[0].outTradeNo, undefined, '下单未成功时没有订单号');
+});
+
+test('上报: 下单返回数据不完整时上报（缺 paySig）', async () => {
+  reset();
+  mock.createRewardOrder = async () => ({ data: { ...GOOD_ORDER, paySig: '' } });
+  const r = await vp.payLineReward({ lineId: 1, tierCode: 'T001' });
+  assert.equal(r.status, 'failed');
+  assert.equal(calls.vpay.length, 0, '参数不全时绝不调起支付');
+  assert.equal(counter.report, 1);
+  assert.equal(reportPayloads[0].stage, 'creating-order');
+  assert.match(reportPayloads[0].errMsg, /signData|paySig|signature|mode/);
+});
+
+test('上报: 上报接口自身抛错不得影响主流程（fire-and-forget）', async () => {
+  reset();
+  vpayBehavior = 'fail'; vpayFailCode = -15010;
+  mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+  // 上报通道挂掉（断网/后端 500）时，用户看到的失败提示必须照常返回
+  mock.reportRewardPayError = () => { throw new Error('report endpoint down'); };
+  const r = await vp.payLineReward({ lineId: 1, tierCode: 'T902' });
+  assert.equal(r.status, 'failed', '上报失败不得把主流程带崩');
+  assert.equal(r.errCode, -15010, '原始错误码仍要透出给调用方');
+});
+
+test('上报: 设备不支持时既不出网也不上报', async () => {
+  reset();
+  sysInfo = { platform: 'devtools', SDKVersion: '3.0.0' };
+  mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+  const r = await vp.payLineReward({ lineId: 1, tierCode: 'T900' });
+  assert.equal(r.status, 'unsupported');
+  assert.equal(counter.create, 0);
+  assert.equal(counter.report, 0, '能力检测阶段就拦住了，没有支付行为可上报');
 });
