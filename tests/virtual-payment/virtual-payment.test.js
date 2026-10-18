@@ -13,7 +13,8 @@
  * - 顶层只传 signData/paySig/signature，不多传 mode（官方参数表已核对）
  * - errCode=-2 用户取消是正常路径，不 reject、不轮询、不报错
  * - 支付成功 ≠ 打赏成功：必须轮询服务端，读到 '0'/'1' 判为 pending 而非 failed
- * - 4001 / -15007 重新登录后**只重试一次**，不无限重试放大后端压力
+ * - 4001 / -15007 / -15005 重新登录后**只重试一次**，不无限重试放大后端压力
+ * - -15006（paySig 错）**不**重登：paySig 用 AppKey 算，重登无用，必须显式失败让人看见配置问题
  * - 设备不支持时**完全不出网**下单
  * - 并发连点被模块级锁拦住，只产生一笔订单
  */
@@ -375,6 +376,61 @@ test('编排: 支付阶段 -15007 重登后重新下单（签名依赖新 sessio
   assert.equal(r.status, 'success');
   assert.equal(counter.create, 2);
   assert.equal(counter.login, 1);
+});
+// -15005（用户态签名错误）与 -15007 根因相同：后端持有的 session_key 已被微信轮换，
+// 官方错误码表对 -15005 的处置同样是「查 session_key 与算法」，故重登重试是正确的第一手动作。
+// 曾经只认 -15007，等于把同根因的另一种表现形态漏掉，用户只会反复看到
+// 「支付校验失败，请重新发起」，每点一次多一笔永远付不掉的待支付订单。
+//
+// ⚠️ 这不是 2026-10-18 鸿蒙三连败的修复：那三笔单经微信 query_order 实证在微信侧
+// 确实存在（status=6 已关闭），签名是被受理的，失败发生在拉起支付面板之后。
+test('编排: 支付阶段 -15005 也重登后重新下单（与 -15007 同根因）', async () => {
+  reset();
+  let first = true;
+  mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+  mock.getRewardOrderStatus = async () => ({ data: { orderStatus: '2', outTradeNo: GOOD_ORDER.outTradeNo } });
+  const origVpay = wx.requestVirtualPayment;
+  wx.requestVirtualPayment = (opt) => {
+    calls.vpay.push(opt);
+    if (first) { first = false; return opt.fail({ errCode: -15005, errMsg: 'invalid signature' }); }
+    return opt.success({ errMsg: 'ok' });
+  };
+  const r = await vp.payLineReward({ lineId: 1, tierCode: 'T001' });
+  wx.requestVirtualPayment = origVpay;
+  assert.equal(r.status, 'success');
+  assert.equal(counter.create, 2, '重登后必须重新下单：旧单的签名是用旧 session_key 算的');
+  assert.equal(counter.login, 1);
+});
+test('编排: -15005 重登后仍失败 → 只重试一次，不无限重登', async () => {
+  reset();
+  mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+  const origVpay = wx.requestVirtualPayment;
+  wx.requestVirtualPayment = (opt) => {
+    calls.vpay.push(opt);
+    return opt.fail({ errCode: -15005, errMsg: 'invalid signature' });
+  };
+  const r = await vp.payLineReward({ lineId: 1, tierCode: 'T001' });
+  wx.requestVirtualPayment = origVpay;
+  assert.equal(r.status, 'failed');
+  assert.equal(counter.create, 2);
+  assert.equal(counter.login, 1);
+  assert.equal(r.errCode, -15005);
+});
+test('编排: -15006（paySig 错）不重登，直接失败并上报', async () => {
+  reset();
+  mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+  const origVpay = wx.requestVirtualPayment;
+  wx.requestVirtualPayment = (opt) => {
+    calls.vpay.push(opt);
+    return opt.fail({ errCode: -15006, errMsg: 'invalid pay sig' });
+  };
+  const r = await vp.payLineReward({ lineId: 1, tierCode: 'T001' });
+  wx.requestVirtualPayment = origVpay;
+  assert.equal(r.status, 'failed');
+  assert.equal(counter.login, 0, 'paySig 用 AppKey 计算，重登不可能修好它');
+  assert.equal(counter.create, 1);
+  assert.equal(counter.report, 1, '必须上报，否则 AppKey 配错这件事在服务端不可见');
+  assert.equal(reportPayloads[0].errCode, -15006);
 });
 test('编排: 用户取消返回 cancelled 且不触发轮询', async () => {
   reset();

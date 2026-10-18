@@ -18,6 +18,13 @@
  *
  * 3. **-2（用户取消）不是错误。**
  *    用户主动取消支付属于正常操作路径，不弹错误提示、不上报异常。
+ *
+ * 4. **session_key 失效要以「重登 + 重试一次」自愈，判定要覆盖 4001 / -15007 / -15005。**
+ *    用户态签名依赖后端持有的 session_key，而它会被微信轮换；只认其中一个码，
+ *    其余形态就会退化成「用户反复失败、服务端零日志」。
+ *    但注意：**签名类失败在微信侧不会留下订单**，所以「订单停在待支付」不足以推出
+ *    session_key 失效——必须用 `query_order` 确认微信侧到底有没有这笔单，
+ *    否则会像 2026-10-18 那样把支付面板环节的失败误判成签名问题。
  */
 
 import { wxLogin } from './authorize';
@@ -590,8 +597,25 @@ async function invokeRewardPayment(
       cancelled = result.cancelled;
     } catch (err: any) {
       const errCode = err?.errCode;
-      // 支付阶段报 session_key 过期：重登后重新下单（签名依赖新的 session_key）
-      if (errCode === VPAY_ERR.SESSION_KEY_EXPIRED && attempt < maxOrderAttempts) {
+      // 支付阶段报 session_key 问题：重登后重新下单（用户态签名依赖新的 session_key）。
+      //
+      // **-15005 和 -15007 一起纳入**：signature = HMAC(signData, session_key)，
+      // 后端持有的 session_key 与微信当前值不一致时，微信过期报 -15007、签名对不上报 -15005，
+      // 两者根因相同、处置动作也相同（重新 wx.login 换 session_key 再下一单）。
+      // 官方错误码表对 -15005 的处置同样是「查 session_key 与算法」，故重登是正确的第一手动作。
+      //
+      // ⚠️ **不要把这段当成 2026-10-18 鸿蒙三连败的修复。** 那次故障经微信 `query_order`
+      // 实证：三笔订单（orderId 17/18/19）在微信侧**确实存在且状态为 6（已关闭）**，
+      // 说明 signData / paySig / signature 全部通过了微信校验、下单被正常受理，
+      // session_key（当时已 70 小时未刷新）依然有效——失败发生在**拉起支付面板之后**，
+      // 与签名无关。本改动只是把 -15005 这条**真实存在但那次没走到**的分支补齐，
+      // 属于防御性覆盖，不解决那次故障。
+      //
+      // ⚠️ -15006（paySig 错误）**刻意不在**重登白名单里：paySig 用 AppKey 计算，
+      // 与 session_key 无关，重登多少次都还是错的——那是配置/签名实现问题，必须让它显式失败。
+      const sessionKeyStale =
+        errCode === VPAY_ERR.SESSION_KEY_EXPIRED || errCode === VPAY_ERR.SIGNATURE_INVALID;
+      if (sessionKeyStale && attempt < maxOrderAttempts) {
         const ok = await relogin();
         if (ok) continue;
       }

@@ -180,7 +180,12 @@ export const VPAY_ERR = {
   DUPLICATE_OUT_TRADE_NO: -15002,
   SYSTEM_ERROR: -15003,
   CURRENCY_INVALID: -15004,
+  /**
+   * 用户态签名错误。根因通常与 -15007 相同：后端持有的 session_key 已被微信轮换，
+   * 签名算出来对不上。处置动作也是重新 wx.login 后重试，**不要**只把 -15007 当 session_key 问题。
+   */
   SIGNATURE_INVALID: -15005,
+  /** 支付签名错误：paySig 用 AppKey 计算，与 session_key 无关，重登无用，属配置/实现问题 */
   PAY_SIG_INVALID: -15006,
   /** session_key 过期，需重新 wx.login */
   SESSION_KEY_EXPIRED: -15007,
