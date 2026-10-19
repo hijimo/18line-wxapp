@@ -657,13 +657,109 @@ test('上报: -15001 的原始 errMsg 必须原样回传（它是唯一的定位
   assert.equal(reportPayloads[0].errCode, -15001);
 });
 
-test('上报: 用户取消(-2)绝不上报 —— 取消是正常路径，上报只会污染日志', async () => {
+// ⚠️ 本用例的语义在 2026-10-19 被**故意反转**，旧红线是「取消不是失败，绝不上报」。
+// 反转依据（生产实证，不是偏好）：2026-10-18 鸿蒙真机三笔打赏 orderId=17/18/19
+// 在服务端**一条上报都没有**，微信侧却是「订单存在 + status=6 已关闭 + 无 wxpay_order_id」，
+// 查单补偿只能在 34 分钟后写一句「微信侧已关闭，本地状态对齐」。
+// 根因是上报原先只覆盖 requestVirtualPayment **抛异常**这一条分支，
+// 而 cancelled / pending / 已关闭三条路径全部静默 —— 于是「日志都有却看不出原因」。
+// 客户端**无法区分**「用户真的点了取消」与「微信拉起支付面板失败后自动关单
+// （官方 -15012 调米大师失败导致关单，正是秒级关单 + 无 wxpay_order_id）」，
+// 既然分不清就必须一律留痕。旧的「不污染日志」诉求改由 stage 字段承担：
+// 阶段=payment-cancelled 与真正的 fail 分支在日志里天然可分。
+test('上报: 用户取消(-2)返回 cancelled 且必须上报 stage=payment-cancelled', async () => {
   reset();
   vpayBehavior = 'cancel';
   mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
   const r = await vp.payLineReward({ lineId: 1, tierCode: 'T900' });
-  assert.equal(r.status, 'cancelled');
-  assert.equal(counter.report, 0, '取消不是失败，不得上报');
+  assert.equal(r.status, 'cancelled', '返回语义一个字都不能变：取消不是失败');
+  assert.equal(counter.status, 0, '取消依旧不触发轮询');
+  assert.equal(counter.report, 1, '取消必须留痕，否则鸿蒙那类「微信自动关单」在服务端完全不可见');
+  const p = reportPayloads[0];
+  assert.equal(p.stage, 'payment-cancelled');
+  assert.equal(p.errCode, -2, '带上 -2 便于与真正的 fail 分支在日志里对齐');
+  assert.equal(p.outTradeNo, GOOD_ORDER.outTradeNo, '必须带订单号才能与微信侧 query_order 对上');
+});
+
+// ==================== 观测补盲：轮询阶段的三条静默分支 ====================
+// 这三条是 2026-10-18 排查鸿蒙失败时新补的。共同点：微信客户端**没有报错**，
+// 但我方账面没记账，属于「钱可能已扣、单却不知道去哪了」的资金敏感现场，
+// 原先全部静默返回，服务端零日志。
+
+/** 把 1.5s 轮询间隔压成 0，否则单个 pending 用例要跑 8×1500ms≈12 秒 */
+function withFastPoll(fn) {
+  const orig = global.setTimeout;
+  global.setTimeout = (cb, _ms, ...args) => orig(cb, 0, ...args);
+  return Promise.resolve()
+    .then(fn)
+    .finally(() => { global.setTimeout = orig; });
+}
+
+test('上报: 支付已受理但本地读到「已关闭」→ stage=confirming-closed', async () => {
+  reset();
+  mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+  mock.getRewardOrderStatus = async () => ({
+    data: { orderStatus: '3', outTradeNo: GOOD_ORDER.outTradeNo },
+  });
+  const r = await vp.payLineReward({ expertRouteId: 9, tierCode: 'T900' });
+  assert.equal(r.status, 'failed');
+  assert.match(r.message, /已关闭/);
+  assert.equal(counter.report, 1);
+  assert.equal(reportPayloads[0].stage, 'confirming-closed');
+  assert.equal(reportPayloads[0].outTradeNo, GOOD_ORDER.outTradeNo);
+  assert.match(reportPayloads[0].errMsg, /query_order/, '必须指明下一步动作，否则日志只是噪声');
+});
+
+test('上报: 支付已受理但轮询到 0/1（pending）→ stage=confirming-pending 且标注非失败', async () => {
+  await withFastPoll(async () => {
+    reset();
+    mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+    mock.getRewardOrderStatus = async () => ({
+      data: { orderStatus: '0', outTradeNo: GOOD_ORDER.outTradeNo },
+    });
+    const r = await vp.payLineReward({ lineId: 1, tierCode: 'T900' });
+    assert.equal(r.status, 'pending', '对用户仍是 pending，绝不能变成 failed');
+    assert.equal(counter.status, 8, '确实轮询到耗尽，而不是提前返回');
+    assert.equal(counter.report, 1);
+    const p = reportPayloads[0];
+    assert.equal(p.stage, 'confirming-pending');
+    assert.match(p.errMsg, /^非失败/, '这条不是故障，文案必须先自我声明，避免运维追假问题');
+    assert.match(p.errMsg, /orderStatus=0/, '要带上真实读到的本地状态');
+  });
+});
+
+test('上报: 轮询完全取不到状态 → stage=confirming-noresult', async () => {
+  await withFastPoll(async () => {
+    reset();
+    mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+    mock.getRewardOrderStatus = async () => ({ data: null });
+    const r = await vp.payLineReward({ lineId: 1, tierCode: 'T900' });
+    assert.equal(r.status, 'pending');
+    assert.equal(counter.report, 1);
+    assert.equal(reportPayloads[0].stage, 'confirming-noresult',
+      '「查单接口全程异常」与「读到 0/1」是两件事，必须分开，否则排障方向会被带偏');
+    assert.match(reportPayloads[0].errMsg, /查单接口异常/);
+  });
+});
+
+test('上报: 新增三条分支的上报抛错同样不得影响主流程（fire-and-forget）', async () => {
+  reset();
+  vpayBehavior = 'cancel';
+  mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+  mock.reportRewardPayError = () => { throw new Error('report endpoint down'); };
+  const r = await vp.payLineReward({ lineId: 1, tierCode: 'T900' });
+  assert.equal(r.status, 'cancelled', '上报通道挂掉时，用户看到的结果必须照常');
+});
+
+test('上报: 退款类终态(4/5/6)不上报 —— 那是正常业务路径，不是观测盲区', async () => {
+  reset();
+  mock.createRewardOrder = async () => ({ data: GOOD_ORDER });
+  mock.getRewardOrderStatus = async () => ({
+    data: { orderStatus: '5', outTradeNo: GOOD_ORDER.outTradeNo },
+  });
+  const r = await vp.payLineReward({ lineId: 1, tierCode: 'T900' });
+  assert.equal(r.status, 'failed');
+  assert.equal(counter.report, 0, '退款中是既有业务态，上报只会稀释真正的盲区信号');
 });
 
 test('上报: 支付成功不上报', async () => {

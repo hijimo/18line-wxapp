@@ -640,6 +640,29 @@ async function invokeRewardPayment(
     }
 
     if (cancelled) {
+      // ── 观测补盲（2026-10-18 鸿蒙三连败 orderId=17/18/19）────────────────────
+      // 那三笔在服务端**一条上报都没有**，微信侧却是「订单存在 + status=6 已关闭
+      // + 无 wxpay_order_id」，查单补偿只能在 34 分钟后写一句「微信侧已关闭，本地状态对齐」。
+      // 复盘结论：上报原先只挂在 requestVirtualPayment **抛异常**的分支上，
+      // 而 `cancelled` 与下面的 `pending` / `已关闭` 三条路径**完全静默**——
+      // 这正是「日志都有却看不出原因」的根因，而不是微信没给线索。
+      //
+      // ⚠️ cancelled 在客户端**无法区分**两种情况：用户真的点了取消，
+      //    以及微信侧拉起支付面板失败后自动关单（官方 -15012「调米大师失败导致关单」
+      //    正是以「秒级关单 + 无 wxpay_order_id」呈现）。既然分不清就一律留痕，
+      //    靠服务端日志里的「阶段=payment-cancelled」与真正的 fail 分支区分。
+      //
+      // ⚠️ 这**不改变任何返回语义**：取消依旧返回 'cancelled'、依旧不轮询、
+      //    用户看到的文案一个字都不变。加的只是一条 fire-and-forget 旁路日志。
+      safeReportPayError({
+        outTradeNo: order.outTradeNo,
+        errCode: VPAY_ERR.USER_CANCEL,
+        errMsg: '微信回调 cancelled（-2）：用户主动取消，或微信侧拉起支付失败后自动关单，客户端无法区分',
+        platform: capability.platform,
+        tierCode,
+        sdkVersion: capability.sdkVersion,
+        stage: 'payment-cancelled',
+      });
       return { status: 'cancelled' };
     }
 
@@ -652,13 +675,38 @@ async function invokeRewardPayment(
       return { status: 'success', order: finalOrder };
     }
     if (finalOrder && finalOrder.orderStatus === '3') {
+      // 微信说支付已受理（没走 fail、也没 cancelled），本地却读到「已关闭」——
+      // 这是全链路最该被看见的一条：钱可能已扣而单被关，只能靠 query_order 定性。
+      // 静默返回 failed 等于把唯一线索丢掉，用户只会看到一句「订单已关闭」。
+      safeReportPayError({
+        outTradeNo: order.outTradeNo,
+        errMsg: '支付已受理但轮询读到本地 orderStatus=3（已关闭），需人工查 query_order 确认微信侧是否已扣款',
+        platform: capability.platform,
+        tierCode,
+        sdkVersion: capability.sdkVersion,
+        stage: 'confirming-closed',
+      });
       return { status: 'failed', message: '订单已关闭，请重新发起' };
     }
     if (finalOrder && isOrderFinal(finalOrder.orderStatus)) {
       return { status: 'failed', message: '该笔打赏已进入退款流程，请在打赏记录中查看' };
     }
 
-    // 仍是 0/1：正常现象。微信发货推送或兜底任务会在几分钟内追平。
+    // 仍是 0/1（或压根没读到）：对**用户**是正常现象，微信发货推送或兜底任务会在几分钟内追平。
+    // 但对**排障**不是：走到这里说明「微信客户端认为支付已受理，我方账面却还没记账」，
+    // 这正是「用户说付了、后台显示待支付」那类客诉的唯一现场。
+    // 取舍：接受一定日志噪声（文案已明确标注「非失败」），换取资金链路不再有静默分支。
+    safeReportPayError({
+      outTradeNo: order.outTradeNo,
+      errMsg: finalOrder
+        ? `非失败：支付已受理，轮询 ${POLL_MAX_ATTEMPTS} 次后本地 orderStatus=${finalOrder.orderStatus}，`
+          + '等微信发货推送或查单补偿追平；若长时间不追平需查 query_order'
+        : `非失败：支付已受理，但轮询 ${POLL_MAX_ATTEMPTS} 次均未取到订单状态（查单接口异常），无法确认结果`,
+      platform: capability.platform,
+      tierCode,
+      sdkVersion: capability.sdkVersion,
+      stage: finalOrder ? 'confirming-pending' : 'confirming-noresult',
+    });
     return {
       status: 'pending',
       outTradeNo: order.outTradeNo,
